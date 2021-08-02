@@ -38,5 +38,6 @@
     "title": "Information",
     "description": "Mit dieser Applikation erhalten Sie Informationen über greenlight.tugraz.at."
   },
-  "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!"
+  "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
+  "loading-message": "Lädt..."
 }

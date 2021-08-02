@@ -73,7 +73,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
-                    <dbp-mini-spinner text=${i18n.t('acquire-ticket.loading-message')}></dbp-mini-spinner>
+                    <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                 </span>
             </div>
 

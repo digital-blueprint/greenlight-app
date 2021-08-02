@@ -873,7 +873,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     render() {
-        let privacyURL = commonUtils.getAssetURL('dbp-check-in', 'datenschutzerklaerung-tu-graz-check-in.pdf'); //TODO change to greenpass pdf?
+        let privacyURL = commonUtils.getAssetURL('dbp-check-in', 'datenschutzerklaerung-tu-graz-check-in.pdf'); //TODO change to greenpass pdf
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
         const i18n = this._i18n;
         this.checkIfAlreadyActivated();
@@ -885,7 +885,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
-                    <dbp-mini-spinner text=${i18n.t('green-pass-activation.loading-message')}></dbp-mini-spinner>
+                    <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                 </span>
             </div>
 
