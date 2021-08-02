@@ -61,7 +61,7 @@ deploy_demo:
 deploy_development:
   only:
     refs:
-      - master
+      - main
   environment:
     name: development
     url: https://mw-frontend-dev.tugraz.at/apps/greenlight
@@ -85,7 +85,7 @@ deploy_production:
 e2e_tests:
   only:
     refs:
-      - master
+      - main
   variables:
     E2E_PROJECT: greenlight
   stage: e2e
