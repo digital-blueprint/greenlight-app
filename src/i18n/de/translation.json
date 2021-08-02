@@ -2,7 +2,7 @@
   "green-pass-activation": {
     "title": "3G Nachweis aktivieren",
     "description": "Mit dieser Applikation können Sie ihren 3G Nachweis überprüfen und aktivieren.",
-    "additional-information": "Hier können Sie einen QR Code scannen oder ein vorhandenes PDF oder Bild hochladen, um Ihren 3G Nachweis für den Zeitraum seiner Gültigkeit zu aktivieren. Bitte beachten Sie, dass Sie damit trotzdem noch für Räume ein Ticket erwerben müssen, um die 3G-Regeln einzuhalten.",
+    "additional-information": "Hier können Sie einen QR Code scannen oder ein vorhandenes PDF oder Bild hochladen, um Ihren 3G Nachweis für den Zeitraum seiner Gültigkeit zu aktivieren. Bitte beachten Sie, dass Sie damit trotzdem noch ein Ticket für Räume erwerben müssen, um die 3G-Regeln einzuhalten.",
     "success-activation-title": "Erfolgreiche Aktivierung!",
     "success-activation-body": "Ihr 3G Nachweis wurde erfolgreich aktiviert.",
     "invalid-qr-code-title": "Ungültiger QR Code!",
@@ -23,6 +23,16 @@
     "filepicker-button-title": "Datei auswählen",
     "filepicker-context": "Datei zum Überprüfen auswählen",
     "filepicker-open-button-title": "Datei zum Überprüfen auswählen"
+  },
+  "acquire-ticket": {
+    "title": "Ticket für Ort ausstellen",
+    "description": "Beschreibung",
+    "additional-information": "Weitere Informationen"
+  },
+  "show-active-tickets": {
+    "title": "Zeige alle aktiven Tickets",
+    "description": "Beschreibung",
+    "additional-information": "Weitere Informationen"
   },
   "info": {
     "title": "Information",

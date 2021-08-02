@@ -79,6 +79,8 @@ export default (async () => {
         input: (appEnv != 'test') ? [
                 'src/' + pkg.internalName + '.js',
                 'src/dbp-activate-green-pass.js',
+                'src/dbp-acquire-ticket.js',
+                'src/dbp-show-active-tickets.js',
 
         ] : glob.sync('test/**/*.js'),
         output: {

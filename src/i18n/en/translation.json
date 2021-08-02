@@ -24,6 +24,16 @@
     "filepicker-context": "Choose File for 3G Verification",
     "filepicker-open-button-title": "Choose File for Verification"
   },
+  "acquire-ticket": {
+    "title": "Acquire ticket for a place",
+    "description": "Description",
+    "additional-information": "Additional Informationen"
+  },
+  "show-active-tickets": {
+    "title": "Show all active tickets",
+    "description": "Description",
+    "additional-information": "Additional Informationen"
+  },
   "info": {
     "title": "Information",
     "description": "With this application you get information about greenlight.tugraz.at."

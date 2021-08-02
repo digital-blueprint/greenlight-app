@@ -1,0 +1,18 @@
+{
+  "element": "dbp-acquire-ticket",
+  "module_src": "dbp-acquire-ticket.js",
+  "routing_name": "acquire-ticket",
+  "name": {
+    "de": "Ticket für Ort ausstellen",
+    "en": "Acquire ticket for place"
+  },
+  "short_name": {
+    "de": "Ticket für Ort ausstellen",
+    "en": "Acquire ticket for place"
+  },
+  "description": {
+    "de": "Stellt ein Ticket für einen Ort aus.",
+    "en": "Acquire a ticket for a place."
+  },
+  "subscribe": "lang,entry-point-url,gp-search-hash-string,auth,html-overrides"
+}

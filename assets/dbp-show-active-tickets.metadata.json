@@ -1,0 +1,18 @@
+{
+  "element": "dbp-show-active-tickets",
+  "module_src": "dbp-show-active-tickets.js",
+  "routing_name": "show-active-tickets",
+  "name": {
+    "de": "Aktive Tickets anzeigen",
+    "en": "Show active tickets"
+  },
+  "short_name": {
+    "de": "Aktive Tickets anzeigen",
+    "en": "Show active tickets"
+  },
+  "description": {
+    "de": "Zeigt alle aktiven Tickets für den eingeloggten User",
+    "en": "Shows all active tickets for the logged in user."
+  },
+  "subscribe": "lang,entry-point-url,gp-search-hash-string,auth,html-overrides"
+}
