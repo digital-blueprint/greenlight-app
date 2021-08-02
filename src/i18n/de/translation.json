@@ -26,8 +26,16 @@
   },
   "acquire-ticket": {
     "title": "Ticket für Ort ausstellen",
-    "description": "Beschreibung",
-    "additional-information": "Weitere Informationen"
+    "description": "Hier können Sie sich ein Ticket für einen Ort an der TU Graz ausstellen lassen.",
+    "activation-link": "3G Nachweis aktivieren",
+    "additional-information": "Dieses wird benötigt, um einen Ort an der TU Graz betreten zu dürfen. Falls Sie bereits einen 3G Nachweis aktiviert haben, können Sie sich damit direkt an einem Ort an der TU Graz für einen bestimmten Zeitraum anmelden. Falls Sie noch keinen 3G Nachweis aktiviert haben, verwenden Sie bitte den Menüpunkt ",
+    "additional-information-2": " um einen Nachweis zu aktivieren oder bestätigen Sie, dass Sie einen Nachweis bei sich tragen.",
+    "no-proof-found-message": "Es wurde kein gültiger 3G Nachweis gefunden. Bitte aktivieren Sie einen gültigen 3G Nachweis unter dem Menüpunkt ",
+    "no-proof-found-message-2": ". Alternativ können Sie auch manuell bestätigen, dass Sie einen 3G Nachweis bei sich tragen und diesen im Falle einer manuellen Kontrolle nachweisen können.",
+    "valid-proof-found-message": "Es wurde ein gültiger 3G Nachweis gefunden. Bitte wählen Sie einen Ort aus, um ein Ticket zu erstellen.",
+    "place-select-title": "Ort auswählen",
+    "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Raum bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
+    "confirm-button-text": "Ticket erstellen"
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",

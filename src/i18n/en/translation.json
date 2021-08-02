@@ -26,8 +26,16 @@
   },
   "acquire-ticket": {
     "title": "Acquire ticket for a place",
-    "description": "Description",
-    "additional-information": "Additional Informationen"
+    "description": "Here you can acquire a ticket for a location at TU Graz.",
+    "activation-link": "activate 3G proof",
+    "additional-information": "This is needed to be allowed to enter a location at TU Graz. If you have already activated a 3G proof, you can use it to log in directly at a location at TU Graz for a certain period of time. If you have not activated a 3G proof yet, please use the menu item ",
+    "additional-information-2": " to activate a proof or confirm that you have a proof with you.",
+    "no-proof-found-message": "No valid 3G proof was found. Please activate a valid 3G detection under the menu item ",
+    "no-proof-found-message-2": ". Alternatively, you can manually confirm that you are carrying 3G proof and be able to prove it in case of a manual control.",
+    "valid-proof-found-message": "A valid 3G proof was found. Please select a location to create a ticket.",
+    "place-select-title": "Select a place",
+    "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid proof of such for the duration of my stay in this room and can present such proof in the event of a manual inspection.",
+    "confirm-button-text": "Create a Ticket"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

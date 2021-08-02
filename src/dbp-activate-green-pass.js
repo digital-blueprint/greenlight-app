@@ -367,6 +367,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Check uploaded file and search for QR code
      * If a QR Code is found, validate it and send a Activation Request
      *
+     * @param event
      */
     async doActivationManually(event) {
         const i18n = this._i18n;

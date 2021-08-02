@@ -11,7 +11,7 @@
     "en": "Activate 3G Proof"
   },
   "description": {
-    "de": "Aktiviert den 3G Nachweis für den eingeloggten User",
+    "de": "Aktiviert den 3G Nachweis für den eingeloggten User.",
     "en": "Activates the 3G proof for the logged in user."
   },
   "subscribe": "lang,entry-point-url,gp-search-hash-string,auth,html-overrides,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets"
