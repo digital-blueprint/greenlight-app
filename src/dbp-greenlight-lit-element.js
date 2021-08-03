@@ -99,78 +99,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     /**
-     * Gets the active checkins of the current logged in user
-     *
-     * @returns {object} response
-     */
-    async getActiveCheckIns() {
-        let response;
-
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
-            },
-        };
-        response = await this.httpGetAsync(this.entryPointUrl + '/location_check_in_actions', options);
-        return response;
-    }
-
-    /**
-     * Checkout at a specific location
-     *
-     * @param  locationHash
-     * @param seatNumber (optional)
-     * @returns {object} response
-     */
-    async sendCheckOutRequest(locationHash, seatNumber) {
-        let response;
-
-        let body = {
-            "location": "/check_in_places/" + locationHash,
-            "seatNumber": parseInt(seatNumber),
-        };
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
-            },
-            body: JSON.stringify(body)
-        };
-
-        response = await this.httpGetAsync(this.entryPointUrl + '/location_check_out_actions', options);
-        return response;
-    }
-
-    /**
-     * Checkin at a specific location
-     *
-     * @param  locationHash
-     * @param seatNumber (optional)
-     * @returns {object} response
-     */
-    async sendCheckInRequest(locationHash, seatNumber) {
-        let body = {
-            "location": '/check_in_places/' + locationHash,
-            "seatNumber": parseInt(seatNumber),
-        };
-
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
-            },
-            body: JSON.stringify(body)
-        };
-
-        return await this.httpGetAsync(this.entryPointUrl + '/location_check_in_actions', options);
-    }
-
-    /**
      * Sends an analytics error event for the request of a room
      *
      * @param category
@@ -497,8 +425,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     getReadableDate(date) {
         const i18n = this._i18n;
         let newDate = new Date(date);
-        let month = newDate.getMonth() + 1;
-        return i18n.t('check-in.checked-in-at', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)}) + " " + newDate.getDate() + "." + month + "." + newDate.getFullYear();
+        return i18n.t('show-active-tickets.valid-until', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)});
     }
 
     async checkCheckoutResponse(response, locationHash, seatNumber, locationName, category, that = null, setAdditional = function (){}) {

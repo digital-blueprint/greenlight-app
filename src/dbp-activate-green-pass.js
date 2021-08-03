@@ -167,8 +167,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      *
      * @param {File} file
      */
-    async getImageFromPDF(file)
-    {
+    async getImageFromPDF(file) {
         const data = await this.readBinaryFileContent(file);
         let pages = [], heights = [], width = 0, height = 0, currentPage = 1;
         let scale = 3;
@@ -216,50 +215,175 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Activate Green Pass
+     * Parse the response of a green pass activation request
+     * Include message for user when it worked or not
+     * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
+     *
+     * Possible paths: activation, refresh session, invalid input, green pass hash wrong
+     * no permissions, any other errors, green pass hash empty
+     *
+     * @param responseData
+     * @param greenPassHash
+     * @param category
+     * @param refresh (default = false)
+     * @param setAdditional (default = false)
+     */
+    async checkActivationResponse(responseData, greenPassHash, category, refresh = false, setAdditional = false) {
+        const i18n = this._i18n;
+
+        let status = responseData.status;
+        let responseBody = await responseData.clone().json();
+        switch (status) {
+            case 201:
+                if (setAdditional) {
+                    this.activationEndTime = responseBody['validFor'];
+                    this.identifier = responseBody['identifier'];
+                    console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
+
+                    this.stopQRReader();
+                    this.QRCodeFile = null;
+
+                    this.isActivated = true;
+                    this.isRefresh = false;
+
+                    this._("#text-switch")._active = "";
+
+                    this._("#manualPassUploadWrapper").classList.add('hidden');
+                    this._("#notification-wrapper").classList.remove('hidden');
+                }
+
+                send({
+                    "summary": i18n.t('green-pass-activation.success-activation-title'),
+                    "body": i18n.t('green-pass-activation.success-activation-body'),
+                    "type": "success",
+                    "timeout": 5,
+                });
+
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
+                //await this.checkOtherCheckins(locationHash, seatNumber); //TODO
+                break;
+
+            // Invalid input
+            case 400:
+                //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
+                console.log('error 400');
+                break;
+
+            // Unprocessable entity
+            case 422:
+                console.log('error 422');
+                break;
+
+            // Error: something else doesn't work
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     * @param response
+     * @param identifier
+     * @param category
+     * @returns {Promise<void>}
+     */
+    async checkDeleteCertificateResponse(response, identifier, category) {
+        const i18n = this._i18n;
+
+        switch(response.status) {
+            //Resource deleted
+            case 204:
+                this.activationEndTime = '';
+                this.isActivated = false;
+                this.identifier = null;
+                this.QRCodeFile = null;
+
+                send({
+                    "summary": i18n.t('green-pass-activation.delete-certificate-success-title'),
+                    "body":  i18n.t('green-pass-activation.delete-certificate-success-body'),
+                    "type": "success",
+                    "timeout": 5,
+                });
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CheckOutSuccess', 'name': locationName});
+                break;
+
+            // Resource not found
+            case 404:
+                //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
+                break;
+
+            default:
+                send({
+                    "summary": i18n.t('green-pass-activation.delete-certificate-failed-title'),
+                    "body":  i18n.t('green-pass-activation.delete-certificate-failed-body'),
+                    "type": "error",
+                    "timeout": 5,
+                });
+                //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
+                break;
+        }
+    }
+
+    /**
+     * Sends a request to active a certificate
      *
      * @param greenPassHash
      * @returns {object} response
      */
     async sendActivationRequest(greenPassHash) {
-        let body = {
-            "greenPass": '/activate_green_pass/' + greenPassHash, //TODO change to correct request body
-        };
+        let formData = new FormData();
+        formData.append('digital_covid_certificate_data', greenPassHash);
 
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/ld+json',
                 Authorization: "Bearer " + this.auth.token
             },
-            body: JSON.stringify(body)
+            body: new URLSearchParams(formData)
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/green_pass_activation_actions', options); //TODO change to correct request url
-    }
-
-    async tryDeleteActivation(greenPassHash) {
-        let count_trys = 0;
-        let responseData;
-        while (count_trys !== 4) {
-
-            let time = Math.pow(5, count_trys);
-            responseData = 'response'; //await this.sendCheckOutRequest(greenPassHash); //TODO change to correct request
-            if (responseData.status === 201) {
-                return responseData;
-            }
-            await new Promise(r => setTimeout(r, time));
-            count_trys ++;
-        }
-        return responseData;
-
+        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
     }
 
     /**
-     * Init a checkout and Check if it was successful
+     * Sends a request to get all certificates
+     *
+     * @returns {object} response
+     */
+    async sendGetCertificatesRequest() {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
+    }
+
+    /**
+     * Sends a request to delete the currently activated certificate
+     *
+     * @param  identifier
+     * @returns {object} response
+     */
+    async sendDeleteCertificateRequest(identifier) {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
+    }
+
+    /**
+     * Deletes the currently activated 3G proof certificate
      *
      * @param event
-     * @returns {object} responseData
      */
     async deleteGreenPass(event) {
         let button = event.target;
@@ -267,24 +391,17 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         button.start();
         try {
-            //response = await this.tryDeleteActivation(this.greenPassHash);
-            response = 'response';
-            //TODO: delete green pass data
+            response = await this.sendDeleteCertificateRequest(this.identifier);
+
         } finally {
             button.stop();
         }
 
-        //TODO: send correct response
-       // await this.checkCheckoutResponse(response, this.greenPassHash, 'CheckInRequest', this, this.resetCheckin);
-        this.activationEndTime = '';
-        this.isActivated = false;
-        this.QRCodeFile = null;
-
-        return response;
+        await this.checkDeleteCertificateResponse(response, this.identifier, 'DeleteCertificateRequest');
     }
 
     /**
-     * Sends an Activation request and do error handling and parsing
+     * Sends an activation request and do error handling and parsing
      * Include message for user when it worked or not
      * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
      *
@@ -299,18 +416,16 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async doActivation(greenPassHash, category, refresh = false, setAdditional = false) {
         const i18n = this._i18n;
 
-        // Error: no location hash detected
+        // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
-            this.saveWrongHashAndNotify(i18n.t('check-in.error-title'), i18n.t('check-in.error-body'), greenPassHash);
-            this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailedNoGreenPassHash'});
+            //this.saveWrongHashAndNotify(i18n.t('check-in.error-title'), i18n.t('check-in.error-body'), greenPassHash); //TODO
+            //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailedNoGreenPassHash'});
             return;
         }
 
-        let responseData = { status: 201 }; //await this.sendActivationRequest(greenPassHash); //TODO change to correct request
+        let responseData = await this.sendActivationRequest(greenPassHash);
         await this.checkActivationResponse(responseData, greenPassHash, category, refresh, setAdditional);
     }
-
-
 
     /**
      * Init a checkin from a QR code scan event
@@ -336,6 +451,38 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    /**
+     * Check uploaded file and search for QR code
+     * If a QR Code is found, validate it and send a Activation Request
+     *
+     * @param event
+     */
+    async doActivationManually(event) {
+        const i18n = this._i18n;
+        let button = event.target;
+        if (button.disabled) {
+            return;
+        }
+        try {
+            button.start();
+            let data = await this.searchQRInFile(); //TODO TIMING of showing container -> would be fine if there will appear a loading icon during processing the file
+            if (data === null) {
+                send({
+                    "summary": i18n.t('green-pass-activation.no-qr-code-title'),
+                    "body":  i18n.t('green-pass-activation.no-qr-code-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+            } else {
+                let check = await this.decodeUrl(data.data);
+                if (check) {
+                    await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
+                }
+            }
+        } finally {
+            button.stop();
+        }
+    }
 
     /**
      * Searches in the uploaded file for an QR Code
@@ -360,40 +507,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             let scanner = new QrScanner();
             payload = await scanner.scanImage(this.QRCodeFile);
             return payload;
-        }
-    }
-
-    /**
-     * Check uploaded file and search for QR code
-     * If a QR Code is found, validate it and send a Activation Request
-     *
-     * @param event
-     */
-    async doActivationManually(event) {
-        const i18n = this._i18n;
-        let button = event.target;
-        if (button.disabled) {
-            return;
-        }
-        try {
-            let data = await this.searchQRInFile();
-            if (data === null) {
-                send({
-                    "summary": i18n.t('green-pass-activation.no-qr-code-title'),
-                    "body":  i18n.t('green-pass-activation.no-qr-code-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
-            } else {
-                let check = await this.decodeUrl(data.data);
-                if (check) {
-                    await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
-                    this.doPassUpload(); //TODO TIMING of showing container -> would be fine if there will appear a laoding icon during processing the file
-                }
-                button.start();
-            }
-        } finally {
-            button.stop();
         }
     }
 
@@ -482,30 +595,16 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Show manually room selector container
+     * Show manual pass upload container
      * and stop QR code scanner
      *
      */
-    showFilePicker() {
+    showManualUpload() {
         this._("#qr-scanner").stopScan = true;
         this.showQrContainer = false;
 
         this._("#manualPassUploadWrapper").scrollIntoView({ behavior: 'smooth', block: 'start' });
         this._("#manualPassUploadWrapper").classList.remove('hidden');
-
-        //TODO show filePicker
-    }
-
-    doPassUpload(event) {
-        if ( this._('#qr-scanner') ) {
-            this._('#qr-scanner').stopScan = false;
-        }
-        this.showManuallyContainer = false;
-        this.showQrContainer = false;
-        this._("#manualPassUploadWrapper").classList.add('hidden');
-        this._("#notification-wrapper").classList.remove('hidden');
-
-        this.isActivated = true; //TODO
     }
 
     /**
@@ -548,7 +647,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     uploadSwitch(name) {
         if (name === "manual") {
-            this.showFilePicker();
+            this.showManualUpload();
         } else {
             this.showQrReader();
         }
@@ -564,64 +663,10 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         button.start();
         try {
             this.isRefresh = true;
-            //await this.sendActivationRequest(this.greenPassHash); //TODO
+            //await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true); //TODO
+            //TODO what should happen with the refresh button and the rest of the UI here?
         } finally {
             button.stop();
-        }
-    }
-
-    /**
-     * Parse the response of a green pass activation request
-     * Include message for user when it worked or not
-     * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
-     *
-     * Possible paths: checkin, refresh session, invalid input, green pass hash wrong
-     * no permissions, any other errors, green pass hash empty
-     *
-     * @param responseData
-     * @param greenPassHash
-     * @param category
-     * @param refresh (default = false)
-     * @param setAdditional (default = false)
-     */
-    async checkActivationResponse(responseData, greenPassHash, category, refresh = false, setAdditional = false) {
-        const i18n = this._i18n;
-
-        let status = responseData.status;
-        let responseBody = {endTime: new Date().setMonth(8)}; //await responseData.clone().json(); //TODO change this after correct response
-        switch (status) {
-            case 201:
-                if (setAdditional) {
-                    this.activationEndTime = responseBody.endTime;
-                    //this.identifier = responseBody['identifier'];
-                    //this.agent = responseBody['agent'];
-                    this.stopQRReader();
-                    this.isActivated = true;
-                    this.isRefresh = false;
-                    this._("#text-switch")._active = "";
-                }
-
-                send({
-                    "summary": i18n.t('green-pass-activation.success-activation-title'),
-                    "body": i18n.t('green-pass-activation.success-activation-body'),
-                    "type": "success",
-                    "timeout": 5,
-                });
-
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
-                //await this.checkOtherCheckins(locationHash, seatNumber); //TODO
-                break;
-
-            // Invalid Input
-            case 400:
-                //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
-                console.log('error 400');
-                break;
-
-            // Error: something else doesn't work
-            default:
-                break;
         }
     }
 
@@ -648,16 +693,24 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return data;
     }
 
-    checkIfAlreadyActivated() {
-        let hasValidDocument = false;
+    async checkIfAlreadyActivated() {
 
-        //TODO send request if user already has an activated 3g document. If yes - set activationEndTime + isActivated.
+        let responseData = await this.sendGetCertificatesRequest();
+        let status = responseData.status;
+        let responseBody = await responseData.clone().json();
 
-        if (hasValidDocument) {
-            this.activationEndTime = new Date();
-            this.isActivated = true;
+        if (status === 200) {
+            console.log('received items: ', responseBody['hydra:totalItems']);
 
-            console.log('Found a valid 3G proof for the current user.');
+            if (responseBody['hydra:totalItems'] > 0) {
+                this.isActivated = true;
+                this.activationEndTime = responseBody['hydra:member'][0]['validFor'];
+                this.identifier = responseBody['hydra:member'][0]['identifier'];
+                console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
+                console.log('Found a valid 3G proof for the current user.');
+            }
+        } else {
+            //TODO
         }
     }
 
@@ -877,7 +930,9 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let privacyURL = commonUtils.getAssetURL('dbp-check-in', 'datenschutzerklaerung-tu-graz-check-in.pdf'); //TODO change to greenpass pdf
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
         const i18n = this._i18n;
-        this.checkIfAlreadyActivated();
+        if (this.isLoggedIn() && !this.isLoading() && !this.isActivated) {
+            this.checkIfAlreadyActivated();
+        }
 
         return html`
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -924,12 +979,14 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 <div id="manualPassUploadWrapper" class="border ${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
                     <div class="upload-wrapper">
+                        
                         <label class="button is-primary" for="add-files-button">
                             ${i18n.t('green-pass-activation.filepicker-open-button-title')}
                         </label>
                         <button id="add-files-button" class="hidden" @click="${() => { this.openFileSource(); }}"
                                 class="button" title="TODO add title">
                         </button>
+                        
                          <dbp-file-source
                                     id="file-source"
                                     context="${i18n.t('green-pass-activation.filepicker-context')}"
@@ -961,15 +1018,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="element ${classMap({hidden: (this.isActivated && !this.showQrContainer) || this.showManuallyContainer || this.loading})}">
                         <dbp-qr-code-scanner id="qr-scanner" lang="${this.lang}" stop-scan match-regex="${matchRegexString}" @scan-started="${this._onScanStarted}" @code-detected="${(event) => { this.doActivationWithQR(event);}}"></dbp-qr-code-scanner>
                     </div>
-                    <div class="element ${classMap({hidden: (this.isActivated && !this.showManuallyContainer) || this.showQrContainer || this.loading })}">
-                
-                       <!-- <div class="container" id="manual-select">
-                            <p> TODO: open file picker </p>
-                            <div class="btn">
-                                <dbp-loading-button id="activate-btn" type="is-primary" class="button" value="${i18n.t('green-pass-activation.activate-button-title')}" @click="${(event) => { this.doPassUpload(event); }}" title="${i18n.t('green-pass-activation.activate-button-title')}"></dbp-loading-button>
-                            </div>
-                        </div>-->
-                    </div>  
+
                     <div class="control ${classMap({hidden: !this.loading})}">
                         <span class="loading">
                             <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
