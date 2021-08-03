@@ -242,6 +242,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                     this.stopQRReader();
                     this.QRCodeFile = null;
+                    this.showManuallyContainer = false;
+                    this.showQrContainer = false;
 
                     this.isActivated = true;
                     this.isRefresh = false;
@@ -277,6 +279,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             // Error: something else doesn't work
             default:
+                send({
+                    "summary": i18n.t('green-pass-activation.other-error-title'),
+                    "body": i18n.t('green-pass-activation.other-error-body'),
+                    "type": "error",
+                    "timeout": 5,
+                });
                 break;
         }
     }
@@ -347,23 +355,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Sends a request to get all certificates
-     *
-     * @returns {object} response
-     */
-    async sendGetCertificatesRequest() {
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
-            },
-        };
-
-        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
-    }
-
-    /**
      * Sends a request to delete the currently activated certificate
      *
      * @param  identifier
@@ -414,7 +405,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param setAdditional (default = false)
      */
     async doActivation(greenPassHash, category, refresh = false, setAdditional = false) {
-        const i18n = this._i18n;
+        //const i18n = this._i18n;
 
         // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
@@ -663,8 +654,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         button.start();
         try {
             this.isRefresh = true;
-            //await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true); //TODO
-            //TODO what should happen with the refresh button and the rest of the UI here?
+            //TODO what should happen with the refresh button and the rest of the UI?
         } finally {
             button.stop();
         }

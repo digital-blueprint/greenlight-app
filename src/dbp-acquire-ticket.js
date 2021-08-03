@@ -34,6 +34,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ...super.properties,
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
+            hasValidProof: { type: Boolean, attribute: false },
         };
     }
 
@@ -54,10 +55,23 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         super.update(changedProperties);
     }
 
-    checkForValidProof() {
-        //TODO request if user has an activation
+    async checkForValidProof() { //TODO show loading spinner until the function has finished
+        let responseData = await this.sendGetCertificatesRequest();
+        let status = responseData.status;
+        let responseBody = await responseData.clone().json();
 
-        this.hasValidProof = false;
+        if (status === 200) {
+            if (responseBody['hydra:totalItems'] > 0) {
+                this.isActivated = true;
+                this.activationEndTime = responseBody['hydra:member'][0]['validFor'];
+                this.identifier = responseBody['hydra:member'][0]['identifier'];
+                console.log('Found a valid 3G proof for the current user.');
+                this.hasValidProof = true;
+            }
+        } else {
+            //TODO
+            this.hasValidProof = false;
+        }
     }
 
     static get styles() {
@@ -70,14 +84,23 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
 
+            #manual-proof-checkmark {
+                margin-top: 9px;
+            }
+
+            .border {
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                border-top: 1px solid black;
+            }
 
             .notification-wrapper {
-                margin-top: 1.2em;
+                /*margin-top: 1.2em;*/
                 margin-bottom: 1.2em;
             }
 
             .checkbox-wrapper {
-                margin-top: 2rem;
+                margin-top: 1.5rem;
             }
         
             .confirm-btn {
@@ -140,7 +163,9 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     render() {
         const i18n = this._i18n;
-        this.checkForValidProof();
+        if (this.isLoggedIn() && !this.isLoading() && !this.hasValidProof) {
+            this.checkForValidProof().then(r =>  console.log('3G proof validation done'));
+        }
 
         return html`
 
@@ -155,6 +180,19 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             </div>
 
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+            
+                 <div class="notification-wrapper">
+                    ${ this.hasValidProof ?
+                        html`<dbp-inline-notification type="success" body="${i18n.t('acquire-ticket.valid-proof-found-message')}"></dbp-inline-notification>`
+                        : html`
+                            <dbp-inline-notification type="warning" 
+                                body="${i18n.t('acquire-ticket.no-proof-found-message')}
+                                <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
+                                    <span>${i18n.t('acquire-ticket.activation-link')}</span>.
+                                </a>"
+                            </dbp-inline-notification>`
+                    }
+                </div>
                 
                 <h2>${i18n.t('acquire-ticket.title')}</h2>
                 <div>
@@ -170,20 +208,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </slot>
                 </div>
 
-                <div class="notification-wrapper">
-                    ${ this.hasValidProof ? 
-                        html`<dbp-inline-notification type="success" body="${i18n.t('acquire-ticket.valid-proof-found-message')}"></dbp-inline-notification>`
-                        : html`
-                            <dbp-inline-notification type="warning" 
-                                body="${i18n.t('acquire-ticket.no-proof-found-message')}
-                                <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'> 
-                                    <span>${i18n.t('acquire-ticket.activation-link')}</span>
-                                </a>
-                                ${i18n.t('acquire-ticket.no-proof-found-message-2')}">
-                            </dbp-inline-notification>`
-                    }
-                </div>
-
+                <div class="border"></div>
+                    
                 <div class="field">
                     <label class="label">${i18n.t('acquire-ticket.place-select-title')}</label>
                     <div class="control">
@@ -202,6 +228,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <dbp-loading-button ?disabled="${this.loading}" type="is-primary" value="${i18n.t('acquire-ticket.confirm-button-text')}" @click="${(event) => {}}" title="${i18n.t('acquire-ticket.confirm-button-text')}"></dbp-loading-button>
                     ${!this.hasValidProof ? html`<dbp-loading-button ?disabled="${this.loading}" value="${i18n.t('acquire-ticket.activation-link')}" @click="${(event) => {}}" title="${i18n.t('acquire-ticket.activation-link')}"></dbp-loading-button>` : ``}
                 </div>
+                  
 
             </div>
         `;

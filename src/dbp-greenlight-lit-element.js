@@ -130,6 +130,22 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': action, 'name': JSON.stringify(data)});
     }
 
+    /**
+     * Sends a request to get all certificates
+     *
+     * @returns {object} response
+     */
+    async sendGetCertificatesRequest() {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
+    }
 
     /**
      * Sends a Checkin request and do error handling and parsing
