@@ -22,7 +22,11 @@
     "activate-button-title": "Aktivieren",
     "filepicker-button-title": "Datei auswählen",
     "filepicker-context": "Datei zum Überprüfen auswählen",
-    "filepicker-open-button-title": "Datei zum Überprüfen auswählen"
+    "filepicker-open-button-title": "Datei zum Überprüfen auswählen",
+    "delete-certificate-failed-title": "Fehler!",
+    "delete-certificate-failed-body": "Es ist ein Fehler beim Entfernen Ihres 3G Nachweises aufgetreten.",
+    "delete-certificate-success-title": "Löschen erfolgreich!",
+    "delete-certificate-success-body": "Ihr 3G Nachweis wurde erfolgreich aus dem System entfernt."
   },
   "acquire-ticket": {
     "title": "Ticket für Ort ausstellen",
@@ -39,8 +43,12 @@
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
-    "description": "Beschreibung",
-    "additional-information": "Weitere Informationen"
+    "description": "Hier können Sie die Liste aller gültigen Tickets sehen. Diese müssen Sie im Falle einer manuellen Kontrolle vorweisen.",
+    "no-tickets-message": "Sie besitzen derzeit keine gültigen Tickets!",
+    "valid-until": "Gültig bis: {{clock}} Uhr",
+    "delete-btn-text": "Löschen",
+    "show-btn-text": "Zeigen",
+    "refresh-btn-text": "Aktualisieren"
   },
   "info": {
     "title": "Information",

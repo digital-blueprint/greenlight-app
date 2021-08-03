@@ -39,8 +39,12 @@
   },
   "show-active-tickets": {
     "title": "Show all active tickets",
-    "description": "Description",
-    "additional-information": "Additional Informationen"
+    "description": "Here you can see the list of all valid tickets. You have to show them in case of a manual control.",
+    "no-tickets-message": "You do not have any valid tickets!",
+    "valid-until": "Valid until: {{clock}} o'clock",
+    "delete-btn-text": "Delete",
+    "show-btn-text": "Show",
+    "refresh-btn-text": "Refresh"
   },
   "info": {
     "title": "Information",
