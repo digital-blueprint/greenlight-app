@@ -17,6 +17,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
         this.hasValidProof = false;
+        this.location = '';
+        this.isCheckboxVisible = false;
     }
 
     static get scopedElements() {
@@ -35,6 +37,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
             hasValidProof: { type: Boolean, attribute: false },
+            location: { type: String, attribute: false },
+            isCheckboxVisible: { type: Boolean, attribute: false }
         };
     }
 
@@ -74,6 +78,22 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    showCheckbox() {
+        this.isCheckboxVisible = true;
+    }
+
+    setLocation(event) {
+        if(event.detail.room) {
+            this.location = event.detail.room;
+        } else {
+            this.location = '';
+        }
+    }
+
+    toggleCheckmark() {
+        this._("#manual-proof-mode").checked = this._("#manual-proof-mode") && !this._("#manual-proof-mode").checked;
+    }
+
     static get styles() {
         // language=css
         return css`
@@ -97,14 +117,20 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .notification-wrapper {
                 /*margin-top: 1.2em;*/
                 margin-bottom: 1.2em;
+                margin-top: 0.75em;
+
+                /*display: flex;*/
+                /*flex-direction: column;*/
+                /*row-gap: 10px;*/
             }
 
             .checkbox-wrapper {
-                margin-top: 1.5rem;
+                margin-top: 0.75rem;
             }
         
             .confirm-btn {
-                margin-top: 1.5rem;
+                /*margin-top: 1.5rem;*/
+                margin-top: 1rem;
                 display: flex;
                 justify-content: space-between;
             }
@@ -156,6 +182,14 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     flex-direction: column;
                     row-gap: 10px;
                 }
+
+                .confirm-btn.hidden {
+                    display: none;
+                }
+                
+                #no-proof-continue-btn {
+                    display: block;
+                }
             }
         `;
 
@@ -180,19 +214,6 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             </div>
 
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-            
-                 <div class="notification-wrapper">
-                    ${ this.hasValidProof ?
-                        html`<dbp-inline-notification type="success" body="${i18n.t('acquire-ticket.valid-proof-found-message')}"></dbp-inline-notification>`
-                        : html`
-                            <dbp-inline-notification type="warning" 
-                                body="${i18n.t('acquire-ticket.no-proof-found-message')}
-                                <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
-                                    <span>${i18n.t('acquire-ticket.activation-link')}</span>.
-                                </a>"
-                            </dbp-inline-notification>`
-                    }
-                </div>
                 
                 <h2>${i18n.t('acquire-ticket.title')}</h2>
                 <div>
@@ -201,7 +222,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <p>
                             ${i18n.t('acquire-ticket.additional-information')}
                             <a href="activate-3g-proof" title="${i18n.t('acquire-ticket.activation-link')}" target="_self" class="int-link-internal"> 
-                                <span>${i18n.t('acquire-ticket.activation-link')} </span>
+                                <span>${i18n.t('acquire-ticket.activation-link')}</span>
                             </a>
                             ${i18n.t('acquire-ticket.additional-information-2')}
                         </p>
@@ -213,23 +234,49 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div class="field">
                     <label class="label">${i18n.t('acquire-ticket.place-select-title')}</label>
                     <div class="control">
-                        <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => {}}"></dbp-check-in-place-select>
+                        <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
                     </div>
                 </div>
 
-                <div class="checkbox-wrapper ${classMap({'hidden': this.hasValidProof})}">
+                <div class="notification-wrapper ${classMap({'hidden': (this.location === '')})}">
+                   
+                    <div class="${classMap({'hidden': !this.hasValidProof})}">
+                        <dbp-icon name='checkbox' class="${classMap({'hidden': !this.hasValidProof || this.location === ''})}"></dbp-icon>
+                        ${i18n.t('acquire-ticket.valid-proof-found-message')}
+                    </div>
+
+                    <div class="${classMap({'hidden': this.hasValidProof || this.isCheckboxVisible})}">
+                        <dbp-icon name='close' class="${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
+                        ${i18n.t('acquire-ticket.no-proof-found-message')}
+                        <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
+                            <span>${i18n.t('acquire-ticket.activation-link')}</span>
+                        </a>.
+
+                        <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-ticket.no-proof-continue')}" @click="${this.showCheckbox}" title="${i18n.t('acquire-ticket.no-proof-continue')}"></dbp-loading-button>
+                            <!--<dbp-inline-notification type="warning" 
+                                body="${i18n.t('acquire-ticket.no-proof-found-message')}
+                                <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
+                                    <span>${i18n.t('acquire-ticket.activation-link')}</span>.
+                                </a>"
+                            </dbp-inline-notification>-->
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper ${classMap({'hidden': this.location === '' || this.hasValidProof || !this.isCheckboxVisible})}">
                     <label id="" class="button-container">${i18n.t('acquire-ticket.manual-proof-text')}
                         <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode">
                         <span class="checkmark" id="manual-proof-checkmark"></span>
                     </label>
                 </div>
 
-                <div class="confirm-btn">
-                    <dbp-loading-button ?disabled="${this.loading}" type="is-primary" value="${i18n.t('acquire-ticket.confirm-button-text')}" @click="${(event) => {}}" title="${i18n.t('acquire-ticket.confirm-button-text')}"></dbp-loading-button>
-                    ${!this.hasValidProof ? html`<dbp-loading-button ?disabled="${this.loading}" value="${i18n.t('acquire-ticket.activation-link')}" @click="${(event) => {}}" title="${i18n.t('acquire-ticket.activation-link')}"></dbp-loading-button>` : ``}
+                <div class="confirm-btn ${classMap({'hidden': !this.hasValidProof && !this.isCheckboxVisible})}">
+                    <dbp-loading-button ?disabled="${this.loading || this.location === '' || (!this.hasValidProof && this._("#manual-proof-mode") && !this._("#manual-proof-mode").checked)}"
+                                        type="is-primary" 
+                                        value="${i18n.t('acquire-ticket.confirm-button-text')}" 
+                                        @click="${(event) => {}}" 
+                                        title="${i18n.t('acquire-ticket.confirm-button-text')}"
+                    ></dbp-loading-button>
                 </div>
-                  
-
             </div>
         `;
     }

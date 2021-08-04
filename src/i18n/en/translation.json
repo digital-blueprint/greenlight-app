@@ -15,7 +15,7 @@
     "manually-button-text": "Upload File manually",
     "uploaded-success-message": "A 3G proof has been successfully verified and is active until",
     "delete-button-text": "Delete",
-    "refresh-button-text": "Refresh",
+    "refresh-button-text": "Replace",
     "inline-notification-text": "A valid 3G proof was found!",
     "valid-until": "{{date}} at {{clock}}.",
     "inline-notification-warning": "Your 3G proof will expire soon!",
@@ -40,7 +40,8 @@
     "valid-proof-found-message": "A valid 3G proof was found. Please select a location to create a ticket.",
     "place-select-title": "Select a place",
     "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid proof of such for the duration of my stay in this room and can present such proof in the event of a manual inspection.",
-    "confirm-button-text": "Create a Ticket"
+    "confirm-button-text": "Create a Ticket",
+    "no-proof-continue": "Acquire ticket without 3G proof"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

@@ -718,8 +718,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             #notification-wrapper {
-                /*margin-top: 2rem;*/
-                margin-bottom: 1.2em;
+                margin-top: 1.2rem;
+                /*margin-bottom: 1.2em;*/
             }
             
             #btn-container {
@@ -921,7 +921,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
         const i18n = this._i18n;
         if (this.isLoggedIn() && !this.isLoading() && !this.isActivated) {
-            this.checkIfAlreadyActivated();
+            this.checkIfAlreadyActivated().then(r =>  console.log('3G proof validation done'));
         }
 
         return html`
@@ -936,13 +936,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             </div>
 
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-
-                <div id="notification-wrapper" class="${classMap({hidden: !this.isActivated})}">
-                    ${ this.activationEndTime && this.checkTimeForCurrentDay() ? html`
-                        <dbp-inline-notification type="success" body="${i18n.t('green-pass-activation.inline-notification-text')}"></dbp-inline-notification>` : html`
-                        <dbp-inline-notification type="warning" body="${i18n.t('green-pass-activation.inline-notification-warning')}"></dbp-inline-notification>`
-                    }
-                </div>
                 
                 <h2>${i18n.t('green-pass-activation.title')}</h2>
                 <div>
@@ -1030,6 +1023,10 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
                         </span>
                     </div>
+                </div>
+
+                <div id="notification-wrapper" class="${classMap({hidden: !this.isActivated || this.checkTimeForCurrentDay()})}">
+                    <dbp-inline-notification type="warning" body="${i18n.t('green-pass-activation.inline-notification-warning')}"></dbp-inline-notification>
                 </div>
                 
             </div>
