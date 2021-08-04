@@ -12,7 +12,7 @@ export default {
     },
     development: {
         basePath: '/apps/greenlight/',
-        entryPointURL: 'https://mw-dev.tugraz.at',
+        entryPointURL: 'https://api-dev.tugraz.at',
         keyCloakBaseURL: 'https://auth-dev.tugraz.at/auth',
         keyCloakRealm: 'tugraz-vpu',
         keyCloakClientId: 'greenlight-dev_tugraz_at-GREENLIGHT',
