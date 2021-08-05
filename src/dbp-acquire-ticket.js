@@ -8,6 +8,7 @@ import {classMap} from 'lit-html/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {CheckInPlaceSelect} from '@dbp-toolkit/check-in-place-select';
+import { send } from '@dbp-toolkit/common/notification';
 
 
 class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
@@ -19,6 +20,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasValidProof = false;
         this.location = '';
         this.isCheckboxVisible = false;
+        this.isCheckmarkChecked = false;
     }
 
     static get scopedElements() {
@@ -38,7 +40,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
             hasValidProof: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
-            isCheckboxVisible: { type: Boolean, attribute: false }
+            isCheckboxVisible: { type: Boolean, attribute: false },
+            isCheckmarkChecked: { type: Boolean, attribute: false }
         };
     }
 
@@ -78,20 +81,91 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    async sendCreateTicketRequest() { //TODO request
+        const options = {
+            method: 'POST',
+            headers: {
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        //TODO change to correct request parameters
+        //return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
+        let response = { status: 201 } //TODO delete hardcoded response
+        return response;
+    }
+
+    async checkCreateTicketResponse(response) { //TODO more functionality
+        const i18n = this._i18n;
+
+        switch(response.status) {
+            case 201:
+                send({
+                    "summary": i18n.t('acquire-ticket.create-ticket-success-title'),
+                    "body":  i18n.t('acquire-ticket.create-ticket-success-body', { place: this.location.name }),
+                    "type": "success",
+                    "timeout": 5,
+                });
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
+
+                this.location = "";
+                this.isCheckboxVisible = false;
+                this.isCheckmarkChecked = false;
+                if (this._("#manual-proof-mode")) {
+                    this._("#manual-proof-mode").checked = false;
+                }
+
+                //this.hasValidProof = false; //TODO check if this value should be resetted if it was already false
+                if (this.hasValidProof) {
+                    this.hasValidProof = false; //Could be expired until now
+                }
+            
+                let checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
+                if (checkInPlaceSelect !== null) {
+                    checkInPlaceSelect.clear();
+                }
+
+                break;
+
+            default:
+                send({
+                    "summary": i18n.t('acquire-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-ticket.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+        }
+    }
+
+    async createTicket(event) {
+        let button = event.target;
+        let response;
+
+        button.start();
+        try {
+            response = await this.sendCreateTicketRequest();
+        } finally {
+            button.stop();
+        }
+        await this.checkCreateTicketResponse(response);
+    }
+
     showCheckbox() {
         this.isCheckboxVisible = true;
     }
 
     setLocation(event) {
         if(event.detail.room) {
-            this.location = event.detail.room;
+            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.location = { room: event.detail.room, name: event.detail.name };
         } else {
             this.location = '';
         }
     }
 
-    toggleCheckmark() {
-        this._("#manual-proof-mode").checked = this._("#manual-proof-mode") && !this._("#manual-proof-mode").checked;
+    checkCheckmark() {
+        this.isCheckmarkChecked = this._("#manual-proof-mode") && this._("#manual-proof-mode").checked;
     }
 
     static get styles() {
@@ -103,6 +177,14 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
+
+            .close-icon {
+                color: red;
+            }
+
+            #no-proof-continue-btn {
+                margin-top: 1rem;
+            }
 
             #manual-proof-checkmark {
                 margin-top: 9px;
@@ -118,10 +200,6 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 /*margin-top: 1.2em;*/
                 margin-bottom: 1.2em;
                 margin-top: 0.75em;
-
-                /*display: flex;*/
-                /*flex-direction: column;*/
-                /*row-gap: 10px;*/
             }
 
             .checkbox-wrapper {
@@ -131,8 +209,6 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .confirm-btn {
                 /*margin-top: 1.5rem;*/
                 margin-top: 1rem;
-                display: flex;
-                justify-content: space-between;
             }
 
             .field {
@@ -197,9 +273,6 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     render() {
         const i18n = this._i18n;
-        if (this.isLoggedIn() && !this.isLoading() && !this.hasValidProof) {
-            this.checkForValidProof().then(r =>  console.log('3G proof validation done'));
-        }
 
         return html`
 
@@ -246,12 +319,13 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </div>
 
                     <div class="${classMap({'hidden': this.hasValidProof || this.isCheckboxVisible})}">
-                        <dbp-icon name='close' class="${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
-                        ${i18n.t('acquire-ticket.no-proof-found-message')}
-                        <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
-                            <span>${i18n.t('acquire-ticket.activation-link')}</span>
-                        </a>.
-
+                        <div>
+                            <dbp-icon name='close' class="close-icon ${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
+                            ${i18n.t('acquire-ticket.no-proof-found-message')}
+                            <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
+                                <span>${i18n.t('acquire-ticket.activation-link')}</span>
+                            </a>.
+                        </div>
                         <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-ticket.no-proof-continue')}" @click="${this.showCheckbox}" title="${i18n.t('acquire-ticket.no-proof-continue')}"></dbp-loading-button>
                             <!--<dbp-inline-notification type="warning" 
                                 body="${i18n.t('acquire-ticket.no-proof-found-message')}
@@ -264,16 +338,17 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 <div class="checkbox-wrapper ${classMap({'hidden': this.location === '' || this.hasValidProof || !this.isCheckboxVisible})}">
                     <label id="" class="button-container">${i18n.t('acquire-ticket.manual-proof-text')}
-                        <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode">
+                        <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode" @click="${this.checkCheckmark}">
                         <span class="checkmark" id="manual-proof-checkmark"></span>
                     </label>
                 </div>
 
-                <div class="confirm-btn ${classMap({'hidden': !this.hasValidProof && !this.isCheckboxVisible})}">
-                    <dbp-loading-button ?disabled="${this.loading || this.location === '' || (!this.hasValidProof && this._("#manual-proof-mode") && !this._("#manual-proof-mode").checked)}"
+                <div class="confirm-btn ${classMap({'hidden': (!this.hasValidProof && !this.isCheckboxVisible)})}">
+                    <dbp-loading-button ?disabled="${this.loading || this.location === '' ||  
+                                            (!this.hasValidProof && !this.isCheckmarkChecked)}"
                                         type="is-primary" 
                                         value="${i18n.t('acquire-ticket.confirm-button-text')}" 
-                                        @click="${(event) => {}}" 
+                                        @click="${(event) => { this.createTicket(event) }}" 
                                         title="${i18n.t('acquire-ticket.confirm-button-text')}"
                     ></dbp-loading-button>
                 </div>

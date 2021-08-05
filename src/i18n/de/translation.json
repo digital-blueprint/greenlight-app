@@ -41,7 +41,11 @@
     "place-select-title": "Ort auswählen",
     "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Raum bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
     "confirm-button-text": "Ticket erstellen",
-    "no-proof-continue": "Ticket trotzdem ausstellen lassen"
+    "no-proof-continue": "Ticket trotzdem ausstellen lassen",
+    "create-ticket-success-title": "Ticket erfolgreich erstellt!",
+    "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
+    "other-error-title": "Fehler!",
+    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
