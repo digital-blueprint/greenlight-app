@@ -67,6 +67,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.greenPassHash = '';
         this.isActivated = false;
         this.isRefresh = false;
+        this.isExpiring = false;
         this.QRCodeFile = null;
 
         this.fileHandlingEnabledTargets = 'local';
@@ -106,6 +107,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             wrongHash : { type: Array, attribute: false },
             isActivated: { type: Boolean, attribute: false },
             isRefresh: { type: Boolean, attribute: false },
+            isExpiring: { type: Boolean, attribute: false },
             QRCodeFile: { type: Object, attribute: false },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},
@@ -251,7 +253,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this._("#text-switch")._active = "";
 
                     this._("#manualPassUploadWrapper").classList.add('hidden');
-                    this._("#notification-wrapper").classList.remove('hidden');
                 }
 
                 send({
@@ -343,6 +344,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             case 204:
                 this.activationEndTime = '';
                 this.isActivated = false;
+                this.isExpiring = false;
                 this.identifier = null;
                 this.QRCodeFile = null;
 
@@ -501,7 +503,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
         try {
             button.start();
-            let data = await this.searchQRInFile(); //TODO TIMING of showing container -> would be fine if there will appear a loading icon during processing the file
+            let data = await this.searchQRInFile();
             if (data === null) {
                 send({
                     "summary": i18n.t('green-pass-activation.no-qr-code-title'),
@@ -651,9 +653,31 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     getReadableActivationDate(date) {
         const i18n = this._i18n;
-        let newDate = new Date(date);
-        let month = newDate.getMonth() + 1;
-        return i18n.t('green-pass-activation.valid-until', {date: newDate.getDate() + "." + month + "." + newDate.getFullYear(), clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2) });
+        const iso8601DurationRegex = /(-)?P(?:([.,\d]+)Y)?(?:([.,\d]+)M)?(?:([.,\d]+)W)?(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
+        
+        let matches = date.match(iso8601DurationRegex);
+        let result = '';
+
+        if (matches) {
+            result = {
+                sign: matches[1] === undefined ? '+' : '-',
+                years: matches[2] === undefined ? 0 : matches[2],
+                months: matches[3] === undefined ? 0 : matches[3],
+                weeks: matches[4] === undefined ? 0 : matches[4],
+                days: matches[5] === undefined ? 0 : matches[5],
+                hours: matches[6] === undefined ? 0 : matches[6],
+                minutes: matches[7] === undefined ? 0 : matches[7],
+                seconds: matches[8] === undefined ? 0 : matches[8]
+            };
+            this.isExpiring = (result.years === 0 && result.days === 0 && result.hours < 12);
+            console.log(this.isExpiring);
+        }
+
+        return i18n.t('green-pass-activation.valid-until', { months: result.months, days: result.days, hours: result.hours });
+
+        // let newDate = new Date(date);
+        // let month = newDate.getMonth() + 1;
+        //return i18n.t('green-pass-activation.valid-until', {date: newDate.getDate() + "." + month + "." + newDate.getFullYear(), clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2) });
     }
 
     /**
@@ -1076,7 +1100,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </div>
                 </div>
 
-                <div id="notification-wrapper" class="${classMap({hidden: !this.isActivated || this.checkTimeForCurrentDay()})}">
+                <div id="notification-wrapper" class="${classMap({hidden: !this.isActivated || !this.isExpiring})}">
                     <dbp-inline-notification type="warning" body="${i18n.t('green-pass-activation.inline-notification-warning')}"></dbp-inline-notification>
                 </div>
                 
