@@ -265,16 +265,55 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 //await this.checkOtherCheckins(locationHash, seatNumber); //TODO
                 break;
 
+            // Unauthorized
+            case 403:
+                //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
+                send({
+                    "summary": responseBody['hydra:title'], //TODO
+                    "body": responseBody['hydra:description'],
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                
+                console.log('error 403');
+                break;
+
             // Invalid input
             case 400:
                 //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
+                send({
+                    "summary": responseBody['hydra:title'],
+                    "body": responseBody['hydra:description'],
+                    "type": "danger",
+                    "timeout": 5,
+                });
+
                 console.log('error 400');
                 break;
 
             // Unprocessable entity
             case 422:
+                send({
+                    "summary": responseBody['hydra:title'],
+                    "body": responseBody['hydra:description'],
+                    "type": "danger",
+                    "timeout": 5,
+                });
+
                 console.log('error 422');
+                break;
+            
+            // Bad Gateway
+            case 502:
+                send({
+                    "summary": responseBody['hydra:title'], //TODO
+                    "body": responseBody['hydra:description'],
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
                 break;
 
             // Error: something else doesn't work
@@ -282,7 +321,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 send({
                     "summary": i18n.t('green-pass-activation.other-error-title'),
                     "body": i18n.t('green-pass-activation.other-error-body'),
-                    "type": "error",
+                    "type": "danger",
                     "timeout": 5,
                 });
                 break;
@@ -318,6 +357,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             // Resource not found
             case 404:
+                send({
+                    "summary": responseBody['hydra:title'], //TODO
+                    "body": responseBody['hydra:description'],
+                    "type": "danger",
+                    "timeout": 5,
+                });
                 //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
                 break;
 
@@ -325,7 +370,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 send({
                     "summary": i18n.t('green-pass-activation.delete-certificate-failed-title'),
                     "body":  i18n.t('green-pass-activation.delete-certificate-failed-body'),
-                    "type": "error",
+                    "type": "danger",
                     "timeout": 5,
                 });
                 //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
@@ -701,6 +746,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
         } else {
             //TODO
+            send({
+                "summary": responseBody['hydra:title'],
+                "body": responseBody['hydra:description'],
+                "type": "danger",
+                "timeout": 5,
+            });
         }
     }
 
