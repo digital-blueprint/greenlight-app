@@ -12,7 +12,7 @@
     "data-protection": "Was macht die TU Graz mit Ihren Daten? Die Datenschutzerklärung zur App \"TU Graz Greenlight\" finden sie hier:",
     "data-protection-link": "Zur Datenschutzerklärung",
     "qr-button-text": "QR Code scannen",
-    "manually-button-text": "Datei manuell hochladen",
+    "manually-button-text": "Datei hochladen",
     "uploaded-success-message": "Ein 3G Nachweis wurde erfolgreich überprüft und ist noch aktiv für",
     "uploaded-success-message-2": "Ein 3G Nachweis wurde erfolgreich überprüft und ist aktiv bis",
     "delete-button-text": "Löschen",
@@ -31,7 +31,8 @@
     "delete-certificate-success-body": "Ihr 3G Nachweis wurde erfolgreich aus dem System entfernt.",
     "other-error-title": "Fehler!",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "manual-uploading-message": "Suche nach validem QR Code..."
+    "manual-uploading-message": "Suche nach validem QR Code...",
+    "confirm-text": "Wollen Sie Ihren 3G Nachweis wirklich löschen?"
   },
   "acquire-ticket": {
     "title": "Ticket für Ort ausstellen",
@@ -49,8 +50,10 @@
     "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
     "other-error-title": "Fehler!",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "check-in-link-description": "Möchten Sie auch einchecken?",
-    "check-in-link-text": "TU Graz check-in"
+    "check-in-link-description": "Möchten Sie auch das Contact Tracing der TU Graz unterstützen?",
+    "check-in-link-text": "TU Graz check-in",
+    "manage-tickets-link": "Aktive Tickets anzeigen",
+    "manage-tickets-text": "Sie können Ihre Tickets verwalten unter: "
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",

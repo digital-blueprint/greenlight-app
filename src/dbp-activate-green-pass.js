@@ -428,12 +428,20 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param event
      */
     async deleteGreenPass(event) {
+        const i18n = this._i18n;
         let button = event.target;
         let response;
 
         button.start();
         try {
-            response = await this.sendDeleteCertificateRequest(this.identifier);
+            let confResult = confirm(i18n.t('green-pass-activation.confirm-text'));
+
+            if(confResult) {
+                response = await this.sendDeleteCertificateRequest(this.identifier);
+            } else {
+                button.stop();
+                return;
+            }
 
         } finally {
             button.stop();
@@ -639,6 +647,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._("#manualPassUploadWrapper").scrollIntoView({ behavior: 'smooth', block: 'start' });
         this._("#manualPassUploadWrapper").classList.remove('hidden');
         // this.showManuallyContainer = true; //TODO
+
+        this.openFileSource();
     }
 
     /**
@@ -792,14 +802,13 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 padding: 0 0 0 1em;
             }
             
-            .upload-wrapper {
-                display: flex;
-                flex-direction: row;
-            }
+            /*.upload-wrapper {*/
+            /*    display: flex;*/
+            /*    flex-direction: row;*/
+            /*}*/
 
             #notification-wrapper {
                 margin-top: 1.2rem;
-                /*margin-bottom: 1.2em;*/
             }
             
             #btn-container {
@@ -1038,7 +1047,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </p>
                     </slot>
                 </div>
-                <div id="btn-container" class="${classMap({hidden: this.isActivated && !this.isRefresh})}">
+                <div id="btn-container" class="">
                     <dbp-textswitch id="text-switch" name1="qr-reader"
                         name2="manual"
                         name="${i18n.t('green-pass-activation.qr-button-text')} || ${i18n.t('green-pass-activation.manually-button-text')}
@@ -1051,7 +1060,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
                     <div class="upload-wrapper">
                    
-                        <dbp-loading-button id="add-files-button" value="${i18n.t('green-pass-activation.filepicker-open-button-title')}" @click="${() => { this.openFileSource(); }}" type="is-primary" no-spinner-on-click></dbp-loading-button>
+                        <!--<dbp-loading-button id="add-files-button" value="${i18n.t('green-pass-activation.filepicker-open-button-title')}" @click="${() => { this.openFileSource(); }}" type="is-primary" no-spinner-on-click></dbp-loading-button>-->
           
                         <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
                             <span class="qr-loading">
@@ -1071,7 +1080,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     enabled-targets="${this.fileHandlingEnabledTargets}"
                                     decompress-zip
                                     lang="${this.lang}"
-                                    text="Upload area text"
+                                    text="TODO Upload area text"
                                     button-label="${i18n.t('green-pass-activation.filepicker-button-title')}"
                                     number-of-files="1"
                                     @dbp-file-source-file-selected="${this.getFilesToActivate}"
@@ -1100,7 +1109,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </div>
                         <span class="header"><strong>${i18n.t('green-pass-activation.uploaded-success-message')} ${this.getReadableActivationDate(this.activationEndTime)}</strong></span>
                         <div class="checkins-btn">
-                            <div class="btn"><dbp-loading-button id="refresh-btn" ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.refresh-button-text')}" @click="${(event) => { this.refreshGreenPass(event); }}" title="${i18n.t('green-pass-activation.refresh-button-text')}"></dbp-loading-button></div>
                             <div class="btn"><dbp-loading-button ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.delete-button-text')}" @click="${(event) => { this.deleteGreenPass(event); }}" title="${i18n.t('green-pass-activation.delete-button-text')}"></dbp-loading-button></div>
                         </div>
                     </div>

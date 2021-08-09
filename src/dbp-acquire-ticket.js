@@ -18,6 +18,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
         this.hasValidProof = false;
+        this.hasTicket = false;
         this.location = '';
         this.isCheckboxVisible = false;
         this.isCheckmarkChecked = false;
@@ -39,6 +40,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
             hasValidProof: { type: Boolean, attribute: false },
+            hasTicket: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
             isCheckboxVisible: { type: Boolean, attribute: false },
             isCheckmarkChecked: { type: Boolean, attribute: false }
@@ -110,6 +112,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
 
                 this.location = "";
+                this.hasTicket = true;
                 this.isCheckboxVisible = false;
                 this.isCheckmarkChecked = false;
                 if (this._("#manual-proof-mode")) {
@@ -178,6 +181,10 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
+            
+            .tickets-wrapper {
+                margin-top: 2rem;
+            }
 
             .close-icon {
                 color: red;
@@ -315,25 +322,19 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div class="notification-wrapper ${classMap({'hidden': (this.location === '')})}">
                    
                     <div class="${classMap({'hidden': !this.hasValidProof})}">
-                        <dbp-icon name='checkbox' class="${classMap({'hidden': !this.hasValidProof || this.location === ''})}"></dbp-icon>
+                        <dbp-icon name='checkmark-circle' class="${classMap({'hidden': !this.hasValidProof || this.location === ''})}"></dbp-icon>
                         ${i18n.t('acquire-ticket.valid-proof-found-message')}
                     </div>
 
                     <div class="${classMap({'hidden': this.hasValidProof || this.isCheckboxVisible})}">
                         <div>
-                            <dbp-icon name='close' class="close-icon ${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
+                            <dbp-icon name='cross-circle' class="close-icon ${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
                             ${i18n.t('acquire-ticket.no-proof-found-message')}
                             <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
                                 <span>${i18n.t('acquire-ticket.activation-link')}</span>
                             </a>.
                         </div>
                         <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-ticket.no-proof-continue')}" @click="${this.showCheckbox}" title="${i18n.t('acquire-ticket.no-proof-continue')}"></dbp-loading-button>
-                            <!--<dbp-inline-notification type="warning" 
-                                body="${i18n.t('acquire-ticket.no-proof-found-message')}
-                                <a href='activate-3g-proof' title='${i18n.t('acquire-ticket.activation-link')}' target='_self' class='int-link-internal'>
-                                    <span>${i18n.t('acquire-ticket.activation-link')}</span>.
-                                </a>"
-                            </dbp-inline-notification>-->
                     </div>
                 </div>
 
@@ -344,7 +345,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </label>
                 </div>
 
-                <div class="confirm-btn ${classMap({'hidden': (!this.hasValidProof && !this.isCheckboxVisible)})}">
+                <div class="confirm-btn ${classMap({'hidden': (!this.hasValidProof && !this.isCheckmarkChecked)})}">
                     <dbp-loading-button ?disabled="${this.loading || this.location === '' ||  
                                             (!this.hasValidProof && !this.isCheckmarkChecked)}"
                                         type="is-primary" 
@@ -353,7 +354,20 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         title="${i18n.t('acquire-ticket.confirm-button-text')}"
                     ></dbp-loading-button>
                 </div>
-                
+                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}">
+                    <dbp-inline-notification type="" body="${i18n.t('acquire-ticket.manage-tickets-text')}
+                                <a href='show-active-tickets' title='${i18n.t('acquire-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
+                                    <span>${i18n.t('acquire-ticket.manage-tickets-link')}.</span>
+                                </a>"
+                    </dbp-inline-notification>
+                </div>
+                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}">
+                    <dbp-inline-notification type="" body="${i18n.t('acquire-ticket.check-in-link-description')}
+                                <a href='checkin.tugraz.at' title='${i18n.t('acquire-ticket.check-in-link-text')}' target='_self' class='int-link-internal'>
+                                    <span>${i18n.t('acquire-ticket.check-in-link-text')}.</span>
+                                </a>"
+                    </dbp-inline-notification>
+                </div>
             </div>
         `;
     }

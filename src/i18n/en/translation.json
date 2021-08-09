@@ -12,7 +12,7 @@
     "data-protection": "What does TU Graz do with your data? You can find the data protection declaration for the app \"TU Graz Greenlight\" here:",
     "data-protection-link": "Privacy statement",
     "qr-button-text": "Scan QR Code",
-    "manually-button-text": "Upload File manually",
+    "manually-button-text": "Upload File",
     "uploaded-success-message": "A 3G proof has been successfully verified and is active for",
     "uploaded-success-message-2": "A 3G proof has been successfully verified and is active until",
     "delete-button-text": "Delete",
@@ -31,7 +31,8 @@
     "delete-certificate-success-body": "Your 3G proof has been successfully removed.",
     "other-error-title": "Error!",
     "other-error-body": "An unknown error has occurred.",
-    "manual-uploading-message": "Search for valid QR Code..."
+    "manual-uploading-message": "Search for valid QR Code...",
+    "confirm-text": "Do you really want to delete your 3G proof?"
   },
   "acquire-ticket": {
     "title": "Acquire ticket for a place",
@@ -49,8 +50,10 @@
     "create-ticket-success-body": "The acquired ticket for {{place}} was successfully created.",
     "other-error-title": "Error!",
     "other-error-body": "An unknown error has occurred.",
-    "check-in-link-description": "Do you want to check-in?",
-    "check-in-link-text": "TU Graz check-in"
+    "check-in-link-description": "Do you want to support contact tracing at TU Graz?",
+    "check-in-link-text": "TU Graz check-in",
+    "manage-tickets-link": "Show active tickets",
+    "manage-tickets-text": "You can manage your tickets at: "
   },
   "show-active-tickets": {
     "title": "Show all active tickets",
