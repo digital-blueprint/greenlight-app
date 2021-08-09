@@ -11,7 +11,6 @@ import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
 import { send } from '@dbp-toolkit/common/notification';
 import {escapeRegExp, parseGreenPassQRCode} from './utils.js';
-import {humanFileSize} from "@dbp-toolkit/common/i18next";
 import * as CheckinStyles from './styles';
 import {name as pkgName} from './../package.json';
 import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
@@ -59,6 +58,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.wrongHash = [];
         this.wrongQR = [];
         this._activationInProgress = false;
+        this.qrParsingLoading = false;
         this.loading = false;
         this.loadingMsg = '';
         this.status = null;
@@ -102,6 +102,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             loadingMsg: { type: String, attribute: false },
             searchHashString: { type: String, attribute: 'gp-search-hash-string' },
             loading: {type: Boolean, attribute: false},
+            qrParsingLoading: {type: Boolean, attribute: false},
             status: { type: Object, attribute: false },
             wrongQR : { type: Array, attribute: false },
             wrongHash : { type: Array, attribute: false },
@@ -339,7 +340,10 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async checkDeleteCertificateResponse(response, identifier, category) {
         const i18n = this._i18n;
 
-        switch(response.status) {
+        let status = response.status;
+        // let responseBody = await response.clone().json(); //TODO
+
+        switch(status) {
             //Resource deleted
             case 204:
                 this.activationEndTime = '';
@@ -360,8 +364,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             // Resource not found
             case 404:
                 send({
-                    "summary": responseBody['hydra:title'], //TODO
-                    "body": responseBody['hydra:description'],
+                    "summary": i18n.t('green-pass-activation.delete-certificate-failed-title'), //TODO 404 error text
+                    "body":  i18n.t('green-pass-activation.delete-certificate-failed-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -493,32 +497,23 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Check uploaded file and search for QR code
      * If a QR Code is found, validate it and send a Activation Request
      *
-     * @param event
      */
-    async doActivationManually(event) {
+    async doActivationManually() {
         const i18n = this._i18n;
-        let button = event.target;
-        if (button.disabled) {
-            return;
-        }
-        try {
-            button.start();
-            let data = await this.searchQRInFile();
-            if (data === null) {
-                send({
-                    "summary": i18n.t('green-pass-activation.no-qr-code-title'),
-                    "body":  i18n.t('green-pass-activation.no-qr-code-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
-            } else {
-                let check = await this.decodeUrl(data.data);
-                if (check) {
-                    await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
-                }
+
+        let data = await this.searchQRInFile();
+        if (data === null) {
+            send({
+                "summary": i18n.t('green-pass-activation.no-qr-code-title'),
+                "body":  i18n.t('green-pass-activation.no-qr-code-body'),
+                "type": "danger",
+                "timeout": 5,
+            });
+        } else {
+            let check = await this.decodeUrl(data.data);
+            if (check) {
+                await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
             }
-        } finally {
-            button.stop();
         }
     }
 
@@ -643,6 +638,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this._("#manualPassUploadWrapper").scrollIntoView({ behavior: 'smooth', block: 'start' });
         this._("#manualPassUploadWrapper").classList.remove('hidden');
+        // this.showManuallyContainer = true; //TODO
     }
 
     /**
@@ -723,7 +719,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         button.start();
         try {
             this.isRefresh = true;
-            //TODO what should happen with the refresh button and the rest of the UI?
         } finally {
             button.stop();
         }
@@ -740,16 +735,13 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    getFilesToActivate(event) {
+    async getFilesToActivate(event) {
         this.QRCodeFile = event.detail.file;
-    }
+        this.qrParsingLoading = true;
 
-    getFileData() {
-        let data = html``;
-        if (this.QRCodeFile) {
-            data = html`<span class="show-file"><strong>${this.QRCodeFile.name} </strong> ${humanFileSize(this.QRCodeFile.size)}</span>`;
-        }
-        return data;
+        await this.doActivationManually();
+
+        this.qrParsingLoading = false;
     }
 
     async checkIfAlreadyActivated() {
@@ -790,6 +782,19 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             h2 {
                 margin-top: 0;
+            }
+            
+            .control {
+                align-self: center;
+            }
+            
+            .qr-loading {
+                padding: 0 0 0 1em;
+            }
+            
+            .upload-wrapper {
+                display: flex;
+                flex-direction: row;
             }
 
             #notification-wrapper {
@@ -940,6 +945,14 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             and (orientation: portrait)
             and (max-width:768px) {
 
+                .upload-wrapper {
+                    flex-direction: column;
+                }
+
+                .qr-loading {
+                    padding: 1em;
+                }
+
                 .header {
                     margin-bottom: 0.5rem;
                 }
@@ -1035,15 +1048,16 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         @change=${ (e) => this.uploadSwitch(e.target.name) }></dbp-textswitch>
                 </div>
                 
-                <div id="manualPassUploadWrapper" class="border ${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
+                <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
                     <div class="upload-wrapper">
-                        
-                        <label class="button is-primary" for="add-files-button">
-                            ${i18n.t('green-pass-activation.filepicker-open-button-title')}
-                        </label>
-                        <button id="add-files-button" class="hidden" @click="${() => { this.openFileSource(); }}"
-                                class="button" title="TODO add title">
-                        </button>
+                   
+                        <dbp-loading-button id="add-files-button" value="${i18n.t('green-pass-activation.filepicker-open-button-title')}" @click="${() => { this.openFileSource(); }}" type="is-primary" no-spinner-on-click></dbp-loading-button>
+          
+                        <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
+                            <span class="qr-loading">
+                                <dbp-mini-spinner text=${i18n.t('green-pass-activation.manual-uploading-message')}></dbp-mini-spinner>
+                            </span>
+                        </div>
                         
                          <dbp-file-source
                                     id="file-source"
@@ -1062,13 +1076,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     number-of-files="1"
                                     @dbp-file-source-file-selected="${this.getFilesToActivate}"
                         ></dbp-file-source>
-                        
-                        <div class="${classMap({hidden: !this.QRCodeFile})}">
-                            <div class="file-block">
-                                ${this.getFileData()}
-                                <dbp-loading-button id="activate-btn" type="is-primary" class="" @click="${(event) => { this.doActivationManually(event); }}" value="${i18n.t('green-pass-activation.activate-button-title')}" title="${i18n.t('green-pass-activation.activate-button-title')}">></dbp-loading-button>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
@@ -1086,17 +1093,21 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 <div class="grid-container border ${classMap({hidden: !this.isActivated})}">
                     <div class="checkins">
+                        <div class="qr-control ${classMap({hidden: !this.qrParsingLoading})}">
+                            <span class="qr-loading">
+                                <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
+                            </span>
+                        </div>
                         <span class="header"><strong>${i18n.t('green-pass-activation.uploaded-success-message')} ${this.getReadableActivationDate(this.activationEndTime)}</strong></span>
                         <div class="checkins-btn">
-                            <div class="btn"><dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('green-pass-activation.refresh-button-text')}" @click="${(event) => { this.refreshGreenPass(event); }}" title="${i18n.t('green-pass-activation.refresh-button-text')}"></dbp-loading-button></div>
-                            <div class="btn"><dbp-loading-button ?disabled="${this.loading}" value="${i18n.t('green-pass-activation.delete-button-text')}" @click="${(event) => { this.deleteGreenPass(event); }}" title="${i18n.t('green-pass-activation.delete-button-text')}"></dbp-loading-button></div>
+                            <div class="btn"><dbp-loading-button id="refresh-btn" ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.refresh-button-text')}" @click="${(event) => { this.refreshGreenPass(event); }}" title="${i18n.t('green-pass-activation.refresh-button-text')}"></dbp-loading-button></div>
+                            <div class="btn"><dbp-loading-button ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.delete-button-text')}" @click="${(event) => { this.deleteGreenPass(event); }}" title="${i18n.t('green-pass-activation.delete-button-text')}"></dbp-loading-button></div>
                         </div>
                     </div>
-                    
                     <div class="control ${classMap({hidden: !this.loading})}">
-                        <span class="loading">
-                            <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
-                        </span>
+                            <span class="loading">
+                                <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
+                            </span>
                     </div>
                 </div>
 

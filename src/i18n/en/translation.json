@@ -30,7 +30,8 @@
     "delete-certificate-success-title": "Successful deleted!",
     "delete-certificate-success-body": "Your 3G proof has been successfully removed.",
     "other-error-title": "Error!",
-    "other-error-body": "An unknown error has occurred."
+    "other-error-body": "An unknown error has occurred.",
+    "manual-uploading-message": "Search for valid QR Code..."
   },
   "acquire-ticket": {
     "title": "Acquire ticket for a place",
@@ -47,7 +48,9 @@
     "create-ticket-success-title": "Ticket successfully created!",
     "create-ticket-success-body": "The acquired ticket for {{place}} was successfully created.",
     "other-error-title": "Error!",
-    "other-error-body": "An unknown error has occurred."
+    "other-error-body": "An unknown error has occurred.",
+    "check-in-link-description": "Do you want to check-in?",
+    "check-in-link-text": "TU Graz check-in"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

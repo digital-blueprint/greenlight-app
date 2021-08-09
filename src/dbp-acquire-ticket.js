@@ -82,21 +82,22 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async sendCreateTicketRequest() { //TODO request
-        const options = {
-            method: 'POST',
-            headers: {
-                Authorization: "Bearer " + this.auth.token
-            },
-        };
+        // const options = {
+        //     method: 'POST',
+        //     headers: {
+        //         Authorization: "Bearer " + this.auth.token
+        //     },
+        // };
 
         //TODO change to correct request parameters
         //return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
-        let response = { status: 201 } //TODO delete hardcoded response
+        let response = { status: 201 }; //TODO delete hardcoded response
         return response;
     }
 
     async checkCreateTicketResponse(response) { //TODO more functionality
         const i18n = this._i18n;
+        let checkInPlaceSelect;
 
         switch(response.status) {
             case 201:
@@ -120,7 +121,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this.hasValidProof = false; //Could be expired until now
                 }
             
-                let checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
+                checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
                 if (checkInPlaceSelect !== null) {
                     checkInPlaceSelect.clear();
                 }
@@ -348,10 +349,11 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             (!this.hasValidProof && !this.isCheckmarkChecked)}"
                                         type="is-primary" 
                                         value="${i18n.t('acquire-ticket.confirm-button-text')}" 
-                                        @click="${(event) => { this.createTicket(event) }}" 
+                                        @click="${(event) => { this.createTicket(event); }}" 
                                         title="${i18n.t('acquire-ticket.confirm-button-text')}"
                     ></dbp-loading-button>
                 </div>
+                
             </div>
         `;
     }
