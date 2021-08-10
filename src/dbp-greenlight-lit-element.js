@@ -441,7 +441,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     getReadableDate(date) {
         const i18n = this._i18n;
         let newDate = new Date(date);
-        return i18n.t('show-active-tickets.valid-until', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)});
+
+        let hours = newDate.getHours();
+        let minutes = newDate.getMinutes();
+
+        let result = i18n.t('show-active-tickets.valid-until-message-1');
+        result += hours > 0 ? i18n.t('show-active-tickets.valid-until-message-2', { hours: hours }) : i18n.t('show-active-tickets.valid-until-message-3', { minutes: ("0" + minutes).slice(-2) });
+
+        return result;
     }
 
     async checkCheckoutResponse(response, locationHash, seatNumber, locationName, category, that = null, setAdditional = function (){}) {

@@ -239,7 +239,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         switch (status) {
             case 201:
                 if (setAdditional) {
-                    this.activationEndTime = responseBody['validFor'];
+                    this.activationEndTime = responseBody['expires'];
                     this.identifier = responseBody['identifier'];
                     console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
 
@@ -659,31 +659,11 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     getReadableActivationDate(date) {
         const i18n = this._i18n;
-        const iso8601DurationRegex = /(-)?P(?:([.,\d]+)Y)?(?:([.,\d]+)M)?(?:([.,\d]+)W)?(?:([.,\d]+)D)?T(?:([.,\d]+)H)?(?:([.,\d]+)M)?(?:([.,\d]+)S)?/;
-        
-        let matches = date.match(iso8601DurationRegex);
-        let result = '';
+        let newDate = new Date(date);
+        let month = newDate.getMonth() + 1;
+        this.isExpiring = !this.checkIfCertificateIsExpiring();
 
-        if (matches) {
-            result = {
-                sign: matches[1] === undefined ? '+' : '-',
-                years: matches[2] === undefined ? 0 : matches[2],
-                months: matches[3] === undefined ? 0 : matches[3],
-                weeks: matches[4] === undefined ? 0 : matches[4],
-                days: matches[5] === undefined ? 0 : matches[5],
-                hours: matches[6] === undefined ? 0 : matches[6],
-                minutes: matches[7] === undefined ? 0 : matches[7],
-                seconds: matches[8] === undefined ? 0 : matches[8]
-            };
-            this.isExpiring = (result.years === 0 && result.days === 0 && result.hours < 12);
-            console.log(this.isExpiring);
-        }
-
-        return i18n.t('green-pass-activation.valid-until', { months: result.months, days: result.days, hours: result.hours });
-
-        // let newDate = new Date(date);
-        // let month = newDate.getMonth() + 1;
-        //return i18n.t('green-pass-activation.valid-until', {date: newDate.getDate() + "." + month + "." + newDate.getFullYear(), clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2) });
+        return i18n.t('green-pass-activation.valid-until', {date: newDate.getDate() + "." + month + "." + newDate.getFullYear(), clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2) });
     }
 
     /**
@@ -691,18 +671,15 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      *
      * @returns {boolean} true if the 3G proof is valid for the next 12 hours
      */
-    checkTimeForCurrentDay() {
+    checkIfCertificateIsExpiring() {
         const hours = 12;
-
         let newDate = new Date();
-        newDate.setTime(newDate.getTime() + (hours * 60 * 60 * 1000));
-
         let currDate = new Date(this.activationEndTime);
+        newDate.setTime(newDate.getTime() + (hours * 60 * 60 * 1000));
         currDate.setTime(currDate.getTime() + (hours * 60 * 60 * 1000));
 
-        console.log('computed minimal validity: ', newDate.getDate() + '.' + (newDate.getMonth() + 1) + '.' + newDate.getFullYear() + ' at ' + newDate.getHours() + ':' + ("0" + newDate.getMinutes()).slice(-2));
-        console.log('current 3G proof validity: ', currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear() + ' at ' + currDate.getHours() + ':' + ("0" + currDate.getMinutes()).slice(-2));
-
+        // console.log('computed minimal validity: ', newDate.getDate() + '.' + (newDate.getMonth() + 1) + '.' + newDate.getFullYear() + ' at ' + newDate.getHours() + ':' + ("0" + newDate.getMinutes()).slice(-2));
+        // console.log('current 3G proof validity: ', currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear() + ' at ' + currDate.getHours() + ':' + ("0" + currDate.getMinutes()).slice(-2));
         return currDate.getTime() >= newDate.getTime();
     }
 
@@ -765,7 +742,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             if (responseBody['hydra:totalItems'] > 0) {
                 this.isActivated = true;
-                this.activationEndTime = responseBody['hydra:member'][0]['validFor'];
+                this.activationEndTime = responseBody['hydra:member'][0]['expires'];
                 this.identifier = responseBody['hydra:member'][0]['identifier'];
                 console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
                 console.log('Found a valid 3G proof for the current user.');
@@ -812,6 +789,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             #btn-container {
+                display: flex;
                 margin-top: 1.5rem;
                 margin-bottom: 2rem;
             }
@@ -954,6 +932,11 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             and (orientation: portrait)
             and (max-width:768px) {
 
+                #btn-container {
+                    flex-direction: column;
+                    row-gap: 1.5em;
+                }
+
                 .upload-wrapper {
                     flex-direction: column;
                 }
@@ -1055,6 +1038,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         value1="${i18n.t('green-pass-activation.qr-button-text')}"
                         value2="${i18n.t('green-pass-activation.manually-button-text')}"
                         @change=${ (e) => this.uploadSwitch(e.target.name) }></dbp-textswitch>
+
+                    <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
+                            <span class="qr-loading">
+                                <dbp-mini-spinner text=${i18n.t('green-pass-activation.manual-uploading-message')}></dbp-mini-spinner>
+                            </span>
+                    </div>
                 </div>
                 
                 <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
@@ -1062,11 +1051,11 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                    
                         <!--<dbp-loading-button id="add-files-button" value="${i18n.t('green-pass-activation.filepicker-open-button-title')}" @click="${() => { this.openFileSource(); }}" type="is-primary" no-spinner-on-click></dbp-loading-button>-->
           
-                        <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
+                        <!--<div class="control ${classMap({hidden: !this.qrParsingLoading})}">
                             <span class="qr-loading">
                                 <dbp-mini-spinner text=${i18n.t('green-pass-activation.manual-uploading-message')}></dbp-mini-spinner>
                             </span>
-                        </div>
+                        </div>-->
                         
                          <dbp-file-source
                                     id="file-source"
