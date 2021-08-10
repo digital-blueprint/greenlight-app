@@ -20,8 +20,8 @@
     "inline-notification-text": "Ein gültiger 3G Nachweis wurde gefunden!",
     "inline-notification-warning": "Ihr 3G Nachweis läuft in Kürze ab!",
     "activate-button-title": "Aktivieren",
-    "filepicker-button-title": "Datei auswählen",
-    "filepicker-context": "Datei zur Überprüfung auswählen",
+    "filepicker-button-title": "PDF oder Bild auswählen",
+    "filepicker-context": "PDF oder Bild zur Überprüfung auswählen",
     "filepicker-open-button-title": "Datei zur Überprüfung auswählen",
     "delete-certificate-failed-title": "Fehler!",
     "delete-certificate-failed-body": "Es ist ein Fehler beim Entfernen Ihres 3G Nachweises aufgetreten.",
@@ -43,7 +43,7 @@
     "place-select-title": "Ort auswählen",
     "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Raum bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
     "confirm-button-text": "Ticket erstellen",
-    "no-proof-continue": "Ticket trotzdem ausstellen lassen",
+    "no-proof-continue": "Ticket ohne 3G Nachweis erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
     "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
     "other-error-title": "Fehler!",
@@ -62,7 +62,9 @@
     "valid-until-message-3": "{{minutes}} Minute(n)",
     "delete-btn-text": "Löschen",
     "show-btn-text": "Zeigen",
-    "refresh-btn-text": "Verlängern"
+    "refresh-btn-text": "Verlängern",
+    "show-ticket-title": "Ticket für Ort: {{place}}",
+    "show-ticket-description": "TODO: Beschreibung"
   },
   "info": {
     "title": "Information",

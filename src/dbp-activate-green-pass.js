@@ -58,6 +58,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.wrongHash = [];
         this.wrongQR = [];
         this._activationInProgress = false;
+        this.preCheck = true;
         this.qrParsingLoading = false;
         this.loading = false;
         this.loadingMsg = '';
@@ -264,7 +265,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 });
 
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
-                //await this.checkOtherCheckins(locationHash, seatNumber); //TODO
                 break;
 
             // Unauthorized
@@ -646,7 +646,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this._("#manualPassUploadWrapper").scrollIntoView({ behavior: 'smooth', block: 'start' });
         this._("#manualPassUploadWrapper").classList.remove('hidden');
-        // this.showManuallyContainer = true; //TODO
 
         this.openFileSource();
     }
@@ -733,12 +732,14 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     async checkIfAlreadyActivated() {
 
+        this.loading = true;
+
         let responseData = await this.sendGetCertificatesRequest();
         let status = responseData.status;
         let responseBody = await responseData.clone().json();
 
         if (status === 200) {
-            console.log('received items: ', responseBody['hydra:totalItems']);
+            // console.log('received items: ', responseBody['hydra:totalItems']);
 
             if (responseBody['hydra:totalItems'] > 0) {
                 this.isActivated = true;
@@ -756,6 +757,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 "timeout": 5,
             });
         }
+
+        this.loading = false;
     }
 
     static get styles() {
@@ -997,11 +1000,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     render() {
-        let privacyURL = commonUtils.getAssetURL('dbp-check-in', 'datenschutzerklaerung-tu-graz-check-in.pdf'); //TODO change to greenpass pdf
+        let privacyURL = commonUtils.getAssetURL('@dbp-topics/greenlight', 'datenschutzerklaerung-tu-graz-greenlight.pdf'); //TODO replace dummy PDF file
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
         const i18n = this._i18n;
-        if (this.isLoggedIn() && !this.isLoading() && !this.isActivated) {
+        if (this.isLoggedIn() && !this.isLoading() && this.preCheck) {
             this.checkIfAlreadyActivated().then(r =>  console.log('3G proof validation done'));
+            this.preCheck = false;
         }
 
         return html`
@@ -1048,15 +1052,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
                     <div class="upload-wrapper">
-                   
-                        <!--<dbp-loading-button id="add-files-button" value="${i18n.t('green-pass-activation.filepicker-open-button-title')}" @click="${() => { this.openFileSource(); }}" type="is-primary" no-spinner-on-click></dbp-loading-button>-->
-          
-                        <!--<div class="control ${classMap({hidden: !this.qrParsingLoading})}">
-                            <span class="qr-loading">
-                                <dbp-mini-spinner text=${i18n.t('green-pass-activation.manual-uploading-message')}></dbp-mini-spinner>
-                            </span>
-                        </div>-->
-                        
                          <dbp-file-source
                                     id="file-source"
                                     context="${i18n.t('green-pass-activation.filepicker-context')}"
@@ -1101,11 +1096,12 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="btn"><dbp-loading-button ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.delete-button-text')}" @click="${(event) => { this.deleteGreenPass(event); }}" title="${i18n.t('green-pass-activation.delete-button-text')}"></dbp-loading-button></div>
                         </div>
                     </div>
-                    <div class="control ${classMap({hidden: !this.loading})}">
-                            <span class="loading">
-                                <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
-                            </span>
-                    </div>
+                </div>
+
+                <div class="control ${classMap({hidden: !this.loading})}">
+                    <span class="loading">
+                        <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
+                    </span>
                 </div>
 
                 <div id="notification-wrapper" class="${classMap({hidden: !this.isActivated || !this.isExpiring})}">

@@ -62,7 +62,9 @@
     "valid-until-message-3": "{{minutes}} minute(s)",
     "delete-btn-text": "Delete",
     "show-btn-text": "Show",
-    "refresh-btn-text": "Refresh"
+    "refresh-btn-text": "Refresh",
+    "show-ticket-title": "Ticket for place: {{place}}",
+    "show-ticket-description": "TODO: description"
   },
   "info": {
     "title": "Information",

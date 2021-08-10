@@ -5,6 +5,7 @@ import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {LoadingButton, Icon, MiniSpinner, InlineNotification} from '@dbp-toolkit/common';
 import {classMap} from 'lit-html/directives/class-map.js';
+import MicroModal from './micromodal.es';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 
@@ -94,6 +95,33 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    showTicket(event, entry) {
+        //TODO show modal
+        MicroModal.show(this._('#show-ticket-modal'), {
+            disableScroll: true,
+            onClose: modal => {
+                this.statusText = "";
+                this.loading = false;
+            },
+        });
+
+
+    }
+
+    refreshTicket(event, entry) {
+        //TODO request to create ticket for this room again
+    }
+
+    deleteTicket(event, entry) {
+        //TODO request to delete the ticket
+
+        this.activeTickets = {}; //TODO replace with response
+    }
+
+    closeDialog(e) {
+        MicroModal.close(this._('#show-ticket-modal'));
+    }
+
     static get styles() {
         // language=css
         return css`
@@ -102,6 +130,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getNotificationCSS()}
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
+            ${commonStyles.getModalDialogCSS()}
             
             .tickets {
                 display: flex;
@@ -127,6 +156,68 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-top: 2rem;
                 padding-top: 2rem;
                 border-top: 1px solid black;
+            }
+
+            #ticket-modal-box {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 30px;
+                max-height: 400px;
+                min-height: 400px;
+                min-width: 680px;
+                max-width: 680px;
+            }
+
+            #ticket-modal-box .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            #ticket-modal-box .modal-header h2 {
+                font-size: 1.2rem;
+                padding-right: 5px;
+            }
+
+            #ticket-modal-box .modal-content {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: space-evenly;
+            }
+
+            #ticket-modal-box .modal-content label {
+                display: block;
+                width: 100%;
+                text-align: left;
+            }
+
+            #ticket-modal-box .modal-content div {
+                display: flex;
+            }
+
+            #ticket-modal-box .modal-footer {
+                padding-top: 15px;
+            }
+
+            #ticket-modal-box .modal-footer .modal-footer-btn {
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 15px;
+            }
+            
+            #ticket-modal-box .modal-header {
+                padding: 0px;
+            }
+
+            #ticket-modal-content {
+                padding: 0px;
+                align-items: baseline;
+            }
+
+            #ticket-modal-box .modal-header h2 {
+                text-align: left;
             }
 
             @media only screen
@@ -189,9 +280,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             ${this.getReadableDate(i.endTime)}
                         </span>
                         <div class="btn">
-                            <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => {}}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                            <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => {}}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>
-                            <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => {}}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                            <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                            <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>
+                            <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, i); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                         </div>
                     `)}
                     <span class="control ${classMap({hidden: this.isLoggedIn() && !this.initialTicketsLoading})}">
@@ -203,6 +294,33 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.initialTicketsLoading || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
                 </div>
 
+            </div>
+            
+            <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
+                <div class="modal-overlay" tabindex="-2" data-micromodal-close>
+                    <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
+                         aria-labelledby="ticket-modal-title">
+                        <header class="modal-header">
+                            <h2 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title', { place: 'Test Location'})}</h2>
+                            <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
+                                <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                            </button>
+                        </header>
+                        <main class="modal-content" id="ticket-modal-content">
+                            <h3>
+                                TODO: Content
+                            </h3>
+                            <div>
+                                <!--TODO: Content-->
+                            </div>
+                        </main>
+                        <footer class="modal-footer">
+                            <div class="modal-footer-btn">
+                                <!--Footer Text-->
+                            </div>
+                        </footer>
+                    </div>
+                </div>
             </div>
         `;
     }

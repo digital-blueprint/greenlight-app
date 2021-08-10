@@ -16,7 +16,11 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         super();
         this._i18n = createInstance();
         this.lang = this._i18n.language;
+        this.loading = false;
+        this.preselectedOption = 'TU Graz'; //TODO delete hardcoded TU Graz
+        this.preselectionCheck = true;
         this.entryPointUrl = '';
+        this.showPreselectedSelector = false;
         this.hasValidProof = false;
         this.hasTicket = false;
         this.location = '';
@@ -38,12 +42,14 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return {
             ...super.properties,
             lang: { type: String },
+            loading: { type: Boolean, attribute: false },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
+            showPreselectedSelector: { type: String, attribute: 'no-selector' },
             hasValidProof: { type: Boolean, attribute: false },
             hasTicket: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
             isCheckboxVisible: { type: Boolean, attribute: false },
-            isCheckmarkChecked: { type: Boolean, attribute: false }
+            isCheckmarkChecked: { type: Boolean, attribute: false },
         };
     }
 
@@ -64,7 +70,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         super.update(changedProperties);
     }
 
-    async checkForValidProof() { //TODO show loading spinner until the function has finished
+    async checkForValidProof() {
+        this.loading = true;
         let responseData = await this.sendGetCertificatesRequest();
         let status = responseData.status;
         let responseBody = await responseData.clone().json();
@@ -74,13 +81,14 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.isActivated = true;
                 this.activationEndTime = responseBody['hydra:member'][0]['validFor'];
                 this.identifier = responseBody['hydra:member'][0]['identifier'];
-                console.log('Found a valid 3G proof for the current user.');
+                console.log('No valid 3G proof for the current user could be found.');
                 this.hasValidProof = true;
             }
         } else {
-            //TODO
             this.hasValidProof = false;
+            console.log('Found no valid 3G proof for the current user.');
         }
+        this.loading = false;
     }
 
     async sendCreateTicketRequest() { //TODO request
@@ -118,8 +126,6 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 if (this._("#manual-proof-mode")) {
                     this._("#manual-proof-mode").checked = false;
                 }
-
-                //this.hasValidProof = false; //TODO check if this value should be resetted if it was already false
                 if (this.hasValidProof) {
                     this.hasValidProof = false; //Could be expired until now
                 }
@@ -128,6 +134,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 if (checkInPlaceSelect !== null) {
                     checkInPlaceSelect.clear();
                 }
+
+                this._("#checkin-reference").scrollIntoView({ behavior: 'smooth', block: 'start' }); //TODO fix this
 
                 break;
 
@@ -181,6 +189,21 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
+            
+            select:not(.select) {
+                /*background-size: 13px;*/
+                /*background-position-x: calc(100% - 0.4rem);*/
+                /*padding-right: 1.3rem;*/
+                background-image: none;
+                width: 100%;
+                height: 29px;
+                font-weight: 300;
+                border: 1px solid #aaa;
+            }
+            
+            .loading-proof {
+                padding: 0;
+            }
             
             .tickets-wrapper {
                 margin-top: 2rem;
@@ -282,6 +305,12 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
 
+        if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) {
+            this.location = { room: '', name: this.preselectedOption };
+            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.preselectionCheck = false;
+        }
+
         return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -315,18 +344,19 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div class="field">
                     <label class="label">${i18n.t('acquire-ticket.place-select-title')}</label>
                     <div class="control">
-                        <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
+                        <dbp-check-in-place-select class="${classMap({'hidden': this.showPreselectedSelector})}" subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
+                        <select class="${classMap({'hidden': !this.showPreselectedSelector})}" disabled><option selected="selected">${this.preselectedOption}</option></select>
                     </div>
                 </div>
 
                 <div class="notification-wrapper ${classMap({'hidden': (this.location === '')})}">
                    
-                    <div class="${classMap({'hidden': !this.hasValidProof})}">
+                    <div class="${classMap({'hidden': !this.hasValidProof || this.loading})}">
                         <dbp-icon name='checkmark-circle' class="${classMap({'hidden': !this.hasValidProof || this.location === ''})}"></dbp-icon>
                         ${i18n.t('acquire-ticket.valid-proof-found-message')}
                     </div>
 
-                    <div class="${classMap({'hidden': this.hasValidProof || this.isCheckboxVisible})}">
+                    <div class="${classMap({'hidden': this.hasValidProof || this.isCheckboxVisible || this.loading})}">
                         <div>
                             <dbp-icon name='cross-circle' class="close-icon ${classMap({'hidden': this.hasValidProof || this.location === ''})}"></dbp-icon>
                             ${i18n.t('acquire-ticket.no-proof-found-message')}
@@ -336,6 +366,13 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </div>
                         <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-ticket.no-proof-continue')}" @click="${this.showCheckbox}" title="${i18n.t('acquire-ticket.no-proof-continue')}"></dbp-loading-button>
                     </div>
+
+                    <div class="control ${classMap({hidden: !this.loading})}">
+                        <span class="loading-proof">
+                            <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                        </span>
+                    </div>
+                    
                 </div>
 
                 <div class="checkbox-wrapper ${classMap({'hidden': this.location === '' || this.hasValidProof || !this.isCheckboxVisible})}">
@@ -361,7 +398,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </a>"
                     </dbp-inline-notification>
                 </div>
-                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}">
+                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
                     <dbp-inline-notification type="" body="${i18n.t('acquire-ticket.check-in-link-description')}
                                 <a href='checkin.tugraz.at' title='${i18n.t('acquire-ticket.check-in-link-text')}' target='_self' class='int-link-internal'>
                                     <span>${i18n.t('acquire-ticket.check-in-link-text')}.</span>
