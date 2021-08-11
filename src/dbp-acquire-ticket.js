@@ -17,7 +17,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._i18n = createInstance();
         this.lang = this._i18n.language;
         this.loading = false;
-        this.preselectedOption = 'TU Graz'; //TODO delete hardcoded TU Graz
+        this.preselectedOption = '';
         this.preselectionCheck = true;
         this.entryPointUrl = '';
         this.showPreselectedSelector = false;
@@ -44,7 +44,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             loading: { type: Boolean, attribute: false },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            showPreselectedSelector: { type: String, attribute: 'no-selector' },
+            showPreselectedSelector: { type: String, attribute: 'show-preselected' },
+            preselectedOption: { type: String, attribute: 'preselected-option' },
             hasValidProof: { type: Boolean, attribute: false },
             hasTicket: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
@@ -98,6 +99,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         //         Authorization: "Bearer " + this.auth.token
         //     },
         // };
+        //TODO check if there is a valid ticket for this place -> after response we should send 'ticket was refreshed' and not 'created'
 
         //TODO change to correct request parameters
         //return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
@@ -105,7 +107,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return response;
     }
 
-    async checkCreateTicketResponse(response) { //TODO more functionality
+    async checkCreateTicketResponse(response) { //TODO
         const i18n = this._i18n;
         let checkInPlaceSelect;
 

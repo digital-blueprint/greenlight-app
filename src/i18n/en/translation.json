@@ -51,7 +51,7 @@
     "check-in-link-description": "Do you want to support contact tracing at TU Graz?",
     "check-in-link-text": "TU Graz check-in",
     "manage-tickets-link": "Show active tickets",
-    "manage-tickets-text": "You can manage your tickets at: "
+    "manage-tickets-text": "You can manage your active tickets at: "
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

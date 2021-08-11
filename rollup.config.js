@@ -59,6 +59,7 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1';
+config.preselectedOption = 'TU Graz';
 
 function getOrigin(url) {
     if (url)
@@ -134,6 +135,8 @@ export default (async () => {
                     keyCloakClientId: config.keyCloakClientId,
                     CSP: config.CSP,
                     gpSearchQRString: config.gpSearchQRString,
+                    showPreselected: config.showPreselected,
+                    preselectedOption: config.preselectedOption,
                     matomoUrl: config.matomoUrl,
                     matomoSiteId: config.matomoSiteId,
                     buildInfo: getBuildInfo(appEnv)

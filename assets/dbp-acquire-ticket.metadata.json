@@ -14,5 +14,5 @@
     "de": "Stellt ein Ticket für einen Ort aus.",
     "en": "Acquire a ticket for a place."
   },
-  "subscribe": "lang,entry-point-url,auth,html-overrides"
+  "subscribe": "lang,entry-point-url,auth,html-overrides,preselected-option,show-preselected"
 }
