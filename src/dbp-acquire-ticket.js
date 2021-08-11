@@ -23,6 +23,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.showPreselectedSelector = false;
         this.hasValidProof = false;
         this.hasTicket = false;
+        this.hasTicketForThisPlace = false;
         this.location = '';
         this.isCheckboxVisible = false;
         this.isCheckmarkChecked = false;
@@ -48,6 +49,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             preselectedOption: { type: String, attribute: 'preselected-option' },
             hasValidProof: { type: Boolean, attribute: false },
             hasTicket: { type: Boolean, attribute: false },
+            hasTicketForThisPlace: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
             isCheckboxVisible: { type: Boolean, attribute: false },
             isCheckmarkChecked: { type: Boolean, attribute: false },
@@ -90,6 +92,21 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             console.log('Found no valid 3G proof for the current user.');
         }
         this.loading = false;
+    }
+
+    async checkForValidTickets() {
+        let responseData = { responseBody: '', status: 200 }; //await this.sendGetCertificatesRequest(); //TODO change to correct request
+        let status = responseData.status;
+        //let responseBody = await responseData.clone().json(); //TODO uncomment
+
+        if (status === 200) {
+            console.log('Found a valid ticket for this room.');
+            //TODO ticket data -> show inline notification that there is a ticket for this room + link to 'show active tickets', DONE: 'create ticket' button changes its text to 'refresh ticket'
+            this.hasTicketForThisPlace = true; //TODO only if this is the same ticket as selected
+        } else {
+            console.log('Could not find a valid ticket for this room.');
+            this.hasTicketForThisPlace = false;
+        }
     }
 
     async sendCreateTicketRequest() { //TODO request
@@ -172,6 +189,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     setLocation(event) {
         if(event.detail.room) {
             this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            //this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done')); //TODO uncomment
             this.location = { room: event.detail.room, name: event.detail.name };
         } else {
             this.location = '';
@@ -310,6 +328,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) {
             this.location = { room: '', name: this.preselectedOption };
             this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
         }
 
@@ -388,12 +407,13 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <dbp-loading-button ?disabled="${this.loading || this.location === '' ||  
                                             (!this.hasValidProof && !this.isCheckmarkChecked)}"
                                         type="is-primary" 
-                                        value="${i18n.t('acquire-ticket.confirm-button-text')}" 
+                                        id="confirm-ticket-btn"
+                                        value="${ !this.hasTicketForThisPlace ? i18n.t('acquire-ticket.confirm-button-text') : i18n.t('acquire-ticket.refresh-button-text') }" 
                                         @click="${(event) => { this.createTicket(event); }}" 
                                         title="${i18n.t('acquire-ticket.confirm-button-text')}"
                     ></dbp-loading-button>
                 </div>
-                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}">
+                <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
                     <dbp-inline-notification type="" body="${i18n.t('acquire-ticket.manage-tickets-text')}
                                 <a href='show-active-tickets' title='${i18n.t('acquire-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
                                     <span>${i18n.t('acquire-ticket.manage-tickets-link')}.</span>

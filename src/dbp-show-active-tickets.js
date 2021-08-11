@@ -17,8 +17,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
         this.activeTickets = [];
+        this.activeTicketsCounter = 0;
         this.loading = false;
         this._initialFetchDone = false;
+        this.locationName = '';
     }
 
     static get scopedElements() {
@@ -36,8 +38,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
             activeTickets: { type: Array, attribute: false },
+            activeTicketsCounter: { type: Number, attribute: false },
             initialTicketsLoading: { type: Boolean, attribute: false },
             loading: { type: Boolean, attribute: false },
+            locationName: { type: String, attribute: false },
         };
     }
 
@@ -61,8 +65,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     parseActiveTickets(response) {
         let list = [];
 
-        //TODO
+        //TODO request to fetch list of my active tickets
+        //TODO parse response and send correct errors
         list[0] = { location: { name: 'Test Location' }, endTime: new Date() };
+        list[1] = { location: { name: 'TU Graz' }, endTime: new Date() };
+        this.activeTicketsCounter = 2;
 
         return list;
     }
@@ -96,7 +103,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     showTicket(event, entry) {
-        //TODO show modal
+        this.locationName = entry.location.name;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
             onClose: modal => {
@@ -104,18 +111,28 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.loading = false;
             },
         });
-
-
     }
 
     refreshTicket(event, entry) {
         //TODO request to create ticket for this room again
+        //TODO do not update something - fetch list again
+        let date = new Date();
+        date.setHours(23);
+        console.log(date);
+        const index = this.activeTickets.indexOf(entry);
+        if (index > -1) {
+            this.activeTickets[index] = { location: { name: entry.location.name }, endTime: date };
+        }
+        this.activeTicketsCounter++;
     }
 
     deleteTicket(event, entry) {
         //TODO request to delete the ticket
-
-        this.activeTickets = {}; //TODO replace with response
+        const index = this.activeTickets.indexOf(entry);
+        if (index > -1) {
+            this.activeTickets.splice(index, 1); //TODO do not delete something from the list - fetch the list again
+        }
+        this.activeTicketsCounter--;
     }
 
     closeDialog(e) {
@@ -132,12 +149,21 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             
-            .tickets {
+            .foto-container {
+                width: 144px;
+                height: 190px;
+            }
+            
+            .ticket {
                 display: flex;
                 justify-content: space-between;
                 column-gap: 15px;
                 row-gap: 1.5em;
                 align-items: center;
+                margin-bottom: 2em;
+            }
+            
+            .tickets {
                 margin-top: 2em;
             }
 
@@ -182,9 +208,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             #ticket-modal-box .modal-content {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 height: 100%;
-                justify-content: space-evenly;
+                column-gap: 2em;
             }
 
             #ticket-modal-box .modal-content label {
@@ -195,6 +221,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             #ticket-modal-box .modal-content div {
                 display: flex;
+                flex-direction: column;
+                margin-top: 33px;
             }
 
             #ticket-modal-box .modal-footer {
@@ -213,7 +241,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             #ticket-modal-content {
                 padding: 0px;
-                align-items: baseline;
+                align-items: start;
             }
 
             #ticket-modal-box .modal-header h2 {
@@ -274,15 +302,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
                     ${ this.activeTickets.map(i => html`
-
-                        <span class="header">
-                            <strong>${i.location.name}</strong>
-                            ${this.getReadableDate(i.endTime)}
-                        </span>
-                        <div class="btn">
-                            <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                            <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>
-                            <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, i); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                        <div class="ticket">
+                            <span class="header">
+                                <strong>${i.location.name}</strong>
+                                ${this.getReadableDate(i.endTime)}
+                            </span>
+                            <div class="btn">
+                                <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, i); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                            </div>
                         </div>
                     `)}
                     <span class="control ${classMap({hidden: this.isLoggedIn() && !this.initialTicketsLoading})}">
@@ -301,17 +330,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
                          aria-labelledby="ticket-modal-title">
                         <header class="modal-header">
-                            <h2 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title', { place: 'Test Location'})}</h2>
+                            <h2 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h2>
                             <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
                                 <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
                             </button>
                         </header>
                         <main class="modal-content" id="ticket-modal-content">
-                            <h3>
-                                TODO: Content
-                            </h3>
+                            <div class="foto-container">
+                                <img src="${commonUtils.getAssetURL('@dbp-topics/greenlight', 'wbstudkart.jpeg')}" alt="Foto">
+                            </div>
                             <div>
-                                <!--TODO: Content-->
+                                TODO: Content
                             </div>
                         </main>
                         <footer class="modal-footer">

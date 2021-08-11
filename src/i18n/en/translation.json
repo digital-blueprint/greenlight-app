@@ -2,7 +2,7 @@
   "green-pass-activation": {
     "title": "Activate 3G Proof",
     "description": "With this application you can activate your 3G proof.",
-    "additional-information": "Here you can scan a QR code or upload an existing PDF or image to activate your 3G proof for the period of its validity. Please note that this will still require you to obtain a ticket for rooms in order to comply with 3G rules.",
+    "additional-information": "Here you can scan a QR code or upload an existing PDF or image to activate your 3G proof for the period of its validity. When you upload a new proof, any existing proof will be replaced. Please note that this will still require you to obtain a ticket for rooms in order to comply with 3G rules.",
     "success-activation-title": "Successful Activation!",
     "success-activation-body": "Your 3G proof has been successfully activated.",
     "invalid-qr-code-title": "Invalid QR Code!",
@@ -43,6 +43,7 @@
     "place-select-title": "Select a place",
     "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid proof of such for the duration of my stay in this room and can present such proof in the event of a manual inspection.",
     "confirm-button-text": "Create a Ticket",
+    "refresh-button-text": "Refresh Ticket",
     "no-proof-continue": "Acquire ticket without 3G proof",
     "create-ticket-success-title": "Ticket successfully created!",
     "create-ticket-success-body": "The acquired ticket for {{place}} was successfully created.",
@@ -63,7 +64,7 @@
     "delete-btn-text": "Delete",
     "show-btn-text": "Show",
     "refresh-btn-text": "Refresh",
-    "show-ticket-title": "Ticket for place: {{place}}",
+    "show-ticket-title": "Ticket for place: ",
     "show-ticket-description": "TODO: description"
   },
   "info": {

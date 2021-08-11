@@ -2,7 +2,7 @@
   "green-pass-activation": {
     "title": "3G Nachweis aktivieren",
     "description": "Mit dieser Applikation können Sie ihren 3G Nachweis überprüfen und aktivieren.",
-    "additional-information": "Hier können Sie einen QR Code scannen oder ein vorhandenes PDF oder Bild hochladen, um Ihren 3G Nachweis für den Zeitraum seiner Gültigkeit zu aktivieren. Bitte beachten Sie, dass Sie damit trotzdem noch ein Ticket für Räume erwerben müssen, um die 3G-Regeln einzuhalten.",
+    "additional-information": "Hier können Sie einen QR Code scannen oder ein vorhandenes PDF oder Bild hochladen, um Ihren 3G Nachweis für den Zeitraum seiner Gültigkeit zu aktivieren. Wenn Sie einen neuen Nachweis hochladen, wird ein bereits bestehender Nachweis durch diesen ersetzt. Bitte beachten Sie, dass Sie damit trotzdem noch ein Ticket für Räume erwerben müssen, um die 3G-Regeln einzuhalten.",
     "success-activation-title": "Erfolgreiche Aktivierung!",
     "success-activation-body": "Ihr 3G Nachweis wurde erfolgreich aktiviert.",
     "invalid-qr-code-title": "Ungültiger QR Code!",
@@ -43,6 +43,7 @@
     "place-select-title": "Ort auswählen",
     "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Raum bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
     "confirm-button-text": "Ticket erstellen",
+    "refresh-button-text": "Ticket verlängern",
     "no-proof-continue": "Ticket ohne 3G Nachweis erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
     "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
@@ -63,7 +64,7 @@
     "delete-btn-text": "Löschen",
     "show-btn-text": "Zeigen",
     "refresh-btn-text": "Verlängern",
-    "show-ticket-title": "Ticket für Ort: {{place}}",
+    "show-ticket-title": "Ticket für Ort: ",
     "show-ticket-description": "TODO: Beschreibung"
   },
   "info": {
