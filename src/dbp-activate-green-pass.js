@@ -227,8 +227,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param responseData
      * @param greenPassHash
      * @param category
-     * @param refresh (default = false)
-     * @param setAdditional (default = false)
      */
     async checkActivationResponse(responseData, greenPassHash, category) {
         const i18n = this._i18n;
