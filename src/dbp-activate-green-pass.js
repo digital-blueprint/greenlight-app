@@ -52,7 +52,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activationEndTime = '';
         this.identifier = '';
         this.agent = '';
-        this.showManuallyContainer = false;
         this.showQrContainer = false;
         this.searchHashString = '';
         this.wrongHash = [];
@@ -97,7 +96,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ...super.properties,
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            showManuallyContainer: { type: Boolean, attribute: false},
             showQrContainer: { type: Boolean, attribute: false},
             activationEndTime: { type: String, attribute: false },
             loadingMsg: { type: String, attribute: false },
@@ -232,30 +230,26 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param refresh (default = false)
      * @param setAdditional (default = false)
      */
-    async checkActivationResponse(responseData, greenPassHash, category, refresh = false, setAdditional = false) {
+    async checkActivationResponse(responseData, greenPassHash, category) {
         const i18n = this._i18n;
 
         let status = responseData.status;
         let responseBody = await responseData.clone().json();
         switch (status) {
             case 201:
-                if (setAdditional) {
-                    this.activationEndTime = responseBody['expires'];
-                    this.identifier = responseBody['identifier'];
-                    console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
+                this.activationEndTime = responseBody['expires'];
+                this.identifier = responseBody['identifier'];
+                // console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
 
-                    this.stopQRReader();
-                    this.QRCodeFile = null;
-                    this.showManuallyContainer = false;
-                    this.showQrContainer = false;
+                this.stopQRReader();
+                this.QRCodeFile = null;
+                this.showQrContainer = false;
 
-                    this.isActivated = true;
-                    this.isRefresh = false;
+                this.isActivated = true;
+                this.isRefresh = false;
 
-                    this._("#text-switch")._active = "";
-
-                    this._("#manualPassUploadWrapper").classList.add('hidden');
-                }
+                this._("#text-switch")._active = "";
+                this._("#manualPassUploadWrapper").classList.add('hidden');
 
                 send({
                     "summary": i18n.t('green-pass-activation.success-activation-title'),
@@ -269,63 +263,32 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             // Unauthorized
             case 403:
-                //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
-                send({
-                    "summary": responseBody['hydra:title'], //TODO
-                    "body": responseBody['hydra:description'],
-                    "type": "danger",
-                    "timeout": 5,
-                });
-                
-                console.log('error 403');
+                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed403', 'name': locationName});
                 break;
 
             // Invalid input
             case 400:
-                //this.saveWrongHashAndNotify(i18n.t('check-in.invalid-input-title'), i18n.t('check-in.invalid-input-body'), locationHash, seatNumber);
+                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
-                send({
-                    "summary": responseBody['hydra:title'],
-                    "body": responseBody['hydra:description'],
-                    "type": "danger",
-                    "timeout": 5,
-                });
-
-                console.log('error 400');
                 break;
 
             // Unprocessable entity
             case 422:
-                send({
-                    "summary": responseBody['hydra:title'],
-                    "body": responseBody['hydra:description'],
-                    "type": "danger",
-                    "timeout": 5,
-                });
-
-                console.log('error 422');
+                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed422', 'name': locationName});
                 break;
             
             // Bad Gateway
             case 502:
-                send({
-                    "summary": responseBody['hydra:title'], //TODO
-                    "body": responseBody['hydra:description'],
-                    "type": "danger",
-                    "timeout": 5,
-                });
-                //await this.sendErrorAnalyticsEvent(category, 'DeleteCertificateFailed', this.identifier, response);
+                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed502', 'name': locationName});
                 break;
 
             // Error: something else doesn't work
             default:
-                send({
-                    "summary": i18n.t('green-pass-activation.other-error-title'),
-                    "body": i18n.t('green-pass-activation.other-error-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
+                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
         }
     }
@@ -340,10 +303,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async checkDeleteCertificateResponse(response, identifier, category) {
         const i18n = this._i18n;
 
-        let status = response.status;
-        // let responseBody = await response.clone().json(); //TODO
-
-        switch(status) {
+        switch(response.status) {
             //Resource deleted
             case 204:
                 this.activationEndTime = '';
@@ -364,8 +324,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             // Resource not found
             case 404:
                 send({
-                    "summary": i18n.t('green-pass-activation.delete-certificate-failed-title'), //TODO 404 error text
-                    "body":  i18n.t('green-pass-activation.delete-certificate-failed-body'),
+                    "summary": i18n.t('green-pass-activation.delete-certificate-not-found-title'),
+                    "body":  i18n.t('green-pass-activation.delete-certificate-not-found-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -455,30 +415,28 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Include message for user when it worked or not
      * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
      *
-     * Possible paths: activation, refresh session, invalid input, gp hash wrong
-     * already activated, no permissions, any other errors, gp hash empty
+     * Possible paths: activation, invalid input, gp hash wrong
+     * no permissions, any other errors, gp hash empty
      *
      * @param greenPassHash
      * @param category
-     * @param refresh (default = false)
-     * @param setAdditional (default = false)
      */
-    async doActivation(greenPassHash, category, refresh = false, setAdditional = false) {
-        //const i18n = this._i18n;
+    async doActivation(greenPassHash, category) {
+        const i18n = this._i18n;
 
         // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
-            //this.saveWrongHashAndNotify(i18n.t('check-in.error-title'), i18n.t('check-in.error-body'), greenPassHash); //TODO
+            this.saveWrongHashAndNotify(i18n.t('green-pass-activation.invalid-qr-code-title'), i18n.t('green-pass-activation.invalid-qr-code-body'), greenPassHash);
             //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailedNoGreenPassHash'});
             return;
         }
 
         let responseData = await this.sendActivationRequest(greenPassHash);
-        await this.checkActivationResponse(responseData, greenPassHash, category, refresh, setAdditional);
+        await this.checkActivationResponse(responseData, greenPassHash, category);
     }
 
     /**
-     * Init a checkin from a QR code scan event
+     * Init a 3g activation from a QR code scan event
      *
      * @param event
      */
@@ -492,7 +450,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         try {
             let check = await this.decodeUrl(data);
             if (check) {
-                await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
+                await this.doActivation(this.greenPassHash, 'ActivationRequest');
             }
         } finally {
             this._activationInProgress = false;
@@ -503,7 +461,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     /**
      * Check uploaded file and search for QR code
-     * If a QR Code is found, validate it and send a Activation Request
+     * If a QR Code is found, validate it and send an Activation Request
      *
      */
     async doActivationManually() {
@@ -520,7 +478,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         } else {
             let check = await this.decodeUrl(data.data);
             if (check) {
-                await this.doActivation(this.greenPassHash, 'ActivationRequest', false, true);
+                await this.doActivation(this.greenPassHash, 'ActivationRequest');
             }
         }
     }
@@ -558,7 +516,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
     stopQRReader() {
         if (this._("#qr-scanner")) {
             this._("#qr-scanner").stopScan = true;
-            this.showManuallyContainer = false;
             this.showQrContainer = false;
         } else {
             console.log('error: qr scanner is not available. Is it already stopped?');
@@ -605,7 +562,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         this.greenPassHash = passData;
-        console.log('no error, qr code data: ', passData);
 
         let gpAlreadySend = await this.wrongHash.includes(this.greenPassHash);
         if (gpAlreadySend) {
@@ -628,7 +584,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     showQrReader() {
         this.showQrContainer = true;
-        this.showManuallyContainer = false;
         if ( this._('#qr-scanner') ) {
             this._('#qr-scanner').stopScan = false;
         }
@@ -676,7 +631,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let currDate = new Date(this.activationEndTime);
         newDate.setTime(newDate.getTime() + (hours * 60 * 60 * 1000));
         currDate.setTime(currDate.getTime() + (hours * 60 * 60 * 1000));
-
         // console.log('computed minimal validity: ', newDate.getDate() + '.' + (newDate.getMonth() + 1) + '.' + newDate.getFullYear() + ' at ' + newDate.getHours() + ':' + ("0" + newDate.getMinutes()).slice(-2));
         // console.log('current 3G proof validity: ', currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear() + ' at ' + currDate.getHours() + ':' + ("0" + currDate.getMinutes()).slice(-2));
         return currDate.getTime() >= newDate.getTime();
@@ -692,21 +646,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.showManualUpload();
         } else {
             this.showQrReader();
-        }
-    }
-
-    /**
-     * Init a session refresh
-     *
-     * @param event
-     */
-    async refreshGreenPass(event) {
-        let button = event.target;
-        button.start();
-        try {
-            this.isRefresh = true;
-        } finally {
-            button.stop();
         }
     }
 
@@ -730,37 +669,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.qrParsingLoading = false;
     }
 
-    async checkIfAlreadyActivated() {
-
-        this.loading = true;
-
-        let responseData = await this.sendGetCertificatesRequest();
-        let status = responseData.status;
-        let responseBody = await responseData.clone().json();
-
-        if (status === 200) {
-            // console.log('received items: ', responseBody['hydra:totalItems']);
-
-            if (responseBody['hydra:totalItems'] > 0) {
-                this.isActivated = true;
-                this.activationEndTime = responseBody['hydra:member'][0]['expires'];
-                this.identifier = responseBody['hydra:member'][0]['identifier'];
-                console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
-                console.log('Found a valid 3G proof for the current user.');
-            }
-        } else {
-            //TODO
-            send({
-                "summary": responseBody['hydra:title'],
-                "body": responseBody['hydra:description'],
-                "type": "danger",
-                "timeout": 5,
-            });
-        }
-
-        this.loading = false;
-    }
-
     static get styles() {
         // language=css
         return css`
@@ -781,11 +689,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .qr-loading {
                 padding: 0 0 0 1em;
             }
-            
-            /*.upload-wrapper {*/
-            /*    display: flex;*/
-            /*    flex-direction: row;*/
-            /*}*/
 
             #notification-wrapper {
                 margin-top: 1.2rem;
@@ -843,8 +746,6 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
               -moz-appearance: textfield;
             }
             
-
-            
             .int-link-internal{
                 transition: background-color 0.15s, color 0.15s;
                 border-bottom: 1px solid rgba(0,0,0,0.3);
@@ -890,14 +791,14 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
             }
             
-            .checkins-btn {
+            .activations-btn {
                 display: grid;
                 grid-template-columns: repeat(2, max-content);
                 column-gap: 10px;
                 row-gap: 10px;
             }
             
-            .checkins {
+            .activations {
                 display: flex;
                 justify-content: space-between;
             }
@@ -978,11 +879,11 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     justify-content: center;
                 }
                 
-                .checkins {
+                .activations {
                     display: block;
                 }
                 
-                .checkins-btn {
+                .activations-btn {
                     display: flex;
                     flex-direction: column;
                 }
@@ -1004,7 +905,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
         const i18n = this._i18n;
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck) {
-            this.checkIfAlreadyActivated().then(r =>  console.log('3G proof validation done'));
+            this.checkForValidProof().then(r =>  console.log('3G proof validation done'));
             this.preCheck = false;
         }
 
@@ -1050,7 +951,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </div>
                 </div>
                 
-                <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || !this.showManuallyContainer || this.loading})}">
+                <div id="manualPassUploadWrapper" class="${classMap({hidden: (this.isActivated && this.showQrContainer) || this.loading})}">
                     <div class="upload-wrapper">
                          <dbp-file-source
                                     id="file-source"
@@ -1072,8 +973,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </div>
                 </div>
                 
-                <div class="border ${classMap({hidden: !(this.showQrContainer || this.showManuallyContainer)})}">
-                    <div class="element ${classMap({hidden: (this.isActivated && !this.showQrContainer) || this.showManuallyContainer || this.loading})}">
+                <div class="border ${classMap({hidden: !this.showQrContainer})}">
+                    <div class="element ${classMap({hidden: (this.isActivated && !this.showQrContainer) || this.loading})}">
                         <dbp-qr-code-scanner id="qr-scanner" lang="${this.lang}" stop-scan match-regex="${matchRegexString}" @scan-started="${this._onScanStarted}" @code-detected="${(event) => { this.doActivationWithQR(event);}}"></dbp-qr-code-scanner>
                     </div>
 
@@ -1085,14 +986,14 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </div>
                 
                 <div class="grid-container border ${classMap({hidden: !this.isActivated})}">
-                    <div class="checkins">
+                    <div class="activations">
                         <div class="qr-control ${classMap({hidden: !this.qrParsingLoading})}">
                             <span class="qr-loading">
                                 <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
                             </span>
                         </div>
                         <span class="header"><strong>${i18n.t('green-pass-activation.uploaded-success-message')} ${this.getReadableActivationDate(this.activationEndTime)}</strong></span>
-                        <div class="checkins-btn">
+                        <div class="activations-btn">
                             <div class="btn"><dbp-loading-button ?disabled="${this.loading || this.qrParsingLoading}" value="${i18n.t('green-pass-activation.delete-button-text')}" @click="${(event) => { this.deleteGreenPass(event); }}" title="${i18n.t('green-pass-activation.delete-button-text')}"></dbp-loading-button></div>
                         </div>
                     </div>

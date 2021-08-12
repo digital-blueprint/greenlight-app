@@ -73,29 +73,8 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         super.update(changedProperties);
     }
 
-    async checkForValidProof() {
-        this.loading = true;
-        let responseData = await this.sendGetCertificatesRequest();
-        let status = responseData.status;
-        let responseBody = await responseData.clone().json();
-
-        if (status === 200) {
-            if (responseBody['hydra:totalItems'] > 0) {
-                this.isActivated = true;
-                this.activationEndTime = responseBody['hydra:member'][0]['validFor'];
-                this.identifier = responseBody['hydra:member'][0]['identifier'];
-                console.log('No valid 3G proof for the current user could be found.');
-                this.hasValidProof = true;
-            }
-        } else {
-            this.hasValidProof = false;
-            console.log('Found no valid 3G proof for the current user.');
-        }
-        this.loading = false;
-    }
-
     async checkForValidTickets() {
-        let responseData = { responseBody: '', status: 200 }; //await this.sendGetCertificatesRequest(); //TODO change to correct request
+        let responseData = { responseBody: '', status: 200 }; //await this.GetActiveTicketRequest(this.location.name); //TODO change to correct request
         let status = responseData.status;
         //let responseBody = await responseData.clone().json(); //TODO uncomment
 
@@ -109,22 +88,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    async sendCreateTicketRequest() { //TODO request
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         Authorization: "Bearer " + this.auth.token
-        //     },
-        // };
-        //TODO check if there is a valid ticket for this place -> after response we should send 'ticket was refreshed' and not 'created'
-
-        //TODO change to correct request parameters
-        //return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
-        let response = { status: 201 }; //TODO delete hardcoded response
-        return response;
-    }
-
-    async checkCreateTicketResponse(response) { //TODO
+    async checkCreateTicketResponse(response) { //TODO add refresh option
         const i18n = this._i18n;
         let checkInPlaceSelect;
 
@@ -418,14 +382,14 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <a href='show-active-tickets' title='${i18n.t('acquire-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
                                     <span>${i18n.t('acquire-ticket.manage-tickets-link')}.</span>
                                 </a>"
-                    </dbp-inline-notification>
+                    ></dbp-inline-notification>
                 </div>
                 <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
                     <dbp-inline-notification type="" body="${i18n.t('acquire-ticket.check-in-link-description')}
                                 <a href='checkin.tugraz.at' title='${i18n.t('acquire-ticket.check-in-link-text')}' target='_self' class='int-link-internal'>
                                     <span>${i18n.t('acquire-ticket.check-in-link-text')}.</span>
                                 </a>"
-                    </dbp-inline-notification>
+                    ></dbp-inline-notification>
                 </div>
             </div>
         `;

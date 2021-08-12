@@ -65,8 +65,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     parseActiveTickets(response) {
         let list = [];
 
-        //TODO request to fetch list of my active tickets
-        //TODO parse response and send correct errors
+        //TODO parse response list instead of hardcoded values
         list[0] = { location: { name: 'Test Location' }, endTime: new Date() };
         list[1] = { location: { name: 'TU Graz' }, endTime: new Date() };
         this.activeTicketsCounter = 2;
@@ -74,24 +73,24 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return list;
     }
 
-    async getActiveTickets() {
+    async getActiveTicketsRequest() {
         let response = { };
 
-        //TODO
+        //TODO request to fetch list of my active tickets
         response.status = 200;
 
         return response;
     }
 
     /**
-     * Get a list of active checkins
+     * Get a list of active tickets
      *
      * @returns {Array} list
      */
     async getListOfActiveTickets() {
         this.initialTicketsLoading = !this._initialFetchDone;
         try {
-            let response = await this.getActiveTickets();
+            let response = await this.getActiveTicketsRequest();
             let responseBody = await response; //await response.json(); //TODO
             if (responseBody !== undefined && responseBody.status !== 403) {
                 this.activeTickets = this.parseActiveTickets(responseBody);
@@ -113,9 +112,21 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         });
     }
 
-    refreshTicket(event, entry) {
+    async refreshTicket(event, entry) {
         //TODO request to create ticket for this room again
-        //TODO do not update something - fetch list again
+        let response = await this.sendCreateTicketRequest();
+        let responseBody = await response; //await response.json();
+        //TODO check response
+
+        //TODO fetch list again to update
+        response = await this.getActiveTicketsRequest();
+        responseBody = await response; //await response.json();
+        if (responseBody !== undefined && responseBody.status !== 403) {
+            this.activeTickets = this.parseActiveTickets(responseBody);
+        }
+        //TODO check + process response
+        
+        //TODO delete hardcoded values
         let date = new Date();
         date.setHours(23);
         console.log(date);
@@ -130,7 +141,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         //TODO request to delete the ticket
         const index = this.activeTickets.indexOf(entry);
         if (index > -1) {
-            this.activeTickets.splice(index, 1); //TODO do not delete something from the list - fetch the list again
+            this.activeTickets.splice(index, 1); //TODO do not delete something from the list - fetch the list again:
+            // let response = await this.getActiveTicketsRequest();
+            // let responseBody = await response; //await response.json(); //TODO
+            // if (responseBody !== undefined && responseBody.status !== 403) {
+            //     this.activeTickets = this.parseActiveTickets(responseBody);
+            // }
         }
         this.activeTicketsCounter--;
     }
@@ -251,6 +267,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             @media only screen
             and (orientation: portrait)
             and (max-width:768px) {
+
+                .ticket {
+                    display: block;
+                    margin-bottom: 0;
+                }
 
                 .tickets {
                     display: block;

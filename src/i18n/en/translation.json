@@ -25,6 +25,8 @@
     "filepicker-open-button-title": "Choose File for Verification",
     "delete-certificate-failed-title": "Error!",
     "delete-certificate-failed-body": "An error occurred while removing your 3G proof.",
+    "delete-certificate-not-found-title": "Error!",
+    "delete-certificate-not-found-body": "The certificate could not be found.",
     "delete-certificate-success-title": "Successful deleted!",
     "delete-certificate-success-body": "Your 3G proof has been successfully removed.",
     "other-error-title": "Error!",

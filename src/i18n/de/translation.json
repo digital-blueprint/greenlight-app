@@ -25,6 +25,8 @@
     "filepicker-open-button-title": "Datei zur Überprüfung auswählen",
     "delete-certificate-failed-title": "Fehler!",
     "delete-certificate-failed-body": "Es ist ein Fehler beim Entfernen Ihres 3G Nachweises aufgetreten.",
+    "delete-certificate-not-found-title": "Fehler!",
+    "delete-certificate-not-found-body": "Das Zertifikat wurde nicht gefunden.",
     "delete-certificate-success-title": "Löschen erfolgreich!",
     "delete-certificate-success-body": "Ihr 3G Nachweis wurde erfolgreich aus dem System entfernt.",
     "other-error-title": "Fehler!",
