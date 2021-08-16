@@ -406,7 +406,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             </span>
                             <div class="btn">
                                 <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                                <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>
+                                <!-- <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>  -->
                                 <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, i); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
                         </div>
