@@ -84,6 +84,7 @@ export default (async () => {
                 'src/' + pkg.internalName + '.js',
                 'src/dbp-activate-green-pass.js',
                 'src/dbp-acquire-ticket.js',
+                'src/dbp-acquire-3g-ticket.js',
                 'src/dbp-show-active-tickets.js',
 
         ] : glob.sync('test/**/*.js'),
