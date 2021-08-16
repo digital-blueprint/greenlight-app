@@ -14,7 +14,7 @@ import {escapeRegExp, parseGreenPassQRCode} from './utils.js';
 import * as CheckinStyles from './styles';
 import {name as pkgName} from './../package.json';
 import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
-
+import {hcertValidation} from './hcert.js';
 
 class QrScanner {
     constructor() {
@@ -433,7 +433,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return;
         }
 
-        let responseData = await this.sendActivationRequest(greenPassHash);
+        //let responseData = await this.sendActivationRequest(greenPassHash);
+        let responseData = hcertValidation(greenPassHash);
         await this.checkActivationResponse(responseData, greenPassHash, category);
     }
 
