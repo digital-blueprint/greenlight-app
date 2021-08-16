@@ -24,7 +24,7 @@ let useTerser = buildFull;
 let useBabel = buildFull;
 let checkLicenses = buildFull;
 let useHTTPS = true;
-let obfuscate = buildFull
+let obfuscate = false
 
 let config;
 if (appEnv in appConfig) {
