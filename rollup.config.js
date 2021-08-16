@@ -63,6 +63,9 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1:';
+config.preselectedOption = 'TU Graz';
+config.contentUrl = 'https://dgc.a-sit.at/ehn/cert/listv2';
+config.signatureUrl = 'https://dgc.a-sit.at/ehn/cert/sigv2';
 
 function getOrigin(url) {
     if (url)
@@ -73,7 +76,8 @@ function getOrigin(url) {
 
 config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(config.entryPointURL)} \
-    httpbin.org ${getOrigin(config.nextcloudBaseURL)}; \
+    httpbin.org ${getOrigin(config.nextcloudBaseURL)} \
+    ${getOrigin(config.contentUrl)} ${getOrigin(config.signatureUrl)}; \
     img-src * blob: data:; font-src 'self' data:`;
 
 console.log(".....", config.CSP);
@@ -201,6 +205,7 @@ export default (async () => {
                     {src: 'assets/images/*', dest: 'dist/images'},
                     {src: 'assets/manifest.json', dest: 'dist', rename: pkg.internalName + '.manifest.json'},
                     {src: 'assets/silent-check-sso.html', dest:'dist'},
+                    {src: 'assets/hcert-kotlin.js', dest:'dist'},
                     {src: await getPackagePath('@dbp-toolkit/font-source-sans-pro', 'files/*'), dest: 'dist/' + await getDistPath(pkg.name, 'fonts/source-sans-pro')},
                     {src: await getPackagePath('@dbp-toolkit/common', 'src/spinner.js'), dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: await getPackagePath('@dbp-toolkit/common', 'misc/browser-check.js'), dest: 'dist/' + await getDistPath(pkg.name)},
