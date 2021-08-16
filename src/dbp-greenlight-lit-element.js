@@ -2,16 +2,6 @@ import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
 import {getStackTrace} from "@dbp-toolkit/common/error";
 import {send} from "@dbp-toolkit/common/notification";
 
-/**
- * Dummy function to mark strings as i18next keys for i18next-scanner
- *
- * @param {string} key
- * @param {object} [options]
- * @returns {string} The key param as is
- */
-function i18nKey(key, options) {
-    return key;
-}
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -78,7 +68,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             return false;
         return (!this.isLoggedIn() && this.auth.token !== undefined);
     }
-
 
     /**
      * Send a fetch to given url with given options
@@ -154,11 +143,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         //         Authorization: "Bearer " + this.auth.token
         //     },
         // };
-        //TODO check if there is a valid ticket for this place -> after response we should send 'ticket was refreshed' and not 'created'
 
-        //TODO change to correct request parameters
-        //return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews/' + identifier, options);
-        let response = { status: 201 }; //TODO delete hardcoded response
+        //return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + identifier, options); //TODO uncomment
+        let response = { };
+        response.status = 201; //TODO delete
         return response;
     }
 
@@ -200,7 +188,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let status = responseData.status;
         let responseBody = await responseData.clone().json();
 
-        if (status === 200) {
+        if (status === 200) { //TODO switch/case
             console.log('received items: ', responseBody['hydra:totalItems']);
             if (responseBody['hydra:totalItems'] > 0) {
                 this.isActivated = true;

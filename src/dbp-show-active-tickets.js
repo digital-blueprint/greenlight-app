@@ -8,6 +8,7 @@ import {classMap} from 'lit-html/directives/class-map.js';
 import MicroModal from './micromodal.es';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
+import {send} from "@dbp-toolkit/common/notification";
 
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
@@ -73,12 +74,32 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return list;
     }
 
-    async getActiveTicketsRequest() {
+    async sendDeleteTicketRequest() { //TODO request
+        // const options = {
+        //     method: 'DELETE',
+        //     headers: {
+        //         Authorization: "Bearer " + this.auth.token
+        //     },
+        // };
+
+        // return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + identifier, options);
         let response = { };
+        response.status = 204; //TODO delete
+        return response;
+    }
 
-        //TODO request to fetch list of my active tickets
-        response.status = 200;
+    async getActiveTicketsRequest() { //TODO request
+        // const options = {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/ld+json',
+        //         Authorization: "Bearer " + this.auth.token
+        //     },
+        // };
 
+        //return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+        let response = { };
+        response.status = 200; //TODO delete
         return response;
     }
 
@@ -101,6 +122,60 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    async checkDeleteTicketResponse(response) {
+        const i18n = this._i18n;
+
+        switch(response.status) {
+            case 204:
+                send({
+                    "summary": i18n.t('show-active-tickets.delete-ticket-success-title'),
+                    "body":  i18n.t('show-active-tickets.delete-ticket-success-body', { place: this.locationName }),
+                    "type": "success",
+                    "timeout": 5,
+                });
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
+                this.locationName = "";
+
+                break;
+
+            default: //TODO error handling - more cases
+                send({
+                    "summary": i18n.t('show-active-tickets.other-error-title'),
+                    "body":  i18n.t('show-active-tickets.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+        }
+    }
+
+    async checkRefreshTicketResponse(response) {
+        const i18n = this._i18n;
+
+        switch(response.status) {
+            case 201:
+                send({
+                    "summary": i18n.t('show-active-tickets.refresh-ticket-success-title'),
+                    "body":  i18n.t('show-active-tickets.refresh-ticket-success-body', { place: this.locationName }),
+                    "type": "success",
+                    "timeout": 5,
+                });
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
+                this.locationName = "";
+
+                break;
+
+            default: //TODO error handling - more cases
+                send({
+                    "summary": i18n.t('show-active-tickets.other-error-title'),
+                    "body":  i18n.t('show-active-tickets.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+        }
+    }
+
     showTicket(event, entry) {
         this.locationName = entry.location.name;
         MicroModal.show(this._('#show-ticket-modal'), {
@@ -113,18 +188,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async refreshTicket(event, entry) {
-        //TODO request to create ticket for this room again
+        this.locationName = entry.location.name;
         let response = await this.sendCreateTicketRequest();
-        let responseBody = await response; //await response.json();
-        //TODO check response
+        await this.checkRefreshTicketResponse(response);
 
-        //TODO fetch list again to update
         response = await this.getActiveTicketsRequest();
-        responseBody = await response; //await response.json();
+        let responseBody = await response; //await response.json();
         if (responseBody !== undefined && responseBody.status !== 403) {
             this.activeTickets = this.parseActiveTickets(responseBody);
         }
-        //TODO check + process response
         
         //TODO delete hardcoded values
         let date = new Date();
@@ -137,13 +209,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activeTicketsCounter++;
     }
 
-    deleteTicket(event, entry) {
-        //TODO request to delete the ticket
+   async deleteTicket(event, entry) {
+       this.locationName = entry.location.name;
         const index = this.activeTickets.indexOf(entry);
         if (index > -1) {
-            this.activeTickets.splice(index, 1); //TODO do not delete something from the list - fetch the list again:
-            // let response = await this.getActiveTicketsRequest();
-            // let responseBody = await response; //await response.json(); //TODO
+            this.activeTickets.splice(index, 1); //TODO delete
+            // let response = await this.sendDeleteTicketRequest(); //TODO uncomment
+            let responseBody = { status: 204 }; //await response.json(); //TODO delete hardcoded response
+            await this.checkDeleteTicketResponse(responseBody);
+            //
+            // response = await this.getActiveTicketsRequest();
+            // let responseBody = await response; //await response.json();
             // if (responseBody !== undefined && responseBody.status !== 403) {
             //     this.activeTickets = this.parseActiveTickets(responseBody);
             // }

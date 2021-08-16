@@ -67,7 +67,13 @@
     "show-btn-text": "Show",
     "refresh-btn-text": "Refresh",
     "show-ticket-title": "Ticket for place: ",
-    "show-ticket-description": "TODO: description"
+    "show-ticket-description": "TODO: description",
+    "refresh-ticket-success-title": "Ticket successfully refreshed!",
+    "refresh-ticket-success-body": "The ticket for {{place}} was successfully refreshed.",
+    "delete-ticket-success-title": "Ticket successfully deleted!",
+    "delete-ticket-success-body": "The ticket for {{place}} was successfully deleted.",
+    "other-error-title": "Fehler!",
+    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
   },
   "info": {
     "title": "Information",

@@ -74,21 +74,35 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async checkForValidTickets() {
-        let responseData = { responseBody: '', status: 200 }; //await this.GetActiveTicketRequest(this.location.name); //TODO change to correct request
-        let status = responseData.status;
-        //let responseBody = await responseData.clone().json(); //TODO uncomment
+        const i18n = this._i18n;
 
-        if (status === 200) {
-            console.log('Found a valid ticket for this room.');
-            //TODO ticket data -> show inline notification that there is a ticket for this room + link to 'show active tickets', DONE: 'create ticket' button changes its text to 'refresh ticket'
-            this.hasTicketForThisPlace = true; //TODO only if this is the same ticket as selected
-        } else {
-            console.log('Could not find a valid ticket for this room.');
-            this.hasTicketForThisPlace = false;
+        let responseData = { responseBody: '', status: 200 }; //await this.GetActiveTicketRequest(this.location.name); //TODO change to correct request - maybe there is a request to fetch only tickets for this room?
+        let status = responseData.status;
+        let responseBody = { location: { room: '', name: 'TU Graz' }};//await responseData.clone().json(); //TODO change to response data
+
+        switch (status) {
+            case 200:
+                if (responseBody.location.name === this.location.name) { //only if this is the same ticket as selected
+                    console.log('Found a valid ticket for this room.');
+                    this.hasTicketForThisPlace = true;
+                } else {
+                    console.log('Could not find a valid ticket for this room.');
+                    this.hasTicketForThisPlace = false;
+                }
+                break;
+
+            default: //TODO error handling - more cases
+                send({
+                    "summary": i18n.t('acquire-ticket.other-error-title'),
+                    "body": i18n.t('acquire-ticket.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
         }
     }
 
-    async checkCreateTicketResponse(response) { //TODO add refresh option
+    async checkCreateTicketResponse(response) { //TODO add refresh option?
         const i18n = this._i18n;
         let checkInPlaceSelect;
 
@@ -122,7 +136,7 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 break;
 
-            default:
+            default: //TODO error handling - more cases
                 send({
                     "summary": i18n.t('acquire-ticket.other-error-title'),
                     "body":  i18n.t('acquire-ticket.other-error-body'),
@@ -152,9 +166,9 @@ class AcquireTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     setLocation(event) {
         if(event.detail.room) {
-            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
-            //this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done')); //TODO uncomment
             this.location = { room: event.detail.room, name: event.detail.name };
+            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
         } else {
             this.location = '';
         }
