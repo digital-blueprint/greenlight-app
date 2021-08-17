@@ -180,7 +180,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return result;
     }
 
-    async checkForValidProof() {
+    async checkForValidProof() { //TODO rewrite: check if there is a valid 3g proof in the local storage for the logged-in user
 
         this.loading = true;
 

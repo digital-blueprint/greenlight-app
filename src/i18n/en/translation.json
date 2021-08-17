@@ -54,7 +54,8 @@
     "check-in-link-description": "Do you want to support contact tracing at TU Graz?",
     "check-in-link-text": "TU Graz check-in",
     "manage-tickets-link": "Show active tickets",
-    "manage-tickets-text": "You can manage your active tickets at: "
+    "manage-tickets-text": "You can manage your active tickets at: ",
+    "skip-button-text": "Skip"
   },
   "acquire-3g-ticket": {
     "title": "Acquire ticket for a place",
@@ -90,7 +91,13 @@
     "check-in-link-description": "Do you want to support contact tracing at TU Graz?",
     "check-in-link-text": "TU Graz check-in",
     "manage-tickets-link": "Show active tickets",
-    "manage-tickets-text": "You can manage your active tickets at: "
+    "manage-tickets-text": "You can manage your active tickets at: ",
+    "skip-button-text": "Skip",
+    "confirm-checkbox-valid-cert-text": "I confirm that my information is correct and that I have not manipulated the validation of my certificate.",
+    "confirm-checkbox-no-cert-text": "I confirm that the information I have provided is correct and that I am carrying a valid 3G certificate.",
+    "valid-cert-found-text": "Use existing 3g proof.",
+    "store-valid-cert-text": "Save 3G proof for later.",
+    "3g-proof-label-text": "Validate 3G Proof"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",
