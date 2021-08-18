@@ -84,8 +84,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.isConfirmChecked = false;
         this.storeCertificate = false;
         this.uploadNewProof = false;
-
-        // this.useLocalStorage = false;
+        this.useLocalStorage = false;
 
         this.fileHandlingEnabledTargets = 'local';
 
@@ -139,6 +138,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             isConfirmChecked: { type: Boolean, attribute: false },
             storeCertificate: { type: Boolean, attribute: false },
             uploadNewProof: { type: Boolean, attribute: false },
+            useLocalStorage: { type: Boolean, attribute: false },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},
             nextcloudWebAppPasswordURL: { type: String, attribute: 'nextcloud-web-app-password-url' },
@@ -641,7 +641,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this._("#digital-proof-mode").checked = false;
                 }
 
-                // this.useLocalStorage = false;
+                this.useLocalStorage = false;
                 // if (this._("#cert-found-mode")) {
                 //     this._("#cert-found-mode").checked = false;
                 // }
@@ -720,6 +720,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.hasValidProof = false;
         } else {
             //TODO
+            this.useLocalStorage = true;
+            this.uploadNewProof = false;
         }
     }
 
@@ -738,7 +740,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             #cert-switch {
-                width: 50%;
+                width: 40%;
             }
 
             #confirm-ticket-btn {
@@ -746,8 +748,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             #last-checkbox {
-                margin-top: 1.5rem;
-                margin-bottom: 1.5rem;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .notification-wrapper {
+                margin-top: 1rem;
             }
 
             .proof-upload-container {
@@ -880,7 +886,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             .tickets-wrapper {
-                margin-bottom: 1.5rem;
+                margin-top: 1.5rem;
             }
 
             .close-icon {
@@ -1162,30 +1168,32 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </label>
                 </div>
 
-                <div class="cert-found-checkbox-wrapper ${classMap({'hidden': this.location === '' || this.uploadNewProof})}">
-                    ${ this.hasValidProof ? html`
-                        <!--<label id="" class="button-container">${i18n.t('acquire-3g-ticket.valid-cert-found-text')}
-                            <input type="checkbox" id="cert-found-mode" name="cert-found-mode" value="cert-found-mode" @click="${this.checkCertFoundCheckmark}">
-                            <span class="checkmark" id="cert-found-checkmark"></span>
-                        </label>-->
-
-                        <dbp-textswitch id="cert-switch" name1="use-cert"
-                            name2="no-cert"
-                            name="${i18n.t('acquire-3g-ticket.valid-cert-found-text')} || ${i18n.t('acquire-3g-ticket.valid-cert-found-alternative')}"
-                            class="switch"
-                            value1="${i18n.t('acquire-3g-ticket.valid-cert-found-text')}"
-                            value2="${i18n.t('acquire-3g-ticket.valid-cert-found-alternative')}"
-                            @change=${ (e) => this.showUploadSwitch(e.target.name) }></dbp-textswitch>
-                        `
-                    : html`
-                        <label id="" class="button-container">${i18n.t('acquire-3g-ticket.store-valid-cert-text')}
-                            <input type="checkbox" id="store-cert-mode" name="store-cert-mode" value="store-cert-mode" @click="${this.checkStoreCertCheckmark}">
-                            <span class="checkmark" id="store-cert-checkmark"></span>
-                        </label>
-                    `}
+                <div class="${classMap({'hidden': this.location === '' || this.uploadNewProof})}">
+                    <div class="cert-found-checkbox-wrapper">
+                        ${ this.hasValidProof ? html`
+                            <!--<label id="" class="button-container">${i18n.t('acquire-3g-ticket.valid-cert-found-text')}
+                                <input type="checkbox" id="cert-found-mode" name="cert-found-mode" value="cert-found-mode" @click="${this.checkCertFoundCheckmark}">
+                                <span class="checkmark" id="cert-found-checkmark"></span>
+                            </label>-->
+                        
+                            <dbp-textswitch id="cert-switch" name1="use-cert"
+                                name2="no-cert"
+                                name="${i18n.t('acquire-3g-ticket.valid-cert-found-text')} || ${i18n.t('acquire-3g-ticket.valid-cert-found-alternative')}"
+                                class="switch"
+                                value1="${i18n.t('acquire-3g-ticket.valid-cert-found-text')}"
+                                value2="${i18n.t('acquire-3g-ticket.valid-cert-found-alternative')}"
+                                @change=${ (e) => this.showUploadSwitch(e.target.name) }></dbp-textswitch>
+                            `
+                        : html`
+                            <label id="" class="button-container">${i18n.t('acquire-3g-ticket.store-valid-cert-text')}
+                                <input type="checkbox" id="store-cert-mode" name="store-cert-mode" value="store-cert-mode" @click="${this.checkStoreCertCheckmark}">
+                                <span class="checkmark" id="store-cert-checkmark"></span>
+                            </label>
+                        `}
+                    </div>
                 </div>
 
-                <div class="confirm-btn ${classMap({'hidden': this.location === '' || (!this.hasValidProof && !this.isCheckmarkChecked && !this.isActivated)})}">
+                <div class="confirm-btn ${classMap({'hidden': this.location === '' || (!this.hasValidProof && !this.isCheckmarkChecked && !this.isActivated) || (this.hasValidProof && this.isActivated && !this.useLocalStorage)})}">
 
                     <label id="last-checkbox" class="button-container">
                         ${ this.isCheckmarkChecked ? i18n.t('acquire-3g-ticket.confirm-checkbox-no-cert-text') : i18n.t('acquire-3g-ticket.confirm-checkbox-valid-cert-text') }
