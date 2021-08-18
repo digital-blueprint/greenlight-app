@@ -1,6 +1,4 @@
-import foo from '../assets/hcert-kotlin.js';
-
-console.log(foo);
+//import foo from '../assets/hcert-kotlin.js';
 
 export const hcertValidation = (hc1) => {
 
@@ -44,7 +42,7 @@ function validateTrustList(hc1) {
 }
 
 function downloadBinary(requestUrl, callback) {
-    console.log("Downloading " + requestUrl + " ...")
+    console.log("Downloading " + requestUrl + " ...");
     let xhr = new XMLHttpRequest();
     xhr.open("GET", requestUrl);
     xhr.responseType = "arraybuffer";
