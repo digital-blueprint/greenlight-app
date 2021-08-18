@@ -233,6 +233,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         let status = responseData.status;
         let responseBody = await responseData.clone().json();
+
         switch (status) {
             case 201:
                 this.activationEndTime = responseBody['expires'];
@@ -256,6 +257,8 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "timeout": 5,
                 });
 
+                // Saves encrypted Hash, Salt and IV to local Storage
+                await this.encryptAndSaveHash();
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
                 break;
 
@@ -290,6 +293,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
         }
     }
+
 
     /**
      *
@@ -911,7 +915,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
             </div>
-
+            <h1>${this.auth['person-id']}</h1>
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
@@ -980,6 +984,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <span class="loading">
                             <dbp-mini-spinner text=${this.loadingMsg}></dbp-mini-spinner>
                         </span>
+                    </div>
                     </div>
                 </div>
                 

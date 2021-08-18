@@ -322,30 +322,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return response;
     }
 
-    /**
-     * Sends an activation request and do error handling and parsing
-     * Include message for user when it worked or not
-     * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
-     *
-     * Possible paths: activation, invalid input, gp hash wrong
-     * no permissions, any other errors, gp hash empty
-     *
-     * @param greenPassHash
-     * @param category
-     */
-    async doActivation(greenPassHash, category) {
-        const i18n = this._i18n;
 
-        // Error: no valid hash detected
-        if (greenPassHash.length <= 0) {
-            this.saveWrongHashAndNotify(i18n.t('green-pass-activation.invalid-qr-code-title'), i18n.t('green-pass-activation.invalid-qr-code-body'), greenPassHash);
-            //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailedNoGreenPassHash'});
-            return;
-        }
-
-        let responseData = await this.sendActivationRequest(greenPassHash);
-        await this.checkActivationResponse(responseData, greenPassHash, category);
-    }
 
     /**
      * Init a 3g activation from a QR code scan event
@@ -434,61 +411,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    /**
-     * Decode data from QR code
-     * Check if it is a valid string for this application with this.searchHashString
-     * Saves invalid QR codes, so we don't have to process than more than once
-     * Check if input QR code is already a invalid QR code
-     *
-     * @param data
-     * @returns {boolean} true if data is valid not yet send QR code data
-     * @returns {boolean} false if data is invalid QR code data
-     */
-    async decodeUrl(data) {
-        const i18n = this._i18n;
-        let passData;
-        try {
-            passData = parseGreenPassQRCode(data, this.searchHashString);
-        } catch(error) {
-            let checkAlreadySend = await this.wrongQR.includes(data);
-            if (checkAlreadySend) {
-                const that = this;
-                if (!this.resetWrongQr) {
-                    this.resetWrongQr = true;
-                    setTimeout( function () {
-                        that.wrongQR.splice(0,that.wrongQR.length);
-                        that.wrongQR.length = 0;
-                        that.resetWrongQr = false;
-                    }, 3000);
-                }
-                return false;
-            }
-            this.wrongQR.push(data);
-            send({
-                "summary": i18n.t('green-pass-activation.invalid-qr-code-title'),
-                "body":  i18n.t('green-pass-activation.invalid-qr-code-body'),
-                "type": "danger",
-                "timeout": 5,
-            });
-            return false;
-        }
-
-        this.greenPassHash = passData;
-
-        let gpAlreadySend = await this.wrongHash.includes(this.greenPassHash);
-        if (gpAlreadySend) {
-            const that = this;
-            if (!this.resetWrongHash) {
-                this.resetWrongHash = true;
-                setTimeout( function () {
-                    that.wrongHash.splice(0,that.wrongHash.length);
-                    that.wrongHash.length = 0;
-                    that.resetWrongHash = false;
-                }, 3000);
-            }
-        }
-        return !gpAlreadySend;
-    }
 
     /**
      * Start QR code reader and show container
@@ -676,6 +598,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let response;
 
         button.start();
+        if ( this._("#store-cert-mode").checked)
+        {
+            await this.encryptAndSaveHash();
+        }
         try {
             response = await this.sendCreateTicketRequest();
         } finally {
@@ -691,7 +617,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     setLocation(event) {
         if(event.detail.room) {
             this.location = { room: event.detail.room, name: event.detail.name };
-            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.checkForValidProofLocal().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
             this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
         } else {
             this.location = '';
@@ -1030,7 +956,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck) {
-            this.checkForValidProof().then(r =>  console.log('3G proof validation done')); //TODO check for valid cert in local storage
+            this.checkForValidProofLocal().then(r =>  console.log('3G proof validation done')); //TODO check for valid cert in local storage
             this.preCheck = false;
         }
 
