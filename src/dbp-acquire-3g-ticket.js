@@ -870,6 +870,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 animation: 0s linkIconIn;
                 font-size: 103%;
             }
+            
+            .check-icon{
+                padding: 0px 4px;
+            }
 
             @media only screen
             and (orientation: portrait)
@@ -1067,7 +1071,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div class="notification-wrapper ${classMap({'hidden': (this.location === '' || (!this.isActivated && !this.isUploadSkipped))})}">
                    
                     <div class="${classMap({'hidden': (!this.hasValidProof && !this.isActivated) || this.loading})}">
-                        <dbp-icon name='checkmark-circle' class="${classMap({'hidden': (!this.hasValidProof && !this.isActivated) || this.location === ''})}"></dbp-icon>
+                        <dbp-icon name='checkmark-circle' class="check-icon ${classMap({'hidden': (!this.hasValidProof && !this.isActivated) || this.location === ''})}"></dbp-icon>
                         ${ this.hasValidProof ? i18n.t('acquire-3g-ticket.valid-proof-found-message') : i18n.t('acquire-3g-ticket.valid-proof-uploaded-message') }
                     </div>
 
