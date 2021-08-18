@@ -276,6 +276,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 this.isActivated = true;
                 this.isRefresh = false;
+                this.uploadNewProof = false;
 
                 this._("#text-switch")._active = "";
                 this._("#manualPassUploadWrapper").classList.add('hidden');
@@ -713,13 +714,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.storeCertificate = this._("#store-cert-mode") && this._("#store-cert-mode").checked;
     }
 
-    showUploadSwitch(name) {
+    useCertificateSwitch(name) {
         if (name === "no-cert") {
             this.uploadNewProof = true;
             this.isActivated = false;
             this.hasValidProof = false;
         } else {
-            //TODO
             this.useLocalStorage = true;
             this.uploadNewProof = false;
         }
@@ -1168,7 +1168,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </label>
                 </div>
 
-                <div class="${classMap({'hidden': this.location === '' || this.uploadNewProof})}">
+                <div class="${classMap({'hidden': this.location === '' || this.uploadNewProof || !this.isActivated})}">
                     <div class="cert-found-checkbox-wrapper">
                         ${ this.hasValidProof ? html`
                             <!--<label id="" class="button-container">${i18n.t('acquire-3g-ticket.valid-cert-found-text')}
@@ -1182,7 +1182,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 class="switch"
                                 value1="${i18n.t('acquire-3g-ticket.valid-cert-found-text')}"
                                 value2="${i18n.t('acquire-3g-ticket.valid-cert-found-alternative')}"
-                                @change=${ (e) => this.showUploadSwitch(e.target.name) }></dbp-textswitch>
+                                @change=${ (e) => this.useCertificateSwitch(e.target.name) }></dbp-textswitch>
                             `
                         : html`
                             <label id="" class="button-container">${i18n.t('acquire-3g-ticket.store-valid-cert-text')}

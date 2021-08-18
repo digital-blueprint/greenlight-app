@@ -76,9 +76,9 @@
     "filepicker-open-button-title": "Datei zur Überprüfung auswählen",
     "manual-uploading-message": "Suche nach validem QR Code...",
     "confirm-text": "Wollen Sie Ihren 3G Nachweis wirklich löschen?",
-    "no-proof-found-message": "Es wurde kein gültiger 3G Nachweis gewählt.",
-    "valid-proof-found-message": "Es wurde ein gespeicherter 3G Nachweis gefunden.",
-    "valid-proof-uploaded-message": "Es wurde ein gültiger 3G Nachweis gewählt.",
+    "no-proof-found-message": "Es wurden keine 3G Informationen gefunden.",
+    "valid-proof-found-message": "Es wurden gespeicherte 3G Informationen gefunden.",
+    "valid-proof-uploaded-message": "3G Informationen erfolgreich importiert.",
     "place-select-title": "Ort auswählen",
     "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Raum bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
     "confirm-button-text": "Ticket erstellen",
@@ -97,7 +97,7 @@
     "confirm-checkbox-no-cert-text": "Ich bestätige die Richtigkeit meiner Angaben und dass ich mich im Betrugsfall strafbar machen kann.",
     "valid-cert-found-text": "Bestehenden 3G Nachweis verwenden",
     "store-valid-cert-text": "3G Nachweis für später speichern.",
-    "3g-proof-label-text": "3G Nachweis überprüfen",
+    "3g-proof-label-text": "3G Informationen bereitstellen",
     "valid-cert-found-alternative": "Nicht verwenden"
   },
   "show-active-tickets": {

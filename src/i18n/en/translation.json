@@ -77,9 +77,9 @@
     "filepicker-open-button-title": "Choose File for Verification",
     "manual-uploading-message": "Search for valid QR Code...",
     "confirm-text": "Do you really want to delete your 3G proof?",
-    "no-proof-found-message": "No valid 3G proof was found.",
-    "valid-proof-found-message": "A stored 3G proof was found.",
-    "valid-proof-uploaded-message": "A valid 3G proof was uploaded.",
+    "no-proof-found-message": "No 3G information could be found.",
+    "valid-proof-found-message": "Stored 3G information could be found.",
+    "valid-proof-uploaded-message": "3G information was successfully imported.",
     "place-select-title": "Select a place",
     "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid proof of such for the duration of my stay in this room and can present such proof in the event of a manual inspection.",
     "confirm-button-text": "Create a Ticket",
@@ -98,7 +98,7 @@
     "confirm-checkbox-no-cert-text": "I confirm that the information I have provided is correct and that I am carrying a valid 3G certificate.",
     "valid-cert-found-text": "Use existing 3g proof",
     "store-valid-cert-text": "Save 3G proof for later.",
-    "3g-proof-label-text": "Validate 3G Proof",
+    "3g-proof-label-text": "Use 3G Information",
     "valid-cert-found-alternative": "Do not use it"
   },
   "show-active-tickets": {
