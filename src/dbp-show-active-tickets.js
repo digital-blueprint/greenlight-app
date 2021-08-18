@@ -9,7 +9,7 @@ import MicroModal from './micromodal.es';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {send} from "@dbp-toolkit/common/notification";
-
+import qrcode from "qrcode-generator";
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -50,6 +50,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     connectedCallback() {
         super.connectedCallback();
+        const that = this;
+        this.updateComplete.then(() => {
+           // that.generateQrCode();
+        });
+
+
+
     }
 
     update(changedProperties) {
@@ -110,6 +117,58 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         };
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+    }
+
+    async generateQrCode() {
+
+        //TODO remove this duplicated code
+        let key, salt, cipher, iv;
+        let uid = this.auth['person-id'];
+
+        cipher = localStorage.getItem("dbp-gp-" + uid);
+        salt = localStorage.getItem("dbp-gp-salt-" + uid);
+        iv = localStorage.getItem("dbp-gp-iv-" + uid);
+
+        let salt_binary_string =  window.atob(salt);
+        let salt_bytes = new Uint8Array( salt_binary_string.length );
+        for (let i = 0; i < salt_binary_string.length; i++)        {
+            salt_bytes[i] = salt_binary_string.charCodeAt(i);
+        }
+
+        let iv_binary_string =  window.atob(iv);
+        let iv_bytes = new Uint8Array( iv_binary_string.length );
+        for (let i = 0; i < iv_binary_string.length; i++)        {
+            iv_bytes[i] = iv_binary_string.charCodeAt(i);
+        }
+
+        [key, salt] = await this.generateKey(this.auth['subject'], salt_bytes);
+
+        console.log("key", key);
+        console.log("cipher", cipher);
+        console.log("uid", this.auth);
+        console.log("iv_bytes", iv_bytes);
+        let hash = await this.decrypt(cipher, key, iv_bytes);
+
+        console.log("hash", hash);
+
+        if (hash && typeof hash !== 'undefined' && hash != -1) {
+            //let check = this.decodeUrl(hash);
+            if (1) {
+                console.log("check if hash is valid hash and noch nicht abgelaufen");
+                // TODO check hash valid
+                let typeNumber = 0;
+                let errorCorrectionLevel = 'H';
+                let qr = qrcode(typeNumber, errorCorrectionLevel);
+                qr.addData(hash);
+                qr.make();
+                this._("#qr-code-hash").innerHTML = qr.createImgTag();
+
+            } else {
+                console.error("wrong hash saved");
+            }
+        }
+
+
     }
 
     /**
@@ -377,6 +436,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (this.isLoggedIn() && !this.isLoading() && !this._initialFetchDone && !this.initialTicketsLoading) {
             this.getListOfActiveTickets();
         }
+        this.generateQrCode();
 
         return html`
 
@@ -437,6 +497,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div>
                                 TODO: Content (Name, Birthdate) + QR Code
                             </div>
+                            <div id="qr-code-hash"></div>
                         </main>
                         <footer class="modal-footer">
                             <div class="modal-footer-btn">
