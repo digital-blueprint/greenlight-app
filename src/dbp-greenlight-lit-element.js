@@ -137,18 +137,23 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
     }
 
-    async sendCreateTicketRequest() { //TODO request
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         Authorization: "Bearer " + this.auth.token
-        //     },
-        // };
+    async sendCreateTicketRequest() {
+        let body = {
+            "place": 'place name',  //TODO use correct variables
+            "consentAssurance": true,
+            "manualCheckRequired": true
+        };
 
-        //return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + identifier, options); //TODO uncomment
-        let response = { };
-        response.status = 201; //TODO delete
-        return response;
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+            body: JSON.stringify(body)
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
     }
 
     saveWrongHashAndNotify(title, body, hash) {

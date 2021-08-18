@@ -88,7 +88,7 @@
     "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
     "other-error-title": "Fehler!",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "check-in-link-description": "Möchten Sie auch das Contact Tracing der TU Graz unterstützen?",
+    "check-in-link-description": "Möchten Sie auch am Contact Tracing der TU Graz teilnehmen?",
     "check-in-link-text": "TU Graz check-in",
     "manage-tickets-link": "Aktive Tickets anzeigen",
     "manage-tickets-text": "Sie können Ihre aktiven Tickets vorzeigen oder löschen unter: ",

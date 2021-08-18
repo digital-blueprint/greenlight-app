@@ -22,6 +22,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.loading = false;
         this._initialFetchDone = false;
         this.locationName = '';
+        this.identifier = '';
     }
 
     static get scopedElements() {
@@ -43,6 +44,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             initialTicketsLoading: { type: Boolean, attribute: false },
             loading: { type: Boolean, attribute: false },
             locationName: { type: String, attribute: false },
+            identifier: { type: String, attribute: false },
         };
     }
 
@@ -66,41 +68,48 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     parseActiveTickets(response) {
         let list = [];
 
-        //TODO parse response list instead of hardcoded values
-        list[0] = { location: { name: 'Test Location' }, endTime: new Date() };
-        list[1] = { location: { name: 'TU Graz' }, endTime: new Date() };
-        this.activeTicketsCounter = 2;
+        let numTypes = parseInt(response['hydra:totalItems']);
+        if (isNaN(numTypes)) {
+            numTypes = 0;
+        }
+        for (let i = 0; i < numTypes; i++ ) {
+            list[i] = response['hydra:member'][i];
+        }
+        list.sort(this.compareListItems);
 
         return list;
     }
 
-    async sendDeleteTicketRequest() { //TODO request
-        // const options = {
-        //     method: 'DELETE',
-        //     headers: {
-        //         Authorization: "Bearer " + this.auth.token
-        //     },
-        // };
-
-        // return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + identifier, options);
-        let response = { };
-        response.status = 204; //TODO delete
-        return response;
+    compareListItems(a, b) {
+        if (a.place < b.place) {
+            return -1;
+        }
+        else if (a.place > b.place) {
+            return 1;
+        }
     }
 
-    async getActiveTicketsRequest() { //TODO request
-        // const options = {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/ld+json',
-        //         Authorization: "Bearer " + this.auth.token
-        //     },
-        // };
+    async sendDeleteTicketRequest() {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
 
-        //return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
-        let response = { };
-        response.status = 200; //TODO delete
-        return response;
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + this.identifier, options);
+    }
+
+    async getActiveTicketsRequest() {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
     }
 
     /**
@@ -112,7 +121,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.initialTicketsLoading = !this._initialFetchDone;
         try {
             let response = await this.getActiveTicketsRequest();
-            let responseBody = await response; //await response.json(); //TODO
+            let responseBody = await response.json();
             if (responseBody !== undefined && responseBody.status !== 403) {
                 this.activeTickets = this.parseActiveTickets(responseBody);
             }
@@ -134,7 +143,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "timeout": 5,
                 });
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
-                this.locationName = "";
+                this.locationName = '';
+                this.identifier = '';
 
                 break;
 
@@ -161,7 +171,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "timeout": 5,
                 });
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
-                this.locationName = "";
+                this.locationName = '';
+                this.identifier = '';
 
                 break;
 
@@ -177,7 +188,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     showTicket(event, entry) {
-        this.locationName = entry.location.name;
+        this.locationName = entry.place;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
             onClose: modal => {
@@ -188,43 +199,30 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async refreshTicket(event, entry) {
-        this.locationName = entry.location.name;
+        this.locationName = entry.place;
         let response = await this.sendCreateTicketRequest();
         await this.checkRefreshTicketResponse(response);
 
         response = await this.getActiveTicketsRequest();
-        let responseBody = await response; //await response.json();
+        let responseBody = await response.json();
         if (responseBody !== undefined && responseBody.status !== 403) {
             this.activeTickets = this.parseActiveTickets(responseBody);
         }
-        
-        //TODO delete hardcoded values
-        let date = new Date();
-        date.setHours(23);
-        console.log(date);
-        const index = this.activeTickets.indexOf(entry);
-        if (index > -1) {
-            this.activeTickets[index] = { location: { name: entry.location.name }, endTime: date };
-        }
-        this.activeTicketsCounter++;
     }
 
    async deleteTicket(event, entry) {
-       this.locationName = entry.location.name;
-        const index = this.activeTickets.indexOf(entry);
-        if (index > -1) {
-            this.activeTickets.splice(index, 1); //TODO delete
-            // let response = await this.sendDeleteTicketRequest(); //TODO uncomment
-            let responseBody = { status: 204 }; //await response.json(); //TODO delete hardcoded response
-            await this.checkDeleteTicketResponse(responseBody);
-            //
-            // response = await this.getActiveTicketsRequest();
-            // let responseBody = await response; //await response.json();
-            // if (responseBody !== undefined && responseBody.status !== 403) {
-            //     this.activeTickets = this.parseActiveTickets(responseBody);
-            // }
+        this.locationName = entry.place;
+        this.identifier = entry.identifier;
+        let response = await this.sendDeleteTicketRequest();
+        let responseBody = await response.json();
+        await this.checkDeleteTicketResponse(responseBody);
+        
+        response = await this.getActiveTicketsRequest();
+        responseBody = await response.json();
+        if (responseBody !== undefined && responseBody.status !== 403) {
+            this.activeTickets = this.parseActiveTickets(responseBody);
         }
-        this.activeTicketsCounter--;
+
     }
 
     closeDialog(e) {
@@ -401,8 +399,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(i => html`
                         <div class="ticket">
                             <span class="header">
-                                <strong>${i.location.name}</strong>
-                                ${this.getReadableDate(i.endTime)}
+                                <strong>${i.place}</strong>
+                                ${this.getReadableDate(i.validUntil)}
                             </span>
                             <div class="btn">
                                 <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
@@ -437,7 +435,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <img src="${commonUtils.getAssetURL('@dbp-topics/greenlight', 'wbstudkart.jpeg')}" alt="Foto">
                             </div>
                             <div>
-                                TODO: Content
+                                TODO: Content (Name, Birthdate) + QR Code
                             </div>
                         </main>
                         <footer class="modal-footer">

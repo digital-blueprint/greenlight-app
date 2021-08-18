@@ -89,7 +89,7 @@
     "create-ticket-success-body": "The acquired ticket for {{place}} was successfully created.",
     "other-error-title": "Error!",
     "other-error-body": "An unknown error has occurred.",
-    "check-in-link-description": "Do you want to support contact tracing at TU Graz?",
+    "check-in-link-description": "Do you want to use contact tracing at TU Graz?",
     "check-in-link-text": "TU Graz check-in",
     "manage-tickets-link": "Show active tickets",
     "manage-tickets-text": "You can manage your active tickets at: ",
