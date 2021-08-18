@@ -9,6 +9,7 @@ export default {
         matomoSiteId: 131,
         nextcloudBaseURL: 'http://localhost:8081',
         nextcloudName: 'TU Graz cloud',
+        preselectedOption: 'TU Graz',
     },
     development: {
         basePath: '/apps/greenlight/',
@@ -20,6 +21,7 @@ export default {
         matomoSiteId: 131,
         nextcloudBaseURL: 'https://nc-dev.tugraz.at/pers',
         nextcloudName: 'TU Graz cloud',
+        preselectedOption: 'TU Graz',
     },
     demo: {
         basePath: '/apps/greenlight/',
@@ -31,6 +33,7 @@ export default {
         matomoSiteId: 131,
         nextcloudBaseURL: 'https://cloud.tugraz.at',
         nextcloudName: 'TU Graz cloud',
+        preselectedOption: 'TU Graz',
     },
     production: {
         basePath: '/',
@@ -42,5 +45,6 @@ export default {
         matomoSiteId: 150,
         nextcloudBaseURL: 'https://cloud.tugraz.at',
         nextcloudName: 'TU Graz cloud',
+        preselectedOption: 'TU Graz',
     },
 };

@@ -40,6 +40,7 @@ if (appEnv in appConfig) {
         matomoSiteId: -1,
         nextcloudBaseURL: 'https://test',
         nextcloudName: '',
+        preselectedOption: 'TU Graz',
     };
 } else {
     console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(appConfig)}'`);
@@ -61,7 +62,6 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1';
-config.preselectedOption = 'TU Graz';
 
 function getOrigin(url) {
     if (url)
@@ -82,8 +82,6 @@ export default (async () => {
     return {
         input: (appEnv != 'test') ? [
                 'src/' + pkg.internalName + '.js',
-                'src/dbp-activate-green-pass.js',
-                'src/dbp-acquire-ticket.js',
                 'src/dbp-acquire-3g-ticket.js',
                 'src/dbp-show-active-tickets.js',
 

@@ -180,9 +180,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.initialTicketsLoading = !this._initialFetchDone;
         try {
             let response = await this.getActiveTicketsRequest();
-            let responseBody = await response.json();
+            let responseBody = await response.clone().json();
             if (responseBody !== undefined && responseBody.status !== 403) {
                 this.activeTickets = this.parseActiveTickets(responseBody);
+                this.activeTicketsCounter++;
             }
         } finally {
             this.initialTicketsLoading = false;
@@ -218,33 +219,33 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    async checkRefreshTicketResponse(response) {
-        const i18n = this._i18n;
+    // async checkRefreshTicketResponse(response) {
+    //     const i18n = this._i18n;
 
-        switch(response.status) {
-            case 201:
-                send({
-                    "summary": i18n.t('show-active-tickets.refresh-ticket-success-title'),
-                    "body":  i18n.t('show-active-tickets.refresh-ticket-success-body', { place: this.locationName }),
-                    "type": "success",
-                    "timeout": 5,
-                });
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
-                this.locationName = '';
-                this.identifier = '';
+    //     switch(response.status) {
+    //         case 201:
+    //             send({
+    //                 "summary": i18n.t('show-active-tickets.refresh-ticket-success-title'),
+    //                 "body":  i18n.t('show-active-tickets.refresh-ticket-success-body', { place: this.locationName }),
+    //                 "type": "success",
+    //                 "timeout": 5,
+    //             });
+    //             //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
+    //             this.locationName = '';
+    //             this.identifier = '';
 
-                break;
+    //             break;
 
-            default: //TODO error handling - more cases
-                send({
-                    "summary": i18n.t('show-active-tickets.other-error-title'),
-                    "body":  i18n.t('show-active-tickets.other-error-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
-                break;
-        }
-    }
+    //         default: //TODO error handling - more cases
+    //             send({
+    //                 "summary": i18n.t('show-active-tickets.other-error-title'),
+    //                 "body":  i18n.t('show-active-tickets.other-error-body'),
+    //                 "type": "danger",
+    //                 "timeout": 5,
+    //             });
+    //             break;
+    //     }
+    // }
 
     showTicket(event, entry) {
         this.locationName = entry.place;
@@ -257,29 +258,31 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         });
     }
 
-    async refreshTicket(event, entry) {
-        this.locationName = entry.place;
-        let response = await this.sendCreateTicketRequest();
-        await this.checkRefreshTicketResponse(response);
+    // async refreshTicket(event, entry) {
+    //     this.locationName = entry.place;
+    //     let response = await this.sendCreateTicketRequest();
+    //     await this.checkRefreshTicketResponse(response);
 
-        response = await this.getActiveTicketsRequest();
-        let responseBody = await response.json();
-        if (responseBody !== undefined && responseBody.status !== 403) {
-            this.activeTickets = this.parseActiveTickets(responseBody);
-        }
-    }
+    //     response = await this.getActiveTicketsRequest();
+    //     let responseBody = await response.json();
+    //     if (responseBody !== undefined && responseBody.status !== 403) {
+    //         this.activeTickets = this.parseActiveTickets(responseBody);
+    //         this.activeTicketsCounter++;
+    //     }
+    // }
 
    async deleteTicket(event, entry) {
         this.locationName = entry.place;
         this.identifier = entry.identifier;
         let response = await this.sendDeleteTicketRequest();
-        let responseBody = await response.json();
+        let responseBody = await response.clone();
         await this.checkDeleteTicketResponse(responseBody);
         
         response = await this.getActiveTicketsRequest();
-        responseBody = await response.json();
+        responseBody = await response.clone().json();
         if (responseBody !== undefined && responseBody.status !== 403) {
             this.activeTickets = this.parseActiveTickets(responseBody);
+            this.activeTicketsCounter--;
         }
 
     }

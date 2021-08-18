@@ -257,8 +257,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param responseData
      * @param greenPassHash
      * @param category
+     * @param precheck
      */
-    async checkActivationResponse(responseData, greenPassHash, category) {
+    async checkActivationResponse(responseData, greenPassHash, category, precheck) {
         const i18n = this._i18n;
 
         let status = responseData.status;
@@ -275,19 +276,26 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.showQrContainer = false;
 
                 this.isActivated = true;
-                this.isRefresh = false;
-                this.uploadNewProof = false;
+                this.hasValidProof = true;
+                if (this.isRefresh) {
+                    this.isRefresh = false;
+                }
+                if (this.uploadNewProof) {
+                    this.uploadNewProof = false;
+                }
 
                 this._("#text-switch")._active = "";
                 this._("#manualPassUploadWrapper").classList.add('hidden');
 
-                send({
-                    "summary": i18n.t('green-pass-activation.success-activation-title'),
-                    "body": i18n.t('green-pass-activation.success-activation-body'),
-                    "type": "success",
-                    "timeout": 5,
-                });
-
+                if (!precheck) {
+                    send({
+                        "summary": i18n.t('green-pass-activation.success-activation-title'),
+                        "body": i18n.t('green-pass-activation.success-activation-body'),
+                        "type": "success",
+                        "timeout": 5,
+                    });
+                }
+                
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
                 break;
 
@@ -306,18 +314,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @returns {object} response
      */
     async sendActivationRequest(greenPassHash) {
-        // let formData = new FormData();
-        // formData.append('digital_covid_certificate_data', greenPassHash);
+        
+        //TODO use frontend validation and send correct response
 
-        // const options = {
-        //     method: 'POST',
-        //     headers: {
-        //         Authorization: "Bearer " + this.auth.token
-        //     },
-        //     body: new URLSearchParams(formData)
-        // };
-
-        // return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
         let response = { status: 201, data: { expires: new Date(), identifier: 1234567890 } }; //TODO return correct validation results
         return response;
     }
@@ -440,21 +439,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Parse an incoming date to a readable date
-     *
-     * @param date
-     * @returns {string} readable date
-     */
-    getReadableActivationDate(date) {
-        const i18n = this._i18n;
-        let newDate = new Date(date);
-        let month = newDate.getMonth() + 1;
-        this.isExpiring = !this.checkIfCertificateIsExpiring();
-
-        return i18n.t('green-pass-activation.valid-until', {date: newDate.getDate() + "." + month + "." + newDate.getFullYear(), clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2) });
-    }
-
-    /**
      * Checks if the validity of the 3G proof expires in the next 12 hours
      *
      * @returns {boolean} true if the 3G proof is valid for the next 12 hours
@@ -508,21 +492,41 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.qrParsingLoading = false;
     }
 
+    async sendGetTicketsRequest() {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+    }
+
     async checkForValidTickets() {
         const i18n = this._i18n;
 
-        let responseData = { responseBody: '', status: 200 }; //await this.GetActiveTicketRequest(this.location.name); //TODO change to correct request - maybe there is a request to fetch only tickets for this room?
+        let responseData = await this.sendGetTicketsRequest(this.location);
         let status = responseData.status;
-        let responseBody = { location: { room: '', name: 'TU Graz' }};//await responseData.clone().json(); //TODO change to response data
+        let responseBody = await responseData.clone().json();
+
+        let numTypes = parseInt(responseBody['hydra:totalItems']);
+        if (isNaN(numTypes)) {
+            numTypes = 0;
+        }
 
         switch (status) {
-            case 200:
-                if (responseBody.location.name === this.location.name) { //only if this is the same ticket as selected
-                    console.log('Found a valid ticket for this room.');
-                    this.hasTicketForThisPlace = true;
-                } else {
-                    console.log('Could not find a valid ticket for this room.');
-                    this.hasTicketForThisPlace = false;
+            case 200:   
+                for (let i = 0; i < numTypes; i++ ) {
+
+                    let item = responseBody['hydra:member'][i];
+
+                    if (item['place'] === this.location) { //only if this is the same ticket as selected
+                        //TODO check if item is still valid
+                        this.hasTicketForThisPlace = true;
+                        console.log('Found a valid ticket for this room.');
+                    }
                 }
                 break;
 
@@ -537,21 +541,32 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    async checkCreateTicketResponse(response) { //TODO add refresh option?
+    async checkCreateTicketResponse(response) {
         const i18n = this._i18n;
         let checkInPlaceSelect;
 
         switch(response.status) {
             case 201:
-                send({
-                    "summary": i18n.t('acquire-ticket.create-ticket-success-title'),
-                    "body":  i18n.t('acquire-ticket.create-ticket-success-body', { place: this.location.name }),
-                    "type": "success",
-                    "timeout": 5,
-                });
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
 
-                this.location = "";
+                if (this.hasTicketForThisPlace) {
+                    send({
+                        "summary": i18n.t('acquire-3g-ticket.refresh-ticket-success-title'),
+                        "body":  i18n.t('acquire-3g-ticket.refresh-ticket-success-body', { place: this.location }),
+                        "type": "success",
+                        "timeout": 5,
+                    });
+                    //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'RefreshTicketSuccess', 'name': this.location});
+                } else {
+                    send({
+                        "summary": i18n.t('acquire-3g-ticket.create-ticket-success-title'),
+                        "body":  i18n.t('acquire-3g-ticket.create-ticket-success-body', { place: this.location }),
+                        "type": "success",
+                        "timeout": 5,
+                    });
+                    //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location});
+                }
+
+                this.location = this.preselectedOption;
                 this.hasTicket = true;
                 this.isCheckboxVisible = false;
                 this.isCheckmarkChecked = false;
@@ -565,9 +580,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 this.useLocalStorage = false;
-                // if (this._("#cert-found-mode")) {
-                //     this._("#cert-found-mode").checked = false;
-                // }
 
                 if (this.hasValidProof) {
                     this.hasValidProof = false; //Could be expired until now
@@ -578,7 +590,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     checkInPlaceSelect.clear();
                 }
 
-                this._("#checkin-reference").scrollIntoView({ behavior: 'smooth', block: 'start' }); //TODO fix this
+                this._("#checkin-reference").scrollIntoView({ behavior: 'smooth', block: 'start' }); //TODO doesn't work?
 
                 break;
 
@@ -598,7 +610,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let response;
 
         button.start();
-        if ( this._("#store-cert-mode").checked)
+        if ( this._("#store-cert-mode") && this._("#store-cert-mode").checked)
         {
             await this.encryptAndSaveHash();
         }
@@ -616,8 +628,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     setLocation(event) {
         if(event.detail.room) {
-            this.location = { room: event.detail.room, name: event.detail.name };
-            this.checkForValidProofLocal().then(r =>  console.log('3G proof validation done')); //Check this each time because proof validity could expire
+            this.location = event.detail.name;
+            this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done')); //Check this each time because proof validity could expire
             this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
         } else {
             this.location = '';
@@ -631,10 +643,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     checkConfirmCheckmark() {
         this.isConfirmChecked = this._("#digital-proof-mode") && this._("#digital-proof-mode").checked;
     }
-
-    // checkCertFoundCheckmark() {
-    //     this.useLocalStorage = this._("#cert-found-mode") && this._("#cert-found-mode").checked;
-    // }
 
     checkStoreCertCheckmark() {
         this.storeCertificate = this._("#store-cert-mode") && this._("#store-cert-mode").checked;
@@ -960,12 +968,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck) {
-            this.checkForValidProofLocal().then(r =>  console.log('3G proof validation done')); //TODO check for valid cert in local storage
+            this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done')); //TODO check for valid cert in local storage
             this.preCheck = false;
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) {
-            this.location = { room: '', name: this.preselectedOption };
+            this.location = this.preselectedOption;
             this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
         }
@@ -1098,7 +1106,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </label>
                 </div>
 
-                <div class="${classMap({'hidden': this.location === '' || this.uploadNewProof || !this.isActivated})}">
+                <div class="${classMap({'hidden': this.location === '' || (!this.uploadNewProof && !this.isActivated)})}">
                     <div class="cert-found-checkbox-wrapper">
                         ${ this.hasValidProof ? html`
                             <!--<label id="" class="button-container">${i18n.t('acquire-3g-ticket.valid-cert-found-text')}

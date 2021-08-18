@@ -139,9 +139,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async sendCreateTicketRequest() {
         let body = {
-            "place": 'place name',  //TODO use correct variables
-            "consentAssurance": true,
-            "manualCheckRequired": true
+            "place": this.location,
+            "consentAssurance": this.isConfirmChecked, //or always hardcoded true?
+            "manualCheckRequired": this.isCheckmarkChecked
         };
 
         const options = {
@@ -254,8 +254,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      *
      * @param greenPassHash
      * @param category
+     * @param precheck
      */
-    async doActivation(greenPassHash, category) {
+    async doActivation(greenPassHash, category, precheck = false) {
         const i18n = this._i18n;
 
         // Error: no valid hash detected
@@ -266,10 +267,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         let responseData = await this.sendActivationRequest(greenPassHash);
-        await this.checkActivationResponse(responseData, greenPassHash, category);
+        await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
     }
 
-    async checkForValidProof() { //TODO rewrite: check if there is a valid 3g proof in the local storage for the logged-in user
+
+    async checkForValidProof() {
 
         this.loading = true;
 
@@ -335,7 +337,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             if (check) {
                 console.log("check if hash is valid hash and noch nicht abgelaufen");
                 this.greenPassHash = hash;
-                await this.doActivation(this.greenPassHash, "checkForValidHash");
+                await this.doActivation(this.greenPassHash, "checkForValidHash", true);
             } else {
                 console.error("wrong hash saved");
             }
