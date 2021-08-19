@@ -463,7 +463,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <div class="ticket">
                             <span class="header">
                                 <strong>${i18n.t('show-active-tickets.preselected-place')}</strong>
-                                ${this.getReadableDate(i.validUntil)}
+                                ${this.getReadableDate(i.validFrom, i.validUntil)}
                             </span>
                             <div class="btn">
                                 <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>

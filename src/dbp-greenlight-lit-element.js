@@ -173,9 +173,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param date
      * @returns {string} readable date
      */
-    getReadableDate(date) {
+    getReadableDate(startDate, endDate) {
         const i18n = this._i18n;
-        let newDate = new Date(date);
+        let newDate1 = new Date(startDate);
+        let newDate2 = new Date(endDate);
+        let newDate = new Date(newDate2 - newDate1);
 
         let hours = newDate.getHours();
         let minutes = newDate.getMinutes();

@@ -514,7 +514,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async checkForValidTickets() {
         const i18n = this._i18n;
 
-        let responseData = await this.sendGetTicketsRequest(this.location);
+        let responseData = await this.sendGetTicketsRequest();
 
         let responseBody = await responseData.clone().json();
         let status = responseData.status;
