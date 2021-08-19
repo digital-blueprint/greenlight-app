@@ -462,7 +462,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(i => html`
                         <div class="ticket">
                             <span class="header">
-                                <strong>${i.place}</strong>
+                                <strong>${i18n.t('show-active-tickets.preselected-place')}</strong>
                                 ${this.getReadableDate(i.validUntil)}
                             </span>
                             <div class="btn">

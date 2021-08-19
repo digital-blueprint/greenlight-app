@@ -139,7 +139,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async sendCreateTicketRequest() {
         let body = {
-            "place": this.location,
+            // "place": this.location,
             "consentAssurance": this.isConfirmChecked, //or always hardcoded true?
             "manualCheckRequired": this.isCheckmarkChecked
         };
@@ -270,7 +270,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
     }
 
-
     async checkForValidProof() {
 
         this.loading = true;
@@ -345,7 +344,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.loading = false;
     }
 
-
     async encryptAndSaveHash() {
         let key, salt, cipher, iv;
         let uid = this.auth['person-id'];
@@ -367,7 +365,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         localStorage.setItem("dbp-gp-salt-" + uid, salt);
         localStorage.setItem("dbp-gp-iv-" + uid, iv);
     }
-
 
     async generateKey(string, salt = window.crypto.getRandomValues(new Uint8Array(24))) {
         let password = string;

@@ -298,10 +298,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 } else {
                     console.log("Found a proof in local storage");
                     this.hasLocalStorageProof = true;
-                    // this.storeCertificate = true;
-                    // if (this._("#store-cert-mode")) {
-                    //     this._("#store-cert-mode").checked = true;
-                    // }
+                    this.storeCertificate = true;
+                    if (this._("#store-cert-mode")) {
+                        this._("#store-cert-mode").checked = true;
+                    }
                 }
                 
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
@@ -515,6 +515,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
 
         let responseData = await this.sendGetTicketsRequest(this.location);
+
         let responseBody = await responseData.clone().json();
         let status = responseData.status;
 
@@ -530,11 +531,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     // console.log('resp2: ', responseBody['hydra:member'][i]);
                     let item = responseBody['hydra:member'][i];
 
-                    if (item && (item['place'] === this.location)) { //only if this is the same ticket as selected
-                        //TODO check if item is still valid
+                    // if (item['place'] === this.location) { //only if this is the same ticket as selected 
+                    //     //TODO check if item is still valid
                         this.hasTicketForThisPlace = true;
                         console.log('Found a valid ticket for this room.');
-                    }
+                    // } 
                 }
                 break;
 

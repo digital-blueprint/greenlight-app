@@ -101,7 +101,8 @@
     "valid-cert-found-text": "Use existing 3g proof",
     "store-valid-cert-text": "Save 3G proof for later.",
     "3g-proof-label-text": "Use 3G Information",
-    "valid-cert-found-alternative": "Do not use it"
+    "valid-cert-found-alternative": "Do not use it",
+    "preselected-place": "TU Graz"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

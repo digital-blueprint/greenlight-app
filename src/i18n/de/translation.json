@@ -119,7 +119,8 @@
     "delete-ticket-success-title": "Ticket erfolgreich gelöscht!",
     "delete-ticket-success-body": "Das Ticket für den Ort {{place}} wurde erfolgreich gelöscht.",
     "other-error-title": "Fehler!",
-    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
+    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
+    "preselected-place": "TU Graz"
   },
   "info": {
     "title": "Information",
