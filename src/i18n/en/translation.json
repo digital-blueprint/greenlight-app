@@ -77,7 +77,7 @@
     "filepicker-open-button-title": "Choose File for Verification",
     "manual-uploading-message": "Search for valid QR Code...",
     "confirm-text": "Do you really want to delete your 3G proof?",
-    "no-proof-found-message": "No 3G information could be found.",
+    "no-proof-found-message": "No 3G information was imported.",
     "valid-proof-found-message": "Stored 3G information could be found.",
     "valid-proof-uploaded-message": "3G information found and successfully imported.",
     "place-select-title": "Select a place",
