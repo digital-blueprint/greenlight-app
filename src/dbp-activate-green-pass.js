@@ -230,15 +230,19 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async checkActivationResponse(responseData, greenPassHash, category) {
         const i18n = this._i18n;
+        let expires = 0;
 
         let status = responseData.status;
-        let responseBody = await responseData.clone().json();
-
         switch (status) {
             case 201:
-                this.activationEndTime = responseBody['expires'];
-                this.identifier = responseBody['identifier'];
-                console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
+
+                expires = (new Date(responseData.expires)).toString();
+                this._(".grid-container > .activations > .header > strong").innerText
+                    = `firstname: ${responseData.firstname}
+                    lastname: ${responseData.lastname}
+                    day of birth: ${responseData.dob}
+                    expires: ${expires}
+                    valid: ${responseData.type}, ${responseData.description}`;
 
                 this.stopQRReader();
                 this.QRCodeFile = null;
@@ -262,33 +266,21 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
                 break;
 
-            // Unauthorized
-            case 403:
-                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed403', 'name': locationName});
-                break;
-
             // Invalid input
             case 400:
-                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                this.saveWrongHashAndNotify('HCert invalid', responseData.description, greenPassHash);
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed400', 'name': locationName});
                 break;
 
             // Unprocessable entity
             case 422:
-                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
-                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed422', 'name': locationName});
-                break;
-            
-            // Bad Gateway
-            case 502:
-                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
-                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed502', 'name': locationName});
+                this.saveWrongHashAndNotify('HCert broken', responseData.description, greenPassHash);
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed422', 'name': locationName});
                 break;
 
             // Error: something else doesn't work
             default:
-                this.saveWrongHashAndNotify(responseBody['hydra:title'], responseBody['hydra:description'], greenPassHash);
+                this.saveWrongHashAndNotify('Unknown Error', responseData.description, greenPassHash);
                  //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
         }
@@ -435,7 +427,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         // let responseData = await this.sendActivationRequest(greenPassHash);
         let responseData = await hcertValidation(greenPassHash);
-        console.dir(responseData);
+        //console.dir(responseData);
         await this.checkActivationResponse(responseData, greenPassHash, category);
     }
 
