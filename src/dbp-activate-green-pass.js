@@ -238,7 +238,7 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             case 201:
                 this.activationEndTime = responseBody['expires'];
                 this.identifier = responseBody['identifier'];
-                // console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
+                console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
 
                 this.stopQRReader();
                 this.QRCodeFile = null;
@@ -433,8 +433,9 @@ class GreenPassActivation extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return;
         }
 
-        //let responseData = await this.sendActivationRequest(greenPassHash);
-        let responseData = hcertValidation(greenPassHash);
+        // let responseData = await this.sendActivationRequest(greenPassHash);
+        let responseData = await hcertValidation(greenPassHash);
+        console.dir(responseData);
         await this.checkActivationResponse(responseData, greenPassHash, category);
     }
 

@@ -62,6 +62,9 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1';
+config.preselectedOption = 'TU Graz';
+config.contentUrl = 'https://dgc.a-sit.at/ehn/cert/listv2';
+config.signatureUrl = 'https://dgc.a-sit.at/ehn/cert/sigv2';
 
 function getOrigin(url) {
     if (url)
@@ -72,7 +75,8 @@ function getOrigin(url) {
 
 config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(config.entryPointURL)} \
-    httpbin.org ${getOrigin(config.nextcloudBaseURL)}; \
+    httpbin.org ${getOrigin(config.nextcloudBaseURL)} \
+    ${getOrigin(config.contentUrl)} ${getOrigin(config.signatureUrl)}; \
     img-src * blob: data:; font-src 'self' data:`;
 
 console.log(".....", config.CSP);
