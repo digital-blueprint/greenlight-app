@@ -4,6 +4,7 @@ import glob from 'glob';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
+import replace from 'rollup-plugin-replace';
 import {terser} from "rollup-plugin-terser";
 import json from '@rollup/plugin-json';
 import serve from 'rollup-plugin-serve';
@@ -143,6 +144,11 @@ export default (async () => {
                     buildInfo: getBuildInfo(appEnv)
                 }
             }),
+            replace({
+                // If you would like DEV messages, specify 'development'
+                // Otherwise use 'production'
+                'process.env.NODE_ENV': JSON.stringify('production')
+            }),
             resolve({
                 // ignore node_modules from vendored packages
                 moduleDirectories: [path.join(process.cwd(), 'node_modules')],
@@ -184,7 +190,7 @@ export default (async () => {
                     {src: 'assets/*-placeholder.png', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/*.css', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/*.ico', dest: 'dist/' + await getDistPath(pkg.name)},
-                    {src: 'assets/*.metadata.json', dest: 'dist'},
+                    {src: 'src/*.metadata.json', dest: 'dist'},
                     {src: 'assets/*.svg', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/datenschutzerklaerung-tu-graz-greenlight.pdf', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/htaccess-shared', dest: 'dist/shared/', rename: '.htaccess'},

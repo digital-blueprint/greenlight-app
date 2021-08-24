@@ -50,10 +50,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     connectedCallback() {
         super.connectedCallback();
-        const that = this;
-        this.updateComplete.then(() => {
-           // that.generateQrCode();
-        });
+
 
 
 
