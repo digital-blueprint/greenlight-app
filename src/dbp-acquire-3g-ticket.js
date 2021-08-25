@@ -1126,11 +1126,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let privacyURL = commonUtils.getAssetURL('@dbp-topics/greenlight', 'datenschutzerklaerung-tu-graz-greenlight.pdf'); //TODO replace dummy PDF file
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
 
+
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
             this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done'));
         }
 
-        if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) {
+        if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) { //TODO überlegen
             this.location = this.preselectedOption;
             this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
@@ -1173,7 +1174,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         
                         <!-- Place Selector -->
                         <div class="field ${classMap({'hidden': this.showPreselectedSelector})}">
-                            <label class="label">${i18n.t('acquire-3g-ticket.place-select-title')}</label>
+                            <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
                             <div class="control">
                                 <dbp-check-in-place-select class="${classMap({'hidden': this.showPreselectedSelector})}" subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
                                 <select class="${classMap({'hidden': !this.showPreselectedSelector})}" disabled><option selected="selected">${this.preselectedOption}</option></select>
@@ -1181,8 +1182,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </div>
                         
                         <!-- 3G Proof Upload -->
-                        
-                         <div class="proof-upload-container ${classMap({'hidden': !this.showProofUpload})}">
+
+                         <div class="proof-upload-container ${classMap({'hidden': !this.showProofUpload || this.location === ''})}">
         
                             <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
                              <div class="${classMap({'hidden': !this.hasLocalStorageProof})}">
