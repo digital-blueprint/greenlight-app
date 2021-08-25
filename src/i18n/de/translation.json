@@ -99,7 +99,7 @@
     "confirm-checkbox-no-cert-text": "Ich bestätige die Richtigkeit meiner Angaben und dass ich mich im Betrugsfall strafbar machen kann.",
     "valid-cert-found-text": "Bestehenden 3G Nachweis verwenden",
     "store-valid-cert-text": "3G Nachweis für später speichern.",
-    "3g-proof-label-text": "3G Informationen bereitstellen",
+    "3g-proof-label-text": "3G Nachweis überprüfen",
     "valid-cert-found-alternative": "Nicht verwenden"
   },
   "show-active-tickets": {
