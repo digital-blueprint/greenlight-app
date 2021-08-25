@@ -62,7 +62,7 @@ if (watch) {
     config.basePath = '/dist/';
 }
 
-config.gpSearchQRString = 'HC1';
+config.gpSearchQRString = 'HC1:';
 
 function getOrigin(url) {
     if (url)
@@ -137,6 +137,7 @@ export default (async () => {
                     keyCloakClientId: config.keyCloakClientId,
                     CSP: config.CSP,
                     gpSearchQRString: config.gpSearchQRString,
+                    gpSearchSelfTestStringArray: config.gpSearchSelfTestStringArray,
                     showPreselected: config.showPreselected,
                     preselectedOption: config.preselectedOption,
                     matomoUrl: config.matomoUrl,

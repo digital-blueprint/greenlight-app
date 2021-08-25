@@ -200,38 +200,18 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {boolean} true if data is valid not yet send QR code data
      * @returns {boolean} false if data is invalid QR code data
      */
-    async decodeUrl(data) {
-        const i18n = this._i18n;
+    async decodeUrl(data, searchHashString, hash) {
         let passData;
         try {
-            passData = parseGreenPassQRCode(data, this.searchHashString);
+            passData = parseGreenPassQRCode(data, searchHashString);
         } catch(error) {
-            let checkAlreadySend = await this.wrongQR.includes(data);
-            if (checkAlreadySend) {
-                const that = this;
-                if (!this.resetWrongQr) {
-                    this.resetWrongQr = true;
-                    setTimeout( function () {
-                        that.wrongQR.splice(0,that.wrongQR.length);
-                        that.wrongQR.length = 0;
-                        that.resetWrongQr = false;
-                    }, 3000);
-                }
-                return false;
-            }
-            this.wrongQR.push(data);
-            send({
-                "summary": i18n.t('green-pass-activation.invalid-qr-code-title'),
-                "body":  i18n.t('green-pass-activation.invalid-qr-code-body'),
-                "type": "danger",
-                "timeout": 5,
-            });
+            this.checkAlreadySend(data, this.resetWrongQr, this.wrongQR);
             return false;
         }
 
         this.greenPassHash = passData;
 
-        let gpAlreadySend = await this.wrongHash.includes(this.greenPassHash);
+        let gpAlreadySend = await this.wrongHash.includes(data);
         if (gpAlreadySend) {
             const that = this;
             if (!this.resetWrongHash) {
@@ -243,6 +223,70 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 }, 3000);
             }
         }
+
+        return !gpAlreadySend;
+    }
+
+    async checkAlreadySend(data, reset, wrongQrArray) {
+        const i18n = this._i18n;
+
+        let checkAlreadySend = await wrongQrArray.includes(data);
+
+        if (checkAlreadySend) {
+
+            if (!reset) {
+                reset = true;
+
+                setTimeout( function () {
+                    wrongQrArray.splice(0,wrongQrArray.length);
+                    wrongQrArray.length = 0;
+                    reset = false;
+                }, 3000);
+            }
+        }
+        wrongQrArray.push(data);
+        send({
+            "summary": i18n.t('green-pass-activation.invalid-qr-code-title'),
+            "body":  i18n.t('green-pass-activation.invalid-qr-code-body'),
+            "type": "danger",
+            "timeout": 5,
+        });
+        this.proofUploadFailed = true;
+    }
+
+    /**
+     * Decode data from QR code
+     * Check if it is a valid string for this application with this.searchHashString
+     * Saves invalid QR codes, so we don't have to process than more than once
+     * Check if input QR code is already a invalid QR code
+     *
+     * @param data
+     * @returns {boolean} true if data is valid not yet send QR code data
+     * @returns {boolean} false if data is invalid QR code data
+     */
+    async decodeUrlWithoutCheck(data, searchHashString) {
+        let passData;
+        try {
+            passData = parseGreenPassQRCode(data, searchHashString);
+            console.log("passdata", passData);
+        } catch(error) {
+
+            return false;
+        }
+
+        let gpAlreadySend = await this.wrongHash.includes(data);
+        if (gpAlreadySend) {
+            const that = this;
+            if (!this.resetWrongHash) {
+                this.resetWrongHash = true;
+                setTimeout( function () {
+                    that.wrongHash.splice(0,that.wrongHash.length);
+                    that.wrongHash.length = 0;
+                    that.resetWrongHash = false;
+                }, 3000);
+            }
+        }
+
         return !gpAlreadySend;
     }
 
@@ -260,7 +304,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      */
     async doActivation(greenPassHash, category, precheck = false) {
         const i18n = this._i18n;
-
         // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
             this.saveWrongHashAndNotify(i18n.t('green-pass-activation.invalid-qr-code-title'), i18n.t('green-pass-activation.invalid-qr-code-body'), greenPassHash);
@@ -288,6 +331,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this.identifier = responseBody['hydra:member'][0]['identifier'];
                 console.log('Found a valid 3G proof for the current user.');
                 this.hasValidProof = true;
+                this.proofUploadFailed = false;
             } else {
                 this.hasValidProof = false;
                 console.log('Found no valid 3G proof for the current user.');
@@ -305,6 +349,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async checkForValidProofLocal() {
+        console.log("checkForValidProofLocal",);
         this.loading = true;
 
         let key, salt, cipher, iv;
@@ -331,25 +376,20 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         let hash = await this.decrypt(cipher, key, iv_bytes);
 
-        console.log("hash", hash);
+        console.log("hash checkForValidProofLocal", hash);
 
         if (hash && typeof hash !== 'undefined' && hash != -1) {
-            let check = this.decodeUrl(hash);
-            if (check) {
-                console.log("check if hash is valid hash and noch nicht abgelaufen");
-                this.greenPassHash = hash;
-                await this.doActivation(this.greenPassHash, "checkForValidHash", true);
-            } else {
-                console.error("wrong hash saved");
-            }
+            await this.checkQRCode(hash);
         }
         this.loading = false;
+        this.preCheck = false;
     }
 
     async encryptAndSaveHash() {
         let key, salt, cipher, iv;
         let uid = this.auth['person-id'];
 
+        console.log("to encrypt:", this.greenPassHash);
         [key, salt] = await this.generateKey(this.auth['subject']);
         [cipher, iv] = await this.encrypt(key, this.greenPassHash);
 
@@ -366,6 +406,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         localStorage.setItem("dbp-gp-" + uid, cipher);
         localStorage.setItem("dbp-gp-salt-" + uid, salt);
         localStorage.setItem("dbp-gp-iv-" + uid, iv);
+    }
+
+    async clearLocalStorage() {
+        let uid = this.auth['person-id'];
+
+        localStorage.removeItem("dbp-gp-" + uid);
+        localStorage.removeItem("dbp-gp-salt-" + uid);
+        localStorage.removeItem("dbp-gp-iv-" + uid);
     }
 
     async generateKey(string, salt = window.crypto.getRandomValues(new Uint8Array(24))) {
@@ -408,6 +456,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async encrypt(key, plaintext) {
         let enc = new TextEncoder();
         let iv = window.crypto.getRandomValues(new Uint8Array(24));
+        console.log("encrypt: ", plaintext);
 
         let cipher = await window.crypto.subtle.encrypt(
             {
@@ -465,7 +514,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             console.error("Decryption error");
             return -1;
         }
-        // console.log("decrypt: ", dec.decode(plaintext));
+        console.log("decrypt: ", dec.decode(plaintext));
         return dec.decode(plaintext);
     }
 }

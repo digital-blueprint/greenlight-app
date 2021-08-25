@@ -2,7 +2,7 @@
   "green-pass-activation": {
     "title": "Activate 3G Proof",
     "description": "With this application you can activate your 3G proof.",
-    "additional-information": "Here you can scan a QR code or upload an existing PDF or image to activate your 3G proof for the period of its validity. When you upload a new proof, any existing proof will be replaced. Please note that this will still require you to obtain a ticket for rooms in order to comply with 3G rules.",
+    "additional-information": "Here you can scan a QR code or upload an existing PDF or image with a QR code to activate your 3G proof for the period of its validity. When you upload a new proof, any existing proof will be replaced. Please note that this will still require you to obtain a ticket for rooms in order to comply with 3G rules.",
     "success-activation-title": "Successful Activation!",
     "success-activation-body": "Your 3G proof has been successfully activated.",
     "invalid-qr-code-title": "Invalid QR Code!",
