@@ -1,0 +1,18 @@
+{
+  "element": "dbp-show-reference-ticket",
+  "module_src": "dbp-show-reference-ticket.js",
+  "routing_name": "show-reference-ticket",
+  "name": {
+    "de": "Referenzticket anzeigen",
+    "en": "Show reference ticket"
+  },
+  "short_name": {
+    "de": "Referenzticket anzeigen",
+    "en": "Show reference ticket"
+  },
+  "description": {
+    "de": "Zeigt das Referenzticket an.",
+    "en": "Shows the reference ticket"
+  },
+  "subscribe": "lang,entry-point-url,auth,html-overrides"
+}
