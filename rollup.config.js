@@ -80,8 +80,6 @@ config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     ${getOrigin(config.contentUrl)} ${getOrigin(config.signatureUrl)}; \
     img-src * blob: data:; font-src 'self' data:`;
 
-console.log(".....", config.CSP);
-
 export default (async () => {
     let privatePath = await getDistPath(pkg.name)
     return {
