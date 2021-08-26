@@ -28,9 +28,9 @@ export default {
     demo: {
         basePath: '/apps/greenlight/',
         entryPointURL: 'https://api-demo.tugraz.at',
-        keyCloakBaseURL: 'https://auth-test.tugraz.at/auth',
-        keyCloakRealm: 'tugraz',
-        keyCloakClientId: 'greenlight-demo_tugraz_at-GREENLIGHT',
+        keyCloakBaseURL: 'https://auth-demo.tugraz.at/auth',
+        keyCloakRealm: 'tugraz-vpu',
+        keyCloakClientId: 'dbp-greenlight',
         matomoUrl: 'https://analytics.tugraz.at/',
         matomoSiteId: 131,
         nextcloudBaseURL: 'https://cloud.tugraz.at',
