@@ -13,40 +13,13 @@ import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
 import {escapeRegExp} from './utils.js';
-import {name as pkgName} from './../package.json';
-import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
 import tippy from 'tippy.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
+import {getQRCodeFromFile} from './qrfilescanner.js';
 import {hcertValidation} from './hcert';
 
 console.log('ok nice!', tippy);
-class QrScanner {
-    constructor() {
-        this._engine = null;
-        this._canvas = document.createElement("canvas");
-        this._scanner = null;
-    }
-
-    async scanImage(image) {
-        if (this._scanner === null)  {
-            this._scanner = (await import('qr-scanner')).default;
-            this._scanner.WORKER_PATH = commonUtils.getAssetURL(pkgName, 'qr-scanner-worker.min.js');
-        }
-        if (this._engine === null) {
-            this._engine = await this._scanner.createQrEngine(this._scanner.WORKER_PATH);
-        }
-        try {
-            await this._scanner.scanImage(image)
-                .then(result => console.log("QR found", result))
-                .catch(error => console.log("Error", error || 'No QR code found.'));
-            return {data: await this._scanner.scanImage(image)};
-        } catch (e) {
-            return null;
-        }
-    }
-}
-
 
 class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -191,8 +164,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     connectedCallback() {
         super.connectedCallback();
-        pdfjs.GlobalWorkerOptions.workerSrc = commonUtils.getAssetURL(pkgName, 'pdfjs/pdf.worker.js');
-
     }
 
     update(changedProperties) {
@@ -214,77 +185,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         });
 
         super.update(changedProperties);
-    }
-
-    /**
-     * Returns the content of the file
-     *
-     * @param {File} file The file to read
-     * @returns {string} The content
-     */
-    readBinaryFileContent = async (file) => {
-        return new Promise((resolve, reject) => {
-            let reader = new FileReader();
-            reader.onload = () => {
-                resolve(reader.result);
-            };
-            reader.onerror = () => {
-                reject(reader.error);
-            };
-            reader.readAsBinaryString(file);
-        });
-    };
-
-    /**
-     * Converts a PDF file to an Canvas Image Array
-     *
-     * @param {File} file
-     */
-    async getImageFromPDF(file) {
-        const data = await this.readBinaryFileContent(file);
-        let pages = [], heights = [], width = 0, height = 0, currentPage = 1;
-        let scale = 3;
-        let canvasImages = [];
-        try {
-            let pdf = await pdfjs.getDocument({data: data}).promise;
-            await this.getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages);
-            return canvasImages;
-        }
-        catch (error) {
-            //TODO Throw error if pdf cant converted to image
-            this.sendSetPropertyEvent('analytics-event', {'category': 'ActivateGreenPass', 'action': 'PdfToImageConversionFailed'});
-            console.error(error);
-            return -1;
-        }
-    }
-
-    async getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages) {
-        let page = await pdf.getPage(currentPage);
-        let viewport = page.getViewport({scale});
-        let canvas = document.createElement('canvas') , ctx = canvas.getContext('2d');
-        let renderContext = { canvasContext: ctx, viewport: viewport };
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        await page.render(renderContext).promise;
-        console.log("page rendered");
-        pages.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-
-        heights.push(height);
-        height += canvas.height;
-        if (width < canvas.width) width = canvas.width;
-
-        if (currentPage < pdf.numPages) {
-            currentPage++;
-            await this.getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages);
-        }
-        else {
-            let canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
-            for(let i = 0; i < pages.length; i++)
-                ctx.putImageData(pages[i], 0, heights[i]);
-            canvasImages.push(canvas);
-        }
     }
 
     /**
@@ -495,22 +395,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @returns {object} payload
      */
     async searchQRInFile() {
-        if (this.QRCodeFile.type === "application/pdf") {
-            let pages = await this.getImageFromPDF(this.QRCodeFile);
-            let payload = null;
-            let scanner = new QrScanner();
-            for (const page of pages) {
-                payload = await scanner.scanImage(page);
-                if (payload !== null)
-                    break;
-            }
-            return payload;
-        } else {
-            let payload = "";
-            let scanner = new QrScanner();
-            payload = await scanner.scanImage(this.QRCodeFile);
-            return payload;
-        }
+        return getQRCodeFromFile(this.QRCodeFile);
     }
 
     /**
