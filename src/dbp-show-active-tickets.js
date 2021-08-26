@@ -120,7 +120,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             },
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+        // TODO: Set correct additional information
+        const additionalInformation = 'local-proof';
+        // const additionalInformation = '';
+
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
+            encodeURIComponent(additionalInformation), options);
     }
 
     async generateQrCode() {
