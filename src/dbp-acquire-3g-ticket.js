@@ -18,8 +18,7 @@ import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
 import tippy from 'tippy.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
-
-
+import './hcert.js';
 
 console.log('ok nice!', tippy);
 class QrScanner {
