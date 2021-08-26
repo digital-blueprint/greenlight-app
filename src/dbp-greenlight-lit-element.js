@@ -23,6 +23,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         this._loginStatus = '';
         this._loginState = [];
+        this._loginCalled = false;
     }
 
     /**
@@ -36,6 +37,15 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.requestUpdate();
         }
         this._loginState = newLoginState;
+
+        if (this.isLoggedIn() && !this._loginCalled) {
+            this._loginCalled = true;
+            this.loginCallback();
+        }
+    }
+
+    loginCallback() {
+        // Implement in subclass
     }
 
     update(changedProperties) {

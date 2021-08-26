@@ -23,6 +23,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._initialFetchDone = false;
         this.locationName = '';
         this.identifier = '';
+        this.currentTicket = {};
     }
 
     static get scopedElements() {
@@ -67,6 +68,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         });
 
         super.update(changedProperties);
+    }
+
+    loginCallback() {
+        super.loginCallback();
+
+        this.getListOfActiveTickets();
     }
 
     parseActiveTickets(response) {
@@ -244,8 +251,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     //     }
     // }
 
-    showTicket(event, entry) {
-        this.locationName = entry.place;
+    showTicket(event, ticket) {
+        this.locationName = ticket.place;
+        this.currentTicket = ticket;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
             onClose: modal => {
@@ -434,7 +442,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
 
         if (this.isLoggedIn() && !this.isLoading() && !this._initialFetchDone && !this.initialTicketsLoading) {
-            this.getListOfActiveTickets();
+            // this.getListOfActiveTickets();
         }
         this.generateQrCode();
 
@@ -456,16 +464,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <p>${i18n.t('show-active-tickets.description')}</p>
                 
                 <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-                    ${ this.activeTickets.map(i => html`
+                    ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
                                 <strong>${i18n.t('show-active-tickets.preselected-place')}</strong>
-                                ${this.getReadableDate(i.validFrom, i.validUntil)}
+                                ${this.getReadableDate(ticket.validFrom, ticket.validUntil)}
                             </span>
                             <div class="btn">
-                                <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, i); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                                <!-- <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, i); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>  -->
-                                <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, i); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button type="is-primary" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <!-- <dbp-loading-button id="refresh-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>  -->
+                                <dbp-loading-button id="delete-btn" ?disabled="${this.loading}" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
                         </div>
                     `)}
@@ -492,7 +500,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </header>
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="foto-container">
-                                <img src="${commonUtils.getAssetURL('@dbp-topics/greenlight', 'wbstudkart.jpeg')}" alt="Foto">
+                                <img src="${this.currentTicket.image || ''}" alt="Foto" />
                             </div>
                             <div>
                                 TODO: Content (Name, Birthdate) + QR Code
