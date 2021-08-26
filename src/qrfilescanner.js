@@ -5,7 +5,6 @@ import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
 class QrScanner {
     constructor() {
         this._engine = null;
-        this._canvas = document.createElement("canvas");
         this._scanner = null;
     }
 
@@ -18,10 +17,6 @@ class QrScanner {
             this._engine = await this._scanner.createQrEngine(this._scanner.WORKER_PATH);
         }
         try {
-            // FIXME: don't scan twice
-            await this._scanner.scanImage(image)
-                .then(result => console.log("QR found", result))
-                .catch(error => console.log("Error", error || 'No QR code found.'));
             return {data: await this._scanner.scanImage(image)};
         } catch (e) {
             return null;
