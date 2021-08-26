@@ -96,7 +96,7 @@ EkhRcgdlVfUb
 const contentUrl = 'https://dgc.a-sit.at/ehn/cert/listv2';
 const signatureUrl = 'https://dgc.a-sit.at/ehn/cert/sigv2';
 
-export async function validateTrustList(hc1) {
+async function validateTrustList(hc1) {
     let hcert = await importHCert();
     let result;
 

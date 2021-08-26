@@ -1,1 +1,1 @@
-export {validateTrustList} from './validate.js';
+export {hcertValidation} from './validate.js';

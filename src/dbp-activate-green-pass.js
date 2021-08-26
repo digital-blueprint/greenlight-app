@@ -14,7 +14,7 @@ import {escapeRegExp, parseGreenPassQRCode} from './utils.js';
 import * as CheckinStyles from './styles';
 import {name as pkgName} from './../package.json';
 import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
-import {hcertValidation} from './hcert.js';
+import {hcertValidation} from './hcert';
 
 class QrScanner {
     constructor() {
