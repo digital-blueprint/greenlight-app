@@ -6,7 +6,7 @@ import cbor from 'cbor-web';
  * 
  * @returns {Array}
  */
-async function fetchValueSets()
+export async function fetchValueSets()
 {
     let r = await fetch('https://dgc-trust.qr.gv.at/valuesets');
     console.assert(r.ok);
@@ -23,7 +23,7 @@ async function fetchValueSets()
  *
  * @returns {Array}
  */
-async function fetchBusinessRules()
+export async function fetchBusinessRules()
 {
     let r = await fetch('https://dgc-trust.qr.gv.at/rules');
     console.assert(r.ok);
@@ -41,7 +41,7 @@ async function fetchBusinessRules()
  * @param {Array} valueSets 
  * @returns {Array}
  */
-function valueSetsToLogic(valueSets)
+export function valueSetsToLogic(valueSets)
 {
     let logicInput = {};
     for(const set of valueSets) {
@@ -75,7 +75,7 @@ function getRuleErrorDescription(rule) {
  * @param {string} region 
  * @returns {Array}
  */
-function filterRules(rules, country, region) {
+export function filterRules(rules, country, region) {
     let filtered = [];
     for(let rule of rules) {
         if (rule.Country == country && rule.Region == region) {
@@ -96,7 +96,7 @@ function filterRules(rules, country, region) {
  * @param {Date} dateTime
  * @throws
  */
-function validateHCertRules(cert, businessRules, valueSets, dateTime)
+export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 {
     let logicInput = {
         payload: cert,

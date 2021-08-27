@@ -66,6 +66,7 @@ config.gpSearchQRString = 'HC1:';
 config.preselectedOption = 'TU Graz';
 config.contentUrl = 'https://dgc.a-sit.at/ehn/cert/listv2';
 config.signatureUrl = 'https://dgc.a-sit.at/ehn/cert/sigv2';
+config.rulesUrl = 'https://dgc-trust.qr.gv.at/rules';
 
 function getOrigin(url) {
     if (url)
@@ -77,7 +78,7 @@ function getOrigin(url) {
 config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(config.entryPointURL)} \
     httpbin.org ${getOrigin(config.nextcloudBaseURL)} \
-    ${getOrigin(config.contentUrl)} ${getOrigin(config.signatureUrl)}; \
+    ${getOrigin(config.contentUrl)} ${getOrigin(config.signatureUrl)} ${getOrigin(config.rulesUrl)}; \
     img-src * blob: data:; font-src 'self' data:`;
 
 export default (async () => {

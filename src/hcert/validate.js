@@ -1,24 +1,13 @@
 import {importHCert} from './utils.js';
-
-// see https://gitlab.tugraz.at/dbp/greenlight/greenlight-docs/-/blob/main/rules.md
-const profiles = [
-    { name: "Einreise", antigen: 48, pcr: 72, vac1: 90, vac2: 270, allowedVaccines: ["EU/1/20/1528", "EU/1/20/1507", "EU/1/20/1507", "EU/1/21/1529", "EU/1/20/1525", "BBIBP-CorV", "CoronaVac"] },
-    { name: "Eintrittstest", antigen: 48, pcr: 72, vac1: 90, vac2: 270, allowedVaccines: ["EU/1/20/1528", "EU/1/20/1507", "EU/1/20/1507", "EU/1/21/1529", "EU/1/20/1525"] },
-    { name: "Nachtgastronomie", antigen: 0, pcr: 72, vac1: 90, vac2: 270, allowedVaccines: ["EU/1/20/1528", "EU/1/20/1507", "EU/1/20/1507", "EU/1/21/1529", "EU/1/20/1525", "BBIBP-CorV", "CoronaVac"] },
-    { name: "Berufsgruppentest", antigen: 168, pcr: 168, vac1: 90, vac2: 270, allowedVaccines: ["EU/1/20/1528", "EU/1/20/1507", "EU/1/20/1507", "EU/1/21/1529", "EU/1/20/1525"] },
-];
+import {fetchBusinessRules, fetchValueSets, filterRules, validateHCertRules, valueSetsToLogic} from "./rules";
 
 export const hcertValidation = async (hc1) => {
-    const profile = profiles[1]; //Eintrittstest
-
     let firstname;
     let lastname;
     let dob;
-    let expires = 0;
     let status = 422;
     let valid = false;
-    let type = 'invalid';
-    let description = 'HCert is not valid';
+    let description = '';
 
     const hcertData = await validateTrustList(hc1);
 
@@ -26,45 +15,19 @@ export const hcertValidation = async (hc1) => {
         status = 500;
         description = 'cannot process input';
     } else if (hcertData.isValid) {
-        valid = true;
-        status = 201;
-        description = 'HCert is valid';
+        let businessRules = filterRules(await fetchBusinessRules(), 'AT', 'ET');
+        let valueSets = valueSetsToLogic(await fetchValueSets());
+        let currentDateTime = new Date();
 
-        if (hcertData.greenCertificate.v) {
-            const v = hcertData.greenCertificate.v[0];
-            type = 'vaccination';
-
-            if (profile.allowedVaccines.includes(v.mp)) {
-                if (v.sd === v.dn) {
-                    // 1 of 1 or 2 of 2
-                    expires = Date.parse(v.dt).valueOf() + profile.vac2 * 24 * 60 * 60 * 1000;
-                } else if (v.sd > v.dn) {
-                    expires = Date.parse(v.dt).valueOf() + profile.vac1 * 24 * 60 * 60 * 1000;
-                }
-            } else {
-                status = 400;
-                description = 'vaccine not approved';
-            }
-        } else if (hcertData.greenCertificate.t) {
-            const t = hcertData.greenCertificate.t[0];
-            type = 'test';
-
-            switch (t.tt) {
-                case 'LP217198-3':
-                    expires = Date.parse(t.sc).valueOf() + profile.antigen * 60 * 60 * 1000;
-                    break;
-                case 'LP6464-4':
-                    expires = Date.parse(t.sc).valueOf() + profile.pcr * 60 * 60 * 1000;
-                    break;
-                default:
-                    status = 400;
-                    description = 'test not approved';
-            }
-        } else if (hcertData.greenCertificate.r) {
-            const r = hcertData.greenCertificate.r[0];
-            type = 'recovery';
-
-            expires = Date.parse(r.fr).valueOf() + 180 * 24 * 60 * 60 * 1000;
+        try {
+            validateHCertRules(hcertData.greenCertificate, businessRules, valueSets, currentDateTime);
+            valid = true;
+            status = 201;
+            description = 'HCert is valid';
+        } catch (e) {
+            valid = false;
+            status = 422;
+            description = e.message;
         }
 
         firstname = hcertData.greenCertificate.nam.gn;
@@ -76,9 +39,7 @@ export const hcertValidation = async (hc1) => {
         firstname: firstname,
         lastname: lastname,
         dob: dob,
-        expires: expires,
         valid: valid,
-        type: type,
         status: status,
         description: description,
     };

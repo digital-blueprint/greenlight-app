@@ -326,13 +326,18 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async checkQRCode(data) {
-        let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
+        const responseData = await hcertValidation(data);
+        let check = responseData.valid;
+        //let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
         if (check) {
             this.greenPassHash = data;
             console.log("gp", this.greenPassHash);
             this.isSelfTest = false;
 
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
+            return;
+        } else if (responseData.status === 422) {
+            console.dir(responseData);
             return;
         }
 
@@ -511,7 +516,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async checkForValidTickets() {
-        const i18n = this._i18n;
+        //const i18n = this._i18n;
 
         let responseData = await this.sendGetTicketsRequest();
 
@@ -528,7 +533,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 for (let i = 0; i < numTypes; i++ ) {
 
                     // console.log('resp2: ', responseBody['hydra:member'][i]);
-                    let item = responseBody['hydra:member'][i];
+                    //let item = responseBody['hydra:member'][i];
 
                     // if (item['place'] === this.location) { //only if this is the same ticket as selected 
                     //     //TODO check if item is still valid
