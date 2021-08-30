@@ -151,7 +151,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let body = {
             // "place": this.location,
             "consentAssurance": this.isConfirmChecked, //or always hardcoded true?
-            "additionalInformation": this.isCheckmarkChecked ? "" : "local-proof",
+            "additionalInformation": this.hasValidProof ? 'local-proof' : '',
         };
 
         const options = {
