@@ -840,6 +840,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     useProof(event) {
         this.showCreateTicket = true;
+        this.isCheckboxVisible = true;
     }
 
     static get styles() {
