@@ -335,7 +335,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async checkForValidProofLocal() {
-        console.log("checkForValidProofLocal",);
+        console.log("checkForValidProofLocal");
         this.loading = true;
 
         let key, salt, cipher, iv;
@@ -361,8 +361,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
 
         let hash = await this.decrypt(cipher, key, iv_bytes);
-
-        console.log("hash checkForValidProofLocal", hash);
 
         if (hash && typeof hash !== 'undefined' && hash != -1) {
             await this.checkQRCode(hash);

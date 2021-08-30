@@ -364,6 +364,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             // Error: something else doesn't work
             default:
+                this.proofUploadFailed = true;
+                this.hasValidProof = false;
+                this.message = "Irgendwas passt mitn cert nicht";//TODO Übersetzen
                 this.saveWrongHashAndNotify('title', 'description', greenPassHash);
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
