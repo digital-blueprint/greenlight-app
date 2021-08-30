@@ -192,6 +192,7 @@ export default (async () => {
             }),
             copy({
                 targets: [
+                    {src: 'assets/dgc-trust', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/*-placeholder.png', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/*.css', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/*.ico', dest: 'dist/' + await getDistPath(pkg.name)},
