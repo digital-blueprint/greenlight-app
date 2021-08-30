@@ -327,16 +327,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     async checkQRCode(data) {
         const responseData = await hcertValidation(data);
-        let check = responseData.valid;
+        let check = responseData.status === 201;
         //let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
         if (check) {
             this.greenPassHash = data;
             console.log("gp", this.greenPassHash);
             this.isSelfTest = false;
+            this.hasValidProof = true;
+            this.proofUploadFailed = false;
 
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
             return;
         } else if (responseData.status === 422 || responseData.status === 403) {
+            console.error('hcert has errors, status='+responseData.status);
             console.dir(responseData);
             return;
         }

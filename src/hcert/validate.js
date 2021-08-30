@@ -37,12 +37,13 @@ export const hcertValidation = async (hc1) => {
     }
 
     return {
-        firstname: firstname,
-        lastname: lastname,
-        dob: dob,
-        valid: status === 201,
         status: status,
-        description: description,
+        error: description,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            dob: dob,
+        }
     };
 };
 
