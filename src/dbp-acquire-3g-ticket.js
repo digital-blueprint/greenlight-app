@@ -252,8 +252,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
 
     async checkPerson(firstName, lastName, dob) {
-        const personFirstName = this.auth.person.familyName;
-        const personLastName = this.auth.person.givenName;
+        const personFirstName = this.auth.person.givenName;
+        const personLastName = this.auth.person.familyName;
         const authDob = this.auth.person.birthDate;
 
         let match = await this.compareBirthdayStrings(authDob, dob);
@@ -261,15 +261,21 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return false;
         }
 
+
         // if birdthdate could be checked in day, month and year then we can lower the impact of the name matching
         const percent = match === 3 ? 80 : 50;
 
         let firstNameSimilarityPercent = 0;
         // check firstname if there is one set in the certificate
         if (firstName !== "") {
-            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstName, personFirstName) * 100;
-            //firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstName, personFirstName);
+
+            let firstNameShorted = firstName.split(" ");
+            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstNameShorted[0], personFirstName) * 100;
+            if (firstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
+                firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstNameShorted[1], personFirstName) * 100;
+            }
             console.log("1", firstNameSimilarityPercent);
+            console.log("fristname", firstNameShorted);
             // return false if firstname isn't similar enough
             if (firstNameSimilarityPercent < percent) {
                 return false;
@@ -590,6 +596,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param name
      */
     uploadSwitch(name) {
+
         this.isUploadSkipped = false;
         if (name === "manual") {
             this.showManualUpload();
