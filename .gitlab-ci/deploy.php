@@ -35,6 +35,7 @@ host('demo')
 host('development')
     ->stage('development')
     ->hostname('mw@mw01-dev.tugraz.at')
+    ->set('shared_dirs', ['local/@dbp-topics/greenlight/dgc-trust/prod'])
     ->set('deploy_path', '/home/mw/dev/deploy/apps/greenlight');
 
 host('production')
