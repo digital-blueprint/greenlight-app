@@ -5,8 +5,7 @@ export const hcertValidation = async (hc1) => {
     let firstname;
     let lastname;
     let dob;
-    let status = 422;
-    let valid = false;
+    let status;
     let description = '';
 
     const hcertData = await validateTrustList(hc1);
@@ -21,11 +20,9 @@ export const hcertValidation = async (hc1) => {
 
         try {
             validateHCertRules(hcertData.greenCertificate, businessRules, valueSets, currentDateTime);
-            valid = true;
             status = 201;
             description = 'HCert is valid';
         } catch (e) {
-            valid = false;
             status = 422;
             description = e.message;
         }
@@ -33,13 +30,17 @@ export const hcertValidation = async (hc1) => {
         firstname = hcertData.greenCertificate.nam.gn;
         lastname = hcertData.greenCertificate.nam.fn;
         dob = hcertData.greenCertificate.dob;
+    } else {
+        // hcertData.isValid === false
+        status = 403;
+        description = hcertData.error;
     }
 
     return {
         firstname: firstname,
         lastname: lastname,
         dob: dob,
-        valid: valid,
+        valid: status === 201,
         status: status,
         description: description,
     };

@@ -336,7 +336,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
             return;
-        } else if (responseData.status === 422) {
+        } else if (responseData.status === 422 || responseData.status === 403) {
             console.dir(responseData);
             return;
         }
