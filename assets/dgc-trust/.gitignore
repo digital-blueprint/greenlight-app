@@ -1,3 +1,3 @@
-trustlist*
-rules*
-valuesets*
+prod/trustlist*
+prod/rules*
+prod/valuesets*
