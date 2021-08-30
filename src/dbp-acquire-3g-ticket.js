@@ -272,7 +272,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             let personFirstNameShorted = personFirstName.split(" ");
             let firstNameShorted = firstName.split(" ");
             firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[0], firstNameShorted[0]) * 100;
-            
+
             if (personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
                 firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[0]) * 100;
             }

@@ -375,7 +375,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let key, salt, cipher, iv;
         let uid = this.auth['person-id'];
 
-        console.log("to encrypt:", this.greenPassHash);
         [key, salt] = await this.generateKey(this.auth['subject']);
         [cipher, iv] = await this.encrypt(key, this.greenPassHash);
 
@@ -473,7 +472,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async decrypt(ciphertext, key, iv) {
         if (!ciphertext || !key || !iv) {
-            console.error("Input for decryption not completely");
             return -1;
         }
         let binary_string =  window.atob(ciphertext);
@@ -500,7 +498,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             console.error("Decryption error");
             return -1;
         }
-        console.log("decrypt: ", dec.decode(plaintext));
         return dec.decode(plaintext);
     }
 }
