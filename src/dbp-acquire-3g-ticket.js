@@ -269,13 +269,21 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         // check firstname if there is one set in the certificate
         if (firstName !== "") {
 
+            let personFirstNameShorted = personFirstName.split(" ");
             let firstNameShorted = firstName.split(" ");
-            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstNameShorted[0], personFirstName) * 100;
+            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[0], firstNameShorted[0]) * 100;
+            
+            if (personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
+                firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[0]) * 100;
+            }
             if (firstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
-                firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstNameShorted[1], personFirstName) * 100;
+                firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[0], firstNameShorted[1]) * 100;
+            }
+            if (firstNameShorted[1] !== null && personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
+                firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[1]) * 100;
             }
             console.log("1", firstNameSimilarityPercent);
-            console.log("fristname", firstNameShorted);
+            console.log("fristname", personFirstNameShorted);
             // return false if firstname isn't similar enough
             if (firstNameSimilarityPercent < percent) {
                 return false;
