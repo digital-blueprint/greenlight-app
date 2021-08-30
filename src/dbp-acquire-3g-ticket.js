@@ -13,13 +13,14 @@ import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
 import {escapeRegExp} from './utils.js';
-import tippy from 'tippy.js';
+//import tippy from 'tippy.js';
+import stringSimilarity from 'string-similarity';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
 import {hcertValidation} from './hcert';
 
-console.log('ok nice!', tippy);
+//console.log('ok nice!', tippy);
 
 class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -77,7 +78,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.nextcloudFileURL = '';
         this.nextcloudAuthInfo = '';
 
-        this.tippy = '';
+        //this.tippy = '';
+
+        this.message = '';
 
         this.showProofUpload = true;
         this.proofUploadFailed = false;
@@ -136,6 +139,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             proofUploadFailed: { type: Boolean, attribute: false },
             showCreateTicket: { type: Boolean, attribute: false },
 
+            message: { type: String, attribute: false },
+
             searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},
@@ -188,6 +193,95 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
+     * Splits a birthday string.
+     *
+     * @param string|null $string
+     * @return array
+     */
+    async splitBirthdayString(string)
+    {
+        let parts = string.split('-');
+        let birthdate = {};
+        birthdate.year = parts[0] ? parts[0] : null;
+        birthdate.month = parts[1] ? parts[1] : null;
+        birthdate.day = parts[2] ? parts[2] : null;
+
+        return birthdate;
+    }
+
+
+
+    /**
+     * Compares two birthday strings.
+     *
+     * @param null|string $string1
+     * @param string|null $string2
+     * @return bool
+     */
+    async compareBirthdayStrings(string1, string2)
+    {
+        if (string1 === null || string1 === '' || string2 === null || string2 === '') {
+            // if a birthday is not set, return true
+            return true;
+        }
+        let parts1 = await this.splitBirthdayString(string1);
+        let parts2 = await this.splitBirthdayString(string2);
+        let matcher = 0;
+
+        if (parts1.day && parts2.day && parts1.day !== parts2.day) {
+            // if days are set but don't match, return false
+            return false;
+        } else {
+            matcher = matcher + 1;
+            if (parts1.month && parts2.month && parts1.month !== parts2.month) {
+                // if months are set but don't match, return false
+                return false;
+            } else {
+                matcher = matcher + 1;
+                if (parts1.year !== parts2.year) {
+                    // if years don't match, return false
+                    return false;
+                }
+            }
+        }
+        matcher = matcher + 1;
+
+
+        return matcher;
+    }
+
+
+    async checkPerson(firstName, lastName, dob) {
+        const personFirstName = this.auth.person.familyName;
+        const personLastName = this.auth.person.givenName;
+        const authDob = this.auth.person.birthDate;
+
+        let match = await this.compareBirthdayStrings(authDob, dob);
+        if (!match) {
+            return false;
+        }
+
+        // if birdthdate could be checked in day, month and year then we can lower the impact of the name matching
+        const percent = match === 3 ? 80 : 50;
+
+        let firstNameSimilarityPercent = 0;
+        // check firstname if there is one set in the certificate
+        if (firstName !== "") {
+            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstName, personFirstName) * 100;
+            //firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(firstName, personFirstName);
+            console.log("1", firstNameSimilarityPercent);
+            // return false if firstname isn't similar enough
+            if (firstNameSimilarityPercent < percent) {
+                return false;
+            }
+        }
+        let lastNameSimilarityPercent = stringSimilarity.compareTwoStrings(lastName, personLastName) * 100;
+
+        // return false if lastname isn't similar enough
+        return lastNameSimilarityPercent >= percent;
+    }
+
+    /**
      * Parse the response of a green pass activation request
      * Include message for user when it worked or not
      * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
@@ -204,14 +298,28 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
 
         let status = responseData.status;
-        // let responseBody = await responseData.clone().json(); //TODO
         let responseBody = responseData.data;
         switch (status) {
             case 201:
-                this.activationEndTime = responseBody['expires'];
-                this.identifier = responseBody['identifier'];
-                // console.log('id:', this.identifier, ' , time: ', this.activationEndTime);
 
+
+                // Check Person
+                if (!await this.checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob))
+                {
+
+                    send({
+                        "summary": i18n.t('green-pass-activation.failed-activation-wrong-person-title'),
+                        "body": i18n.t('green-pass-activation.failed-activation-wrong-person-body'),
+                        "type": "warning",
+                        "timeout": 5,
+                    });
+
+                    this.proofUploadFailed = true;
+                    this.hasValidProof = false;
+                    this.message = "Die Person im hochgeladenen Nachweis stimmt nicht mit der angmeldeten Person überein."; //TODO Übersetzen
+                    return;
+
+                }
                 this.stopQRReader();
                 this.QRCodeFile = null;
                 this.showQrContainer = false;
@@ -219,20 +327,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.hasValidProof = true;
                 this.proofUploadFailed = false;
 
+                this.isSelfTest = false;
+
                 if (this.uploadNewProof) {
                     this.uploadNewProof = false;
                 }
 
                 this._("#text-switch")._active = "";
-               // this._("#manualPassUploadWrapper").classList.add('hidden');
+
 
                 if (!precheck) {
-                    send({
-                        "summary": i18n.t('green-pass-activation.success-activation-title'),
-                        "body": i18n.t('green-pass-activation.success-activation-body'),
-                        "type": "success",
-                        "timeout": 5,
-                    });
                     this.isCheckboxVisible = true;
                 } else {
                     console.log("Found a proof in local storage");
@@ -242,9 +346,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         this._("#store-cert-mode").checked = true;
                     }
                 }
-                
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationSuccess', 'name': locationName});
-                break;
+                break; // TODO other cases
 
             // Error: something else doesn't work
             default:
@@ -254,6 +356,36 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+
+
+
+
+
+    /**
+     * Sends an activation request and do error handling and parsing
+     * Include message for user when it worked or not
+     * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
+     *
+     * Possible paths: activation, invalid input, gp hash wrong
+     * no permissions, any other errors, gp hash empty
+     *
+     * @param greenPassHash
+     * @param category
+     * @param precheck
+     */
+    async doActivation(greenPassHash, category, precheck = false) {
+        const i18n = this._i18n;
+        // Error: no valid hash detected
+        if (greenPassHash.length <= 0) {
+            this.saveWrongHashAndNotify(i18n.t('green-pass-activation.invalid-qr-code-title'), i18n.t('green-pass-activation.invalid-qr-code-body'), greenPassHash);
+            return;
+        }
+
+        let responseData = await this.sendActivationRequest(greenPassHash);
+        await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
+    }
+
+
     /**
      * Sends a request to active a certificate
      *
@@ -261,11 +393,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @returns {object} response
      */
     async sendActivationRequest(greenPassHash) {
-        
-        //TODO use frontend validation and send correct response
-
-        let response = { status: 201, data: { expires: new Date(), identifier: 1234567890 } }; //TODO return correct validation results
-        return response;
+        // Frontend validation
+        const responseData = await hcertValidation(greenPassHash);
+        return responseData;
     }
 
     /**
@@ -326,9 +456,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async checkQRCode(data) {
-        const responseData = await hcertValidation(data);
-        let check = responseData.status === 201;
-        //let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
+        let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
         if (check) {
             this.greenPassHash = data;
             console.log("gp", this.greenPassHash);
@@ -337,10 +465,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.proofUploadFailed = false;
 
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
-            return;
-        } else if (responseData.status === 422 || responseData.status === 403) {
-            console.error('hcert has errors, status='+responseData.status);
-            console.dir(responseData);
             return;
         }
 
@@ -384,14 +508,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             this._("#text-switch")._active = "";
-            //this._("#manualPassUploadWrapper").classList.add('hidden');
 
             console.log("----------------------", this.greenPassHash);
 
         } else {
             await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR);
         }
-
     }
 
 
@@ -500,6 +622,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.QRCodeFile = event.detail.file;
         this.qrParsingLoading = true;
         this.hasValidProof = false;
+
+        this.showCreateTicket = false;
+        this.isUploadSkipped = false;
+        this.isCheckboxVisible = false;
 
         await this.doActivationManually();
 
@@ -1142,11 +1268,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <!-- End 3G Proof Upload-->
                              
                         <!-- Show Proof -->
-                        <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped})}">
+                        <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.loading})}">
 
                             <div class="${classMap({'hidden': !this.hasLocalStorageProof})}">
                                 <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
-                                ${ i18n.t('acquire-3g-ticket.valid-proof-found-message') }
+                                ${ i18n.t('acquire-3g-ticket.valid-proof-found-message') } <!-- TODO replace with this.message -->
                             </div>
                             <div class="g-proof-information notification ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                 <span class="header">
@@ -1162,12 +1288,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed})}">
                                 <div>
                                     <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
-                                    ${i18n.t('acquire-3g-ticket.no-proof-found-message')}
+                                    ${this.message} <!-- TODO Search for other uses of this part -->
                                 </div>
                                 <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-3g-ticket.no-proof-continue')}" @click="${this.skipUpload}" title="${i18n.t('acquire-3g-ticket.no-proof-continue')}"></dbp-loading-button>
                             </div>
 
-                            <button class="button is-primary ${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}" value="Diesen Nachweis verwenden" @click="${this.useProof}" title="Diesen Nachweis verwenden">Diesen Nachweis verwenden</button><!-- TODO übersetzen -->
+                            <button class="button is-primary ${classMap({hidden: !this.isSelfTest && !this.hasValidProof})}" value="Diesen Nachweis verwenden" @click="${this.useProof}" title="Diesen Nachweis verwenden">Diesen Nachweis verwenden</button><!-- TODO übersetzen -->
                             
                         </div>
                         <!-- End Show Proof -->

@@ -300,30 +300,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return !gpAlreadySend;
     }
 
-    /**
-     * Sends an activation request and do error handling and parsing
-     * Include message for user when it worked or not
-     * Saves invalid QR codes in array in this.wrongHash, so no multiple requests are send
-     *
-     * Possible paths: activation, invalid input, gp hash wrong
-     * no permissions, any other errors, gp hash empty
-     *
-     * @param greenPassHash
-     * @param category
-     * @param precheck
-     */
-    async doActivation(greenPassHash, category, precheck = false) {
-        const i18n = this._i18n;
-        // Error: no valid hash detected
-        if (greenPassHash.length <= 0) {
-            this.saveWrongHashAndNotify(i18n.t('green-pass-activation.invalid-qr-code-title'), i18n.t('green-pass-activation.invalid-qr-code-body'), greenPassHash);
-            //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailedNoGreenPassHash'});
-            return;
-        }
-
-        let responseData = await this.sendActivationRequest(greenPassHash);
-        await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
-    }
 
     async checkForValidProof() {
 
