@@ -30,6 +30,7 @@ set('rsync_dest','{{release_path}}');
 host('demo')
     ->stage('demo')
     ->hostname('mw@vpu01-demo.tugraz.at')
+    ->set('shared_dirs', ['local/@dbp-topics/greenlight/dgc-trust/prod'])
     ->set('deploy_path', '/home/mw/demo/deploy/apps/greenlight');
 
 host('development')
@@ -41,6 +42,7 @@ host('development')
 host('production')
     ->stage('production')
     ->hostname('mw@mw01-prod.tugraz.at')
+    ->set('shared_dirs', ['local/@dbp-topics/greenlight/dgc-trust/prod'])
     ->set('deploy_path', '/home/mw/prod_greenlight/deploy');
 
 task('build', function () {
