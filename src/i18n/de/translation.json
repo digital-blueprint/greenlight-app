@@ -57,15 +57,13 @@
     "manage-tickets-text": "Sie können Ihre aktiven Tickets verwalten unter: "
   },
   "acquire-3g-ticket": {
-    "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) uploaden indem sie den entsprechenden QR Code scannen oder ein vorhandenes PDF oder Bild mit QR Code hochladen und sich damit ein Ticket für einen Ort ausstellen lassen. Dieses wird benötigt, um einen Ort an der TU Graz betreten zu dürfen. Alternativ können Sie auch manuell bestätigen, dass Sie einen 3G Nachweis bei sich tragen und diesen im Falle einer manuellen Kontrolle nachweisen können.",
+    "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) hochladen indem Sie den entsprechenden QR Code scannen oder ein vorhandenes PDF oder Bild mit QR Code hochladen und sich damit ein Ticket für einen Ort ausstellen lassen. Dieses wird benötigt, um einen Ort betreten zu dürfen. Alternativ können Sie auch manuell bestätigen, dass Sie einen 3G Nachweis bei sich tragen und diesen im Falle einer manuellen Kontrolle nachweisen können.",
     "success-activation-title": "Erfolgreich importiert!",
     "success-activation-body": "Ihr 3-G Nachweis wurde erfolgreich importiert.",
     "invalid-qr-code-title": "Ungültiger QR Code!",
     "invalid-qr-code-body": "Dieser QR Code ist kein gültiger 3-G QR Code. Bitte benutzen Sie einen anderen oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G Nachweises aus.",
     "no-qr-code-title": "Kein QR Code gefunden!",
     "no-qr-code-body": "Im hochgeladenen Dokument wurde kein QR Code gefunden. Bitte benutzen Sie ein anderes Dokument oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G Nachweises aus.",
-    "data-protection": "Was macht die TU Graz mit Ihren Daten? Die Datenschutzerklärung zur App \"TU Graz Greenlight\" finden sie hier:",
-    "data-protection-link": "Zur Datenschutzerklärung",
     "qr-button-text": "QR Code scannen",
     "manually-button-text": "Datei hochladen",
     "activate-button-title": "Aktivieren",

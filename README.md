@@ -45,6 +45,52 @@ Note that you will need a Keycloak server along with a client id for the domain 
 You use templates tags to inject slots into the activity.
 These templates will be converted to div containers when the page is loaded and will not show up before that.
 
+### dbp-acquire-3g-ticket
+
+Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
+
+#### Attributes
+
+- `lang` (optional, default: `de`): set to `de` or `en` for German or English
+    - example `lang="de"`
+- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
+    - example `entry-point-url="https://api-dev.tugraz.at"`
+- `auth` object: you need to set that object property for the auth token
+    - example auth property: `{token: "THE_BEARER_TOKEN"}`
+    - note: most often this should be an attribute that is not set directly, but subscribed at a provider
+
+#### Slots
+
+You use templates tags to inject slots into the activity.
+These templates will be converted to div containers when the page is loaded and will not show up before that.
+
+##### additional-information
+
+The content of this slot will be shown below the other text and can be used to provide
+further information about the process to report a risk. For example a link to a page with
+more information about how to report a risk can be provided.
+
+Example:
+
+```html
+<dbp-acquire-3g-ticket lang="de">
+  <template slot="additional-information">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          Sie können Ihren 3G Nachweis vorab prüfen, indem sie den entsprechenden QR Code scannen oder ein vorhandenes PDF
+          oder Bild hochladen und sich damit ein Ticket für einen Ort ausstellen lassen. Alternativ können Sie auch manuell
+          bestätigen, dass Sie einen 3G Nachweis bei sich tragen und diesen im Falle einer Kontrolle nachweisen können.
+      </div>
+      <div slot="en">
+          You can check your 3G proof in advance by scanning the corresponding QR code or uploading an existing PDF or
+          image and using it to issue a ticket for a location. Alternatively, you can manually confirm that you have a
+          3G certificate with you and that you can prove it in the event of a control.
+      </div>
+    </dbp-translated>
+  </template>
+</dbp-acquire-3g-ticket>
+```
+
 ### Design Note
 
 To ensure a uniform and responsive design these activities should occupy 100% width of the window when the activities width are under 768 px.

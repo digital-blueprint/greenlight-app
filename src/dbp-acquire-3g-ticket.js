@@ -1196,16 +1196,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div>
                     <slot name="additional-information">
                         <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
-                       
                     </slot>
-                    <div class="privacy-information">
-                        <p>
-                            ${i18n.t('acquire-3g-ticket.data-protection')}
-                            <a href="${privacyURL}" title="${i18n.t('acquire-3g-ticket.data-protection-link')}" target="_blank" class="int-link-internal">
-                                <span>${i18n.t('acquire-3g-ticket.data-protection-link')} </span>
-                            </a>
-                        </p>
-                    </div>
                 </div>
                 
                 <div class="border">

@@ -58,15 +58,13 @@
     "skip-button-text": "Skip"
   },
   "acquire-3g-ticket": {
-    "additional-information": "You can scan a QR code or upload an existing PDF or image to use it to log in directly at a location at TU Graz for a certain period of time. This is needed to be allowed to enter a location at TU Graz. Alternatively, you can manually confirm that you are carrying 3G evidence and be able to prove it in case of a manual control.",
+    "additional-information": "You can scan a QR code or upload an existing PDF or image to use it to log in directly at a location for a certain period of time. This is needed to be allowed to enter a location. Alternatively, you can manually confirm that you are carrying 3G evidence and be able to prove it in case of a manual control.",
     "success-activation-title": "Successful Activation!",
     "success-activation-body": "Your 3-G evidence has been successfully activated.",
     "invalid-qr-code-title": "Invalid QR Code!",
     "invalid-qr-code-body": "This QR code is not a valid 3-G evidence. Please use another one or select the manual 3-G inspection at the ticket store.",
     "no-qr-code-title": "No QR code found!",
     "no-qr-code-body": "No QR code was found in the uploaded document. Please use another document or select the manual 3-G inspection at the ticket store.",
-    "data-protection": "What does TU Graz do with your data? You can find the data protection declaration for the app \"TU Graz Greenlight\" here:",
-    "data-protection-link": "Privacy statement",
     "qr-button-text": "Scan QR Code",
     "manually-button-text": "Upload File",
     "activate-button-title": "Activate",
