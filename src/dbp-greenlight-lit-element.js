@@ -262,6 +262,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             "timeout": 5,
         });
         this.proofUploadFailed = true;
+        this.message = i18n.t('acquire-3g-ticket.invalid-qr-code');
     }
 
     /**
