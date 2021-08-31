@@ -58,8 +58,6 @@
     "skip-button-text": "Skip"
   },
   "acquire-3g-ticket": {
-    "title": "Acquire ticket for a place",
-    "description": "With this application you can acquire a ticket for a location at TU Graz.",
     "additional-information": "You can scan a QR code or upload an existing PDF or image to use it to log in directly at a location at TU Graz for a certain period of time. This is needed to be allowed to enter a location at TU Graz. Alternatively, you can manually confirm that you are carrying 3G proof and be able to prove it in case of a manual control.",
     "success-activation-title": "Successful Activation!",
     "success-activation-body": "Your 3G proof has been successfully activated.",
@@ -78,7 +76,6 @@
     "manual-uploading-message": "Search for valid QR Code...",
     "confirm-text": "Do you really want to delete your 3G proof?",
     "no-proof-found-message": "No 3G information was imported.",
-    "valid-proof-found-message": "Stored 3G information could be found.",
     "valid-proof-uploaded-message": "3G information found and successfully imported.",
     "place-select-title": "Select a place",
     "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid proof of such for the duration of my stay in this room and can present such proof in the event of a manual inspection.",
@@ -102,7 +99,20 @@
     "store-valid-cert-text": "Save 3G proof for later.",
     "3g-proof-label-text": "Use 3G Information",
     "valid-cert-found-alternative": "Do not use it",
-    "preselected-place": "TU Graz"
+    "preselected-place": "TU Graz",
+    "found-valid-3g-preCheck": "Stored valid 3G information could be found.",
+    "found-valid-selfetest-preCheck": "A locally saved self-test was found.",
+    "found-valid-selfetest": "A self-test was found.",
+    "not-same-person": "The person in the uploaded certificate does not match the person logged in.",
+    "cannot-process-data": "The uploaded proof could not be processed.",
+    "cannot-process-data-title": "There was a problem processing",
+    "cannot-process-data-body": "The uploaded proof could not be processed. Please try again or skip the upload process.",
+    "validate-error": "An error has occurred.",
+    "validate-error-title": "An error has occurred",
+    "validate-error-body": "Please try again or skip the process.",
+    "hcert-invalid": "Uploaded proof is invalid.",
+    "hcert-invalid-title": "Uploaded proof is invalid.",
+    "hcert-invalid-body": "Please upload a valid 3-G certificate or skip the process."
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

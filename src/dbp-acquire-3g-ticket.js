@@ -40,7 +40,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasTicket = false;
         this.hasTicketForThisPlace = false;
         this.location = '';
-        this.isCheckboxVisible = false;
         this.isCheckmarkChecked = false;
 
         this.activationEndTime = '';
@@ -69,6 +68,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.uploadNewProof = false;
         this.useLocalStorage = false;
         this.showCertificateSwitch = true;
+
+        this.person = {};
 
         this.fileHandlingEnabledTargets = 'local';
 
@@ -112,7 +113,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             hasTicket: { type: Boolean, attribute: false },
             hasTicketForThisPlace: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
-            isCheckboxVisible: { type: Boolean, attribute: false },
             isCheckmarkChecked: { type: Boolean, attribute: false },
             showQrContainer: { type: Boolean, attribute: false},
             activationEndTime: { type: String, attribute: false },
@@ -129,11 +129,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             uploadNewProof: { type: Boolean, attribute: false },
             useLocalStorage: { type: Boolean, attribute: false },
             showCertificateSwitch: { type: Boolean, attribute: false },
+            person: { type: Object, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
-
-
-
-
 
             showProofUpload: { type: Boolean, attribute: false },
             proofUploadFailed: { type: Boolean, attribute: false },
@@ -153,18 +150,18 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     firstUpdated() {
-        if (this._('[data-tippy-content]')) {
+        /*if (this._('[data-tippy-content]')) {
             console.log("tippy it", this._('[data-tippy-content]'));
 
-          /*  tippy('#singleElement', {
+           tippy('#singleElement', {
                 content: 'Tooltip',
-            });*/
-            tippy (this._('[data-tippy-content]'));
+            });
+            tippy (this._('[data-tippy-content]'))
 
         }
         else {
             console.log("no tippy");
-        }
+        };*/
     }
 
     connectedCallback() {
@@ -186,7 +183,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     }
                     break;
             }
-            //console.log("######", propName);
         });
 
         super.update(changedProperties);
@@ -195,8 +191,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     /**
      * Splits a birthday string.
      *
-     * @param string|null $string
-     * @return array
+     * @param string | null string
+     * @returns {Array} birthdate
      */
     async splitBirthdayString(string)
     {
@@ -214,9 +210,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     /**
      * Compares two birthday strings.
      *
-     * @param null|string $string1
-     * @param string|null $string2
-     * @return bool
+     * @param {?string} string1 - an empty string, only a day, day and month or the full birthdate
+     * @param {?string} string2 - an empty string, only a day, day and month or the full birthdate
+     * @returns {(number | boolean)} matcher - returns the maximal matching number
      */
     async compareBirthdayStrings(string1, string2)
     {
@@ -250,13 +246,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return matcher;
     }
 
-
-    async checkPerson(firstName, lastName, dob) {
-        const personFirstName = this.auth.person.givenName;
-        const personLastName = this.auth.person.familyName;
-        const authDob = this.auth.person.birthDate;
-
-        let match = await this.compareBirthdayStrings(authDob, dob);
+    /**
+     * Checks if a person is another person
+     *
+     * @param {string} firstName
+     * @param {string} lastName
+     * @param {string} dob
+     * @param {string} personFirstName
+     * @param {string} personLastName
+     * @param {string} personDob
+     * @returns {boolean} - returns if the person mathes with the other person
+     */
+    async checkPerson(firstName, lastName, dob, personFirstName, personLastName, personDob) {
+        let match = await this.compareBirthdayStrings(personDob, dob);
         if (!match) {
             return false;
         }
@@ -282,8 +284,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             if (firstNameShorted[1] !== null && personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= match) {
                 firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[1]) * 100;
             }
-            console.log("1", firstNameSimilarityPercent);
-            console.log("fristname", personFirstNameShorted);
             // return false if firstname isn't similar enough
             if (firstNameSimilarityPercent < percent) {
                 return false;
@@ -306,19 +306,17 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param responseData
      * @param greenPassHash
      * @param category
-     * @param precheck
+     * @param preCheck
      */
-    async checkActivationResponse(responseData, greenPassHash, category, precheck) {
+    async checkActivationResponse(responseData, greenPassHash, category, preCheck) {
         const i18n = this._i18n;
 
         let status = responseData.status;
         let responseBody = responseData.data;
         switch (status) {
             case 201:
-
-
                 // Check Person
-                if (!await this.checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob))
+                if (this.auth && this.auth.person && !await this.checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
 
                     send({
@@ -330,10 +328,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
-                    this.message = "Die Person im hochgeladenen Nachweis stimmt nicht mit der angmeldeten Person überein."; //TODO Übersetzen
+                    this.message = i18n.t('acquire-3g-ticket.not-same-person');
                     return;
 
                 }
+
+                this.person.firstname = responseBody.firstname;
+                this.person.lastname = responseBody.lastname;
+                this.person.dob = responseBody.dob;
+
                 this.stopQRReader();
                 this.QRCodeFile = null;
                 this.showQrContainer = false;
@@ -350,24 +353,48 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this._("#text-switch")._active = "";
 
 
-                if (!precheck) {
-                    this.isCheckboxVisible = true;
-                } else {
+                if (preCheck) {
                     console.log("Found a proof in local storage");
                     this.hasLocalStorageProof = true;
                     this.storeCertificate = true;
                     if (this._("#store-cert-mode")) {
                         this._("#store-cert-mode").checked = true;
                     }
+                    this.message = i18n.t('acquire-3g-ticket.found-valid-3g-preCheck');
+                } else {
+                    this.message = i18n.t('acquire-3g-ticket.found-valid-3g');
+                    send({
+                        "summary": i18n.t('green-pass-activation.found-valid-3g-title'),
+                        "body": i18n.t('green-pass-activation.found-valid-3g-body'),
+                        "type": "success",
+                        "timeout": 5,
+                    });
                 }
-                break; // TODO other cases
-
+                break;
+            case 403: // HCert has expired
+                this.proofUploadFailed = true;
+                this.hasValidProof = false;
+                this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
+                break;
+            case 422: // HCert has expired
+                this.proofUploadFailed = true;
+                this.hasValidProof = false;
+                this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
+                break;
+            case 500: // Can't process Data
+                this.proofUploadFailed = true;
+                this.hasValidProof = false;
+                this.message = i18n.t('acquire-3g-ticket.cannot-process-data');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.cannot-process-data-title'), i18n.t('acquire-3g-ticket.cannot-process-body', greenPassHash));
+                break;
             // Error: something else doesn't work
             default:
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = "Irgendwas passt mitn cert nicht";//TODO Übersetzen
-                this.saveWrongHashAndNotify('title', 'description', greenPassHash);
+                this.message = i18n.t('acquire-3g-ticket.validate-error');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.validate-error-title'), i18n.t('acquire-3g-ticket.validate-error-body', greenPassHash));
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
         }
@@ -398,22 +425,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return;
         }
 
-        let responseData = await this.sendActivationRequest(greenPassHash);
+        let responseData = await hcertValidation(greenPassHash);
         await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
     }
 
-
-    /**
-     * Sends a request to active a certificate
-     *
-     * @param greenPassHash
-     * @returns {object} response
-     */
-    async sendActivationRequest(greenPassHash) {
-        // Frontend validation
-        const responseData = await hcertValidation(greenPassHash);
-        return responseData;
-    }
 
     /**
      * Init a 3g activation from a QR code scan event
@@ -486,7 +501,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         let selfTestURL = '';
-        const array = await this.searchSelfTestStringArray.split(",");
+        const array = this.searchSelfTestStringArray.split(",");
         for (const selfTestString of array) {
             check = await this.decodeUrlWithoutCheck(data, selfTestString);
             if (check) {
@@ -505,8 +520,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "type": "success",
                     "timeout": 5,
                 });
-                this.isCheckboxVisible = true;
+                this.message = i18n.t('acquire-3g-ticket.found-valid-selfetest');
             } else {
+                this.message = i18n.t('acquire-3g-ticket.found-valid-selfetest-preCheck');
                 this.hasLocalStorageProof = true;
             }
 
@@ -526,7 +542,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             this._("#text-switch")._active = "";
 
-            console.log("----------------------", this.greenPassHash);
 
         } else {
             await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR);
@@ -616,10 +631,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    skipUpload(event) {
+    skipUpload() {
         this.proofUploadFailed = false;
         this.isUploadSkipped = true;
-        this.isCheckboxVisible = true;
         this._("#text-switch")._active = "";
         console.log('upload skipped is true');
     }
@@ -643,7 +657,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this.showCreateTicket = false;
         this.isUploadSkipped = false;
-        this.isCheckboxVisible = false;
 
         await this.doActivationManually();
 
@@ -731,7 +744,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 this.isUploadSkipped = false;
 
-                this.isCheckboxVisible = false;
+
                 this.isCheckmarkChecked = false;
                 if (this._("#manual-proof-mode")) {
                     this._("#manual-proof-mode").checked = false;
@@ -750,11 +763,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 if (this.hasValidProof) {
                     this.hasValidProof = false; //Could be expired until now
                     this.preCheck = true;
-                    this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done'));
-                }
-                
-                if (this._("#cert-switch")) {
-                    this._("#cert-switch")._active = "";
+                    this.checkForValidProofLocal().then(function(){console.log('3G proof importing done');});
                 }
 
                 checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
@@ -787,7 +796,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         {
             await this.encryptAndSaveHash();
         } else {
-            this.clearLocalStorage();
+            await this.clearLocalStorage();
+            this.hasLocalStorageProof = false;
         }
         try {
             response = await this.sendCreateTicketRequest();
@@ -797,15 +807,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         await this.checkCreateTicketResponse(response);
     }
 
-    showCheckbox() {
-        this.isCheckboxVisible = true;
-    }
-
     setLocation(event) {
         if(event.detail.room) {
             this.location = event.detail.name;
-            this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done')); //Check this each time because proof validity could expire
-            this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
+            this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done')); //Check this each time because proof validity could expire
+            this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
         } else {
             this.location = '';
         }
@@ -835,15 +841,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    useLocalCert(event) {
-        this.hasValidProof = true;
-        this.isCheckboxVisible = true;
-        this.proofUploadFailed = false;
-    }
-
-    useProof(event) {
+    useProof() {
         this.showCreateTicket = true;
-        this.isCheckboxVisible = true;
     }
 
     static get styles() {
@@ -856,6 +855,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
+            ${commonStyles.getLinkCss()}
 
             h2 {
                 margin-top: 0;
@@ -863,10 +863,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             h3{
                 margin-top: 2rem;
-            }
-
-            #cert-switch {
-                width: 40%;
             }
             
             #last-checkbox {
@@ -1071,8 +1067,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .g-proof-information{
                 margin: 1.5em 0;
-                border: 1px solid black;
-                background-color: white;
+                border: var(--dbp-border-width) solid var(--dbp-border-color);
+                padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+                position: relative;
+                border-radius: var(--dbp-border-radius);
+              }
+              
+            .g-proof-information h4{
+                margin-top: 0px;
+                margin-bottom: 0.5em;
               }
             
             .wrapper {
@@ -1124,11 +1127,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     box-sizing: border-box;
                 }
 
-                #cert-switch {
-                    display: block;
-                    width: 100%;
-                }
-
                 #text-switch {
                     display: block;
                     width: 100%;
@@ -1171,12 +1169,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
-            this.checkForValidProofLocal().then(r =>  console.log('3G proof importing done'));
+            this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done'));
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) { //TODO überlegen
             this.location = this.preselectedOption;
-            this.checkForValidTickets().then(r =>  console.log('Fetch for valid tickets done'));
+            this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
         }
 
@@ -1291,19 +1289,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                             <div class="${classMap({'hidden': !this.hasLocalStorageProof})}">
                                 <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
-                                ${ i18n.t('acquire-3g-ticket.valid-proof-found-message') } <!-- TODO replace with this.message -->
+                                ${ this.message }
                             </div>
-                            <div class="g-proof-information notification ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                <span class="header">
-                                    <strong>3G Proof</strong> Valid until: 18:40 Uhr on 23.9.2021 <!-- TODO get this information from 3g validation -->
-                                </span>
-                            </div>
-                            <div class="g-proof-information notification ${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                                <span class="header">
-                                    <strong>Selbsttest</strong> validier es selber <!-- TODO get this information from 3g validation -->
-                                </span>
-                            </div>
-                            
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed})}">
                                 <div>
                                     <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
@@ -1311,14 +1298,28 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </div>
                                 <dbp-loading-button id="no-proof-continue-btn" value="${i18n.t('acquire-3g-ticket.no-proof-continue')}" @click="${this.skipUpload}" title="${i18n.t('acquire-3g-ticket.no-proof-continue')}"></dbp-loading-button>
                             </div>
-
+                            
+                            <div class="g-proof-information ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                                <span class="header">
+                                    <h4>3-G Nachweis</h4> <span>Status: <strong>gültig</strong></span> <br> Von: ${this.person.firstname ? this.person.firstname + " " : "" } <!-- TODO Übersetzen -->
+                                    ${this.person.lastname} ${this.person.dob ? html`<br>Geburtsdatum: ${this.person.dob}` : "" }
+                                </span>
+                            </div>
+                            <div class="g-proof-information ${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                <span class="header">
+                                    <h4>Selbsttest</h4> 
+                                    Bitte überprüfen Sie ob der Nachweis noch gültig ist.
+                                    <span>Link: <a class="int-link-external" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span><!-- TODO Übersetzen -->
+                                </span>
+                            </div>
+                            
                             <button class="button is-primary ${classMap({hidden: !this.isSelfTest && !this.hasValidProof})}" value="Diesen Nachweis verwenden" @click="${this.useProof}" title="Diesen Nachweis verwenden">Diesen Nachweis verwenden</button><!-- TODO übersetzen -->
                             
                         </div>
                         <!-- End Show Proof -->
              
                         <!-- Create Ticket part -->
-                        <div class="confirm-btn wrapper ${classMap({hidden: !this.showCreateTicket && !this.isUploadSkipped || !this.isCheckboxVisible})}">
+                        <div class="confirm-btn wrapper ${classMap({hidden: !this.showCreateTicket && !this.isUploadSkipped})}">
                             <h3>Ticket erstellen</h3> <!-- TODO übersetzen -->
                             <div class="${classMap({hidden: !this.isUploadSkipped})}">
                                 <label class="button-container">
@@ -1382,4 +1383,4 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 }
 
-commonUtils.defineCustomElement('dbp-acquire-3g-ticket', Acquire3GTicket);
+commonUtils.defineCustomElement('dbp-acquire-3g-ticket', Acquire3GTicket, Acquire3GTicket);

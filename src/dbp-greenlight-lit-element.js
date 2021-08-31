@@ -345,28 +345,33 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         salt = localStorage.getItem("dbp-gp-salt-" + uid);
         iv = localStorage.getItem("dbp-gp-iv-" + uid);
 
-        let salt_binary_string =  window.atob(salt);
-        let salt_bytes = new Uint8Array( salt_binary_string.length );
-        for (let i = 0; i < salt_binary_string.length; i++)        {
-            salt_bytes[i] = salt_binary_string.charCodeAt(i);
+        try {
+            let salt_binary_string =  window.atob(salt);
+            let salt_bytes = new Uint8Array( salt_binary_string.length );
+            for (let i = 0; i < salt_binary_string.length; i++)        {
+                salt_bytes[i] = salt_binary_string.charCodeAt(i);
+            }
+
+            let iv_binary_string =  window.atob(iv);
+            let iv_bytes = new Uint8Array( iv_binary_string.length );
+            for (let i = 0; i < iv_binary_string.length; i++)        {
+                iv_bytes[i] = iv_binary_string.charCodeAt(i);
+            }
+
+            [key, salt] = await this.generateKey(this.auth['subject'], salt_bytes);
+
+
+            let hash = await this.decrypt(cipher, key, iv_bytes);
+
+            if (hash && typeof hash !== 'undefined' && hash != -1) {
+                await this.checkQRCode(hash);
+            }
+            this.loading = false;
+            this.preCheck = false;
+        } catch (error) {
+            console.log("checkForValidProofLocal Error", error);
         }
 
-        let iv_binary_string =  window.atob(iv);
-        let iv_bytes = new Uint8Array( iv_binary_string.length );
-        for (let i = 0; i < iv_binary_string.length; i++)        {
-            iv_bytes[i] = iv_binary_string.charCodeAt(i);
-        }
-
-        [key, salt] = await this.generateKey(this.auth['subject'], salt_bytes);
-
-
-        let hash = await this.decrypt(cipher, key, iv_bytes);
-
-        if (hash && typeof hash !== 'undefined' && hash != -1) {
-            await this.checkQRCode(hash);
-        }
-        this.loading = false;
-        this.preCheck = false;
     }
 
     async encryptAndSaveHash() {
