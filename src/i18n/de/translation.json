@@ -81,6 +81,7 @@
     "confirm-button-text": "Ticket erstellen",
     "refresh-button-text": "Ticket verlängern",
     "no-proof-continue": "Ticket ohne 3-G Nachweis erstellen",
+    "create-ticket": "Ticket erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
     "create-ticket-success-body": "Das angeforderte Ticket für den Ort {{place}} wurde erfolgreich erstellt.",
     "refresh-ticket-success-title": "Ticket erfolgreich verlängert!",
@@ -132,8 +133,7 @@
     "delete-ticket-success-title": "Ticket erfolgreich gelöscht!",
     "delete-ticket-success-body": "Das Ticket für den Ort {{place}} wurde erfolgreich gelöscht.",
     "other-error-title": "Fehler!",
-    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "preselected-place": "TU Graz"
+    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
   },
   "info": {
     "title": "Information",
