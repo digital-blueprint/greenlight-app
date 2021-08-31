@@ -17,7 +17,7 @@ export default {
         entryPointURL: 'https://api-dev.tugraz.at',
         keyCloakBaseURL: 'https://auth-dev.tugraz.at/auth',
         keyCloakRealm: 'tugraz-vpu',
-        keyCloakClientId: 'greenlight-dev_tugraz_at-GREENLIGHT',
+        keyCloakClientId: 'dbp-greenlight',
         matomoUrl: 'https://analytics.tugraz.at/',
         matomoSiteId: 131,
         nextcloudBaseURL: 'https://nc-dev.tugraz.at/pers',
