@@ -1,3 +1,4 @@
 /vendor/**
 /dist/**
 /*.js
+/assets/hcert-kotlin.js
