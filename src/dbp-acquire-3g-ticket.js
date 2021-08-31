@@ -298,8 +298,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 {
 
                     send({
-                        "summary": i18n.t('green-pass-activation.failed-activation-wrong-person-title'),
-                        "body": i18n.t('green-pass-activation.failed-activation-wrong-person-body'),
+                        "summary": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-title'),
+                        "body": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-body'),
                         "type": "warning",
                         "timeout": 5,
                     });
