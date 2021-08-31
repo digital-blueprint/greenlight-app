@@ -110,7 +110,8 @@
     "validate-error-body": "Please try again or skip the process.",
     "hcert-invalid": "Uploaded evidence is invalid.",
     "hcert-invalid-title": "Uploaded evidence is invalid.",
-    "hcert-invalid-body": "Please upload a valid 3-G certificate or skip the process."
+    "hcert-invalid-body": "Please upload a valid 3-G certificate or skip the process.",
+    "use-3g-proof": "Use this proof"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

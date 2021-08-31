@@ -1170,7 +1170,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done'));
         }
 
-        if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) { //TODO überlegen
+        if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
             this.location = this.preselectedOption;
             this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
@@ -1302,7 +1302,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </span>
                             </div>
                             
-                            <button class="button is-primary ${classMap({hidden: !this.isSelfTest && !this.hasValidProof})}" value="Diesen Nachweis verwenden" @click="${this.useProof}" title="Diesen Nachweis verwenden">Diesen Nachweis verwenden</button><!-- TODO übersetzen -->
+                            <button class="button is-primary ${classMap({hidden: !this.isSelfTest && !this.hasValidProof})}" value="${i18n.t('acquire-3g-ticket.use-3g-proof')}" @click="${this.useProof}" title="${i18n.t('acquire-3g-ticket.use-3g-proof')}">${i18n.t('acquire-3g-ticket.use-3g-proof')}</button>
                             
                         </div>
                         <!-- End Show Proof -->

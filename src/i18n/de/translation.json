@@ -112,7 +112,8 @@
     "validate-error-body": "Bitte versuchen Sie es noch einmal oder überspringen Sie den Vorgang.",
     "hcert-invalid": "Hochgeladener Nachweis ist ungültig.",
     "hcert-invalid-title": "Hochgeladener Nachweis ist ungültig.",
-    "hcert-invalid-body": "Bitte laden Sie einen gültigen 3-G Nachweis hoch oder überspringen Sie den Vorgang."
+    "hcert-invalid-body": "Bitte laden Sie einen gültigen 3-G Nachweis hoch oder überspringen Sie den Vorgang.",
+    "use-3g-proof": "Diesen Nachweis verwenden"
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
