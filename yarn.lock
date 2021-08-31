@@ -1813,11 +1813,6 @@ caniuse-lite@^1.0.30001248:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001249.tgz#90a330057f8ff75bfe97a94d047d5e14fabb2ee8"
   integrity sha512-vcX4U8lwVXPdqzPWi6cAJ3FnQaqXbBqy/GZseKNQzRj37J7qZdGcBtxq/QLFNLLlfsoXLUdHw8Iwenri86Tagw==
 
-cbor-web@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/cbor-web/-/cbor-web-8.0.1.tgz#0c2723d4b484e1dd1aa79de618f955c07c25fefd"
-  integrity sha512-9+HxS+B0VaIYMbBZ7g9WFlC0CbGObiMI+w6De0oZsWLh/m0iAjz0FFuByJeDgvUTJxe8JvesWSuGCwbd9vzFjg==
-
 certlogic-js@^0.9.2:
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/certlogic-js/-/certlogic-js-0.9.2.tgz#1ed370acfd8a7b4362eec0232d176f7ca4fa97a8"

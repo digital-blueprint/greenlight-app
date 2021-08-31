@@ -1,36 +1,47 @@
 import certlogic from 'certlogic-js';
-import cbor from 'cbor-web';
 
 /**
- * Fetches the Austrian version of the value sets
- * 
+ * Decodes the Austrian version of the value sets
+ *
+ * @param {object} hcert 
+ * @param {object} trustData 
+ * @param {string} trustAnchor 
+ * @param {Date} dateTime 
  * @returns {Array}
  */
-export async function fetchValueSets()
+export async function decodeValueSets(hcert, trustData, trustAnchor, dateTime)
 {
-    let r = await fetch('https://dgc-trust.qr.gv.at/valuesets');
-    console.assert(r.ok);
-    let decoded = await cbor.decodeFirst(await r.arrayBuffer());
+    let decoded = hcert.SignedDataDownloader.loadValueSets(trustAnchor, trustData['valuesets'], trustData['valuesetssig']);
+    // FIXME: Should we fail here?
+    if (dateTime < new Date(decoded.first.validFrom) || dateTime > new Date(decoded.first.validUntil)) {
+        console.warn('value set not yet valid or not valid anymore');
+    }
     let result = [];
-    for (const entry of decoded.v) {
-        result.push(JSON.parse(entry.v));
+    for (const entry of decoded.second.valueSets) {
+        result.push(JSON.parse(entry.valueSet));
     }
     return result;
 }
 
 /**
- * Fetches the Austrian version of the business rules
- *
+ * Decode the Austrian version of the business rules
+ * 
+ * @param {object} hcert 
+ * @param {object} trustData 
+ * @param {string} trustAnchor 
+ * @param {Date} dateTime 
  * @returns {Array}
  */
-export async function fetchBusinessRules()
+export async function decodeBusinessRules(hcert, trustData, trustAnchor, dateTime)
 {
-    let r = await fetch('https://dgc-trust.qr.gv.at/rules');
-    console.assert(r.ok);
-    let decoded = await cbor.decodeFirst(await r.arrayBuffer());
+    let decoded = hcert.SignedDataDownloader.loadBusinessRules(trustAnchor, trustData['rules'], trustData['rulessig']);
+    // FIXME: Should we fail here?
+    if (dateTime < new Date(decoded.first.validFrom) || dateTime > new Date(decoded.first.validUntil)) {
+        console.warn('trust list not yet valid or not valid anymore');
+    }
     let result = [];
-    for (const entry of decoded.r) {
-        result.push(JSON.parse(entry.r));
+    for (const entry of decoded.second.rules) {
+        result.push(JSON.parse(entry.rule));
     }
     return result;
 }
@@ -85,6 +96,14 @@ export function filterRules(rules, country, region) {
     return filtered;
 }
 
+export class RuleValidationResult {
+
+    constructor() {
+        this.isValid = false;
+        this.error = null;
+    }
+}
+
 /**
  * Validates a HCERT against specific business rules, value sets and the current time
  * 
@@ -94,7 +113,7 @@ export function filterRules(rules, country, region) {
  * @param {Array} businessRules 
  * @param {Array} valueSets 
  * @param {Date} dateTime
- * @throws
+ * @returns {RuleValidationResult}
  */
 export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 {
@@ -108,48 +127,23 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 
     let errors = [];
     for(let rule of businessRules) {
+        // FIXME: should we ignore rules not valid at that time, or should we fail?
+        if (dateTime < new Date(rule.validFrom) || dateTime > new Date(rule.validTo)) {
+            console.warn(`rule ${rule.Identifier} not valid anymore`);
+        }
         let result = certlogic.evaluate(rule.Logic, logicInput);
         if (!result) {
             errors.push(getRuleErrorDescription(rule));
         }
     }
 
+    let result = new RuleValidationResult();
+
     if (errors.length) {
-        throw new Error("One or more rules failed:\n" + errors.join("\n"));
+        result.error = "One or more rules failed:\n" + errors.join("\n");
+    } else {
+        result.isValid = true;
     }
-}
 
-async function test() {
-    // just for testing
-    let businessRules = filterRules(await fetchBusinessRules(), 'AT', 'ET');
-    let valueSets = valueSetsToLogic(await fetchValueSets());
-    let currentDateTime = new Date();
-
-    let DATA = JSON.parse(`
-    {
-        "ver": "1.0.0",
-        "nam": {
-            "fn": "Musterfrau-Gößinger",
-            "fnt": "MUSTERFRAU<GOESSINGER",
-            "gn": "Gabriele",
-            "gnt": "GABRIELE"
-        },
-        "dob": "1998-02-26",
-        "v": [
-            {
-                "tg": "840539006",
-                "vp": "1119305005",
-                "mp": "EU/1/20/1528",
-                "ma": "ORG-100030215",
-                "dn": 1,
-                "sd": 2,
-                "dt": "2021-02-18",
-                "co": "AT",
-                "is": "BMSGPK Austria",
-                "ci": "urn:uvci:01:AT:10807843F94AEE0EE5093FBC254BD813P"
-            }
-        ]
-    }`);
-
-    validateHCertRules(DATA, businessRules, valueSets, currentDateTime);
+    return result;
 }

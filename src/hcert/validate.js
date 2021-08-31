@@ -1,80 +1,91 @@
-import {importHCert} from './utils.js';
-import {fetchBusinessRules, fetchValueSets, filterRules, validateHCertRules, valueSetsToLogic} from "./rules";
+import {importHCert, fetchTrustData, trustAnchorProd} from './utils.js';
+import {filterRules, validateHCertRules, valueSetsToLogic, decodeValueSets, decodeBusinessRules, RuleValidationResult} from "./rules";
+import {name as pkgName} from './../../package.json';
+import * as commonUtils from '@dbp-toolkit/common/utils';
 
-export const hcertValidation = async (hc1) => {
-    let firstname;
-    let lastname;
-    let dob;
-    let status;
-    let description = '';
+export class ValidationResult {
 
-    const hcertData = await validateTrustList(hc1);
+    constructor() {
+        this.isValid = false;
+        this.error = null;
+        this.firstname = null;
+        this.lastname = null;
+        this.dob = null;
+    }
+}
 
-    if (hcertData === null) {
-        status = 500;
-        description = 'cannot process input';
-    } else if (hcertData.isValid) {
-        let businessRules = filterRules(await fetchBusinessRules(), 'AT', 'ET');
-        let valueSets = valueSetsToLogic(await fetchValueSets());
-        let currentDateTime = new Date();
+export class Validator {
 
-        try {
-            validateHCertRules(hcertData.greenCertificate, businessRules, valueSets, currentDateTime);
-            status = 201;
-            description = 'HCert is valid';
-        } catch (e) {
-            status = 422;
-            description = e.message;
-        }
-
-        firstname = hcertData.greenCertificate.nam.gn;
-        lastname = hcertData.greenCertificate.nam.fn;
-        dob = hcertData.greenCertificate.dob;
-    } else {
-        // hcertData.isValid === false
-        status = 403;
-        description = hcertData.error;
+    constructor() {
+        this.trustAnchor = trustAnchorProd;
+        this.baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/prod');
+        this.trustData = null;
+        this.verifier = null;
     }
 
-    return {
-        status: status,
-        error: description,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            dob: dob,
+    /**
+     * Validate the HCERT for a given Date, usually the current date.
+     * 
+     * Returns a ValidationResult or throws if validation wasn't possible.
+     * 
+     * @param {string} cert
+     * @param {Date} dateTime
+     * @returns {ValidationResult}
+     */
+     async validate(cert, dateTime) {
+        await this._ensureData();
+
+        // Verify that the signature is correct and decode the HCERT
+        let hcertData = this.verifier.verify(cert);
+
+        let result = new ValidationResult();
+
+        if (hcertData.isValid) {
+            let greenCertificate = hcertData.greenCertificate;
+            let res = await this._validateRules(greenCertificate, dateTime);
+
+            if (res.isValid) {
+                result.isValid = true;
+                result.firstname = greenCertificate.nam.gn;
+                result.lastname = greenCertificate.nam.fn;
+                result.dob = greenCertificate.dob;
+            } else {
+                result.isValid = false;
+                result.error = res.error;
+            }
+        } else {
+            result.isValid = false;
+            result.error = hcertData.error;
         }
-    };
-};
-
-const pemCert = `-----BEGIN CERTIFICATE-----
-MIIBJTCBy6ADAgECAgUAwvEVkzAKBggqhkjOPQQDAjAQMQ4wDAYDVQQDDAVFQy1N
-ZTAeFw0yMTA0MjMxMTI3NDhaFw0yMTA1MjMxMTI3NDhaMBAxDjAMBgNVBAMMBUVD
-LU1lMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/OV5UfYrtE140ztF9jOgnux1
-oyNO8Bss4377E/kDhp9EzFZdsgaztfT+wvA29b7rSb2EsHJrr8aQdn3/1ynte6MS
-MBAwDgYDVR0PAQH/BAQDAgWgMAoGCCqGSM49BAMCA0kAMEYCIQC51XwstjIBH10S
-N701EnxWGK3gIgPaUgBN+ljZAs76zQIhAODq4TJ2qAPpFc1FIUOvvlycGJ6QVxNX
-EkhRcgdlVfUb
------END CERTIFICATE-----`;
-const contentUrl = 'https://dgc.a-sit.at/ehn/cert/listv2';
-const signatureUrl = 'https://dgc.a-sit.at/ehn/cert/sigv2';
-
-async function validateTrustList(hc1) {
-    let hcert = await importHCert();
-    let result;
-
-    const resultContent = await fetch(contentUrl);
-    const abRC = await resultContent.arrayBuffer();
-    const resultSignature = await fetch(signatureUrl);
-    const abRS = await resultSignature.arrayBuffer();
-
-    try {
-        // eslint-disable-next-line no-undef
-        const verifier = new hcert.VerifierTrustList(pemCert, abRC, abRS);
-        result = verifier.verify(hc1);
-    } catch (error) {
-        console.error(error);
-        return null;
+    
+        return result;
     }
-    return result;
+
+    async _ensureData()
+    {
+        // Does all the one time setup if not already done
+        if (this.trustData !== null && this.verifier !== null)
+            return;
+        this.trustData = await fetchTrustData(this.baseUrl);
+        let hcert = await importHCert();
+        this.verifier = new hcert.VerifierTrustList(
+            this.trustAnchor, this.trustData['trustlist'], this.trustData['trustlistsig']);
+    }
+
+    /**
+     * Validate a cert against the business rules
+     * 
+     * @param {object} cert 
+     * @param {Date} dateTime 
+     * @returns {RuleValidationResult}
+     */
+    async _validateRules(cert, dateTime) {
+        await this._ensureData();
+
+        let hcert = await importHCert();
+        // Validate against the business rules for "entry test in Austria"
+        let businessRules = filterRules(await decodeBusinessRules(hcert, this.trustData, this.trustAnchor, dateTime), 'AT', 'ET');
+        let valueSets = valueSetsToLogic(await decodeValueSets(hcert, this.trustData, this.trustAnchor, dateTime));
+        return validateHCertRules(cert, businessRules, valueSets, dateTime);
+    }
 }
