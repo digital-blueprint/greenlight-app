@@ -31,7 +31,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activity = new Activity(metadata);
 
         this.loading = false;
-        this.showPreselectedSelector = false; // TODO vereinfachen mit preselectedOption
         this.preselectedOption = '';
         this.preselectionCheck = true;
 
@@ -107,7 +106,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             loading: { type: Boolean, attribute: false },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            showPreselectedSelector: { type: String, attribute: 'show-preselected' },
             preselectedOption: { type: String, attribute: 'preselected-option' },
             hasValidProof: { type: Boolean, attribute: false },
             hasTicket: { type: Boolean, attribute: false },
@@ -1172,7 +1170,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done'));
         }
 
-        if (this.isLoggedIn() && !this.isLoading() && this.showPreselectedSelector && this.preselectionCheck) { //TODO überlegen
+        if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) { //TODO überlegen
             this.location = this.preselectedOption;
             this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
             this.preselectionCheck = false;
@@ -1214,11 +1212,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="container">
                         
                         <!-- Place Selector -->
-                        <div class="field ${classMap({'hidden': this.showPreselectedSelector})}">
+                        <div class="field ${classMap({'hidden': this.preselectedOption && this.preselectedOption !== '' })}">
                             <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
                             <div class="control">
-                                <dbp-check-in-place-select class="${classMap({'hidden': this.showPreselectedSelector})}" subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
-                                <select class="${classMap({'hidden': !this.showPreselectedSelector})}" disabled><option selected="selected">${this.preselectedOption}</option></select>
+                                <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
+                                <select disabled class="${classMap({'hidden': !(this.preselectedOption && this.preselectedOption !== '') })}"><option selected="selected">${this.preselectedOption}</option></select>
                             </div>
                         </div>
                         
@@ -1285,7 +1283,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <!-- End 3G Proof Upload-->
                              
                         <!-- Show Proof -->
-                        <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.loading})}">
+                        <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.loading || this.location === ''})}">
 
                             <div class="${classMap({'hidden': !this.hasLocalStorageProof})}">
                                 <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
@@ -1320,7 +1318,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
              
                         <!-- Create Ticket part -->
                         <div class="confirm-btn wrapper ${classMap({hidden: !this.showCreateTicket && !this.isUploadSkipped})}">
-                            <h3>Ticket erstellen</h3> <!-- TODO übersetzen -->
+                            <h3>${i18n.t('acquire-3g-ticket.create-ticket')}</h3> 
                             <div class="${classMap({hidden: !this.isUploadSkipped})}">
                                 <label class="button-container">
                                     ${i18n.t('acquire-3g-ticket.manual-proof-text')}
