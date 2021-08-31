@@ -1261,9 +1261,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </span>
                                 </div>
                                 <dbp-loading-button id="remove-proof-btn"
-                                                    value="Nachweis entfernen" 
+                                                    value="${i18n.t('acquire-3g-ticket.remove-proof')}" 
                                                     @click="${() => { this.removeProof(); }}"
-                                                    title="Nachweis entfernen"
+                                                    title="${i18n.t('acquire-3g-ticket.remove-proof')}"
                                 ></dbp-loading-button><!-- TODO Übersetzen -->
                             </div>
                             

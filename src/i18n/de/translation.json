@@ -99,6 +99,7 @@
     "store-valid-cert-text": "3-G Nachweis für später speichern.",
     "3g-proof-label-text": "3-G Nachweis überprüfen",
     "valid-cert-found-alternative": "Nicht verwenden",
+    "remove-proof": "Nachweis entfernen",
     "found-valid-3g-preCheck": "Es wurden lokal gespeicherte valide 3-G Informationen gefunden.",
     "found-valid-3g": "Es wurde ein gültiger 3-G Nachweis importiert.",
     "found-valid-3g-title": "Gültige 3-G Nachweis gefunden",
