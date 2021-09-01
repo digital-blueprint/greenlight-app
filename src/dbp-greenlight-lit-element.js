@@ -4,6 +4,7 @@ import {send} from "@dbp-toolkit/common/notification";
 import {parseGreenPassQRCode} from "./utils";
 import {hcertValidation} from "./hcert";
 import stringSimilarity from "string-similarity";
+import {generateKey, encrypt, decrypt} from "./crypto.js";
 
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
@@ -367,10 +368,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 iv_bytes[i] = iv_binary_string.charCodeAt(i);
             }
 
-            [key, salt] = await this.generateKey(this.auth['subject'], salt_bytes);
+            [key, salt] = await generateKey(this.auth['subject'], salt_bytes);
 
 
-            let hash = await this.decrypt(cipher, key, iv_bytes);
+            let hash = await decrypt(cipher, key, iv_bytes);
             if (hash && typeof hash !== 'undefined' && hash !== -1) {
                 await this.checkQRCode(hash);
             }
@@ -671,19 +672,12 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return lastNameSimilarityPercent >= percent;
     }
 
-
-
-
-
-
-
-
     async encryptAndSaveHash() {
         let key, salt, cipher, iv;
         let uid = this.auth['person-id'];
 
-        [key, salt] = await this.generateKey(this.auth['subject']);
-        [cipher, iv] = await this.encrypt(key, this.greenPassHash);
+        [key, salt] = await generateKey(this.auth['subject']);
+        [cipher, iv] = await encrypt(key, this.greenPassHash);
 
         if (navigator.storage && navigator.storage.persist) {
             navigator.storage.persist().then(function(persistent) {
@@ -706,104 +700,5 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         localStorage.removeItem("dbp-gp-" + uid);
         localStorage.removeItem("dbp-gp-salt-" + uid);
         localStorage.removeItem("dbp-gp-iv-" + uid);
-    }
-
-    async generateKey(string, salt = window.crypto.getRandomValues(new Uint8Array(24))) {
-        let password = string;
-
-        let enc = new TextEncoder();
-
-        let privateKey = await window.crypto.subtle.importKey(
-            "raw",
-            enc.encode(password),
-            "PBKDF2",
-            false,
-            ["deriveBits", "deriveKey"]
-        );
-
-
-        let key = await window.crypto.subtle.deriveKey(
-            {
-                "name": "PBKDF2",
-                "salt": salt,
-                "iterations": 100000,
-                "hash": "SHA-256"
-            },
-            privateKey,
-            { "name": "AES-GCM", "length": 256},
-            true,
-            [ "encrypt", "decrypt" ]
-        );
-
-        let binary = '';
-        for (let i = 0; i < salt.byteLength; i++) {
-            binary += String.fromCharCode( salt[ i ] );
-        }
-
-        let saltBase64 = window.btoa( binary );
-
-        return [key, saltBase64];
-    }
-
-    async encrypt(key, plaintext) {
-        let enc = new TextEncoder();
-        let iv = window.crypto.getRandomValues(new Uint8Array(24));
-        console.log("encrypt: ", plaintext);
-
-        let cipher = await window.crypto.subtle.encrypt(
-            {
-                name: "AES-GCM",
-                iv: iv,
-            },
-            key,
-            enc.encode(plaintext)
-        );
-
-        let binary = '';
-        let bytes = new Uint8Array( cipher );
-        for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode( bytes[ i ] );
-        }
-
-        let cipherBase64 = window.btoa( binary );
-
-        binary = '';
-        for (let i = 0; i < iv.byteLength; i++) {
-            binary += String.fromCharCode( iv[ i ] );
-        }
-
-        let ivBase64 = window.btoa( binary );
-
-        return [cipherBase64, ivBase64];
-    }
-
-    async decrypt(ciphertext, key, iv) {
-        if (!ciphertext || !key || !iv) {
-            return -1;
-        }
-        let binary_string =  window.atob(ciphertext);
-        let bytes = new Uint8Array( binary_string.length );
-        for (let i = 0; i < binary_string.length; i++) {
-            bytes[i] = binary_string.charCodeAt(i);
-        }
-        let cipherArrayBuffer = bytes.buffer;
-
-        let dec = new TextDecoder("utf-8");
-        let plaintext = await window.crypto.subtle.decrypt(
-                        {
-                            name: "AES-GCM",
-                            iv: iv,
-                        },
-                        key,
-                        cipherArrayBuffer
-                    ).catch(() => {
-                        console.error("Decryption error");
-        });
-
-        if (plaintext instanceof Error) {
-            console.error("Decryption error");
-            return -1;
-        }
-        return dec.decode(plaintext);
     }
 }
