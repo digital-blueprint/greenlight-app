@@ -1007,9 +1007,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </div>
                                 <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>${i18n.t('acquire-3g-ticket.selfe-test')}</h4> 
-                                        ${i18n.t('acquire-3g-ticket.selfe-test-information')}
-                                        <span>${i18n.t('acquire-3g-ticket.selfe-test-link')}: <a class="int-link-external" title="${i18n.t('acquire-3g-ticket.selfe-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span>
+                                        <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4> 
+                                        ${i18n.t('acquire-3g-ticket.self-test-information')}
+                                        <span>${i18n.t('acquire-3g-ticket.self-test-link')}: <a class="int-link-external" title="${i18n.t('acquire-3g-ticket.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span>
                                     </span>
                                 </div>
                                 <dbp-loading-button id="remove-proof-btn"

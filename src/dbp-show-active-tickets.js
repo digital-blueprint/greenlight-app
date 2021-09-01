@@ -24,6 +24,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.locationName = 'TU Graz';
         this.identifier = '';
         this.currentTicket = {};
+        this.currentTicketImage = '';
 
         this.searchHashString = '';
         this.greenPassHash = '';
@@ -31,6 +32,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasValidProof = false;
 
         this.preCheck = true;
+        this.error = false; // TODO
 
 
     }
@@ -59,6 +61,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             preCheck: { type: Boolean, attribute: false },
             searchHashString: { type: String, attribute: 'gp-search-hash-string' },
             searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
+            currentTicket: { type: Object, attribute: false },
+            currentTicketImage: { type: String, attribute: false },
         };
     }
 
@@ -119,25 +123,24 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             },
         };
         const additionalInformation = this.hasValidProof ? 'local-proof' : '';
-        console.log("---------------------", additionalInformation);
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
             encodeURIComponent(additionalInformation), options);
     }
 
-    async updateReferenceTicket(that) {
+    async updateTicket(that) {
         let responseData = await that.getActiveTicketsRequest();
         let responseBody = await responseData.clone().json();
 
         if(responseData.status === 200) {
             console.log("refreshed", responseBody['hydra:member'][0].imageValidFor );
-            that.referenceImage = responseBody['hydra:member'][0].image || '';
+            that.currentTicketImage = responseBody['hydra:member'][0].image || '';
             that.error = false;
             const that_ = that;
             if (!this.setTimeoutIsSet) {
                 that_.setTimeoutIsSet = true;
                 setTimeout(function () {
-                    that_.updateReferenceTicket(that_);
+                    that_.updateTicket(that_);
                     that_.setTimeoutIsSet = false;
                 }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
             }
@@ -161,6 +164,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this._("#qr-code-hash").innerHTML = qr.createImgTag();
         } else {
             console.log("wrong code detected");
+            this.hasValidProof = false;
+            this.isSelfTest = false;
         }
         this.loading = false;
         this.preCheck = false;
@@ -243,8 +248,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     //     }
     // }
 
-    showTicket(event, ticket) {
-        this.generateQrCode();
+    async showTicket(event, ticket) {
+        await this.generateQrCode();
+        await this.updateTicket(this);
+
         this.currentTicket = ticket;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
@@ -524,7 +531,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </header>
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="foto-container">
-                                <img src="${this.currentTicket.image || ''}" alt="Ticketfoto" />
+                                <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
                             </div>
                             <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
                                  <div class="notification-wrapper">
@@ -536,8 +543,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <span class="header">
-                                                <h4>${i18n.t('acquire-3g-ticket.selfe-test')}</h4> 
-                                                ${i18n.t('acquire-3g-ticket.selfe-test-information')}
+                                                <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4> 
+                                                ${i18n.t('acquire-3g-ticket.self-test-information')}
                                             </span>
                                         </div>
                                         <div id="qr-code-hash"></div>

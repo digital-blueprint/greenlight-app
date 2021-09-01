@@ -345,6 +345,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async checkForValidProofLocal() {
+        this.greenPassHash = '';
         console.log("checkForValidProofLocal");
         this.loading = true;
 
@@ -411,9 +412,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             const i18n = this._i18n;
 
             if (!this.preCheck) {
-                this.message = i18n.t('acquire-3g-ticket.found-valid-selfetest');
+                this.message = i18n.t('acquire-3g-ticket.found-valid-selftest');
             } else {
-                this.message = i18n.t('acquire-3g-ticket.found-valid-selfetest-preCheck');
+                this.message = i18n.t('acquire-3g-ticket.found-valid-selftest-preCheck');
             }
 
             this.isSelfTest = true;
