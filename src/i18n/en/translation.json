@@ -1,32 +1,7 @@
 {
   "green-pass-activation": {
-    "title": "Activate 3-G evidence",
-    "description": "With this application you can activate your 3-G evidence.",
-    "additional-information": "Here you can scan a QR code or upload an existing PDF or image with a QR code to activate your 3-G evidence for the period of its validity. When you upload a new evidence, any existing evidence will be replaced. Please note that this will still require you to obtain a ticket for rooms in order to comply with 3G rules.",
-    "success-activation-title": "Successful Activation!",
-    "success-activation-body": "Your 3-G evidence has been successfully activated.",
     "invalid-qr-code-title": "Invalid QR Code!",
-    "invalid-qr-code-body": "This QR code is not a valid 3-G evidence. Please use another one or select the manual 3-G inspection at the ticket store.",
-    "no-qr-code-title": "No QR code found!",
-    "no-qr-code-body": "No QR code was found in the uploaded document. Please use another document or select the manual 3-G inspection at the ticket store.",
-    "data-protection": "What does TU Graz do with your data? You can find the data protection declaration for the app \"TU Graz Greenlight\" here:",
-    "data-protection-link": "Privacy statement",
-    "qr-button-text": "Scan QR Code",
-    "manually-button-text": "Upload File",
-    "uploaded-success-message": "A 3-G evidence has been successfully verified and is active until",
-    "valid-until": "{{date}} at {{clock}}.",
-    "delete-button-text": "Delete",
-    "inline-notification-warning": "Your 3-G evidence will expire soon!",
-    "filepicker-button-title": "Choose File",
-    "filepicker-context": "Choose File for 3-G Verification",
-    "delete-certificate-failed-title": "Error!",
-    "delete-certificate-failed-body": "An error occurred while removing your 3-G evidence.",
-    "delete-certificate-not-found-title": "Error!",
-    "delete-certificate-not-found-body": "The certificate could not be found.",
-    "delete-certificate-success-title": "Successful deleted!",
-    "delete-certificate-success-body": "Your 3-G evidence has been successfully removed.",
-    "manual-uploading-message": "Search for valid QR Code...",
-    "confirm-text": "Do you really want to delete your 3-G evidence?"
+    "invalid-qr-code-body": "This QR code is not a valid 3-G evidence. Please use another one or select the manual 3-G inspection at the ticket store."
   },
   "acquire-ticket": {
     "title": "Acquire ticket for a place",

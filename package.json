@@ -2,7 +2,6 @@
   "name": "@dbp-topics/greenlight",
   "internalName": "dbp-greenlight",
   "version": "1.0.12",
-  "main": "src/dbp-activate-green-pass.js",
   "license": "LGPL-2.1-or-later",
   "repository": {
     "type": "git",

@@ -1,26 +1,7 @@
 import {assert} from 'chai';
 
-import '../src/dbp-activate-green-pass.js';
 import '../src/dbp-greenlight.js';
 import {parseQRCode} from '../src/utils.js';
-
-suite('dbp-activate-green-pass basics', () => {
-  let node;
-
-  suiteSetup(async () => {
-    node = document.createElement('dbp-activate-green-pass');
-    document.body.appendChild(node);
-    await node.updateComplete;
-  });
-
-  suiteTeardown(() => {
-    node.remove();
-  });
-
-  test('should render', () => {
-    assert(node.shadowRoot !== undefined);
-  });
-});
 
 suite('dbp-greenlight-app basics', () => {
   let node;

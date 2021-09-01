@@ -1,32 +1,7 @@
 {
   "green-pass-activation": {
-    "title": "3-G Nachweis aktivieren",
-    "description": "Mit dieser Applikation können Sie ihren 3-G Nachweis überprüfen und aktivieren.",
-    "additional-information": "Hier können Sie einen QR Code scannen oder ein vorhandenes PDF oder Bild hochladen, um Ihren 3-G Nachweis für den Zeitraum seiner Gültigkeit zu aktivieren. Wenn Sie einen neuen Nachweis hochladen, wird ein bereits bestehender Nachweis durch diesen ersetzt. Bitte beachten Sie, dass Sie damit trotzdem noch ein Ticket für Räume erwerben müssen, um die 3G-Regeln einzuhalten.",
-    "success-activation-title": "Erfolgreiche Aktivierung!",
-    "success-activation-body": "Ihr 3-G Nachweis wurde erfolgreich aktiviert.",
     "invalid-qr-code-title": "Ungültiger QR Code!",
-    "invalid-qr-code-body": "Dieser QR Code ist kein gültiger 3-G QR Code. Bitte benutzen Sie einen anderen oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G Nachweises aus.",
-    "no-qr-code-title": "Kein QR Code gefunden!",
-    "no-qr-code-body": "Im hochgeladenen Dokument wurde kein QR Code gefunden. Bitte benutzen Sie ein anderes Dokument oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G Nachweises aus.",
-    "data-protection": "Was macht die TU Graz mit Ihren Daten? Die Datenschutzerklärung zur App \"TU Graz Greenlight\" finden sie hier:",
-    "data-protection-link": "Zur Datenschutzerklärung",
-    "qr-button-text": "QR Code scannen",
-    "manually-button-text": "Datei hochladen",
-    "uploaded-success-message": "Ein 3-G Nachweis wurde erfolgreich überprüft und ist aktiv bis",
-    "valid-until": "{{date}} um {{clock}} Uhr.",
-    "delete-button-text": "Löschen",
-    "inline-notification-warning": "Ihr 3-G Nachweis läuft in Kürze ab!",
-    "filepicker-button-title": "PDF oder Bild auswählen",
-    "filepicker-context": "PDF oder Bild zur Überprüfung auswählen",
-    "delete-certificate-failed-title": "Fehler!",
-    "delete-certificate-failed-body": "Es ist ein Fehler beim Entfernen Ihres 3-G Nachweises aufgetreten.",
-    "delete-certificate-not-found-title": "Fehler!",
-    "delete-certificate-not-found-body": "Das Zertifikat wurde nicht gefunden.",
-    "delete-certificate-success-title": "Löschen erfolgreich!",
-    "delete-certificate-success-body": "Ihr 3-G Nachweis wurde erfolgreich aus dem System entfernt.",
-    "manual-uploading-message": "Suche nach validem QR Code...",
-    "confirm-text": "Wollen Sie Ihren 3-G Nachweis wirklich löschen?"
+    "invalid-qr-code-body": "Dieser QR Code ist kein gültiger 3-G QR Code. Bitte benutzen Sie einen anderen oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G Nachweises aus."
   },
   "acquire-ticket": {
     "title": "Ticket für Ort ausstellen",
