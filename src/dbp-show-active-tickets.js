@@ -33,7 +33,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this.preCheck = true;
         this.error = false; // TODO
-
+        this.setTimeoutIsSet = false;
 
     }
 
