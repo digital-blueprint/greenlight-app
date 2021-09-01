@@ -118,13 +118,32 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 Authorization: "Bearer " + this.auth.token
             },
         };
-
-        // TODO: Set correct additional information
-        const additionalInformation = 'local-proof';
-        // const additionalInformation = '';
+        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
+        console.log("---------------------", additionalInformation);
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
             encodeURIComponent(additionalInformation), options);
+    }
+
+    async updateReferenceTicket(that) {
+        let responseData = await that.getActiveTicketsRequest();
+        let responseBody = await responseData.clone().json();
+
+        if(responseData.status === 200) {
+            console.log("refreshed", responseBody['hydra:member'][0].imageValidFor );
+            that.referenceImage = responseBody['hydra:member'][0].image || '';
+            that.error = false;
+            const that_ = that;
+            if (!this.setTimeoutIsSet) {
+                that_.setTimeoutIsSet = true;
+                setTimeout(function () {
+                    that_.updateReferenceTicket(that_);
+                    that_.setTimeoutIsSet = false;
+                }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
+            }
+        } else {
+            that.error = true;
+        }
     }
 
     async generateQrCode() {
@@ -510,7 +529,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
                                  <div class="notification-wrapper">
                                     <div class="g-proof-information">
-                                    ${console.log(" this.isSelfTest",  this.isSelfTest || !this.hasValidProof)}
                                         <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                             <span class="header">
                                                 <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>

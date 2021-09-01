@@ -490,13 +490,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 // Check Person
                 if (this.auth && this.auth.person && !await this.checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
-
-                    send({
-                        "summary": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-title'),
-                        "body": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-body'),
-                        "type": "warning",
-                        "timeout": 5,
-                    });
+                    if (!preCheck) {
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-title'),
+                            "body": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-body'),
+                            "type": "warning",
+                            "timeout": 5,
+                        });
+                    }
 
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
@@ -540,26 +541,30 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
+                if (!preCheck)
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
                 break;
             case 422: // HCert has expired
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
+                if (!preCheck)
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
                 break;
             case 500: // Can't process Data
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18n.t('acquire-3g-ticket.cannot-process-data');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.cannot-process-data-title'), i18n.t('acquire-3g-ticket.cannot-process-data-body', greenPassHash));
+                if (!preCheck)
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.cannot-process-data-title'), i18n.t('acquire-3g-ticket.cannot-process-data-body', greenPassHash));
                 break;
             // Error: something else doesn't work
             default:
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18n.t('acquire-3g-ticket.validate-error');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.validate-error-title'), i18n.t('acquire-3g-ticket.validate-error-body', greenPassHash));
+                if (!preCheck)
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.validate-error-title'), i18n.t('acquire-3g-ticket.validate-error-body', greenPassHash));
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
         }

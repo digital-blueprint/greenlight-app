@@ -753,6 +753,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-top: 1em;
             }
 
+            #confirm-ticket-btn {
+                margin-top: 0.5em;
+            }
+
             @media only screen
             and (orientation: portrait)
             and (max-width:768px) {
@@ -816,7 +820,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     flex-direction: column;
                 }
 
-                #confirm-ticket-btn, #confirm-ticket-btn {
+                #confirm-ticket-btn {
                     width: 100%;
                     margin-bottom: 0.5em;
                 }
@@ -866,7 +870,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                 </span>
-            </div>
+            </div>git
     
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
     
@@ -884,15 +888,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     
                     <!-- Create ticket start -->
                     <div class="container ${classMap({'hidden': this.processStarted })}">
-                        <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}'>
-                            <dbp-loading-button
-                                    class="${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}"
-                                    type="is-primary"
-                                    id="confirm-ticket-btn"
-                                    value="${ i18n.t('acquire-3g-ticket.manage-tickets-link') }"
-                                    title="${i18n.t('acquire-3g-ticket.manage-tickets-link')}"
-                            ></dbp-loading-button>
-                        </a>
+                       <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
+                            <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
+                                            <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
+                                                <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
+                                            </a>"
+                            ></dbp-inline-notification>
+                        </div>
+
                         <dbp-loading-button 
                             type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
                             id="confirm-ticket-btn"

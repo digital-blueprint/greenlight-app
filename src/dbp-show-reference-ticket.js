@@ -17,7 +17,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activity = new Activity(metadata);
         this.referenceImage = '';
         this.error = false;
-        this.refreshInterval = false;
+        this.setTimeoutIsSet = false;
     }
 
     static get scopedElements() {
@@ -48,7 +48,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             that.updateReferenceTicket(that);
         });
         const that = this;
-        this.refreshInterval = window.setInterval(that.updateReferenceTicket, 300000, that);// 5min = 300000 ms TODO deregister
         window.addEventListener('focus', function() {that.updateReferenceTicket(that);});
 
     }
@@ -72,10 +71,17 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let responseBody = await responseData.clone().json();
 
         if(responseData.status === 200) {
-            console.log("refreshed");
+            console.log("refreshed", responseBody['hydra:member'][0].imageValidFor );
             that.referenceImage = responseBody['hydra:member'][0].image || '';
             that.error = false;
-
+            const that_ = that;
+            if (!this.setTimeoutIsSet) {
+                that_.setTimeoutIsSet = true;
+                setTimeout(function () {
+                    that_.updateReferenceTicket(that_);
+                    that_.setTimeoutIsSet = false;
+                }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
+            }
         } else {
             that.error = true;
         }
