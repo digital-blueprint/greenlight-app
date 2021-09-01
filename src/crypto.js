@@ -87,7 +87,7 @@ export async function encrypt(key, plaintext) {
  */
 export async function decrypt(ciphertext, key, iv) {
     if (!ciphertext || !key || !iv) {
-        throw new Error();
+        return -1;
     }
     let binary_string = window.atob(ciphertext);
     let bytes = new Uint8Array(binary_string.length);
