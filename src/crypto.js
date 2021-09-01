@@ -97,18 +97,20 @@ export async function decrypt(ciphertext, key, iv) {
     let cipherArrayBuffer = bytes.buffer;
 
     let dec = new TextDecoder("utf-8");
-    let plaintext = await window.crypto.subtle.decrypt(
-        {
-            name: "AES-GCM",
-            iv: iv,
-        },
-        key,
-        cipherArrayBuffer
-    );
-
-    if (plaintext instanceof Error) {
+    let plaintext;
+    try {
+        plaintext = await window.crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv: iv,
+            },
+            key,
+            cipherArrayBuffer
+        );
+    } catch (error) {
         console.error("Decryption error");
         return -1;
     }
+
     return dec.decode(plaintext);
 }
