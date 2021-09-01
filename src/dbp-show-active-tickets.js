@@ -95,18 +95,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         for (let i = 0; i < numTypes; i++ ) {
             list[i] = response['hydra:member'][i];
         }
-        list.sort(this.compareListItems);
 
         return list;
-    }
-
-    compareListItems(a, b) {
-        if (a.place < b.place) {
-            return -1;
-        }
-        else if (a.place > b.place) {
-            return 1;
-        }
     }
 
     async sendDeleteTicketRequest() {
@@ -236,7 +226,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     showTicket(event, ticket) {
         this.generateQrCode();
-        //this.locationName = ticket.place;
         this.currentTicket = ticket;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
@@ -261,7 +250,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     // }
 
    async deleteTicket(event, entry) {
-        this.locationName = entry.place;
         this.identifier = entry.identifier;
         let response = await this.sendDeleteTicketRequest();
         let responseBody = await response.clone();
@@ -460,7 +448,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
-                                <strong>${this.locationName}</strong> <!-- TODO change to ticket.place -->
+                                <strong>${this.locationName}</strong>
                                 ${this.getReadableDate(ticket.validFrom, ticket.validUntil)}
                             </span>
                             <div class="btn">

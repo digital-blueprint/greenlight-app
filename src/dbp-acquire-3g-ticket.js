@@ -899,7 +899,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
 
                              <label id="last-checkbox" class="button-container">
-                                 Diesem Gerät vertrauen. <!-- TODO übersetzen -->
+                                 ${i18n.t('acquire-3g-ticket.trust-and-save')}
                                  <input type="checkbox" id="trust-button" name="trust-button" value="trust-button" @click="${this.checkTrustButtonCheckmark}">
                                  <span class="checkmark" id="trust-button-checkmark"></span>
                              </label>
