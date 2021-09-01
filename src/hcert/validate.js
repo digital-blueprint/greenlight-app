@@ -1,5 +1,5 @@
 import {importHCert, fetchTrustData, trustAnchorProd} from './utils.js';
-import {filterRules, validateHCertRules, valueSetsToLogic, decodeValueSets, decodeBusinessRules, RuleValidationResult} from "./rules";
+import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult} from "./rules";
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 
@@ -17,10 +17,29 @@ export class ValidationResult {
 export class Validator {
 
     constructor() {
-        this.trustAnchor = trustAnchorProd;
-        this.baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/prod');
-        this.trustData = null;
-        this.verifier = null;
+        this._trustAnchor = trustAnchorProd;
+        this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/prod');
+        this._verifier = null;
+        /** @type {BusinessRules} */
+        this._businessRules = null;
+        /** @type {ValueSets} */
+        this._valueSets = null;
+        this._loaded = false;
+    }
+
+    async _ensureData()
+    {
+        // Does all the one time setup if not already done
+        if (this._loaded === true)
+            return;
+        let hcert = await importHCert();
+        let trustData = await fetchTrustData(this._baseUrl);
+        this._verifier = new hcert.VerifierTrustList(
+            this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
+        this._businessRules = await decodeBusinessRules(hcert, trustData, this._trustAnchor);
+        this._businessRules = this._businessRules.filter('AT', 'ET');
+        this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor);
+        this._loaded = true;
     }
 
     /**
@@ -36,13 +55,14 @@ export class Validator {
         await this._ensureData();
 
         // Verify that the signature is correct and decode the HCERT
-        let hcertData = this.verifier.verify(cert);
+        let hcertData = this._verifier.verify(cert);
 
         let result = new ValidationResult();
 
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
-            let res = await this._validateRules(greenCertificate, dateTime);
+            /** @type {RuleValidationResult} */
+            let res = await validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime);
 
             if (res.isValid) {
                 result.isValid = true;
@@ -59,33 +79,5 @@ export class Validator {
         }
     
         return result;
-    }
-
-    async _ensureData()
-    {
-        // Does all the one time setup if not already done
-        if (this.trustData !== null && this.verifier !== null)
-            return;
-        this.trustData = await fetchTrustData(this.baseUrl);
-        let hcert = await importHCert();
-        this.verifier = new hcert.VerifierTrustList(
-            this.trustAnchor, this.trustData['trustlist'], this.trustData['trustlistsig']);
-    }
-
-    /**
-     * Validate a cert against the business rules
-     * 
-     * @param {object} cert 
-     * @param {Date} dateTime 
-     * @returns {RuleValidationResult}
-     */
-    async _validateRules(cert, dateTime) {
-        await this._ensureData();
-
-        let hcert = await importHCert();
-        // Validate against the business rules for "entry test in Austria"
-        let businessRules = filterRules(await decodeBusinessRules(hcert, this.trustData, this.trustAnchor, dateTime), 'AT', 'ET');
-        let valueSets = valueSetsToLogic(await decodeValueSets(hcert, this.trustData, this.trustAnchor, dateTime));
-        return validateHCertRules(cert, businessRules, valueSets, dateTime);
     }
 }
