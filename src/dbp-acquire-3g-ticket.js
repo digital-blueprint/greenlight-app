@@ -870,7 +870,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                 </span>
-            </div>git
+            </div>
     
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
     
