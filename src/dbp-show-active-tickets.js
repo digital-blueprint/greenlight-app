@@ -21,9 +21,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activeTicketsCounter = 0;
         this.loading = false;
         this._initialFetchDone = false;
-        this.locationName = '';
+        this.locationName = 'TU Graz';
         this.identifier = '';
         this.currentTicket = {};
+
+        this.searchHashString = '';
+        this.greenPassHash = '';
+        this.isSelfTest = false;
+        this.hasValidProof = true;
     }
 
     static get scopedElements() {
@@ -46,6 +51,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             loading: { type: Boolean, attribute: false },
             locationName: { type: String, attribute: false },
             identifier: { type: String, attribute: false },
+            greenPassHash: { type: String, attribute: false },
         };
     }
 
@@ -62,6 +68,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             switch (propName) {
                 case "lang":
                     this._i18n.changeLanguage(this.lang);
+                    break;
+                case "auth":
+                    this.generateQrCode();
                     break;
             }
             //console.log("######", propName);
@@ -129,54 +138,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async generateQrCode() {
-
-        //TODO remove this duplicated code
-        let key, salt, cipher, iv;
-        let uid = this.auth['person-id'];
-
-        cipher = localStorage.getItem("dbp-gp-" + uid);
-        salt = localStorage.getItem("dbp-gp-salt-" + uid);
-        iv = localStorage.getItem("dbp-gp-iv-" + uid);
-
-        let salt_binary_string =  window.atob(salt);
-        let salt_bytes = new Uint8Array( salt_binary_string.length );
-        for (let i = 0; i < salt_binary_string.length; i++)        {
-            salt_bytes[i] = salt_binary_string.charCodeAt(i);
+        await this.checkForValidProofLocal();
+        if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
+            console.log("Generate QR Code");
+            // TODO check hash valid
+            let typeNumber = 0;
+            let errorCorrectionLevel = 'H';
+            let qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(this.greenPassHash);
+            qr.make();
+            this._("#qr-code-hash").innerHTML = qr.createImgTag();
+        } else {
+            console.log("wrong code detected");
         }
-
-        let iv_binary_string =  window.atob(iv);
-        let iv_bytes = new Uint8Array( iv_binary_string.length );
-        for (let i = 0; i < iv_binary_string.length; i++)        {
-            iv_bytes[i] = iv_binary_string.charCodeAt(i);
-        }
-
-        [key, salt] = await this.generateKey(this.auth['subject'], salt_bytes);
-
-        console.log("key", key);
-        console.log("cipher", cipher);
-        console.log("uid", this.auth);
-        console.log("iv_bytes", iv_bytes);
-        let hash = await this.decrypt(cipher, key, iv_bytes);
-
-        console.log("hash", hash);
-
-        if (hash && typeof hash !== 'undefined' && hash != -1) {
-            //let check = this.decodeUrl(hash);
-            if (1) {
-                console.log("check if hash is valid hash and noch nicht abgelaufen");
-                // TODO check hash valid
-                let typeNumber = 0;
-                let errorCorrectionLevel = 'H';
-                let qr = qrcode(typeNumber, errorCorrectionLevel);
-                qr.addData(hash);
-                qr.make();
-                this._("#qr-code-hash").innerHTML = qr.createImgTag();
-
-            } else {
-                console.error("wrong hash saved");
-            }
-        }
-
+        this.loading = false;
 
     }
 
@@ -257,7 +232,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     // }
 
     showTicket(event, ticket) {
-        this.locationName = ticket.place;
+        this.generateQrCode();
+        //this.locationName = ticket.place;
         this.currentTicket = ticket;
         MicroModal.show(this._('#show-ticket-modal'), {
             disableScroll: true,
@@ -449,7 +425,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (this.isLoggedIn() && !this.isLoading() && !this._initialFetchDone && !this.initialTicketsLoading) {
             // this.getListOfActiveTickets();
         }
-        this.generateQrCode();
+      //  this.generateQrCode();
 
         return html`
 
@@ -506,9 +482,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="foto-container">
                                 <img src="${this.currentTicket.image || ''}" alt="Foto" />
-                            </div>
-                            <div>
-                                TODO: Content (Name, Birthdate) + QR Code
                             </div>
                             <div id="qr-code-hash"></div>
                         </main>

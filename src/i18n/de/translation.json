@@ -58,15 +58,15 @@
     "not-same-person": "Die Person im hochgeladenen Nachweis stimmt nicht mit der angmeldeten Person überein.",
     "cannot-process-data": "Der hochgeladene Nachweis konnte nicht verarbeitet werden.",
     "cannot-process-data-title": "Problem bei der Verarbeitung aufgetreten",
+    "cannot-process-data-body": "Der hochgeladene Nachweis konnte nicht verarbeitet werden. Bitte probieren Sie es noch einmal oder überspringen Sie den Upload Vorgang.",
     "validate-error": "Ein Fehler ist aufgetreten.",
     "validate-error-title": "Ein Fehler ist aufgetreten",
     "validate-error-body": "Bitte versuchen Sie es noch einmal oder überspringen Sie den Vorgang.",
     "hcert-invalid": "Hochgeladener Nachweis ist ungültig.",
     "hcert-invalid-title": "Hochgeladener Nachweis ist ungültig.",
     "hcert-invalid-body": "Bitte laden Sie einen gültigen 3-G Nachweis hoch oder überspringen Sie den Vorgang.",
-    "cannot-process-body": "",
-    "failed-activation-wrong-person-title": "",
-    "failed-activation-wrong-person-body": ""
+    "failed-activation-wrong-person-title": "Unstimmigkeiten gefunden",
+    "failed-activation-wrong-person-body": "Die Person vom hochgeladenen Nachweis stimmt eventuell nicht mit der angemeldeten Person überein."
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",

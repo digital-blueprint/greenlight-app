@@ -56,17 +56,17 @@
     "not-same-person": "The person in the uploaded certificate does not match the person logged in.",
     "cannot-process-data": "The uploaded evidence could not be processed.",
     "cannot-process-data-title": "There was a problem processing",
+    "cannot-process-body-data": "The uploaded evidence could not be processed. Please try again or skip the upload process.",
     "validate-error": "An error has occurred.",
     "validate-error-title": "An error has occurred",
     "validate-error-body": "Please try again or skip the process.",
     "hcert-invalid": "Uploaded evidence is invalid.",
     "hcert-invalid-title": "Uploaded evidence is invalid.",
     "hcert-invalid-body": "Please upload a valid 3-G certificate or skip the process.",
-    "found-valid-3g": "",
-    "cannot-process-body": "",
-    "remove-proof": "",
-    "failed-activation-wrong-person-title": "",
-    "failed-activation-wrong-person-body": ""
+    "found-valid-3g": "A valid 3-G certificate was imported.",
+    "remove-proof": "Remove evidence",
+    "failed-activation-wrong-person-title": "Inconsistencies found",
+    "failed-activation-wrong-person-body": "The person from the uploaded credentials may not match the person registered."
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

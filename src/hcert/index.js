@@ -29,6 +29,8 @@ export async function hcertValidation(hc1)
     } catch (error) {
         result.status = 500;
         result.error = error.message;
+        console.log("errror", error);
+        return result;
     }
 
     if (res.isValid) {
