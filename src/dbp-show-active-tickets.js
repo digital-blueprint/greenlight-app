@@ -432,7 +432,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 60%;
                 }
                 
-                
                 .proof-container {
                     width: 100%;
                 }

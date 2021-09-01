@@ -815,6 +815,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     display: flex;
                     flex-direction: column;
                 }
+
+                #confirm-ticket-btn, #confirm-ticket-btn {
+                    width: 100%;
+                    margin-bottom: 0.5em;
+                }
+                
+                .g-proof-information {
+                    flex-direction: column;
+                }
+                
+                .checkmark {
+                    top: 10%;
+                }
             }
         `;
 

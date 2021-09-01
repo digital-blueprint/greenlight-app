@@ -68,7 +68,7 @@ export class TextSwitch extends AdapterLitElement {
                 margin: 0px;
             }
 
-            .button:hover {
+            .button:hover:not([disabled]) {
                 background-color: var(--dbp-secondary-bg-color) !important;
             }
 
