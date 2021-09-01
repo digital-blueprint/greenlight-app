@@ -47,10 +47,10 @@
     "manage-tickets-link": "Show active tickets",
     "manage-tickets-text": "You can manage your active tickets at: ",
     "skip-button-text": "Skip",
-    "confirm-checkbox-valid-cert-text": "I confirm that my information is correct and that I may be liable to prosecution in the event of fraud.",
-    "confirm-checkbox-no-cert-text": "I confirm that the information I have provided is correct and that I may be liable to prosecution in the event of fraud.",
-    "3g-proof-label-text": "Use 3-G Information",
-    "found-valid-3g-preCheck": "Stored valid 3-G information could be found.",
+    "confirm-checkbox-valid-cert-text": "I confirm that my evidence is correct and that I may be liable to prosecution in the event of fraud.",
+    "confirm-checkbox-no-cert-text": "I confirm that the evidence I have provided is correct and that I may be liable to prosecution in the event of fraud.",
+    "3g-proof-label-text": "Import 3-G evidence",
+    "found-valid-3g-preCheck": "Stored valid 3-G evidence could be found.",
     "found-valid-selfetest-preCheck": "A locally saved self-test was found.",
     "found-valid-selfetest": "A self-test was found.",
     "not-same-person": "The person in the uploaded evidence does not match the person logged in.",
@@ -75,7 +75,9 @@
     "3g-proof-status-valid": "valid",
     "3g-proof-proof-from": "From",
     "3g-proof-birthdate": "birthdate",
-    "trust-and-save": "Trust this device and import 3-G evidence."
+    "trust-and-save": "Trust this device and import 3-G evidence.",
+    "create-new-ticket": "Create new ticket"
+
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

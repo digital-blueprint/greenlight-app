@@ -39,7 +39,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasTicketForThisPlace = false;
         this.location = '';
         this.trustButtonChecked = false;
-        this.isCheckmarkChecked = false;
 
         this.activationEndTime = '';
         this.identifier = '';
@@ -108,7 +107,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             hasTicket: { type: Boolean, attribute: false },
             hasTicketForThisPlace: { type: Boolean, attribute: false },
             location: { type: String, attribute: false },
-            isCheckmarkChecked: { type: Boolean, attribute: false },
             showQrContainer: { type: Boolean, attribute: false},
             activationEndTime: { type: String, attribute: false },
             searchHashString: { type: String, attribute: 'gp-search-hash-string' },
@@ -317,8 +315,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     skipUpload() {
         this.proofUploadFailed = false;
         this.isUploadSkipped = true;
-        this._("#text-switch")._active = "";
-        console.log('upload skipped is true');
+        this.isConfirmChecked = false;
+        if (this._("#digital-proof-mode"))
+            this._("#digital-proof-mode").checked = false;
+        if (this._("#text-switch"))
+            this._("#text-switch")._active = "";
     }
 
     /*
@@ -415,8 +416,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 this.isUploadSkipped = false;
 
-
-                this.isCheckmarkChecked = false;
                 if (this._("#manual-proof-mode")) {
                     this._("#manual-proof-mode").checked = false;
                 }
@@ -462,7 +461,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let response;
 
         button.start();
-        if ( this._("#trust-button") && this._("#trust-button").checked)
+        if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
         {
             await this.encryptAndSaveHash();
         } else {
@@ -486,12 +485,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    checkCheckmark() {
-        this.isCheckmarkChecked = this._("#manual-proof-mode") && this._("#manual-proof-mode").checked;
-    }
-
     checkConfirmCheckmark() {
-        this.isConfirmChecked = this._("#digital-proof-mode") && this._("#digital-proof-mode").checked;
+        if (this.isUploadSkipped)
+            this.isConfirmChecked = this._("#digital-proof-mode") && this._("#digital-proof-mode").checked && this._("#manual-proof-mode") && this._("#manual-proof-mode").checked;
+        else
+            this.isConfirmChecked = this._("#digital-proof-mode") && this._("#digital-proof-mode").checked;
+
     }
 
     checkTrustButtonCheckmark() {
@@ -499,13 +498,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async removeProof() {
+        console.log("clear");
         await this.clearLocalStorage();
         if (this._("#trust-button")) {
-            this._("#trust-button").checked = 'checked';
+            this._("#trust-button").checked = true;
             this.trustButtonChecked = this._("#trust-button") && this._("#trust-button").checked;
         }
         this.hasValidProof = false;
         this.showCreateTicket = false;
+        this.greenPassHash = '';
 
     }
 
@@ -867,22 +868,29 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </div>
                 
                 <div class="border">
+                    
+                    <!-- Create ticket start -->
                     <div class="container ${classMap({'hidden': this.processStarted })}">
+                        <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}'>
+                            <dbp-loading-button
+                                    class="${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}"
+                                    type="is-primary"
+                                    id="confirm-ticket-btn"
+                                    value="${ i18n.t('acquire-3g-ticket.manage-tickets-link') }"
+                                    title="${i18n.t('acquire-3g-ticket.manage-tickets-link')}"
+                            ></dbp-loading-button>
+                        </a>
                         <dbp-loading-button 
-                            type="is-primary" 
+                            type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
                             id="confirm-ticket-btn"
-                            value="${ i18n.t('acquire-3g-ticket.confirm-button-text') }" 
+                            value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.confirm-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
                             @click="${() => {  this.processStarted = true; }}" 
                             title="${i18n.t('acquire-3g-ticket.confirm-button-text')}"
                         ></dbp-loading-button>
-                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
-                            <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
-                                            <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
-                                                <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
-                                            </a>"
-                            ></dbp-inline-notification>
-                        </div>
                     </div>
+                    <!-- Create ticket start end -->
+
+
                     <div class="container ${classMap({'hidden': !this.processStarted })}">
                         <!-- Place Selector -->
                         <div class="field ${classMap({'hidden': this.preselectedOption && this.preselectedOption !== '' })}">
@@ -1003,7 +1011,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="${classMap({hidden: !this.isUploadSkipped})}">
                                 <label class="button-container">
                                     ${i18n.t('acquire-3g-ticket.manual-proof-text')}
-                                    <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode" @click="${this.checkCheckmark}">
+                                    <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode" @click="${this.checkConfirmCheckmark}">
                                     <span class="checkmark" id="manual-proof-checkmark"></span>
                                 </label>
                             </div>

@@ -408,8 +408,33 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     row-gap: 0.5em;
                 }
                 
-                .loading{
+                .loading {
                     justify-content: center;
+                }
+                
+                #ticket-modal-box {
+                    width: 100%;
+                    height: 100%;
+                    min-width: 100%;
+                    min-height: 100%;
+                    padding: 10px;
+                }
+                
+                #ticket-modal-box .modal-content {
+                    flex-direction: column;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    row-gap: 2em;
+                }
+                
+                .foto-container {
+                    width: 60%;
+                }
+                
+                
+                .proof-container {
+                    width: 100%;
                 }
             }
         `;
@@ -489,7 +514,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     ${console.log(" this.isSelfTest",  this.isSelfTest || !this.hasValidProof)}
                                         <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                             <span class="header">
-                                                <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid')}</strong>
+                                                <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
                                             </span>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">

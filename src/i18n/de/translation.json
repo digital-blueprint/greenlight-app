@@ -49,7 +49,7 @@
     "skip-button-text": "Überspringen",
     "confirm-checkbox-valid-cert-text": "Ich bestätige, dass meine Angaben richtig sind und dass ich mich bei Missbrauch strafbar machen kann.",
     "confirm-checkbox-no-cert-text": "Ich bestätige die Richtigkeit meiner Angaben und dass ich mich bei Missbrauch strafbar machen kann.",
-    "3g-proof-label-text": "3-G Nachweis überprüfen",
+    "3g-proof-label-text": "3-G Nachweis importieren",
     "remove-proof": "Nachweis entfernen",
     "found-valid-3g-preCheck": "Es wurden lokal gespeicherte valide 3-G Informationen gefunden.",
     "found-valid-3g": "Es wurde ein gültiger 3-G Nachweis importiert.",
@@ -75,7 +75,8 @@
     "3g-proof-status-valid": "gültig",
     "3g-proof-proof-from": "Von",
     "3g-proof-birthdate": "Geburtsdatum",
-    "trust-and-save": "Diesem Gerät vertrauen und 3-G Nachweis importieren."
+    "trust-and-save": "Diesem Gerät vertrauen und 3-G Nachweis importieren.",
+    "create-new-ticket": "Neues Ticket erstellen"
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
