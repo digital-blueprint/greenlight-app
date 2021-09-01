@@ -1,26 +1,86 @@
 import certlogic from 'certlogic-js';
 
+export class ValueSets
+{
+    constructor() {
+        /** @type {Date} */
+        this.validFrom = null;
+        /** @type {Date} */
+        this.validUntil = null;
+        this.valueSets = [];
+    }
+
+    /**
+     * Converts an array of value sets to something certlogic can work with
+     * 
+     * @returns {Array}
+     */
+    forLogic()
+    {
+        let logicInput = {};
+        for(const set of this.valueSets) {
+            logicInput[set.valueSetId] = Object.keys(set.valueSetValues);
+        }
+        return logicInput;
+    }
+}
+
 /**
  * Decodes the Austrian version of the value sets
  *
  * @param {object} hcert 
  * @param {object} trustData 
  * @param {string} trustAnchor 
- * @param {Date} dateTime 
- * @returns {Array}
+ * @returns {ValueSets}
  */
-export async function decodeValueSets(hcert, trustData, trustAnchor, dateTime)
+export async function decodeValueSets(hcert, trustData, trustAnchor)
 {
     let decoded = hcert.SignedDataDownloader.loadValueSets(trustAnchor, trustData['valuesets'], trustData['valuesetssig']);
-    // FIXME: Should we fail here?
-    if (dateTime < new Date(decoded.first.validFrom) || dateTime > new Date(decoded.first.validUntil)) {
-        console.warn('value set not yet valid or not valid anymore');
-    }
     let result = [];
     for (const entry of decoded.second.valueSets) {
         result.push(JSON.parse(entry.valueSet));
     }
-    return result;
+
+    let vs = new ValueSets();
+    vs.validFrom = new Date(decoded.first.validFrom);
+    vs.validUntil = new Date(decoded.first.validUntil);
+    vs.valueSets = result;
+    return vs;
+}
+
+export class BusinessRules {
+
+    constructor()
+    {
+        /** @type {Date} */
+        this.validFrom = null;
+        /** @type {Date} */
+        this.validUntil = null;
+        this.rules = [];
+    }
+
+    /**
+     * Filters based on country and region
+     * 
+     * @param {string} country 
+     * @param {string} region 
+     * @returns {BusinessRules}
+     */
+    filter(country, region)
+    {
+        let filtered = [];
+        for(let rule of this.rules) {
+            if (rule.Country == country && rule.Region == region) {
+                filtered.push(rule);
+            }
+        }
+
+        let br = new BusinessRules();
+        br.rules = filtered;
+        br.validFrom = this.validFrom;
+        br.validUntil = this.validUntil;
+        return br;
+    }
 }
 
 /**
@@ -29,36 +89,20 @@ export async function decodeValueSets(hcert, trustData, trustAnchor, dateTime)
  * @param {object} hcert 
  * @param {object} trustData 
  * @param {string} trustAnchor 
- * @param {Date} dateTime 
- * @returns {Array}
+ * @returns {BusinessRules}
  */
-export async function decodeBusinessRules(hcert, trustData, trustAnchor, dateTime)
+export async function decodeBusinessRules(hcert, trustData, trustAnchor)
 {
     let decoded = hcert.SignedDataDownloader.loadBusinessRules(trustAnchor, trustData['rules'], trustData['rulessig']);
-    // FIXME: Should we fail here?
-    if (dateTime < new Date(decoded.first.validFrom) || dateTime > new Date(decoded.first.validUntil)) {
-        console.warn('trust list not yet valid or not valid anymore');
-    }
     let result = [];
     for (const entry of decoded.second.rules) {
         result.push(JSON.parse(entry.rule));
     }
-    return result;
-}
-
-/**
- * Converts an array of value sets to something certlogic can work with
- * 
- * @param {Array} valueSets 
- * @returns {Array}
- */
-export function valueSetsToLogic(valueSets)
-{
-    let logicInput = {};
-    for(const set of valueSets) {
-        logicInput[set.valueSetId] = Object.keys(set.valueSetValues);
-    }
-    return logicInput;
+    let br = new BusinessRules();
+    br.rules = result;
+    br.validFrom = new Date(decoded.first.validFrom);
+    br.validUntil = new Date(decoded.first.validUntil);
+    return br;
 }
 
 /**
@@ -78,24 +122,6 @@ function getRuleErrorDescription(rule) {
     return msg;
 }
 
-/**
- * Filters a list of rules based on country and region
- * 
- * @param {Array} rules 
- * @param {string} country 
- * @param {string} region 
- * @returns {Array}
- */
-export function filterRules(rules, country, region) {
-    let filtered = [];
-    for(let rule of rules) {
-        if (rule.Country == country && rule.Region == region) {
-            filtered.push(rule);
-        }
-    }
-    return filtered;
-}
-
 export class RuleValidationResult {
 
     constructor() {
@@ -110,8 +136,8 @@ export class RuleValidationResult {
  * Will throw an error in case the HCERT breaks one or more rules.
  * 
  * @param {object} cert
- * @param {Array} businessRules 
- * @param {Array} valueSets 
+ * @param {BusinessRules} businessRules 
+ * @param {ValueSets} valueSets 
  * @param {Date} dateTime
  * @returns {RuleValidationResult}
  */
@@ -120,19 +146,29 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
     let logicInput = {
         payload: cert,
         external: {
-            valueSets: valueSets,
+            valueSets: valueSets.forLogic(),
             validationClock: dateTime.toISOString(),
         }
     };
 
+    // XXX: We are not a real check app, just a wallet, so we don't fail hard here..
+    if (dateTime < new Date(businessRules.validFrom) || dateTime > new Date(businessRules.validUntil)) {
+        console.warn(`business rules not valid anymore`);
+    }
+    if (dateTime < new Date(valueSets.validFrom) || dateTime > new Date(valueSets.validUntil)) {
+        console.warn(`business rules not valid anymore`);
+    }
+
     let errors = [];
-    for(let rule of businessRules) {
+    for(let rule of businessRules.rules) {
         // FIXME: should we ignore rules not valid at that time, or should we fail?
+        // I can't find anything in the spec, except that this means when the rules are "valid"
+        // but not what to do when they aren't
         if (dateTime < new Date(rule.validFrom) || dateTime > new Date(rule.validTo)) {
             console.warn(`rule ${rule.Identifier} not valid anymore`);
         }
         let result = certlogic.evaluate(rule.Logic, logicInput);
-        if (!result) {
+        if (result !== true) {
             errors.push(getRuleErrorDescription(rule));
         }
     }
