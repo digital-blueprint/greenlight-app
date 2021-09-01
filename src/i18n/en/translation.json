@@ -66,7 +66,15 @@
     "found-valid-3g": "A valid 3-G certificate was imported.",
     "remove-proof": "Remove evidence",
     "failed-activation-wrong-person-title": "Inconsistencies found",
-    "failed-activation-wrong-person-body": "The person from the uploaded credentials may not match the person registered."
+    "failed-activation-wrong-person-body": "The person from the uploaded credentials may not match the person registered.",
+    "selfe-test": "Selfetest",
+    "selfe-test-link": "Link",
+    "selfe-test-information": "Please check whether the proof is still valid.",
+    "3g-proof": "3-G evidence",
+    "3g-proof-status": "Status",
+    "3g-proof-status-valid": "valid",
+    "3g-proof-proof-from": "From",
+    "3g-proof-proof-birthdate": "birthdate"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

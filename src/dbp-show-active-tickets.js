@@ -28,7 +28,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.searchHashString = '';
         this.greenPassHash = '';
         this.isSelfTest = false;
-        this.hasValidProof = true;
+        this.hasValidProof = false;
+
+        this.preCheck = true;
+
+
     }
 
     static get scopedElements() {
@@ -52,15 +56,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             locationName: { type: String, attribute: false },
             identifier: { type: String, attribute: false },
             greenPassHash: { type: String, attribute: false },
+            preCheck: { type: Boolean, attribute: false },
+            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
+            searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
         };
     }
 
     connectedCallback() {
         super.connectedCallback();
-
-
-
-
     }
 
     update(changedProperties) {
@@ -68,9 +71,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             switch (propName) {
                 case "lang":
                     this._i18n.changeLanguage(this.lang);
-                    break;
-                case "auth":
-                    this.generateQrCode();
                     break;
             }
             //console.log("######", propName);
@@ -138,6 +138,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async generateQrCode() {
+        this.loading = true;
+
         await this.checkForValidProofLocal();
         if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
             console.log("Generate QR Code");
@@ -152,6 +154,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             console.log("wrong code detected");
         }
         this.loading = false;
+        this.preCheck = false;
 
     }
 
@@ -287,9 +290,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             
-            .foto-container {
-                width: 144px;
-                height: 190px;
+            .foto-container, .proof-container {
+                width: 49%;
+            }
+
+            .foto-container img {
+                width: 100%;
+            }
+            
+            .proof-container h4 {
+                margin-top: 0px;
             }
             
             .ticket {
@@ -325,7 +335,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #ticket-modal-box {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 padding: 30px;
                 max-height: 400px;
                 min-height: 400px;
@@ -347,7 +356,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #ticket-modal-box .modal-content {
                 display: flex;
                 flex-direction: row;
-                height: 100%;
                 column-gap: 2em;
             }
 
@@ -357,11 +365,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 text-align: left;
             }
 
-            #ticket-modal-box .modal-content div {
+           /* #ticket-modal-box .modal-content div {
                 display: flex;
                 flex-direction: column;
                 margin-top: 33px;
-            }
+            }*/
 
             #ticket-modal-box .modal-footer {
                 padding-top: 15px;
@@ -422,6 +430,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
 
+        if (this.isLoggedIn() && !this.isLoading() && !this.loading && this.preCheck) {
+            this.generateQrCode();
+        }
+
         if (this.isLoggedIn() && !this.isLoading() && !this._initialFetchDone && !this.initialTicketsLoading) {
             // this.getListOfActiveTickets();
         }
@@ -448,7 +460,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
-                                <strong>${i18n.t('show-active-tickets.preselected-place')}</strong>
+                                <strong>${this.locationName}</strong> <!-- TODO change to ticket.place -->
                                 ${this.getReadableDate(ticket.validFrom, ticket.validUntil)}
                             </span>
                             <div class="btn">
@@ -474,22 +486,36 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
                          aria-labelledby="ticket-modal-title">
                         <header class="modal-header">
-                            <h2 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h2>
+                            <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
                             <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
                                 <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
                             </button>
                         </header>
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="foto-container">
-                                <img src="${this.currentTicket.image || ''}" alt="Foto" />
+                                <img src="${this.currentTicket.image || ''}" alt="Ticketfoto" />
                             </div>
-                            <div id="qr-code-hash"></div>
+                            <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
+                                 <div class="notification-wrapper">
+                                    <div class="g-proof-information">
+                                    ${console.log(" this.isSelfTest",  this.isSelfTest || !this.hasValidProof)}
+                                        <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                                            <span class="header">
+                                                <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid')}</strong>
+                                            </span>
+                                        </div>
+                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                            <span class="header">
+                                                <h4>${i18n.t('acquire-3g-ticket.selfe-test')}</h4> 
+                                                ${i18n.t('acquire-3g-ticket.selfe-test-information')}
+                                            </span>
+                                        </div>
+                                        <div id="qr-code-hash"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                         </main>
-                        <footer class="modal-footer">
-                            <div class="modal-footer-btn">
-                                <!--Footer Text-->
-                            </div>
-                        </footer>
                     </div>
                 </div>
             </div>

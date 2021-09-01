@@ -14,5 +14,5 @@
     "de": "Zeigt alle aktiven Tickets für den eingeloggten User.",
     "en": "Shows all active tickets for the logged in user."
   },
-  "subscribe": "lang,entry-point-url,auth,html-overrides"
+  "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array"
 }

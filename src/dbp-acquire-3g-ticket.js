@@ -500,8 +500,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     async removeProof() {
         await this.clearLocalStorage();
+        if (this._("#trust-button")) {
+            this._("#trust-button").checked = 'checked';
+            this.trustButtonChecked = this._("#trust-button") && this._("#trust-button").checked;
+        }
         this.hasValidProof = false;
         this.showCreateTicket = false;
+
     }
 
     static get styles() {
@@ -971,22 +976,23 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="g-proof-information">
                                 <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>3-G Nachweis</h4> <span>Status: <strong>gültig</strong></span> <br> Von: ${this.person.firstname ? this.person.firstname + " " : "" } <!-- TODO Übersetzen -->
-                                        ${this.person.lastname} ${this.person.dob ? html`<br>Geburtsdatum: ${this.person.dob}` : "" }
+                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid')}</strong></span> 
+                                        <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
+                                        ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
                                     </span>
                                 </div>
                                 <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>Selbsttest</h4> 
-                                        Bitte überprüfen Sie ob der Nachweis noch gültig ist.
-                                        <span>Link: <a class="int-link-external" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span><!-- TODO Übersetzen -->
+                                        <h4>${i18n.t('acquire-3g-ticket.selfe-test')}</h4> 
+                                        ${i18n.t('acquire-3g-ticket.selfe-test-information')}
+                                        <span>${i18n.t('acquire-3g-ticket.selfe-test-link')}: <a class="int-link-external" title="${i18n.t('acquire-3g-ticket.selfe-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span>
                                     </span>
                                 </div>
                                 <dbp-loading-button id="remove-proof-btn"
                                                     value="${i18n.t('acquire-3g-ticket.remove-proof')}" 
                                                     @click="${() => { this.removeProof(); }}"
                                                     title="${i18n.t('acquire-3g-ticket.remove-proof')}"
-                                ></dbp-loading-button><!-- TODO Übersetzen -->
+                                ></dbp-loading-button>
                             </div>
                             
                         </div>
