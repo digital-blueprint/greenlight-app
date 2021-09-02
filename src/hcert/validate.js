@@ -1,5 +1,5 @@
 import {importHCert, fetchTrustData, trustAnchorProd} from './utils.js';
-import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult} from "./rules";
+import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 
@@ -16,6 +16,8 @@ export class ValidationResult {
         this.lastname = null;
         /** @type {string} */
         this.dob = null;
+        /** @type {Date|null} */
+        this.validUntil = null;
     }
 }
 
@@ -52,11 +54,15 @@ export class Validator {
      * 
      * Returns a ValidationResult or throws if validation wasn't possible.
      * 
+     * If computeValidUntil=true then the returned ValidationResult will have
+     * the validUntil property set.
+     * 
      * @param {string} cert
      * @param {Date} dateTime
+     * @param {boolean} [computeValidUntil]
      * @returns {ValidationResult}
      */
-     async validate(cert, dateTime) {
+     async validate(cert, dateTime, computeValidUntil=false) {
         await this._ensureData();
 
         // Verify that the signature is correct and decode the HCERT
@@ -67,13 +73,17 @@ export class Validator {
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
             /** @type {RuleValidationResult} */
-            let res = await validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime);
+            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime);
 
             if (res.isValid) {
                 result.isValid = true;
                 result.firstname = greenCertificate.nam.gn ?? '';
                 result.lastname = greenCertificate.nam.fn ?? '';
                 result.dob = greenCertificate.dob ?? '';
+                if (computeValidUntil) {
+                    result.validUntil = getValidUntil(
+                        greenCertificate, this._businessRules, this._valueSets, dateTime);
+                }
             } else {
                 result.isValid = false;
                 result.error = res.error;

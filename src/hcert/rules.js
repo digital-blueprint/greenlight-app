@@ -179,3 +179,76 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 
     return result;
 }
+
+/**
+ * Returns a Date until the HCERT is valid. fromDate needs to be a Date at which
+ * the HCERT is valid. If it isn't valid then null is returned instead.
+ *
+ * Since the rules can change this of course is just a guess, but still helpful
+ * to users.
+ *
+ * This assumes that a valid HCERT that as time goes on becomes invalid will
+ * never become valid again. If that's not the case then the returned result is
+ * undefined.
+ *
+ * @param {object} hcert 
+ * @param {BusinessRules} businessRules 
+ * @param {ValueSets} valueSets 
+ * @param {Date} fromDate 
+ * @returns {null|Date}
+ */
+export function getValidUntil(hcert, businessRules, valueSets, fromDate)
+{
+    let isValid = (checkTime) => {
+        console.log(checkTime);
+        return validateHCertRules(hcert, businessRules, valueSets, checkTime).isValid;
+    };
+
+    let fromTimestamp = (timestamp) => {
+        return new Date(timestamp);
+    };
+
+    // If not valid at fromDate then there is no end date
+    if (!isValid(fromDate)) {
+        return null;
+    }
+
+    // Find a date in the future where the cert is no longer valid
+    // Give up once the timestamp overflows
+    let start = fromDate.getTime();
+    let offset = 3600 * 1000 * 24;
+    let checkTime = fromDate;
+    // eslint-disable-next-line no-constant-condition
+    while (1) {
+        let timestamp = start + offset;
+        if (timestamp >= Number.MAX_VALUE) {
+            return checkTime;
+        }
+        checkTime = fromTimestamp(timestamp);
+        if (!isValid(checkTime)) {
+            break;
+        }
+        offset *= 2;
+    }
+
+    // Find the latest date at which the cert is still valid
+    let low = fromDate.getTime();
+    let high = checkTime.getTime();
+    while (low < high) {
+        let mid = Math.round(low + (high - low) / 2);
+        checkTime = fromTimestamp(mid);
+        if (!isValid(checkTime)) {
+            if (high === mid) {
+                break;
+            }
+            high = mid;
+        } else {
+            if (low === mid) {
+                break;
+            }
+            low = mid;
+        }
+    }
+
+    return fromTimestamp(low);
+}
