@@ -60,50 +60,85 @@ export function compareBirthDateStrings(string1, string2)
     return matches;
 }
 
+function removeDiacriticsKinda(input) {
+    // We decompose each composed character and take the first one of the result.
+    // This has the nice side effect of getting rid of diacritics.
+    let out = "";
+    for (const c of Array.from(input.normalize('NFC'))) {
+        out += Array.from(c.normalize('NFD'))[0];
+    }
+    return out;
+}
+
 /**
- * Checks if a person is another person
+ * Removes diacritics, maps to lowercase
+ *
+ * @param {string} input 
+ * @returns {string}
+ */
+function normalizeName(input) {
+    return removeDiacriticsKinda(input).normalize('NFC').toUpperCase().toLowerCase();
+}
+
+/**
+ * Compares the input and returns a score from 0 to 1 (0 meaning no match)
+ * 
+ * @param {string} s1 
+ * @param {string} s2 
+ * @returns {number}
+ */
+function compareNames(s1, s2)
+{
+    return stringSimilarity.compareTwoStrings(normalizeName(s1), normalizeName(s2));
+}
+
+/**
+ * Checks if the name and birth date of a certificate match the data we have about them.
+ * 
+ * This is a very loose check since both come from different sources and we only want to prevent
+ * very obvious problems, like scanning the wrong certificate by accident.
+ * 
+ * The dates and firstName can be empty strings to mean the information is missing.
  *
  * @param {string} firstName
  * @param {string} lastName
- * @param {string} dob
+ * @param {string} dateOfBirth
  * @param {string} personFirstName
  * @param {string} personLastName
- * @param {string} personDob
+ * @param {string} personDateOfBirth
  * @returns {boolean} - returns if the person mathes with the other person
  */
-export function checkPerson(firstName, lastName, dob, personFirstName, personLastName, personDob) {
-    let matches = compareBirthDateStrings(personDob, dob);
-    if (matches === false) {
+export function checkPerson(firstName, lastName, dateOfBirth, personFirstName, personLastName, personDateOfBirth) {
+    let dateMatches = compareBirthDateStrings(dateOfBirth, personDateOfBirth);
+    if (dateMatches === false) {
         return false;
     }
 
     // if birdthdate could be checked in day, month and year then we can lower the impact of the name matching
-    const percent = 80 - (matches * 10);
+    const limit = 0.8 - (dateMatches * 0.10);
 
-    let firstNameSimilarityPercent = 0;
     // check firstname if there is one set in the certificate
     if (firstName !== "") {
+        let personFirstNameShorted = personFirstName.split(/\s+/);
+        let firstNameShorted = firstName.split(/\s+/);
+        let firstNameSimilarity = compareNames(personFirstNameShorted[0], firstNameShorted[0]);
 
-        let personFirstNameShorted = personFirstName.split(" ");
-        let firstNameShorted = firstName.split(" ");
-        firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[0], firstNameShorted[0]) * 100;
-
-        if (personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= percent) {
-            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[0]) * 100;
+        if (personFirstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
+            firstNameSimilarity = compareNames(personFirstNameShorted[1], firstNameShorted[0]);
         }
-        if (firstNameShorted[1] !== null && firstNameSimilarityPercent <= percent) {
-            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[0], firstNameShorted[1]) * 100;
+        if (firstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
+            firstNameSimilarity = compareNames(personFirstNameShorted[0], firstNameShorted[1]);
         }
-        if (firstNameShorted[1] !== null && personFirstNameShorted[1] !== null && firstNameSimilarityPercent <= percent) {
-            firstNameSimilarityPercent = stringSimilarity.compareTwoStrings(personFirstNameShorted[1], firstNameShorted[1]) * 100;
+        if (firstNameShorted[1] !== undefined && personFirstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
+            firstNameSimilarity = compareNames(personFirstNameShorted[1], firstNameShorted[1]);
         }
         // return false if firstname isn't similar enough
-        if (firstNameSimilarityPercent < percent) {
+        if (firstNameSimilarity < limit) {
             return false;
         }
     }
-    let lastNameSimilarityPercent = stringSimilarity.compareTwoStrings(lastName, personLastName) * 100;
+    let lastNameSimilarity = compareNames(lastName, personLastName);
 
     // return false if lastname isn't similar enough
-    return lastNameSimilarityPercent >= percent;
+    return lastNameSimilarity >= limit;
 }
