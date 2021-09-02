@@ -1,6 +1,8 @@
 # Greenlight Application
 
-[GitLab Repository](https://gitlab.tugraz.at/dbp/greenlight/greenlight)
+[GitLab Repository](https://gitlab.tugraz.at/dbp/greenlight/greenlight) |
+[npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
+[Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/)
 
 ## Local development
 
