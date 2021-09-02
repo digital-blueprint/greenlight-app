@@ -1,12 +1,12 @@
 import stringSimilarity from "string-similarity";
 
 /**
- * Splits a birthday string.
+ * Splits a date string.
  *
  * @param string | null string
- * @returns {Array|null} birthdate
+ * @returns {object|null} birthdate
  */
-function splitBirthdayString(string)
+function splitDateString(string)
 {
     let parts = string.split('-');
     if (string === "") {
@@ -23,16 +23,16 @@ function splitBirthdayString(string)
 }
 
 /**
- * Compares two birthday strings.
+ * Compares two birth date strings.
  *
- * @param {string} string1 - an empty string, only a day, day and month or the full birthdate
- * @param {string} string2 - an empty string, only a day, day and month or the full birthdate
+ * @param {string} string1 - an empty string, only a day, day and month or the full birth date
+ * @param {string} string2 - an empty string, only a day, day and month or the full birth date
  * @returns {(number | boolean)} matcher - returns the maximal matching number or false if it didn't match
  */
-export function compareBirthdayStrings(string1, string2)
+export function compareBirthDateStrings(string1, string2)
 {
-    let parts1 = splitBirthdayString(string1);
-    let parts2 = splitBirthdayString(string2);
+    let parts1 = splitDateString(string1);
+    let parts2 = splitDateString(string2);
     if (parts1 === null || parts2 === null) {
         return false;
     }
@@ -72,7 +72,7 @@ export function compareBirthdayStrings(string1, string2)
  * @returns {boolean} - returns if the person mathes with the other person
  */
 export function checkPerson(firstName, lastName, dob, personFirstName, personLastName, personDob) {
-    let matches = compareBirthdayStrings(personDob, dob);
+    let matches = compareBirthDateStrings(personDob, dob);
     if (matches === false) {
         return false;
     }
