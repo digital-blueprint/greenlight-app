@@ -71,7 +71,7 @@
     "self-test-information": "Please check whether the proof is still valid.",
     "3g-proof": "3-G evidence",
     "3g-proof-status": "Status",
-    "3g-proof-status-valid": "valid",
+    "3g-proof-status-valid": "valid until {{date}}",
     "3g-proof-proof-from": "From",
     "3g-proof-birthdate": "birthdate",
     "trust-and-save": "Trust this device and import 3-G evidence.",

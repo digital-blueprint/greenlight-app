@@ -859,6 +859,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.preselectionCheck = false;
         }
 
+        let formatValidUntil = (date) => {
+            return date.toLocaleString('de-DE', {
+                day: 'numeric',
+                year: 'numeric',
+                month: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+            });
+        };
+
         return html`
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
@@ -998,7 +1008,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="g-proof-information">
                                 <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid')}</strong></span> 
+                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid', {date: this.person.validUntil ? formatValidUntil(this.person.validUntil) : ''})}</strong></span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
                                     </span>

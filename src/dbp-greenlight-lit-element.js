@@ -467,8 +467,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             return;
         }
 
-        let responseData = await hcertValidation(greenPassHash);
-        await this.checkActivationResponse(responseData, greenPassHash, category, precheck);
+        await this.checkActivationResponse(greenPassHash, category, precheck);
     }
 
 
@@ -480,13 +479,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * Possible paths: activation, refresh session, invalid input, green pass hash wrong
      * no permissions, any other errors, green pass hash empty
      *
-     * @param responseData
      * @param greenPassHash
      * @param category
      * @param preCheck
      */
-    async checkActivationResponse(responseData, greenPassHash, category, preCheck) {
+    async checkActivationResponse(greenPassHash, category, preCheck) {
         const i18n = this._i18n;
+
+        let responseData = await hcertValidation(greenPassHash);
 
         let status = responseData.status;
         let responseBody = responseData.data;
@@ -514,6 +514,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this.person.firstname = responseBody.firstname;
                 this.person.lastname = responseBody.lastname;
                 this.person.dob = responseBody.dob;
+                this.person.validUntil = responseBody.validUntil;
 
                 if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
                     this.stopQRReader();

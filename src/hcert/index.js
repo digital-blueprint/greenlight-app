@@ -19,13 +19,14 @@ export async function hcertValidation(hc1)
             firstname: null,
             lastname: null,
             dob: null,
+            validUntil: null,
         }
     };
 
     let res;
     try {
         let validator = new Validator();
-        res = await validator.validate(hc1, new Date());
+        res = await validator.validate(hc1, new Date(), true);
     } catch (error) {
         result.status = 500;
         result.error = error.message;
@@ -38,6 +39,7 @@ export async function hcertValidation(hc1)
         result.data.firstname = res.firstname;
         result.data.lastname = res.lastname;
         result.data.dob = res.dob;
+        result.data.validUntil = res.validUntil;
     } else {
         result.status = 422;
         result.error = res.error;
