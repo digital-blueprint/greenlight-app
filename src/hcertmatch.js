@@ -98,18 +98,18 @@ function compareNames(s1, s2)
  * This is a very loose check since both come from different sources and we only want to prevent
  * very obvious problems, like scanning the wrong certificate by accident.
  * 
- * The dates and firstName can be empty strings to mean the information is missing.
+ * Both dates and certFirstName can be empty strings to mean the information is missing.
  *
- * @param {string} firstName
- * @param {string} lastName
- * @param {string} dateOfBirth
+ * @param {string} certFirstName
+ * @param {string} certLastName
+ * @param {string} certDateOfBirth
  * @param {string} personFirstName
  * @param {string} personLastName
  * @param {string} personDateOfBirth
  * @returns {boolean} - returns if the person mathes with the other person
  */
-export function checkPerson(firstName, lastName, dateOfBirth, personFirstName, personLastName, personDateOfBirth) {
-    let dateMatches = compareBirthDateStrings(dateOfBirth, personDateOfBirth);
+export function checkPerson(certFirstName, certLastName, certDateOfBirth, personFirstName, personLastName, personDateOfBirth) {
+    let dateMatches = compareBirthDateStrings(certDateOfBirth, personDateOfBirth);
     if (dateMatches === false) {
         return false;
     }
@@ -118,9 +118,9 @@ export function checkPerson(firstName, lastName, dateOfBirth, personFirstName, p
     const limit = 0.8 - (dateMatches * 0.10);
 
     // check firstname if there is one set in the certificate
-    if (firstName !== "") {
+    if (certFirstName !== "") {
         let personFirstNameShorted = personFirstName.split(/\s+/);
-        let firstNameShorted = firstName.split(/\s+/);
+        let firstNameShorted = certFirstName.split(/\s+/);
         let firstNameSimilarity = compareNames(personFirstNameShorted[0], firstNameShorted[0]);
 
         if (personFirstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
@@ -137,7 +137,7 @@ export function checkPerson(firstName, lastName, dateOfBirth, personFirstName, p
             return false;
         }
     }
-    let lastNameSimilarity = compareNames(lastName, personLastName);
+    let lastNameSimilarity = compareNames(certLastName, personLastName);
 
     // return false if lastname isn't similar enough
     return lastNameSimilarity >= limit;
