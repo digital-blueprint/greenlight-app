@@ -200,7 +200,6 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 export function getValidUntil(hcert, businessRules, valueSets, fromDate)
 {
     let isValid = (checkTime) => {
-        console.log(checkTime);
         return validateHCertRules(hcert, businessRules, valueSets, checkTime).isValid;
     };
 
