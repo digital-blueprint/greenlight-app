@@ -91,6 +91,27 @@ Example:
 </dbp-acquire-3g-ticket>
 ```
 
+##### contact-tracing-information
+
+The content of this slot will be shown in an inline notification for a contact tracing suggestion.
+
+Example:
+
+```html
+<dbp-acquire-3g-ticket lang="de">
+  <template slot="contact-tracing-information">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        Möchten Sie auch am Contact Tracing der Universität teilnehmen?
+      </div>
+      <div slot="en">
+        Do you want to use contact tracing at the university?
+      </div>
+    </dbp-translated>
+  </template>
+</dbp-acquire-3g-ticket>
+```
+
 ### Design Note
 
 To ensure a uniform and responsive design these activities should occupy 100% width of the window when the activities width are under 768 px.
