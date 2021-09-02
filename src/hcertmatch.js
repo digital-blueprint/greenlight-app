@@ -24,7 +24,7 @@ function splitBirthdayString(string)
  * @param {?string} string2 - an empty string, only a day, day and month or the full birthdate
  * @returns {(number | boolean)} matcher - returns the maximal matching number
  */
-function compareBirthdayStrings(string1, string2)
+export function compareBirthdayStrings(string1, string2)
 {
     if (string1 === null || string1 === '' || string2 === null || string2 === '') {
         // if a birthday is not set, return true
