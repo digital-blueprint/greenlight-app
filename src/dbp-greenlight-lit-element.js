@@ -584,14 +584,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         [cipher, iv] = await encrypt(key, this.greenPassHash);
 
         if (navigator.storage && navigator.storage.persist) {
-            navigator.storage.persist().then(function(persistent) {
-                if (persistent)
-                    console.log("Storage will not be cleared except by explicit user action");
-                else
-                    console.log("Storage may be cleared by the UA under storage pressure.");
-            });
+            if (await navigator.storage.persist())
+                console.log("Storage will not be cleared except by explicit user action");
+            else
+                console.log("Storage may be cleared by the UA under storage pressure.");
         }
-        
 
         localStorage.setItem("dbp-gp-" + uid, cipher);
         localStorage.setItem("dbp-gp-salt-" + uid, salt);
