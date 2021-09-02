@@ -38,11 +38,11 @@ publish:
   script:
     # https://www.npmjs.com/settings/dbp-deploy/tokens
     # NPM_TOKEN needs to be a "Publish" token with 2FA disabled!
-    # "Automation" tokens don't work with lerna (even if they would work with "npm publish")
     - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
     - yarn install
     - yarn run build
-    - yarn run publish
+    # yarn always reports "https://registry.yarnpkg.com/@dbp-topics%2fsignature - Not found", so we are using npm directly
+    - npm run do-publish
 
 .deploy_defaults: &deploy_defaults
   except:
