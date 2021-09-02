@@ -35,6 +35,8 @@ export class ValueSets
  */
 export async function decodeValueSets(hcert, trustData, trustAnchor)
 {
+    // This will throw if the current time doesn't fall into validFrom/validUntil
+    // Sadly we can't prevent that for testing
     let decoded = hcert.SignedDataDownloader.loadValueSets(trustAnchor, trustData['valuesets'], trustData['valuesetssig']);
     let result = [];
     for (const entry of decoded.second.valueSets) {
@@ -93,6 +95,8 @@ export class BusinessRules {
  */
 export async function decodeBusinessRules(hcert, trustData, trustAnchor)
 {
+    // This will throw if the current time doesn't fall into validFrom/validUntil
+    // Sadly we can't prevent that for testing
     let decoded = hcert.SignedDataDownloader.loadBusinessRules(trustAnchor, trustData['rules'], trustData['rulessig']);
     let result = [];
     for (const entry of decoded.second.rules) {
@@ -150,14 +154,6 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
             validationClock: dateTime.toISOString(),
         }
     };
-
-    // XXX: We are not a real check app, just a wallet, so we don't fail hard here..
-    if (dateTime < new Date(businessRules.validFrom) || dateTime > new Date(businessRules.validUntil)) {
-        console.warn(`business rules not valid anymore`);
-    }
-    if (dateTime < new Date(valueSets.validFrom) || dateTime > new Date(valueSets.validUntil)) {
-        console.warn(`business rules not valid anymore`);
-    }
 
     let errors = [];
     for(let rule of businessRules.rules) {
