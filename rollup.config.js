@@ -13,7 +13,6 @@ import license from 'rollup-plugin-license';
 import del from 'rollup-plugin-delete';
 import emitEJS from 'rollup-plugin-emit-ejs';
 import {getBabelOutputPlugin} from '@rollup/plugin-babel';
-import obfuscator from 'rollup-plugin-obfuscator';
 import appConfig from './app.config.js';
 import {getPackagePath, getBuildInfo, generateTLSConfig, getDistPath} from './vendor/toolkit/rollup.utils.js';
 
@@ -25,7 +24,6 @@ let useTerser = buildFull;
 let useBabel = buildFull;
 let checkLicenses = buildFull;
 let useHTTPS = true;
-let obfuscate = false
 
 let config;
 if (appEnv in appConfig) {
@@ -96,7 +94,7 @@ export default (async () => {
             entryFileNames: '[name].js',
             chunkFileNames: 'shared/[name].[hash].[format].js',
             format: 'esm',
-            sourcemap: !obfuscate
+            sourcemap: true
         },
         preserveEntrySignatures: false,
         onwarn: function (warning, warn) {
@@ -237,7 +235,6 @@ export default (async () => {
                   }
                 ]],
             }),
-            obfuscate ? obfuscator(): false,
             useTerser ? terser() : false,
             watch ? serve({
                 contentBase: '.',
