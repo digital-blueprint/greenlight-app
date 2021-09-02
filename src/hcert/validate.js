@@ -6,10 +6,15 @@ import * as commonUtils from '@dbp-toolkit/common/utils';
 export class ValidationResult {
 
     constructor() {
+        /** @type {boolean} */
         this.isValid = false;
+        /** @type {string} */
         this.error = null;
+        /** @type {string} */
         this.firstname = null;
+        /** @type {string} */
         this.lastname = null;
+        /** @type {string} */
         this.dob = null;
     }
 }
@@ -66,9 +71,9 @@ export class Validator {
 
             if (res.isValid) {
                 result.isValid = true;
-                result.firstname = greenCertificate.nam.gn;
-                result.lastname = greenCertificate.nam.fn;
-                result.dob = greenCertificate.dob;
+                result.firstname = greenCertificate.nam.gn ?? '';
+                result.lastname = greenCertificate.nam.fn ?? '';
+                result.dob = greenCertificate.dob ?? '';
             } else {
                 result.isValid = false;
                 result.error = res.error;
