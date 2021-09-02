@@ -185,8 +185,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     /**
      * Parse a incoming date to a readable date
      *
-     * @param date
      * @returns {string} readable date
+     * @param startDate
+     * @param endDate
      */
     getReadableDate(startDate, endDate) {
         const i18n = this._i18n;
@@ -212,6 +213,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * Check if input QR code is already a invalid QR code
      *
      * @param data
+     * @param searchHashString
+     * @param hash
      * @returns {boolean} true if data is valid not yet send QR code data
      * @returns {boolean} false if data is invalid QR code data
      */
@@ -280,6 +283,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * Check if input QR code is already a invalid QR code
      *
      * @param data
+     * @param searchHashString
      * @returns {boolean} true if data is valid not yet send QR code data
      * @returns {boolean} false if data is invalid QR code data
      */

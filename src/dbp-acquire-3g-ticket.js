@@ -13,11 +13,9 @@ import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
 import {escapeRegExp} from './utils.js';
-import stringSimilarity from 'string-similarity';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
-import {hcertValidation} from './hcert';
 
 //console.log('ok nice!', tippy);
 

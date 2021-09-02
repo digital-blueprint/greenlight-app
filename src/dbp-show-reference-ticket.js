@@ -110,7 +110,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     render() {
-        const i18n = this._i18n;
         return html`
             <div class="${classMap({hidden: this.isLoading()})}">
 
