@@ -24,6 +24,31 @@ yarn test
 
 Jump to <https://localhost:8001> and you should get a Single Sign On login page.
 
+## Using this app as pre-built package
+
+### Install app
+
+If you want to install the DBP Greenlight App in a new folder `greenlight-app` you can call:
+
+```bash
+npx @digital-blueprint/cli install-app greenlight greenlight-app
+```
+
+Afterwards you can point your Apache web-server to `greenlight-app/public`.
+
+You can also use this app directly from the [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/)
+for example like this: [dbp-greenlight/index.html](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/examples/dbp-greenlight/index.html)
+
+Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
+
+### Update app
+
+If you want to update the DBP Greenlight App in the current folder you can call:
+
+```bash
+npx @digital-blueprint/cli update-app greenlight
+```
+
 ## Activities
 
 ### dbp-green-pass-activation

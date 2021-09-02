@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="white"/>
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" type="image/x-icon" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/favicon.svg" sizes="any">
+
+    <!-- PWA manifest file -->
+    <link rel="manifest" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/dbp-greenlight.manifest.json">
+
+    <!-- PWA iphone -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/favicon-16x16.png">
+    <link rel="mask-icon" href="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/safari-pinned-tab.svg" color="#e4154b">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+
+    <!-- PWA Windows -->
+    <meta name="msapplication-config" content="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/dbp-greenlight.browserconfig.xml">
+
+    <!-- Loading spinner -->
+    <script type="module">
+        import {Spinner} from 'https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/spinner.js';
+        customElements.define('dbp-loading-spinner', Spinner);
+    </script>
+
+    <!-- App bundles-->
+    <script type="module" src="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/dbp-greenlight.js"></script>
+
+    <!-- Prevent Chrome/Edge from suggesting to translate the page -->
+    <meta name="google" content="notranslate">
+
+    <!-- Font related CSS -->
+    <style>
+        @import "https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/fonts/source-sans-pro/300.css";
+        @import "https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/fonts/source-sans-pro/400.css";
+        @import "https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/fonts/source-sans-pro/600.css";
+
+        body {
+            font-family: 'Source Sans Pro', 'Calibri', 'Arial', 'sans-serif';
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* style override */
+        html {
+            --dbp-override-primary-bg-color: #245b78;
+            --dbp-override-primary-button-border: solid 1px #245b78;
+            --dbp-override-info-bg-color: #245b78;
+            --dbp-override-danger-bg-color: #e4154b;
+            --dbp-override-warning-bg-color: #ffe183;
+            --dbp-override-warning-text-color: black;
+            --dbp-override-success-bg-color: #259207;
+            --dbp-override-image-nextcloud: url(/dist/images/nextcloud.svg);
+        }
+
+        #main-logo {
+            padding: 0 50px 0 0;
+        }
+
+        .footer-links {
+            margin-top: 0.5em;
+        }
+
+        .footer-links a {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+            padding: 0;
+            margin-left: 1em;
+            transition: background-color 0.15s ease 0s, color 0.15s ease 0s;
+            color: #6c757d;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+            background-color: #000;
+        }
+    </style>
+
+    <!-- Preloading/Preconnecting -->
+    <link rel="preconnect" href="https://api-dev.tugraz.at">
+    <link rel="preconnect" href="https://auth-dev.tugraz.at/auth">
+    <script type="module" src="https://auth-dev.tugraz.at/auth/js/keycloak.min.js"></script>
+</head>
+
+<body>
+<dbp-greenlight
+        provider-root
+        lang="de" entry-point-url="https://api-dev.tugraz.at"
+        gp-search-hash-string="HC1:"
+        gp-search-self-test-string-array="https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id="
+        preselected-option="University"
+        file-handling-enabled-targets="local"
+        src="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/dbp-greenlight.topic.metadata.json"
+        base-path="/"
+        keycloak-config='{"url": "https://auth-dev.tugraz.at/auth", "realm": "tugraz-vpu", "clientId": "auth-dev-mw-frontend-local", "silentCheckSsoRedirectUri": "/silent-check-sso.html"}'
+        env='local'
+        html-overrides="global-override"
+><dbp-loading-spinner></dbp-loading-spinner>
+    <template slot="name">
+        DBP<br />
+        <dbp-translated subscribe="lang">
+            <div slot="de">
+                Eine Universität
+            </div>
+            <div slot="en">
+                A University
+            </div>
+        </dbp-translated>
+    </template>
+    <template slot="title">
+        University Greenlight
+    </template>
+    <template slot="logo">
+        <img height="100" src="/logo.png" />
+    </template>
+    <template slot="footer-links">
+        <dbp-translated subscribe="lang">
+            <div slot="de" class="footer-links">
+                <a target="_blank" rel="noopener" href="#link">Mein Link</a>
+            </div>
+            <div slot="en" class="footer-links">
+                <a target="_blank" rel="noopener" href="#link">My link</a>
+            </div>
+        </dbp-translated>
+    </template>
+</dbp-greenlight>
+
+<template id="global-override">
+    <template id="dbp-acquire-3g-ticket">
+        <div slot="checkin-reference">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Möchten Sie auch am Contact Tracing der Universität teilnehmen?
+                </div>
+                <div slot="en">
+                    Do you want to use contact tracing?
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="additional-information">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Mit dieser Applikation können Sie ein Eintrittsticket erstellen.
+                </div>
+                <div slot="en">
+                    With this application you can create an entry ticket.
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
+</template>
+
+<!-- Error handling for too old browsers -->
+<script src="https://unpkg.com/@dbp-topics/greenlight@0.1.2/dist/local/@dbp-topics/greenlight/browser-check.js" defer></script>
+<noscript>Diese Applikation benötigt Javascript / This application requires Javascript</noscript>
+</body>
+</html>
