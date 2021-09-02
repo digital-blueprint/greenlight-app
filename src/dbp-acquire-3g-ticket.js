@@ -1056,11 +1056,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                          <div class="tickets-notifications hidden"> <!-- TODO Proof if needed and the right place to be -->
                             
                             <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
-                                <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.check-in-link-description')}
-                                            <a href='checkin.tugraz.at' title='${i18n.t('acquire-3g-ticket.check-in-link-text')}' target='_self' class='int-link-internal'>
-                                                <span>${i18n.t('acquire-3g-ticket.check-in-link-text')}.</span>
-                                            </a>"
-                                ></dbp-inline-notification>
+                                <dbp-inline-notification type="">
+                                    <div slot="body">
+                                        <slot name='checkin-reference'>
+                                            ${i18n.t('acquire-3g-ticket.check-in-link-description')}
+                                        </slot>
+                                    </div>
+                                </dbp-inline-notification>
                             </div>
                         </div>
                         <!-- End Ticket Notification -->

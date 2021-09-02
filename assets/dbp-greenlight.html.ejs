@@ -145,6 +145,28 @@
 
 <template id="global-override">
     <template id="dbp-acquire-3g-ticket">
+        <div slot="checkin-reference">
+            <style>
+                a.contact-tracing {
+                    color: white;
+                    text-decoration: underline;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Möchten Sie auch am Contact Tracing der TU Graz teilnehmen?
+                    <a href="https://checkin.tugraz.at" title="TU Graz check-in" target="_self" class="contact-tracing">
+                        <span>TU Graz check-in.</span>
+                    </a>
+                </div>
+                <div slot="en">
+                    Do you want to use contact tracing at TU Graz?
+                    <a href="https://checkin.tugraz.at/en" title="TU Graz check-in" target="_self" class="contact-tracing">
+                        <span>TU Graz check-in.</span>
+                    </a>
+                </div>
+            </dbp-translated>
+        </div>
         <div slot="additional-information">
             <style>
                 .int-link-external{
