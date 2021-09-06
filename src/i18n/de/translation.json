@@ -1,7 +1,7 @@
 {
   "green-pass-activation": {
     "invalid-qr-code-title": "Ungültiger QR-Code!",
-    "invalid-qr-code-body": "Dieser QR-Code ist kein gültiger 3-G QR-Code. Bitte benutzen Sie einen anderen oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G-Nachweises aus."
+    "invalid-qr-code-body": "Dieser QR-Code enthält keinen gültigen 3-G-Nachweis. Bitte benutzen Sie einen anderen oder wählen Sie beim Ticketerwerb die manuelle Überprüfung des 3-G-Nachweises aus."
   },
   "acquire-ticket": {
     "title": "Ticket für Ort ausstellen",
@@ -57,7 +57,7 @@
     "not-same-person": "Der hochgeladene Nachweis konnte der angemeldeten Person nicht zu geordnet werden.",
     "cannot-process-data": "Der hochgeladene Nachweis konnte nicht verarbeitet werden.",
     "cannot-process-data-title": "Problem bei der Verarbeitung aufgetreten",
-    "cannot-process-data-body": "Der hochgeladene Nachweis konnte nicht verarbeitet werden. Bitte laden Sie einen gültigen 3-G Nachweis hoch oder überspringen Sie den Upload Vorgang.",
+    "cannot-process-data-body": "Der hochgeladene Nachweis konnte nicht verarbeitet werden. Bitte laden Sie einen gültigen 3-G-Nachweis hoch oder überspringen Sie den Upload Vorgang.",
     "validate-error": "Ein Fehler ist aufgetreten.",
     "validate-error-title": "Ein Fehler ist aufgetreten",
     "validate-error-body": "Bitte versuchen Sie es noch einmal oder überspringen Sie den Vorgang.",
