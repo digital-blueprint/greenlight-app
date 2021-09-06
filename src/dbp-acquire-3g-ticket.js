@@ -443,7 +443,17 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 break;
 
+            case 500:
+                send({
+                    "summary": i18n.t('acquire-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-ticket.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+
             default: //TODO error handling - more cases
+                
                 send({
                     "summary": i18n.t('acquire-ticket.other-error-title'),
                     "body":  i18n.t('acquire-ticket.other-error-body'),
@@ -666,6 +676,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .tickets-wrapper {
                 margin-top: 1.5rem;
+                margin-bottom: 1.5rem;
             }
 
             .close-icon {
@@ -749,10 +760,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .confirm-btn label{
                 margin-top: 1em;
-            }
-
-            #confirm-ticket-btn {
-                margin-top: 0.5em;
             }
 
             @media only screen
@@ -890,9 +897,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <slot name="additional-information">
                         <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
                     </slot>
-                </div>
-                
-                <div class="border">
+                </div>    
                     
                     <!-- Create ticket start -->
                     <div class="container ${classMap({'hidden': this.processStarted })}">
@@ -907,13 +912,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <dbp-loading-button 
                             type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
                             id="confirm-ticket-btn"
-                            value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.confirm-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
+                            value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
                             @click="${() => {  this.processStarted = true; }}" 
-                            title="${i18n.t('acquire-3g-ticket.confirm-button-text')}"
+                            title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
                         ></dbp-loading-button>
                     </div>
                     <!-- Create ticket start end -->
 
+                <div class="border ${classMap({'hidden': !this.processStarted })}"></div>
 
                     <div class="container ${classMap({'hidden': !this.processStarted })}">
                         <!-- Place Selector -->
@@ -931,7 +937,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
 
                              <label id="last-checkbox" class="button-container">
-                                 ${i18n.t('acquire-3g-ticket.trust-and-save')}
+                                 <strong>${i18n.t('acquire-3g-ticket.trust-and-save-1')}</strong> ${i18n.t('acquire-3g-ticket.trust-and-save-2')}
                                  <input type="checkbox" id="trust-button" name="trust-button" value="trust-button" @click="${this.checkTrustButtonCheckmark}">
                                  <span class="checkmark" id="trust-button-checkmark"></span>
                              </label>
@@ -948,10 +954,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         
                                 
         
-                                <dbp-loading-button id="no-upload-btn" value="${i18n.t('acquire-3g-ticket.skip-button-text')}" 
+                                <!-- <dbp-loading-button id="no-upload-btn" value="${i18n.t('acquire-3g-ticket.skip-button-text')}" 
                                                     @click="${(event) => { this.skipUpload(event); }}"
                                                     title="${i18n.t('acquire-3g-ticket.skip-button-text')}"
-                                ></dbp-loading-button>
+                                ></dbp-loading-button> -->
                             </div>
                              
                              <dbp-file-source
