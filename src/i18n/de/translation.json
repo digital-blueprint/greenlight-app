@@ -71,7 +71,7 @@
     "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
     "3g-proof": "3-G Nachweis",
     "3g-proof-status": "Status",
-    "3g-proof-status-valid": "gültig bis {{date}}",
+    "3g-proof-status-valid": "voraussichtlich gültig bis {{date}}",
     "3g-proof-proof-from": "Von",
     "3g-proof-birthdate": "Geburtsdatum",
     "trust-and-save": "Diesem Gerät vertrauen und 3-G Nachweis importieren.",
@@ -94,11 +94,16 @@
     "delete-ticket-success-body": "Das Ticket für den Ort {{place}} wurde erfolgreich gelöscht.",
     "other-error-title": "Fehler!",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "preselected-place": ""
+    "preselected-place": "Ort",
+    "3g-evidence": "3-G Nachweis:",
+    "self-test-found": "Selbsttest gefunden",
+    "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
+    "self-test": "Selbsttest",
+    "self-test-link": "Link zum Test"
   },
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",
   "file-sink": {
-    "modal-close": ""
+    "modal-close": "Schließen"
   }
 }

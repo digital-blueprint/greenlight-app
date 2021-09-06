@@ -133,7 +133,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let responseBody = await responseData.clone().json();
 
         if(responseData.status === 200) {
-            console.log("refreshed", responseBody['hydra:member'][0].imageValidFor );
             that.currentTicketImage = responseBody['hydra:member'][0].image || '';
             that.error = false;
             const that_ = that;
@@ -303,13 +302,23 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
+            ${commonStyles.getLinkCss()}
             
-            .foto-container, .proof-container {
-                width: 49%;
+            .proof-container {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            #qr-code-hash {
+                flex-grow: 1;
+                display: flex;
             }
 
             .foto-container img {
                 width: 100%;
+                display: block;
             }
             
             .proof-container h4 {
@@ -350,10 +359,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 display: flex;
                 flex-direction: column;
                 padding: 30px;
-                max-height: 400px;
-                min-height: 400px;
+                max-height: unset;
+                min-height: unset;
                 min-width: 680px;
                 max-width: 680px;
+                height: auto;
             }
 
             #ticket-modal-box .modal-header {
@@ -368,9 +378,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             #ticket-modal-box .modal-content {
-                display: flex;
-                flex-direction: row;
-                column-gap: 2em;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 10px;
+                grid-auto-rows: 100%;
             }
 
             #ticket-modal-box .modal-content label {
@@ -378,12 +389,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 width: 100%;
                 text-align: left;
             }
-
-           /* #ticket-modal-box .modal-content div {
-                display: flex;
-                flex-direction: column;
-                margin-top: 33px;
-            }*/
 
             #ticket-modal-box .modal-footer {
                 padding-top: 15px;
@@ -406,6 +411,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             #ticket-modal-box .modal-header h2 {
                 text-align: left;
+            }
+            
+            #qr-code-hash img {
+                margin: auto;
+                display: block;
             }
 
             @media only screen
@@ -442,7 +452,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 100%;
                     height: 100%;
                     min-width: 100%;
-                    min-height: 100%;
+                    min-height: 100vh;
                     padding: 10px;
                 }
                 
@@ -452,6 +462,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     text-align: center;
                     align-items: center;
                     row-gap: 2em;
+                    height: 100%;
+                    display: flex;
                 }
                 
                 .foto-container {
@@ -460,6 +472,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 .proof-container {
                     width: 100%;
+                }
+
+                .proof-container h4 {
+                    margin-bottom: 0px;
                 }
             }
         `;
@@ -533,24 +549,23 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="foto-container">
                                 <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
                             </div>
+                          
                             <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
-                                 <div class="notification-wrapper">
-                                    <div class="g-proof-information">
-                                        <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                            <span class="header">
-                                                <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
-                                            </span>
-                                        </div>
-                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                                            <span class="header">
-                                                <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4> 
-                                                ${i18n.t('acquire-3g-ticket.self-test-information')}
-                                            </span>
-                                        </div>
-                                        <div id="qr-code-hash"></div>
-                                    </div>
-                                    
+                                <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                                    <span class="header">
+                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
+                                    </span>
                                 </div>
+                                <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                    <span class="header">
+                                        <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4> 
+                                        <strong>${i18n.t('show-active-tickets.self-test-found')}</strong>
+                                        <br>
+                                        ${i18n.t('show-active-tickets.self-test-information')}
+                                        <span><a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a></span>
+                                    </span>
+                                </div>
+                                <div id="qr-code-hash"></div>
                             </div>
                         </main>
                     </div>
