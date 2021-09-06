@@ -193,13 +193,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         const i18n = this._i18n;
         let newDate1 = new Date(startDate);
         let newDate2 = new Date(endDate);
-        let newDate = new Date(newDate2 - newDate1);
-
-        let hours = newDate.getHours();
-        let minutes = newDate.getMinutes();
+        const diff_minutes = (newDate2 - newDate1)/1000/60;
+        const diff_hours = diff_minutes/60;
 
         let result = i18n.t('show-active-tickets.valid-until-message-1');
-        result += hours > 0 ? i18n.t('show-active-tickets.valid-until-message-2', { hours: hours }) : i18n.t('show-active-tickets.valid-until-message-3', { minutes: ("0" + minutes).slice(-2) });
+        result += diff_hours > 0 ? i18n.t('show-active-tickets.valid-until-message-2', { hours: diff_hours }) : i18n.t('show-active-tickets.valid-until-message-3', { minutes: ("0" + diff_minutes).slice(-2) });
 
         return result;
     }
