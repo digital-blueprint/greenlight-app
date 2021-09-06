@@ -306,7 +306,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getModalDialogCSS()}
             ${commonStyles.getLinkCss()}
             
-            .proof-container {
+            .proof-container, .information-container   {
                 height: 100%;
                 display: flex;
                 flex-direction: column;
@@ -316,6 +316,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #qr-code-hash {
                 flex-grow: 1;
                 display: flex;
+                max-width: 60%;
+                display: block;
+                margin: 1em auto;
             }
 
             .foto-container img {
@@ -362,7 +365,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 flex-direction: column;
                 padding: 30px;
                 max-height: unset;
-                min-height: 50%;
+                min-height: unset;
                 min-width: 680px;
                 max-width: 680px;
                 height: auto;
@@ -419,6 +422,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin: auto;
                 display: block;
             }
+            
+            .hidden {
+                display: none;
+            }
 
             @media only screen
             and (orientation: portrait)
@@ -460,7 +467,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 #ticket-modal-box .content-wrapper {
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: flex-start;
                     text-align: center;
                     align-items: center;
                     row-gap: 2em;
@@ -479,6 +486,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 .proof-container h4 {
                     margin-bottom: 0px;
                 }
+                
             }
         `;
     }
@@ -555,16 +563,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </div>
                                   
                                     <div class="information-container ${classMap({hidden: this.hasValidProof})}">
-                                        <span class="header">
-                                                <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
-                                        </span>
-                                        <slot name="additional-information">
-                                            <p>${i18n.t('show-active-tickets.no-evidence')}</p>
-                                        </slot>
-                                        <p> 
-                                            Es wurde kein gültiger gespeicherter 3-G Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor. <br><br>
-                                            Sie können Ihren Nachweis hochladen, indem Sie ein neues Ticket unter "Eintrittsticket erstellen" anfordern.
-                                        </p>
+                                        <div class="${classMap({hidden: this.hasValidProof})}">
+                                            <span class="header">
+                                                    <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
+                                            </span>
+                                            <slot name="greenlight-reference">
+                                                <p>${i18n.t('show-active-tickets.no-evidence')}</p>
+                                            </slot>
+                                        </div>
                                     </div>
                                   
                                     <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
@@ -574,15 +580,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             </span>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                                            <span class="header">
+                                            <span>
                                                 <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4> 
                                                 <strong>${i18n.t('show-active-tickets.self-test-found')}</strong>
                                                 <br>
                                                 ${i18n.t('show-active-tickets.self-test-information')}
-                                                <span><a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a></span>
+                                                <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                             </span>
                                         </div>
                                         <div id="qr-code-hash"></div>
+                                        <div>
+                                            <slot name="greenlight-reference-invalid">
+                                                <p>${i18n.t('show-active-tickets.invalid-evidence')}</p>
+                                            </slot>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

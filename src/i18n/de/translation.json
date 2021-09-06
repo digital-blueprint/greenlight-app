@@ -102,7 +102,8 @@
     "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
     "self-test": "Selbsttest",
     "self-test-link": "Link zum Test",
-    "no-evidence": "Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen."
+    "no-evidence": "Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
+    "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen."
   },
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",

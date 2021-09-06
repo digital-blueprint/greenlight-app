@@ -102,7 +102,8 @@
     "self-test-information": "Please check whether the evidence is still valid.",
     "self-test": "self-test",
     "self-test-link": "Link to the test",
-    "no-evidence": "No valid stored 3-G-evidence was found. Show your evidence manually or upload new evidence by creating a new ticket."
+    "no-evidence": "No valid stored 3-G-evidence was found. Show your evidence manually or upload new evidence by creating a new ticket.",
+    "invalid-evidence": "If the 3-G-evidence is no longer valid, you can create a new ticket and upload a new evidence."
   },
   "error-login-message": "You need to be logged in to use this function!",
   "loading-message": "Loading...",

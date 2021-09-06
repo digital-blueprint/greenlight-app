@@ -262,6 +262,73 @@
             </dbp-translated>
         </div>
     </template>
+    <template id="dbp-show-active-tickets">
+        <div slot="greenlight-reference">
+            <style>
+                .int-link-internal{
+                    transition: background-color 0.15s, color 0.15s;
+                    border-bottom: 1px solid rgba(0,0,0,0.3);
+                }
+
+                .int-link-internal:hover{
+                    background-color: black;
+                    color: white;
+                    text-decoration: underline;
+                }
+
+
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <p>
+                        Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
+                            <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
+                            <span>Eintrittsticket erstellen</span>
+                            </a>
+                        anfordern.
+                    </p>
+                </div>
+                <div slot="en">
+                    No valid stored 3-G-evidence was found. Show your proof manually or upload a new proof by requesting a new ticket under
+                    <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
+                        <span>Create entry ticket</span>.
+                    </a>"
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="greenlight-reference-invalid">
+            <style>
+                .int-link-internal{
+                    transition: background-color 0.15s, color 0.15s;
+                    border-bottom: 1px solid rgba(0,0,0,0.3);
+                }
+
+                .int-link-internal:hover{
+                    background-color: black;
+                    color: white;
+                    text-decoration: underline;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <p>
+                        Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie unter
+                        <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
+                            <span>Eintrittsticket erstellen</span>
+                        </a>
+                        ein neues Ticket anfordern und einen neuen Nachweis hochladen.
+                    </p>
+                </div>
+                <div slot="en">
+                    If the 3-G-evidence is no longer valid, you can request a new ticket under
+                    <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
+                        <span>Create entry ticket</span>
+                    </a>
+                    and upload a new proof.
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
 </template>
 
 <!-- Error handling for too old browsers -->
