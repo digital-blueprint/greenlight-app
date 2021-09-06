@@ -1,6 +1,9 @@
 import {Validator} from './validate.js';
 export {Validator, ValidationResult} from './validate.js';
 
+
+const defaultValidator = new Validator();
+
 /**
  * FIXME: remove this function,
  * this is just a shim to provide a similar interface to the server one.
@@ -25,8 +28,7 @@ export async function hcertValidation(hc1)
 
     let res;
     try {
-        let validator = new Validator();
-        res = await validator.validate(hc1, new Date(), true);
+        res = await defaultValidator.validate(hc1, new Date(), true);
     } catch (error) {
         result.status = 500;
         result.error = error.message;
