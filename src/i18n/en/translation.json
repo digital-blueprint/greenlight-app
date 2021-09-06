@@ -100,7 +100,8 @@
     "self-test-found": "Self-test found",
     "self-test-information": "Please check whether the evidence is still valid.",
     "self-test": "self-test",
-    "self-test-link": "Link to the test"
+    "self-test-link": "Link to the test",
+    "no-evidence": "No valid stored 3-G evidence was found. Show your evidence manually or upload new evidence by creating a new ticket."
   },
   "error-login-message": "You need to be logged in to use this function!",
   "loading-message": "Loading...",
