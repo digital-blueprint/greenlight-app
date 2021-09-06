@@ -531,7 +531,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
 
                 if (preCheck) {
-                    console.log("Found a proof in local storage");
+                    console.log("Found an evidence in local storage");
                     this.storeCertificate = true;
                     if (this._("#store-cert-mode")) {
                         this._("#store-cert-mode").checked = true;
