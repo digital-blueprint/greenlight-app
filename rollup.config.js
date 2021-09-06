@@ -14,6 +14,8 @@ import del from 'rollup-plugin-delete';
 import emitEJS from 'rollup-plugin-emit-ejs';
 import {getBabelOutputPlugin} from '@rollup/plugin-babel';
 import appConfig from './app.config.js';
+import cp from 'child_process';
+import util from 'util';
 import {getPackagePath, getBuildInfo, generateTLSConfig, getDistPath} from './vendor/toolkit/rollup.utils.js';
 
 const pkg = require('./package.json');
@@ -80,6 +82,12 @@ config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     img-src * blob: data:; font-src 'self' data:`;
 
 export default (async () => {
+    // Make sure the trustlist is up to date
+    if (watch) {
+        let exec = util.promisify(cp.exec);
+        console.log(await exec('./assets/dgc-trust/update.sh'));
+    }
+
     let privatePath = await getDistPath(pkg.name)
     return {
         input: (appEnv != 'test') ? [
