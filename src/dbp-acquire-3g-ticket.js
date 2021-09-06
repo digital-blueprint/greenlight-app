@@ -472,9 +472,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
         {
             await this.encryptAndSaveHash();
-        } else {
-            await this.clearLocalStorage();
-        }
+        } 
         try {
             response = await this.sendCreateTicketRequest();
         } finally {
@@ -506,7 +504,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async removeProof() {
-        console.log("clear");
         await this.clearLocalStorage();
         if (this._("#trust-button")) {
             this._("#trust-button").checked = true;
