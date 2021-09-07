@@ -490,7 +490,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 100%;
                     height: 100%;
                     min-width: 100%;
-                    min-height: 100vh;
+                    min-height: 100%;
                     padding: 10px;
                 }
                 
@@ -527,6 +527,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 #ticket-modal-box {
                     padding: 0px;
                 }
+
+                #ticket-modal-content {
+                    height: 100%;
+                    display: flex;
+                }
+                
+                #ticket-modal-content div {
+                    height: 100%;
+                }
                 
                 #ticket-modal-box .modal-header, #ticket-modal-content {
                     padding-top: 10px;
@@ -536,23 +545,23 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 80%;
                 }
                 
-                .proof-container {
+                .proof-container, .information-container {
                     padding: 30px 10px; 
                     background-color: #245b78;
                     color: white;
                 }
                 
-                .proof-container .int-link-external{
+                .proof-container .int-link-external, .information-container .int-link-external{
                     border-bottom: 1px solid white;
                 }
                 
-                .proof-container .int-link-external::after{
+                .proof-container .int-link-external::after, .information-container .int-link-external:after{
                     border-bottom: 1px solid white;
                     filter: invert(100%);
                     -webkit-filter: invert(100%);
                 }
                 
-                .proof-container .int-link-internal{
+                .proof-container .int-link-internal, .information-container .int-link-internal{
                     border-bottom: 1px solid white;
                 }
                 
