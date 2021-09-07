@@ -1086,4 +1086,4 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 }
 
-commonUtils.defineCustomElement('dbp-acquire-3g-ticket', Acquire3GTicket, Acquire3GTicket);
+commonUtils.defineCustomElement('dbp-acquire-3g-ticket', Acquire3GTicket);
