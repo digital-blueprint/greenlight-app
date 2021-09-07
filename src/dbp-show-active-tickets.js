@@ -329,6 +329,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 display: block;
                 margin: 0em auto;
             }
+            
+            .qr-code-wrapper {
+
+                width: 100%;
+            }
 
             .self-test-qr #qr-code-hash {
                 margin: 1em auto;
@@ -676,7 +681,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                             </span>
                                         </div>
-                                        <div class="${classMap({'self-test-qr': this.isSelfTest})}">
+                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
                                             <div id="qr-code-hash"></div>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
