@@ -45,7 +45,7 @@ export default {
         keyCloakRealm: 'tugraz',
         keyCloakClientId: 'greenlight_tugraz_at-GREENLIGHT',
         matomoUrl: 'https://analytics.tugraz.at/',
-        matomoSiteId: 150,
+        matomoSiteId: 131,
         nextcloudBaseURL: 'https://cloud.tugraz.at',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
