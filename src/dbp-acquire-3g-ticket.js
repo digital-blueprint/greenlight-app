@@ -204,8 +204,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let data = await this.searchQRInFile();
         if (data === null) {
             send({
-                "summary": i18n.t('acquire-3g-ticket.no-qr-code-title'),
-                "body": i18n.t('acquire-3g-ticket.no-qr-code-body'),
+                "summary": i18n.t('acquire-3g-ticket.invalid-title'),
+                // "body": i18n.t('acquire-3g-ticket.no-qr-code-body'),
                 "type": "danger",
                 "timeout": 5,
             });

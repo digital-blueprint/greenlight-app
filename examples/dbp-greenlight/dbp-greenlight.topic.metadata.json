@@ -1,15 +1,15 @@
 {
   "name": {
-    "de": "Greenlight",
-    "en": "Greenlight"
+    "de": "greenlight",
+    "en": "greenlight"
   },
   "short_name": {
-    "de": "Greenlight",
-    "en": "Greenlight"
+    "de": "greenlight",
+    "en": "greenlight"
   },
   "description": {
-    "de": "Mit dieser Applikation können Sie Ihren 3G Nachweis verwalten und Tickets für Orte ausstellen lassen.",
-    "en": "With this application you can manage your 3G proof and acquire tickets for places."
+    "de": "Mit dieser Applikation können Sie Ihren 3-G-Nachweis verwalten und Tickets für Orte ausstellen lassen.",
+    "en": "With this application you can manage your 3-G-evidence and acquire tickets for places."
   },
   "routing_name": "greenlight",
   "activities": [
