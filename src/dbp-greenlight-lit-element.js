@@ -188,7 +188,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param startDate
      * @param endDate
      */
-    getReadableDate(startDate, endDate) {
+    getReadableDuration(startDate, endDate) {
         const i18n = this._i18n;
         let newDate1 = new Date(startDate);
         let newDate2 = new Date(endDate);
@@ -199,6 +199,19 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         result += diff_hours > 0 ? i18n.t('show-active-tickets.valid-until-message-2', { hours: diff_hours }) : i18n.t('show-active-tickets.valid-until-message-3', { minutes: ("0" + diff_minutes).slice(-2) });
 
         return result;
+    }
+
+    /**
+     * Parse a incoming date to a readable date
+     *
+     * @param date
+     * @returns {string} readable date
+     */
+    getReadableDate(date) {
+        const i18n = this._i18n;
+        let newDate = new Date(date);
+        let month = newDate.getMonth() + 1;
+        return i18n.t('valid-till', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)}) + " " + newDate.getDate() + "." + month + "." + newDate.getFullYear();
     }
 
 
@@ -350,12 +363,25 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         console.log("checkForValidProofLocal");
         this.loading = true;
 
-        let key, salt, cipher, iv;
+        let key, salt, cipher, iv, maxTime;
         let uid = this.auth['person-id'];
 
         cipher = localStorage.getItem("dbp-gp-" + uid);
         salt = localStorage.getItem("dbp-gp-salt-" + uid);
         iv = localStorage.getItem("dbp-gp-iv-" + uid);
+        maxTime = localStorage.getItem("dbp-gp-maxTime-" + uid);
+
+        if (maxTime) {
+            let actualTime = Date.now();
+
+            if (actualTime - maxTime >= 0) {
+                await this.clearLocalStorage();
+                console.log("Selftest invalid", actualTime - maxTime);
+                this.loading = false;
+                if (this.preCheck)
+                    this.preCheck = false;
+            }
+        }
 
         try {
             let salt_binary_string =  window.atob(salt);
@@ -382,6 +408,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this.preCheck = false;
         } catch (error) {
             console.log("checkForValidProofLocal Error", error);
+            this.loading = false;
+            if (this.preCheck)
+                this.preCheck = false;
         }
 
     }
@@ -588,6 +617,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         localStorage.setItem("dbp-gp-" + uid, cipher);
         localStorage.setItem("dbp-gp-salt-" + uid, salt);
         localStorage.setItem("dbp-gp-iv-" + uid, iv);
+        if (this.isSelfTest) {
+            localStorage.setItem("dbp-gp-maxTime-" + uid, Date.now() + 60000*1440); //24 hours
+        }
+
     }
 
     async clearLocalStorage() {
@@ -596,5 +629,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         localStorage.removeItem("dbp-gp-" + uid);
         localStorage.removeItem("dbp-gp-salt-" + uid);
         localStorage.removeItem("dbp-gp-iv-" + uid);
+        localStorage.removeItem("dbp-gp-maxTime-" + uid);
+
     }
 }

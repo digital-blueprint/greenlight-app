@@ -160,7 +160,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             qr.make();
             let opts = {};
             opts.cellSize = 2;
-            opts.margin = 0;
+            opts.margin = 2;
             opts.scalable = true;
             this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
         } else {
@@ -311,12 +311,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 display: flex;
                 flex-direction: column;
                 text-align: center;
+                align-items: center;
+            }
+            
+            .foto-container {
+                width: 60%;
+            }
+            
+            .self-test-qr {
+                width: 40%;
             }
             
             #qr-code-hash {
                 flex-grow: 1;
-                display: flex;
-                max-width: 60%;
+                width: 80%;
                 display: block;
                 margin: 1em auto;
             }
@@ -363,8 +371,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #ticket-modal-box {
                 display: flex;
                 flex-direction: column;
-                padding: 30px;
-                max-height: unset;
+                padding: 10px 14px 40px 14px;
+                max-height: 100%;
                 min-height: unset;
                 min-width: 680px;
                 max-width: 680px;
@@ -426,6 +434,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .hidden {
                 display: none;
             }
+            
+            .left-container {
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                row-gap: 1em;
+            }
 
             @media only screen
             and (orientation: portrait)
@@ -483,9 +499,58 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 100%;
                 }
 
-                .proof-container h4 {
-                    margin-bottom: 0px;
+                #ticket-modal-title {
+                    width: 100%;
+                    text-align: center;
+                    margin: 0px;
+                    line-height: 37px; 
                 }
+                
+                #ticket-modal-box .modal-close {
+                    position: absolute;
+                    right: 20px;
+                }
+                
+                #ticket-modal-box {
+                    padding: 0px;
+                }
+                
+                #ticket-modal-box .modal-header, #ticket-modal-content {
+                    padding-top: 10px;
+                }
+                
+                .foto-container {
+                    width: 80%;
+                }
+                
+                .proof-container {
+                    padding: 30px 10px; 
+                    background-color: #245b78;
+                    color: white;
+                }
+                
+                .proof-container .int-link-external{
+                    border-bottom: 1px solid white;
+                }
+                
+                .proof-container .int-link-external::after{
+                    border-bottom: 1px solid white;
+                    filter: invert(100%);
+                    -webkit-filter: invert(100%);
+                }
+                
+                .proof-container .int-link-internal{
+                    border-bottom: 1px solid white;
+                }
+                
+                .self-test-qr {
+                    width: 60%;
+                }
+                
+                #qr-code-hash {
+                    width: 90%;
+                }
+               
                 
             }
         `;
@@ -525,7 +590,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <div class="ticket">
                             <span class="header">
                                 <strong>${this.locationName}</strong>
-                                ${this.getReadableDate(ticket.validFrom, ticket.validUntil)}
+                                ${this.getReadableDate(ticket.validUntil)}
                             </span>
                             <div class="btn">
                                 <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
@@ -558,9 +623,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="${classMap({hidden: this.loading})}">
                                 <div class="content-wrapper ${classMap({hidden: this.loading})}">
-                                    <div class="foto-container">
-                                        <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
+                                    <div class="left-container">
+                                        <div class="foto-container">
+                                            <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
+                                        </div>
+                                        ${this.getReadableDate(this.currentTicket.validUntil)}
                                     </div>
+                                    
                                   
                                     <div class="information-container ${classMap({hidden: this.hasValidProof})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
@@ -576,20 +645,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
                                         <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                             <span class="header">
-                                                <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
+                                                <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
                                             </span>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <span>
-                                                <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4> 
-                                                <strong>${i18n.t('show-active-tickets.self-test-found')}</strong>
-                                                <br>
+                                                <h4>${i18n.t('show-active-tickets.self-test-found')}</h4>
                                                 ${i18n.t('show-active-tickets.self-test-information')}
                                                 <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                             </span>
                                         </div>
-                                        <div id="qr-code-hash"></div>
-                                        <div>
+                                        <div class="${classMap({'self-test-qr': this.isSelfTest})}">
+                                            <div id="qr-code-hash"></div>
+                                        </div>
+                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <slot name="greenlight-reference-invalid">
                                                 <p>${i18n.t('show-active-tickets.invalid-evidence')}</p>
                                             </slot>
