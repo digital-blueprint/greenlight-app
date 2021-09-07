@@ -556,7 +556,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
                 
                 .proof-container .int-link-external::after, .information-container .int-link-external:after{
-                    border-bottom: 1px solid white;
                     filter: invert(100%);
                     -webkit-filter: invert(100%);
                 }
