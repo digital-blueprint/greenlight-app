@@ -154,7 +154,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async sendCreateTicketRequest() {
         let body = {
             // "place": this.location,
-            "consentAssurance": this.isConfirmChecked, //or always hardcoded true?
+            "consentAssurance": this.isConfirmChecked, 
             "additionalInformation": this.hasValidProof && !this.isSelfTest ? 'local-proof' : '',
         };
 

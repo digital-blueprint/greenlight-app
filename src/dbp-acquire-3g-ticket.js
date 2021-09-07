@@ -465,8 +465,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async createTicket(event) {
+        const i18n = this._i18n;
         let button = event.target;
         let response;
+
+        if (!this.isConfirmChecked) {
+            send({
+                "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
+                "body":  i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                "type": "danger",
+                "timeout": 8,
+            });
+            return;
+        }
 
         button.start();
         try {
@@ -896,9 +907,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
                     </slot>
                 </div>    
+
+                <div class="control ${classMap({hidden: !this.preCheck})}">
+                    <span class="loading">
+                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                    </span>
+                </div>
                     
                     <!-- Create ticket start -->
-                    <div class="container ${classMap({'hidden': this.processStarted })}">
+                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck})}">
                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
                             <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
                                             <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>

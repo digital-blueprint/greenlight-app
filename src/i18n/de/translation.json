@@ -66,7 +66,9 @@
     "trust-and-save-1": "Diesem Gerät vertrauen.",
     "trust-and-save-2": "Meinen 3-G-Nachweis importieren und auf diesem Gerät speichern.",
     "create-new-ticket": "Neues Ticket anfordern",
-    "request-ticket-button-text": "Ticket anfordern"
+    "request-ticket-button-text": "Ticket anfordern",
+    "confirm-not-checked-title": "Zustimmung nicht erteilt!",
+    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann."
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
