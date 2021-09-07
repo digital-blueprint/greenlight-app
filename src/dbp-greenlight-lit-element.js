@@ -530,17 +530,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                             "timeout": 5,
                         });
                     }*/
-                    if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
-                    {
-                        await this.encryptAndSaveHash();
-                    }
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     return;
 
                 }
-
+                if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
+                {
+                    await this.encryptAndSaveHash();
+                }
                 this.person.firstname = responseBody.firstname;
                 this.person.lastname = responseBody.lastname;
                 this.person.dob = responseBody.dob;
