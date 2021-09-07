@@ -6,6 +6,16 @@ import {hcertValidation} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
 import {generateKey, encrypt, decrypt} from "./crypto.js";
 
+/**
+ * Dummy function to mark strings as i18next keys for i18next-scanner
+ *
+ * @param {string} key
+ * @param {object} [options]
+ * @returns {string} The key param as is
+ */
+ function i18nKey(key, options) {
+    return key;
+}
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -536,9 +546,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     if (this._("#store-cert-mode")) {
                         this._("#store-cert-mode").checked = true;
                     }
-                    this.message = i18n.t('acquire-3g-ticket.found-valid-3g-preCheck');
+                    this.message = i18nKey('acquire-3g-ticket.found-valid-3g-preCheck');
                 } else {
-                    this.message = i18n.t('acquire-3g-ticket.found-valid-3g');
+                    this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
                 }
                 break;
             case 403: // HCert has expired

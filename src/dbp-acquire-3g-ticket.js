@@ -210,7 +210,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 "timeout": 5,
             });
 
-            this.message = i18n.t('acquire-3g-ticket.no-qr-code');
+            this.message = this.i18nKey('acquire-3g-ticket.no-qr-code');
             this.proofUploadFailed = true;
             this._activationInProgress = false;
             this.loading = false;
@@ -863,11 +863,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.preselectionCheck = false;
         }
 
-        let formatValidUntil = (date) => {
-            return date.toLocaleString('de-DE', {
+        let formatValidUntilDate = (date) => {
+            return date.toLocaleDateString('de-DE', {
                 day: 'numeric',
                 year: 'numeric',
                 month: 'numeric',
+            });
+        };
+
+        let formatValidUntilTime = (date) => {
+            return date.toLocaleTimeString('de-DE', {
                 hour: 'numeric',
                 minute: 'numeric',
             });
@@ -1000,18 +1005,18 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <div class="${classMap({hidden: this.location === '' || this.isUploadSkipped || this.loading})}">
                             <div class="${classMap({'hidden': !this.hasValidProof || this.loading})}">
                                 <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
-                                ${ this.message }
+                                ${ i18n.t(this.message) }
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
-                                ${this.message} <!-- TODO Search for other uses of this part -->
+                                ${ i18n.t(this.message) } <!-- TODO Search for other uses of this part -->
                             </div>
                         </div>
                         <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
                             <div class="g-proof-information">
                                 <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid', {date: this.person.validUntil ? formatValidUntil(this.person.validUntil) : ''})}</strong></span> 
+                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}</strong></span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
                                     </span>
