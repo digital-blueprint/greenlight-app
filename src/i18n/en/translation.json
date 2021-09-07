@@ -99,6 +99,7 @@
     "other-error-body": "An unknown error occurred.",
     "preselected-place": "Place",
     "3g-evidence": "3-G-evidence: Found Green Pass",
+    "no-3g-evidence": "No 3-G-evidence found",
     "self-test-found": "3-G-evidence: Self-test found",
     "self-test-information": "Please check whether the evidence is still valid.",
     "self-test": "self-test",

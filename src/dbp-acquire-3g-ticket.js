@@ -469,10 +469,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let response;
 
         button.start();
-        if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
-        {
-            await this.encryptAndSaveHash();
-        } 
         try {
             response = await this.sendCreateTicketRequest();
         } finally {

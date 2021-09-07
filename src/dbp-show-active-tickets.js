@@ -59,6 +59,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             identifier: { type: String, attribute: false },
             greenPassHash: { type: String, attribute: false },
             preCheck: { type: Boolean, attribute: false },
+            hasValidProof: { type: Boolean, attribute: false },
             searchHashString: { type: String, attribute: 'gp-search-hash-string' },
             searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
             currentTicket: { type: Object, attribute: false },
@@ -326,6 +327,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 flex-grow: 1;
                 width: 80%;
                 display: block;
+                margin: 0em auto;
+            }
+
+            .self-test-qr #qr-code-hash {
                 margin: 1em auto;
             }
 
@@ -441,6 +446,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 flex-direction: column;
                 align-items: center;
                 row-gap: 1em;
+            }
+
+            @media only screen
+            and (orientation: landscape)
+            and (max-width:768px) {
+                #ticket-modal-box {
+                    height: 100%;
+                }
             }
 
             @media only screen
@@ -634,7 +647,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <div class="information-container ${classMap({hidden: this.hasValidProof})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
                                             <span class="header">
-                                                    <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
+                                                    <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
                                             </span>
                                             <slot name="greenlight-reference">
                                                 <p>${i18n.t('show-active-tickets.no-evidence')}</p>

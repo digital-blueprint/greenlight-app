@@ -461,7 +461,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this._("#text-switch")._active = "";
 
             this.showCreateTicket = true;
-
+            if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
+            {
+                await this.encryptAndSaveHash();
+            }
 
         } else {
             if (this.wrongQR !== undefined)
@@ -519,15 +522,18 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 // Check Person
                 if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
-                    if (!preCheck) {
+                   /* if (!preCheck) {
                         send({
                             "summary": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-title'),
                             "body": i18n.t('acquire-3g-ticket.failed-activation-wrong-person-body'),
                             "type": "warning",
                             "timeout": 5,
                         });
+                    }*/
+                    if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
+                    {
+                        await this.encryptAndSaveHash();
                     }
-
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
