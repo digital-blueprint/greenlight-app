@@ -1,21 +1,10 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
 import {getStackTrace} from "@dbp-toolkit/common/error";
 import {send} from "@dbp-toolkit/common/notification";
-import {parseGreenPassQRCode} from "./utils";
+import {parseGreenPassQRCode, i18nKey} from "./utils";
 import {hcertValidation} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
 import {generateKey, encrypt, decrypt} from "./crypto.js";
-
-/**
- * Dummy function to mark strings as i18next keys for i18next-scanner
- *
- * @param {string} key
- * @param {object} [options]
- * @returns {string} The key param as is
- */
- function i18nKey(key, options) {
-    return key;
-}
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -281,7 +270,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             "timeout": 5,
         });
         this.proofUploadFailed = true;
-        this.message = i18n.t('acquire-3g-ticket.invalid-qr-code');
+        this.message = i18nKey('acquire-3g-ticket.invalid-qr-code');
     }
 
     /**
@@ -421,12 +410,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         if (check && selfTestURL !== '') {
-            const i18n = this._i18n;
-
             if (!this.preCheck) {
-                this.message = i18n.t('acquire-3g-ticket.found-valid-selftest');
+                this.message = i18nKey('acquire-3g-ticket.found-valid-selftest');
             } else {
-                this.message = i18n.t('acquire-3g-ticket.found-valid-selftest-preCheck');
+                this.message = i18nKey('acquire-3g-ticket.found-valid-selftest-preCheck');
             }
 
             this.isSelfTest = true;
@@ -514,7 +501,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
-                    this.message = i18n.t('acquire-3g-ticket.not-same-person');
+                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     return;
 
                 }
@@ -554,21 +541,21 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             case 403: // HCert has expired
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
+                this.message = i18nKey('acquire-3g-ticket.hcert-invalid');
                 if (!preCheck)
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
                 break;
             case 422: // HCert has expired
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18n.t('acquire-3g-ticket.hcert-invalid');
+                this.message = i18nKey('acquire-3g-ticket.hcert-invalid');
                 if (!preCheck)
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.hcert-invalid-title'), i18n.t('acquire-3g-ticket.hcert-invalid-body', greenPassHash));
                 break;
             case 500: // Can't process Data
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18n.t('acquire-3g-ticket.cannot-process-data');
+                this.message = i18nKey('acquire-3g-ticket.cannot-process-data');
                 if (!preCheck)
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.cannot-process-data-title'), i18n.t('acquire-3g-ticket.cannot-process-data-body', greenPassHash));
                 break;
@@ -576,7 +563,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             default:
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18n.t('acquire-3g-ticket.validate-error');
+                this.message = i18nKey('acquire-3g-ticket.validate-error');
                 if (!preCheck)
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.validate-error-title'), i18n.t('acquire-3g-ticket.validate-error-body', greenPassHash));
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});

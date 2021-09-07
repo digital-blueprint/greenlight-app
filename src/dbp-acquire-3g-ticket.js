@@ -12,7 +12,7 @@ import { send } from '@dbp-toolkit/common/notification';
 import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
-import {escapeRegExp} from './utils.js';
+import {escapeRegExp, i18nKey} from './utils.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
@@ -210,7 +210,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 "timeout": 5,
             });
 
-            this.message = this.i18nKey('acquire-3g-ticket.no-qr-code');
+            this.message = i18nKey('acquire-3g-ticket.no-qr-code');
             this.proofUploadFailed = true;
             this._activationInProgress = false;
             this.loading = false;

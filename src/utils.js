@@ -133,3 +133,14 @@ export function parseQRCode(data, id) {
 export function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
+
+/**
+ * Dummy function to mark strings as i18next keys for i18next-scanner
+ *
+ * @param {string} key
+ * @param {object} [options]
+ * @returns {string} The key param as is
+ */
+ export function i18nKey(key, options) {
+    return key;
+}
