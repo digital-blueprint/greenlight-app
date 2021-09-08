@@ -525,7 +525,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         switch (status) {
             case 201:
                 // Check Person
-                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
+               /* if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
                    /* if (!preCheck) {
                         send({
@@ -535,12 +535,12 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                             "timeout": 5,
                         });
                     }*/
-                    this.proofUploadFailed = true;
+                   /* this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     return;
 
-                }
+                }*/
                 if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
                 {
                     await this.encryptAndSaveHash();

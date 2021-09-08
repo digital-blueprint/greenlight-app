@@ -22,6 +22,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activeTickets = [];
         this.locationName = 'Ticket';
         this.currentTicket = {};
+        this.currentTicketImage = '';
         this.greenPassHash = '';
         this.hasValidProof = false;
         this.isSelfTest = false;
@@ -49,6 +50,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             activeTickets: { type: Array, attribute: false },
             locationName: { type: String, attribute: 'preselected-option' },
             currentTicket: { type: Object, attribute: false },
+            currentTicketImage: { type: String, attribute: false },
             greenPassHash: { type: String, attribute: false },
             hasValidProof: { type: Boolean, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
@@ -83,6 +85,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.generateQrCode();
     }
 
+
+    /**
+     * Parse an activeTicket response and return a list
+     *
+     * @param response
+     * @returns {Array} list
+     */
     parseActiveTickets(response) {
         let list = [];
 
@@ -100,6 +109,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     /**
      * Sends a delete Ticket request
      *
+     * @param ticketID
      */
     async sendDeleteTicketRequest(ticketID) {
         const options = {
@@ -174,6 +184,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return false;
         } else if (responseData.status === 200) { // Success
             that.currentTicket = responseBody;
+            that.currentTicketImage = responseBody.image;
+
             const that_ = that;
             if (!this.setTimeoutIsSet) {
                 that_.setTimeoutIsSet = true;
@@ -662,9 +674,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="content-wrapper ${classMap({hidden: this.loading})}">
                                     <div class="left-container">
                                         <div class="foto-container">
-                                            <img src="${this.currentTicket.image || ''}" alt="Ticketfoto" />
+                                            <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
                                         </div>
-                                        ${this.getReadableDate(this.currentTicket.validUntil)}
                                     </div>
                                     
                                   

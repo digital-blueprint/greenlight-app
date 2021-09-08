@@ -123,7 +123,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </p>
                 <h3> Das Ticketbild </h3>                 
                 <p>Das Ticket besteht entweder aus einem Ausweisbild in Graustufen oder einem X (bei denen kein Bild hinterlegt sind). Der Hintergrund zeigt ob das vorgezeigte Ticket aktuell ist. Der Hintergrund ist bei allen aktuellen Tickets gleich.</p>
-                <h3> Der 3-G-Nachweis</h3>
+                <!--<h3> Der 3-G-Nachweis</h3>
                 <p>
                 Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser angezeigt.
                 Hierbei gibt es 3 Möglichkeite: 3-G-Nachweis nicht gefunden oder abgelaufe, dann wird kein QR Code angezeigt <br>
@@ -131,7 +131,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank">Green Check</a> gescannt und validiert werden. <br>
                 Ist ein Selbsttests des Landes Steiermarks oder Kärntens lokal gespeichert, wird das Ticket in Graustufen und der QR Code vom Selbsttest angezeigt. Dieser QR-Code ist ein Link und kann mit einer QR Code scanner aufgerufen und manuell validiert werden.<br>
                     Ist kein 3-G-Nachweis vorhanden, wird das Ticket in Graustufen angezeigt und kein QR-Code. Der 3-G-Nachweis muss manuell überprüft werden.
-                </p>
+                </p>-->
                     
                     
                
