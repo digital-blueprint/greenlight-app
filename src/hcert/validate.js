@@ -1,4 +1,4 @@
-import {importHCert, fetchTrustData, trustAnchorProd} from './utils.js';
+import {importHCert, fetchTrustData, trustAnchorProd, trustAnchorTest} from './utils.js';
 import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
@@ -23,9 +23,13 @@ export class ValidationResult {
 
 export class Validator {
 
-    constructor() {
-        this._trustAnchor = trustAnchorProd;
-        this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/prod');
+    /**
+     * @param {boolean} production
+     */
+    constructor(production=true) {
+        let dir = production ? 'prod' : 'test';
+        this._trustAnchor = production ? trustAnchorProd : trustAnchorTest;
+        this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/' + dir);
         this._verifier = null;
         /** @type {BusinessRules} */
         this._businessRules = null;

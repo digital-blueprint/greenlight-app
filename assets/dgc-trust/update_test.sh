@@ -3,8 +3,8 @@
 set -e
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-TRUST_DIR="${DIR}/prod"
-DGC_TRUST_URL="https://dgc-trust.qr.gv.at"
+TRUST_DIR="${DIR}/test"
+DGC_TRUST_URL="https://dgc-trusttest.qr.gv.at"
 
 
 mkdir -p "${TRUST_DIR}"
