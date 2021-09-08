@@ -534,13 +534,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
                 
                 #ticket-modal-box .content-wrapper {
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    text-align: center;
-                    align-items: center;
-                    row-gap: 2em;
-                    height: 100%;
-                    display: flex;
+                    display: block
                 }
                 
                 .foto-container {
@@ -572,20 +566,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     display: flex;
                 }
                 
-                #ticket-modal-content div {
-                    height: 100%;
-                }
-                
                 #ticket-modal-box .modal-header, #ticket-modal-content {
                     padding-top: 10px;
                 }
                 
                 .foto-container {
-                    width: 80%;
+                    width: 100%;
+                    padding: 0px 20px 20px 20px;
                 }
                 
                 .proof-container, .information-container {
-                    padding: 30px 10px; 
+                    padding: 20px; 
                     background-color: #245b78;
                     color: white;
                 }
@@ -608,7 +599,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
                 
                 #qr-code-hash {
-                    width: 90%;
+                    width: 100%;
                 }
             }
         `;
@@ -681,7 +672,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                   
                                     <div class="information-container ${classMap({hidden: this.hasValidProof})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
-                                            <span class="header">
+                                            <span>
                                                     <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
                                             </span>
                                             <slot name="greenlight-reference">
@@ -692,7 +683,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                   
                                     <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
                                         <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                            <span class="header">
+                                            <span>
                                                 <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
                                             </span>
                                         </div>
