@@ -51,27 +51,6 @@ npx @digital-blueprint/cli update-app greenlight
 
 ## Activities
 
-### dbp-green-pass-activation
-
-Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
-
-#### Attributes
-
-- `lang` (optional, default: `de`): set to `de` or `en` for German or English
-    - example `lang="de"`
-- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
-    - example `entry-point-url="https://api-dev.tugraz.at"`
-- `auth` object: you need to set that object property for the auth token
-    - example auth property: `{token: "THE_BEARER_TOKEN"}`
-    - note: most often this should be an attribute that is not set directly, but subscribed at a provider
-- `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
-    - example `gp-search-hash-string="HC1"`
-
-#### Slots
-
-You use templates tags to inject slots into the activity.
-These templates will be converted to div containers when the page is loaded and will not show up before that.
-
 ### dbp-acquire-3g-ticket
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
@@ -138,6 +117,76 @@ Example:
   </template>
 </dbp-acquire-3g-ticket>
 ```
+
+
+### dbp-show-active-tickets
+
+Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
+
+#### Attributes
+
+- `lang` (optional, default: `de`): set to `de` or `en` for German or English
+  - example `lang="de"`
+- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
+  - example `entry-point-url="https://api-dev.tugraz.at"`
+- `auth` object: you need to set that object property for the auth token
+  - example auth property: `{token: "THE_BEARER_TOKEN"}`
+  - note: most often this should be an attribute that is not set directly, but subscribed at a provider
+- `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
+  - example `gp-search-hash-string="HC1"`
+- `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
+  - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
+- `preselected-option`: String used in the Ticket, to show where it should be valid
+  - example `preselected-option="University"`
+
+
+#### Slots
+
+You use templates tags to inject slots into the activity.
+These templates will be converted to div containers when the page is loaded and will not show up before that.
+
+##### greenlight-reference
+
+The content of this slot will be shown in a ticket if there is now 3-G-evidence was found.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="greenlight-reference">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter Eintrittsticket erstellen anfordern.
+      </div>
+      <div slot="en">
+        No valid stored 3-G-evidence was found. Show your proof manually or upload a new proof by requesting a new ticket under Create entry ticket.
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### greenlight-reference
+
+The content of this slot will be shown in a ticket if there is a selfetest found.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="greenlight-reference-invalid">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter Eintrittsticket erstellen anfordern.
+      </div>
+      <div slot="en">
+        No valid stored 3-G-evidence was found. Show your proof manually or upload a new proof by requesting a new ticket under Create entry ticket.
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
 
 ### Design Note
 

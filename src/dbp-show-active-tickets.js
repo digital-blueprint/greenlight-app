@@ -577,8 +577,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 
                 .proof-container, .information-container {
                     padding: 20px; 
-                    background-color: #245b78;
-                    color: white;
+                    background-color: var(--dbp-primary-bg-color);
+                    color: var(--dbp-primary-text-color);
                 }
                 
                 .proof-container .int-link-external, .information-container .int-link-external{
