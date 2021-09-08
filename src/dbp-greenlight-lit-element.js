@@ -13,12 +13,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.auth = {};
 
         this.person = {};
+
+        this.searchHashString = '';
+        this.searchSelfTestStringArray = '';
     }
 
     static get properties() {
         return {
             ...super.properties,
             auth: { type: Object },
+            searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
+            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
         };
     }
 

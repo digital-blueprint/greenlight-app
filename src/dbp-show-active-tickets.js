@@ -17,23 +17,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._i18n = createInstance();
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
-        this.activeTickets = [];
-        this.activeTicketsCounter = 0;
         this.loading = false;
-        this._initialFetchDone = false;
-        this.locationName = 'TU Graz';
-        this.identifier = '';
+
+        this.activeTickets = [];
+        this.locationName = 'Ticket';
         this.currentTicket = {};
-        this.currentTicketImage = '';
-
-        this.searchHashString = '';
         this.greenPassHash = '';
-        this.isSelfTest = false;
         this.hasValidProof = false;
+        this.isSelfTest = false;
 
-        this.preCheck = true;
-        this.error = false; // TODO
         this.setTimeoutIsSet = false;
+        this.timer = '';
 
     }
 
@@ -51,21 +45,21 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ...super.properties,
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            activeTickets: { type: Array, attribute: false },
-            activeTicketsCounter: { type: Number, attribute: false },
-            initialTicketsLoading: { type: Boolean, attribute: false },
             loading: { type: Boolean, attribute: false },
-            locationName: { type: String, attribute: false },
-            identifier: { type: String, attribute: false },
-            greenPassHash: { type: String, attribute: false },
-            preCheck: { type: Boolean, attribute: false },
-            hasValidProof: { type: Boolean, attribute: false },
-            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
-            searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
+            activeTickets: { type: Array, attribute: false },
+            locationName: { type: String, attribute: 'preselected-option' },
             currentTicket: { type: Object, attribute: false },
-            currentTicketImage: { type: String, attribute: false },
+            greenPassHash: { type: String, attribute: false },
+            hasValidProof: { type: Boolean, attribute: false },
+            isSelfTest: { type: Boolean, attribute: false },
         };
     }
+
+    disconnectedCallback() {
+        clearTimeout(this.timer);
+        super.disconnectedCallback();
+    }
+
 
     connectedCallback() {
         super.connectedCallback();
@@ -85,8 +79,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     loginCallback() {
         super.loginCallback();
-
         this.getListOfActiveTickets();
+        this.generateQrCode();
     }
 
     parseActiveTickets(response) {
@@ -103,7 +97,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return list;
     }
 
-    async sendDeleteTicketRequest() {
+    /**
+     * Sends a delete Ticket request
+     *
+     */
+    async sendDeleteTicketRequest(ticketID) {
         const options = {
             method: 'DELETE',
             headers: {
@@ -111,9 +109,32 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             },
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + this.identifier, options);
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID, options);
     }
 
+    /**
+     * Gets a specific ticket
+     *
+     * @param ticketID
+     */
+    async getActiveTicketRequest(ticketID) {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/ld+json',
+                Authorization: "Bearer " + this.auth.token
+            },
+        };
+        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
+
+        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID + '?additional-information=' +
+            encodeURIComponent(additionalInformation), options);
+    }
+
+    /**
+     * Gets the active tickets
+     *
+     */
     async getActiveTicketsRequest() {
         const options = {
             method: 'GET',
@@ -128,32 +149,62 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             encodeURIComponent(additionalInformation), options);
     }
 
-    async updateTicket(that) {
-        let responseData = await that.getActiveTicketsRequest();
+    /**
+     * Updates a ticket and sets a timer for next update
+     * Notifies the user if something went wrong
+     *
+     * @param that
+     * @param ticket
+     */
+    async updateTicket(that, ticket) {
+        const i18n = this._i18n;
+
+        let responseData = await that.getActiveTicketRequest(ticket.identifier);
         let responseBody = await responseData.clone().json();
 
-        if(responseData.status === 200) {
-            that.currentTicketImage = responseBody['hydra:member'][0].image || '';
-            that.error = false;
+
+        if (responseData.status === 404) { // Ticket not found
+            that.getListOfActiveTickets();
+            send({
+                "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
+                "body":  i18n.t('show-active-tickets.delete-ticket-notfound-body', { place: this.locationName }),
+                "type": "warning",
+                "timeout": 5,
+            });
+            return false;
+        } else if (responseData.status === 200) { // Success
+            that.currentTicket = responseBody;
             const that_ = that;
             if (!this.setTimeoutIsSet) {
                 that_.setTimeoutIsSet = true;
-                setTimeout(function () {
-                    that_.updateTicket(that_);
+                that_.timer = setTimeout(function () {
+                    that_.updateTicket(that_, ticket);
                     that_.setTimeoutIsSet = false;
-                }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
+                }, responseBody.imageValidFor * 1000 + 1000 || 3000);
             }
-        } else {
-            that.error = true;
+            return true;
+        } else {  // Other Error
+            that.getListOfActiveTickets();
+            send({
+                "summary": i18n.t('show-active-tickets.other-error-title'),
+                "body":  i18n.t('show-active-tickets.other-error-body'),
+                "type": "danger",
+                "timeout": 5,
+            });
+            return false;
         }
     }
 
+    /**
+     * Generate a QR Code at #qr-code-hash
+     * if a valid local stored evidence is found
+     *
+     */
     async generateQrCode() {
         this.loading = true;
 
         await this.checkForValidProofLocal();
         if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
-            this.loading = true;
             let typeNumber = 0;
             let errorCorrectionLevel = 'H';
             let qr = qrcode(typeNumber, errorCorrectionLevel);
@@ -163,40 +214,61 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             opts.cellSize = 2;
             opts.margin = 2;
             opts.scalable = true;
-            this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
+            if (this._("#qr-code-hash"))
+                this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
         } else {
-            console.log("wrong code detected");
             this.hasValidProof = false;
             this.isSelfTest = false;
         }
         this.loading = false;
-        this.preCheck = false;
-
     }
 
     /**
-     * Get a list of active tickets
+     * Generate a QR Code if a hash is avaible and valid,
+     * updates the ticket and shows it in modal view
      *
-     * @returns {Array} list
+     * @param ticket
      */
-    async getListOfActiveTickets() {
-        this.initialTicketsLoading = !this._initialFetchDone;
-        try {
-            let response = await this.getActiveTicketsRequest();
-            let responseBody = await response.clone().json();
-            if (responseBody !== undefined && responseBody.status !== 403) {
-                this.activeTickets = this.parseActiveTickets(responseBody);
-                this.activeTicketsCounter++;
+    async showTicket(ticket) {
+        await this.generateQrCode();
+        let success = await this.updateTicket(this, ticket);
+        if (success) {
+            this.currentTicket = ticket;
+            if (this._('#show-ticket-modal')) {
+                MicroModal.show(this._('#show-ticket-modal'), {
+                    disableScroll: true,
+                    onClose: modal => {
+                        this.loading = false;
+                    },
+                });
             }
-        } finally {
-            this.initialTicketsLoading = false;
-            this._initialFetchDone = true;
         }
     }
 
+    /**
+     * Sends a delete Ticket Request for the specific entry,
+     * Checks the response and update the listview
+     *
+     * @param ticket
+     */
+    async deleteTicket(ticket) {
+        let response = await this.sendDeleteTicketRequest(ticket.identifier);
+        let responseBody = await response.clone();
+        await this.checkDeleteTicketResponse(responseBody);
+
+        response = await this.getActiveTicketsRequest();
+        await this.checkActiveTicketsRequest(response);
+    }
+
+    /**
+     * Checks the response from DeleteTicketRequest
+     * and notify the user
+     *
+     * @param response
+     */
     async checkDeleteTicketResponse(response) {
         const i18n = this._i18n;
-
+        this.locationName = '';
         switch(response.status) {
             case 204:
                 send({
@@ -206,12 +278,19 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "timeout": 5,
                 });
                 //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
-                this.locationName = '';
-                this.identifier = '';
-
                 break;
 
-            default: //TODO error handling - more cases
+            case 404:
+                send({
+                    "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
+                    "body":  i18n.t('show-active-tickets.delete-ticket-notfound-body', { place: this.locationName }),
+                    "type": "warning",
+                    "timeout": 5,
+                });
+                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketNotfound', 'name': this.location.name});
+                break;
+
+            default:
                 send({
                     "summary": i18n.t('show-active-tickets.other-error-title'),
                     "body":  i18n.t('show-active-tickets.other-error-body'),
@@ -222,78 +301,45 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    // async checkRefreshTicketResponse(response) {
-    //     const i18n = this._i18n;
-
-    //     switch(response.status) {
-    //         case 201:
-    //             send({
-    //                 "summary": i18n.t('show-active-tickets.refresh-ticket-success-title'),
-    //                 "body":  i18n.t('show-active-tickets.refresh-ticket-success-body', { place: this.locationName }),
-    //                 "type": "success",
-    //                 "timeout": 5,
-    //             });
-    //             //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
-    //             this.locationName = '';
-    //             this.identifier = '';
-
-    //             break;
-
-    //         default: //TODO error handling - more cases
-    //             send({
-    //                 "summary": i18n.t('show-active-tickets.other-error-title'),
-    //                 "body":  i18n.t('show-active-tickets.other-error-body'),
-    //                 "type": "danger",
-    //                 "timeout": 5,
-    //             });
-    //             break;
-    //     }
-    // }
-
-    async showTicket(event, ticket) {
-        await this.generateQrCode();
-        await this.updateTicket(this);
-
-        this.currentTicket = ticket;
-        MicroModal.show(this._('#show-ticket-modal'), {
-            disableScroll: true,
-            onClose: modal => {
-                this.statusText = "";
-                this.loading = false;
-            },
-        });
+    /**
+     * Get a list of active tickets
+     *
+     */
+    async getListOfActiveTickets() {
+        let response = await this.getActiveTicketsRequest();
+        await this.checkActiveTicketsRequest(response);
     }
 
-    // async refreshTicket(event, entry) {
-    //     this.locationName = entry.place;
-    //     let response = await this.sendCreateTicketRequest();
-    //     await this.checkRefreshTicketResponse(response);
+    /**
+     * Checks the response from getActiveTicketsRequest
+     * updates the ticket list
+     * and notify the user if something went wrong
+     *
+     * @param response
+     */
+    async checkActiveTicketsRequest(response) {
+        const i18n = this._i18n;
 
-    //     response = await this.getActiveTicketsRequest();
-    //     let responseBody = await response.json();
-    //     if (responseBody !== undefined && responseBody.status !== 403) {
-    //         this.activeTickets = this.parseActiveTickets(responseBody);
-    //         this.activeTicketsCounter++;
-    //     }
-    // }
-
-   async deleteTicket(event, entry) {
-        this.identifier = entry.identifier;
-        let response = await this.sendDeleteTicketRequest();
-        let responseBody = await response.clone();
-        await this.checkDeleteTicketResponse(responseBody);
-        
-        response = await this.getActiveTicketsRequest();
-        responseBody = await response.clone().json();
-        if (responseBody !== undefined && responseBody.status !== 403) {
+        let responseBody = await response.clone().json();
+        if (responseBody !== undefined && response.status === 200) {
             this.activeTickets = this.parseActiveTickets(responseBody);
-            this.activeTicketsCounter--;
+        } else {
+            send({
+                "summary": i18n.t('show-active-tickets.other-error-title'),
+                "body":  i18n.t('show-active-tickets.other-error-body'),
+                "type": "danger",
+                "timeout": 5,
+            });
         }
-
     }
 
-    closeDialog(e) {
-        MicroModal.close(this._('#show-ticket-modal'));
+    /**
+     * Close modal dialog #show-ticket-modal
+     *
+     */
+    closeDialog() {
+        if (this._('#show-ticket-modal'))
+            MicroModal.close(this._('#show-ticket-modal'));
     }
 
     static get styles() {
@@ -318,7 +364,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .foto-container {
                 width: 60%;
             }
-            
+
+            .qr-code-wrapper {
+                width: 100%;
+            }
+
+
             .self-test-qr {
                 width: 40%;
             }
@@ -330,11 +381,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin: 0em auto;
             }
             
-            .qr-code-wrapper {
-
-                width: 100%;
+             #qr-code-hash img {
+                margin: auto;
+                display: block;
             }
-
+            
             .self-test-qr #qr-code-hash {
                 margin: 1em auto;
             }
@@ -395,33 +446,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: baseline;
             }
 
-            #ticket-modal-box .modal-header h2 {
-                font-size: 1.2rem;
-                padding-right: 5px;
-            }
-
             #ticket-modal-box .content-wrapper{
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-gap: 10px;
                 grid-auto-rows: 100%;
             }
-
-            #ticket-modal-box .content-wrapper label {
-                display: block;
-                width: 100%;
-                text-align: left;
-            }
-
-            #ticket-modal-box .modal-footer {
-                padding-top: 15px;
-            }
-
-            #ticket-modal-box .modal-footer .modal-footer-btn {
-                display: flex;
-                justify-content: space-between;
-                padding-bottom: 15px;
-            }
+            
             
             #ticket-modal-box .modal-header {
                 padding: 0px;
@@ -430,15 +461,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #ticket-modal-content {
                 padding: 0px;
                 align-items: start;
-            }
-
-            #ticket-modal-box .modal-header h2 {
-                text-align: left;
-            }
-            
-            #qr-code-hash img {
-                margin: auto;
-                display: block;
             }
             
             .hidden {
@@ -576,8 +598,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 #qr-code-hash {
                     width: 90%;
                 }
-               
-                
             }
         `;
     }
@@ -585,14 +605,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
 
-        if (this.isLoggedIn() && !this.isLoading() && !this.loading && this.preCheck) {
-            this.generateQrCode();
-        }
-
-        if (this.isLoggedIn() && !this.isLoading() && !this._initialFetchDone && !this.initialTicketsLoading) {
-            // this.getListOfActiveTickets();
-        }
-      //  this.generateQrCode();
 
         return html`
 
@@ -619,19 +631,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 ${this.getReadableDate(ticket.validUntil)}
                             </span>
                             <div class="btn">
-                                <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${(event) => { this.showTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                                <!-- <dbp-loading-button id="refresh-btn" value="${i18n.t('show-active-tickets.refresh-btn-text')}" @click="${(event) => { this.refreshTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.refresh-btn-text')}"></dbp-loading-button>  -->
-                                <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${(event) => { this.deleteTicket(event, ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${() => { this.deleteTicket(ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
                         </div>
                     `)}
-                    <span class="control ${classMap({hidden: this.isLoggedIn() && !this.initialTicketsLoading})}">
+                    <span class="control ${classMap({hidden: this.isLoggedIn()})}">
                         <span class="loading">
                             <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                         </span>
                     </span>
                     
-                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.initialTicketsLoading || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
+                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
                 </div>
 
             </div>
@@ -651,7 +662,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="content-wrapper ${classMap({hidden: this.loading})}">
                                     <div class="left-container">
                                         <div class="foto-container">
-                                            <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
+                                            <img src="${this.currentTicket.image || ''}" alt="Ticketfoto" />
                                         </div>
                                         ${this.getReadableDate(this.currentTicket.validUntil)}
                                     </div>

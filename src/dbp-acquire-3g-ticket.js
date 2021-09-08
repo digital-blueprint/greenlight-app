@@ -107,7 +107,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             location: { type: String, attribute: false },
             showQrContainer: { type: Boolean, attribute: false},
             activationEndTime: { type: String, attribute: false },
-            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
             qrParsingLoading: {type: Boolean, attribute: false},
             status: { type: Object, attribute: false },
             wrongQR : { type: Array, attribute: false },
@@ -127,6 +126,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             message: { type: String, attribute: false },
 
+            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
             searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},

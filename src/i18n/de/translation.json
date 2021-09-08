@@ -95,7 +95,9 @@
     "self-test": "Selbsttest",
     "self-test-link": "Link zum Test",
     "no-evidence": "Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
-    "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen."
+    "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen.",
+    "delete-ticket-notfound-title": "Ticket nicht gefunden!",
+    "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht."
   },
   "valid-till": "Gültig bis: {{clock}} Uhr am",
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
