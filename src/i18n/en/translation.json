@@ -68,7 +68,8 @@
     "create-new-ticket": "Request new ticket",
     "request-ticket-button-text": "Request ticket",
     "confirm-not-checked-title": "Consent not given!",
-    "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences"
+    "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences",
+    "validity-tooltip": "according to the current regulations"
   },
   "show-active-tickets": {
     "title": "Show all active tickets",

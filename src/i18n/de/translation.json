@@ -68,7 +68,8 @@
     "create-new-ticket": "Neues Ticket anfordern",
     "request-ticket-button-text": "Ticket anfordern",
     "confirm-not-checked-title": "Zustimmung nicht erteilt!",
-    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann."
+    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
+    "validity-tooltip": "nach den aktuellen Bestimmungen"
   },
   "show-active-tickets": {
     "title": "Zeige alle aktiven Tickets",
