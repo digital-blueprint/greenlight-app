@@ -140,23 +140,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': action, 'name': JSON.stringify(data)});
     }
 
-    /**
-     * Sends a request to get all certificates
-     *
-     * @returns {object} response
-     */
-    async sendGetCertificatesRequest() {
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
-            },
-        };
-
-        return await this.httpGetAsync(this.entryPointUrl + '/eu-dcc/digital-covid-certificate-reviews', options);
-    }
-
     async sendCreateTicketRequest() {
         let body = {
             // "place": this.location,
@@ -328,40 +311,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         return !gpAlreadySend;
-    }
-
-
-    async checkForValidProof() {
-
-        this.loading = true;
-
-        let responseData = await this.sendGetCertificatesRequest();
-        let status = responseData.status;
-        let responseBody = await responseData.clone().json();
-
-        if (status === 200) { //TODO switch/case
-            console.log('received items: ', responseBody['hydra:totalItems']);
-            if (responseBody['hydra:totalItems'] > 0) {
-                this.isActivated = true;
-                this.activationEndTime = responseBody['hydra:member'][0]['expires'];
-                this.identifier = responseBody['hydra:member'][0]['identifier'];
-                console.log('Found a valid 3G proof for the current user.');
-                this.hasValidProof = true;
-                this.proofUploadFailed = false;
-            } else {
-                this.hasValidProof = false;
-                console.log('Found no valid 3G proof for the current user.');
-            }
-        } else { //TODO request returned an error
-            send({
-                "summary": responseBody['hydra:title'],
-                "body": responseBody['hydra:description'],
-                "type": "danger",
-                "timeout": 5,
-            });
-        }
-
-        this.loading = false;
     }
 
     async checkForValidProofLocal() {
