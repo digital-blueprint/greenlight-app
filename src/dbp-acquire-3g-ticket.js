@@ -16,7 +16,7 @@ import {escapeRegExp, i18nKey} from './utils.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
-import {TooltipElement} from '@dbp-toolkit/tooltip';
+import {InfoTooltip} from '@dbp-toolkit/tooltip';
 
 class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -90,7 +90,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             'dbp-textswitch': TextSwitch,
             'dbp-qr-code-scanner': QrCodeScanner,
             'dbp-file-source': FileSource,
-            'dbp-tooltip': TooltipElement,
+            'dbp-info-tooltip': InfoTooltip,
         };
     }
 
@@ -919,7 +919,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </div>
                     
                     <!-- Create ticket start -->
-                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck})}">
+                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck})}">
                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
                             <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
                                             <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
@@ -1027,7 +1027,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
                                 ${ i18n.t(this.message) }<!-- TODO Search for other uses of this part -->
-                                ${ this.detailedError ? html`<dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + this.detailedError }"></dbp-tooltip>` : `` }
+                                ${ this.detailedError ? html`<dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + this.detailedError }"></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
                         <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
@@ -1040,7 +1040,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
                                             <a href=${link3gRules} target="_blank">
-                                                <dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-tooltip>
+                                                <dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-info-tooltip>
                                             </a>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
