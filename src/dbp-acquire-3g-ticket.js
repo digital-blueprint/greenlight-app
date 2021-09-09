@@ -36,6 +36,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasTicketForThisPlace = false;
         this.location = '';
         this.trustButtonChecked = false;
+        this.detailedError = '';
 
         this.activationEndTime = '';
         this.identifier = '';
@@ -123,6 +124,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             showProofUpload: { type: Boolean, attribute: false },
             proofUploadFailed: { type: Boolean, attribute: false },
             showCreateTicket: { type: Boolean, attribute: false },
+            detailedError: { type: String, attribute: false },
 
             message: { type: String, attribute: false },
 
@@ -178,6 +180,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (this._activationInProgress)
             return;
         this._activationInProgress = true;
+        this.detailedError = '';
 
         try {
             await this.checkQRCode(data);
@@ -199,13 +202,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return;
         this._activationInProgress = true;
         this.loading = true;
+        this.detailedError = '';
 
 
         let data = await this.searchQRInFile();
         if (data === null) {
             send({
                 "summary": i18n.t('acquire-3g-ticket.invalid-title'),
-                // "body": i18n.t('acquire-3g-ticket.no-qr-code-body'),
+                "body": i18n.t('acquire-3g-ticket.invalid-body'),
                 "type": "danger",
                 "timeout": 5,
             });
@@ -858,7 +862,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
-
+        const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
             this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done'));
@@ -908,7 +912,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </slot>
                 </div>    
 
-                <div class="control ${classMap({hidden: !this.preCheck})}">
+                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck})}">
                     <span class="loading">
                         <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                     </span>
@@ -1022,7 +1026,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
-                                ${ i18n.t(this.message) } <!-- TODO Search for other uses of this part -->
+                                ${ i18n.t(this.message) }<!-- TODO Search for other uses of this part -->
+                                ${ this.detailedError ? html`<dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + this.detailedError }"></dbp-tooltip>` : `` }
                             </div>
                         </div>
                         <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
@@ -1034,7 +1039,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? 
                                                 formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-tooltip>
+                                            <a href=${link3gRules} target="_blank">
+                                                <dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-tooltip>
+                                            </a>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
