@@ -192,6 +192,7 @@ export default (async () => {
                 include: [
                     "node_modules/suggestions/**/*.css",
                     "node_modules/select2/**/*.css",
+                    await getPackagePath('tippy.js', '**/*.css'),
                 ],
                 emitFiles: true,
                 fileName: 'shared/[name].[hash][extname]'

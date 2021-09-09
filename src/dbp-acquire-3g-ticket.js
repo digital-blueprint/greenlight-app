@@ -16,8 +16,7 @@ import {escapeRegExp, i18nKey} from './utils.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
-
-//console.log('ok nice!', tippy);
+import {TooltipElement} from '@dbp-toolkit/tooltip';
 
 class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -90,6 +89,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             'dbp-textswitch': TextSwitch,
             'dbp-qr-code-scanner': QrCodeScanner,
             'dbp-file-source': FileSource,
+            'dbp-tooltip': TooltipElement,
         };
     }
 
@@ -1029,7 +1029,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="g-proof-information">
                                 <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
-                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}</strong></span> 
+                                        <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
+                                        <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
+                                            <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? 
+                                                formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}
+                                            </strong>
+                                            <dbp-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-tooltip>
+                                        </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
                                     </span>
