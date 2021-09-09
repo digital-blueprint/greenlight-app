@@ -10,7 +10,6 @@ import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {send} from "@dbp-toolkit/common/notification";
 import qrcode from "qrcode-generator";
-import {securityByObscurity} from './crypto.js';
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -136,7 +135,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 Authorization: "Bearer " + this.auth.token
             },
         };
-        const additionalInformation = await securityByObscurity(this.auth.token, this.hasValidProof ? 'local-proof' : '');
+        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID + '?additional-information=' +
             encodeURIComponent(additionalInformation), options);
@@ -154,7 +153,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 Authorization: "Bearer " + this.auth.token
             },
         };
-        const additionalInformation = await securityByObscurity(this.auth.token, this.hasValidProof ? 'local-proof' : '');
+        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
             encodeURIComponent(additionalInformation), options);

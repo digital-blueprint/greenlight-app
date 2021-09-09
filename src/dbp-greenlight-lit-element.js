@@ -4,7 +4,7 @@ import {send} from "@dbp-toolkit/common/notification";
 import {parseGreenPassQRCode, i18nKey} from "./utils";
 import {hcertValidation} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
-import {generateKey, encrypt, decrypt} from "./crypto.js";
+import {generateKey, encrypt, decrypt, securityByObscurity} from "./crypto.js";
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -160,7 +160,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let body = {
             // "place": this.location,
             "consentAssurance": this.isConfirmChecked, 
-            "additionalInformation": this.hasValidProof && !this.isSelfTest ? 'local-proof' : '',
+            "additionalInformation": await securityByObscurity(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : ''),
         };
 
         const options = {
