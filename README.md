@@ -118,7 +118,6 @@ Example:
 </dbp-acquire-3g-ticket>
 ```
 
-
 ### dbp-show-active-tickets
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
@@ -139,7 +138,6 @@ Note that you will need a Keycloak server along with a client id for the domain 
 - `preselected-option`: String used in the Ticket, to show where it should be valid
   - example `preselected-option="University"`
 
-
 #### Slots
 
 You use templates tags to inject slots into the activity.
@@ -147,7 +145,7 @@ These templates will be converted to div containers when the page is loaded and 
 
 ##### greenlight-reference
 
-The content of this slot will be shown in a ticket if there is now 3-G-evidence was found.
+The content of this slot will be shown in a ticket if there was no valid 3-G-evidence found.
 
 Example:
 
@@ -166,9 +164,9 @@ Example:
 </template>
 ```
 
-##### greenlight-reference
+##### greenlight-reference-invalid
 
-The content of this slot will be shown in a ticket if there is a selfetest found.
+The content of this slot will be shown in a ticket if there was a self-test found.
 
 Example:
 
@@ -186,7 +184,6 @@ Example:
   </div>
 </template>
 ```
-
 
 ### Design Note
 
