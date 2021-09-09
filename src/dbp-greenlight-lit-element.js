@@ -4,7 +4,8 @@ import {send} from "@dbp-toolkit/common/notification";
 import {parseGreenPassQRCode, i18nKey} from "./utils";
 import {hcertValidation} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
-import {generateKey, encrypt, decrypt, securityByObscurity} from "./crypto.js";
+import {securityByObscurity} from "./crypto.js";
+import * as storage from "./storage.js";
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -368,56 +369,22 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         console.log("checkForValidProofLocal");
         this.loading = true;
 
-        let key, salt, cipher, iv, maxTime;
-        let uid = this.auth['person-id'];
-
-        cipher = localStorage.getItem("dbp-gp-" + uid);
-        salt = localStorage.getItem("dbp-gp-salt-" + uid);
-        iv = localStorage.getItem("dbp-gp-iv-" + uid);
-        maxTime = localStorage.getItem("dbp-gp-maxTime-" + uid);
-
-        if (maxTime) {
-            let actualTime = Date.now();
-
-            if (actualTime - maxTime >= 0) {
-                await this.clearLocalStorage();
-                console.log("Selftest invalid", actualTime - maxTime);
-                this.loading = false;
-                if (this.preCheck)
-                    this.preCheck = false;
-            }
-        }
-
         try {
-            let salt_binary_string =  window.atob(salt);
-            let salt_bytes = new Uint8Array( salt_binary_string.length );
-            for (let i = 0; i < salt_binary_string.length; i++)        {
-                salt_bytes[i] = salt_binary_string.charCodeAt(i);
+            let hash = null;
+            try {
+                hash = await storage.fetch(this.auth['person-id'], this.auth['subject']);
+            } catch (error) {
+                console.log("checkForValidProofLocal Error", error);
             }
 
-            let iv_binary_string =  window.atob(iv);
-            let iv_bytes = new Uint8Array( iv_binary_string.length );
-            for (let i = 0; i < iv_binary_string.length; i++)        {
-                iv_bytes[i] = iv_binary_string.charCodeAt(i);
-            }
-
-            [key, salt] = await generateKey(this.auth['subject'], salt_bytes);
-
-
-            let hash = await decrypt(cipher, key, iv_bytes);
-            if (hash && typeof hash !== 'undefined' && hash !== -1) {
+            if (hash !== null) {
                 await this.checkQRCode(hash);
             }
-            this.loading = false;
-            if (this.preCheck)
-                this.preCheck = false;
-        } catch (error) {
-            console.log("checkForValidProofLocal Error", error);
+        } finally {
             this.loading = false;
             if (this.preCheck)
                 this.preCheck = false;
         }
-
     }
 
     async checkQRCode(data) {
@@ -618,12 +585,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async encryptAndSaveHash() {
-        let key, salt, cipher, iv;
-        let uid = this.auth['person-id'];
-
-        [key, salt] = await generateKey(this.auth['subject']);
-        [cipher, iv] = await encrypt(key, this.greenPassHash);
-
         if (navigator.storage && navigator.storage.persist) {
             if (await navigator.storage.persist())
                 console.log("Storage will not be cleared except by explicit user action");
@@ -631,22 +592,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 console.log("Storage may be cleared by the UA under storage pressure.");
         }
 
-        localStorage.setItem("dbp-gp-" + uid, cipher);
-        localStorage.setItem("dbp-gp-salt-" + uid, salt);
-        localStorage.setItem("dbp-gp-iv-" + uid, iv);
+        let expiresAt;
         if (this.isSelfTest) {
-            localStorage.setItem("dbp-gp-maxTime-" + uid, Date.now() + 60000*1440); //24 hours
+            expiresAt = Date.now() + 60000*1440; //24 hours
         }
 
+        console.log("save: ", this.greenPassHash);
+        await storage.save(this.greenPassHash, this.auth['person-id'], this.auth['subject'], expiresAt);
     }
 
     async clearLocalStorage() {
-        let uid = this.auth['person-id'];
-
-        localStorage.removeItem("dbp-gp-" + uid);
-        localStorage.removeItem("dbp-gp-salt-" + uid);
-        localStorage.removeItem("dbp-gp-iv-" + uid);
-        localStorage.removeItem("dbp-gp-maxTime-" + uid);
-
+        await storage.clear(this.auth['person-id']);
     }
 }

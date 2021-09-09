@@ -53,7 +53,6 @@ export async function generateKey(passphraseKey, salt) {
 export async function encrypt(key, plaintext) {
     let enc = new TextEncoder();
     let iv = window.crypto.getRandomValues(new Uint8Array(24));
-    console.log("encrypt: ", plaintext);
 
     let cipher = await window.crypto.subtle.encrypt(
         {
@@ -89,9 +88,6 @@ export async function encrypt(key, plaintext) {
  * @returns {string}
  */
 export async function decrypt(ciphertext, key, iv) {
-    if (!ciphertext || !key || !iv) {
-        return -1;
-    }
     let binary_string = window.atob(ciphertext);
     let bytes = new Uint8Array(binary_string.length);
     for (let i = 0; i < binary_string.length; i++) {
@@ -100,20 +96,14 @@ export async function decrypt(ciphertext, key, iv) {
     let cipherArrayBuffer = bytes.buffer;
 
     let dec = new TextDecoder("utf-8");
-    let plaintext;
-    try {
-        plaintext = await window.crypto.subtle.decrypt(
-            {
-                name: "AES-GCM",
-                iv: iv,
-            },
-            key,
-            cipherArrayBuffer
-        );
-    } catch (error) {
-        console.error("Decryption error");
-        return -1;
-    }
+    let plaintext = await window.crypto.subtle.decrypt(
+        {
+            name: "AES-GCM",
+            iv: iv,
+        },
+        key,
+        cipherArrayBuffer
+    );
 
     return dec.decode(plaintext);
 }
