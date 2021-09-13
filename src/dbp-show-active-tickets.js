@@ -489,6 +489,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-left: 5px;
             }
             
+            .red {
+                color: var(--dbp-override-danger-bg-color);
+            }
+            
+            .green {
+                color: var(--dbp-override-success-bg-color);
+            }
+            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
@@ -597,16 +605,31 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
-                                <span>${i18n.t('show-active-tickets.entry-ticket')}: <strong>${this.locationName}</strong></span>
-                                <span>
-                                    ${i18n.t('valid-till')}
-                                    ${i18n.t('date-time', {clock: this.person.validUntil ?
-                                    this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
-                                    <dbp-info-tooltip class="tooltip" text-content='<a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip')}</a>' interactive></dbp-info-tooltip>
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: <strong>${this.locationName}</strong></h3>
+                                <span class="header ${classMap({hidden: !this.hasValidProof})}">
+                                    <span> <b>Ticketstatus: <span class="green">
+                                        ${i18n.t('valid-till')}
+                                        ${i18n.t('date-time', {clock: this.person.validUntil ?
+                                         this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
+                                        </span>
+                                        <dbp-info-tooltip class="tooltip" text-content='<a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip')}</a>' interactive></dbp-info-tooltip>
+                                    </span></b>
+                                     <span>
+                                        Auf diesem Gerät wurde ein valider 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                     </span>
+                                </span>
+                                <span class="header ${classMap({hidden: this.hasValidProof})}">
+                                   <p> <b>Ticketstatus: <span class="red">Ungültig</span></b>
+                                   Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
+                                   Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter Eintrittsticket erstellen anfordern. 
+                                   </p>
                                 </span>
                             </span>
                             <div class="btn">
-                                <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}" type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket"> 
+                                    <button class="button">Neues Ticket anfordern</button>
+                                </a>
                                 <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${() => { this.deleteTicket(ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
                         </div>

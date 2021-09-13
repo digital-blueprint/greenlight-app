@@ -1052,7 +1052,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span class="header">
                                         <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
                                         <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
-                                            <strong>${i18n.t('valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
+                                            <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
                                                 this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
                                             <dbp-info-tooltip text-content='<a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip')}</a>' interactive></dbp-info-tooltip>

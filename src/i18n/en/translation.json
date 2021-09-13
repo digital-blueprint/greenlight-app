@@ -42,6 +42,7 @@
     "confirm-checkbox-valid-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
     "confirm-checkbox-no-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
     "3g-proof-label-text": "Import 3-G-evidence",
+    "valid-till": "Valid until: ",
     "remove-proof": "Remove evidence",
     "found-valid-3g-preCheck": "Stored valid 3-G-evidence could be found.",
     "found-valid-3g": "A valid 3-G-evidence was imported.",
@@ -67,7 +68,7 @@
     "create-new-ticket": "Request new ticket",
     "request-ticket-button-text": "Request ticket",
     "confirm-not-checked-title": "Consent not given!",
-    "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences",
+    "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences"
   },
   "show-active-tickets": {
     "entry-ticket": "Entry Ticket",

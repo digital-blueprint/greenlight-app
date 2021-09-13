@@ -45,6 +45,7 @@
     "remove-proof": "Nachweis entfernen",
     "found-valid-3g-preCheck": "Es wurden lokal gespeicherte gültige 3-G-Informationen gefunden.",
     "found-valid-3g": "Es wurde ein gültiger 3-G-Nachweis importiert.",
+    "valid-till": "Gültig bis: ",
     "found-valid-selftest-preCheck": "Es wurde ein lokal gespeicherter Selbsttest gefunden.",
     "found-valid-selftest": "Es wurde ein Selbsttest gefunden.",
     "invalid-document": "Der 3-G-Nachweis ist aktuell nicht für den Eintritt gültig.",
@@ -67,7 +68,7 @@
     "create-new-ticket": "Neues Ticket anfordern",
     "request-ticket-button-text": "Ticket anfordern",
     "confirm-not-checked-title": "Zustimmung nicht erteilt!",
-    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
+    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann."
   },
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",
@@ -99,7 +100,7 @@
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht."
   },
-  "validity-tooltip": "Nach den aktuellen Bestimmungen",
+  "validity-tooltip": "Nach den aktuellen Bestimmungen.",
   "valid-till": "Voraussichtlich gültig bis: ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
