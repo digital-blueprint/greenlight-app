@@ -102,7 +102,7 @@
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht."
   },
   "valid-till": "Gültig bis: {{clock}} Uhr am",
-  "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
+  "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",
   "file-sink": {
     "modal-close": "Schließen"
