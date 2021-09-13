@@ -60,8 +60,6 @@
     "self-test-information": "Please check whether the evidence is still valid.",
     "3g-proof": "3-G-evidence",
     "3g-proof-status": "Status",
-    "3g-proof-status-valid-1": "valid until ",
-    "3g-proof-status-valid-2": "{{clock}} on {{date}}",
     "3g-proof-proof-from": "From",
     "3g-proof-birthdate": "Birthdate",
     "trust-and-save-1": "I agree to import my 3-G evidence and store this data on my device.",
@@ -70,9 +68,9 @@
     "request-ticket-button-text": "Request ticket",
     "confirm-not-checked-title": "Consent not given!",
     "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences",
-    "validity-tooltip": "according to the current regulations"
   },
   "show-active-tickets": {
+    "entry-ticket": "Entry Ticket",
     "title": "Show all active tickets",
     "description": "Here you can see the list of all valid tickets. You have to show them in case of a manual control.",
     "no-tickets-message": "You do not have any valid tickets!",
@@ -101,7 +99,9 @@
     "delete-ticket-notfound-title": "Ticket not found!",
     "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted."
   },
-  "valid-till": "Valid until: {{clock}} on",
+  "validity-tooltip": "According to the current regulations",
+  "valid-till": "Probably valid until: ",
+  "date-time": "{{clock}} on {{date}}",
   "error-login-message": "You need to be logged in to use this function!",
   "loading-message": "Loading...",
   "file-sink": {

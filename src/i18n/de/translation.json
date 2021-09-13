@@ -60,8 +60,6 @@
     "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
     "3g-proof": "3-G-Nachweis",
     "3g-proof-status": "Status",
-    "3g-proof-status-valid-1": "gültig bis ",
-    "3g-proof-status-valid-2": "{{clock}} Uhr am {{date}}",
     "3g-proof-proof-from": "Von",
     "3g-proof-birthdate": "Geburtsdatum",
     "trust-and-save-1": "Ich stimme zu, meinen 3-G-Nachweis zu importieren und diese Daten auf meinem Gerät zu speichern.",
@@ -70,9 +68,9 @@
     "request-ticket-button-text": "Ticket anfordern",
     "confirm-not-checked-title": "Zustimmung nicht erteilt!",
     "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
-    "validity-tooltip": "nach den aktuellen Bestimmungen"
   },
   "show-active-tickets": {
+    "entry-ticket": "Eintrittsticket",
     "title": "Zeige alle aktiven Tickets",
     "description": "Hier können Sie die Liste aller gültigen Tickets sehen. Diese müssen Sie im Falle einer manuellen Kontrolle vorweisen.",
     "no-tickets-message": "Sie besitzen derzeit keine gültigen Tickets!",
@@ -101,8 +99,10 @@
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht."
   },
-  "valid-till": "Gültig bis: {{clock}} Uhr am",
-  "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
+  "validity-tooltip": "Nach den aktuellen Bestimmungen",
+  "valid-till": "Voraussichtlich gültig bis: ",
+  "date-time": "{{clock}} Uhr am {{date}}",
+  "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",
   "file-sink": {
     "modal-close": "Schließen"

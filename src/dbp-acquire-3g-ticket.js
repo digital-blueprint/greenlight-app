@@ -877,20 +877,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.preselectionCheck = false;
         }
 
-        let formatValidUntilDate = (date) => {
-            return date.toLocaleDateString('de-DE', {
-                day: 'numeric',
-                year: 'numeric',
-                month: 'numeric',
-            });
-        };
-
-        let formatValidUntilTime = (date) => {
-            return date.toLocaleTimeString('de-DE', {
-                hour: 'numeric',
-                minute: 'numeric',
-            });
-        };
 
         return html`
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -1066,10 +1052,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span class="header">
                                         <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
                                         <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
-                                            <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? 
-                                                formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}
+                                            <strong>${i18n.t('valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
+                                                this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <dbp-info-tooltip text-content='<a href="${link3gRules}" target="_blank">${i18n.t('acquire-3g-ticket.validity-tooltip')}</a>' interactive></dbp-info-tooltip>
+                                            <dbp-info-tooltip text-content='<a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip')}</a>' interactive></dbp-info-tooltip>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }

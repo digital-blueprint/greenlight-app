@@ -10,6 +10,7 @@ import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {send} from "@dbp-toolkit/common/notification";
 import qrcode from "qrcode-generator";
+import {InfoTooltip} from '@dbp-toolkit/tooltip';
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -38,6 +39,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
           'dbp-mini-spinner': MiniSpinner,
           'dbp-loading-button': LoadingButton,
           'dbp-inline-notification': InlineNotification,
+          'dbp-info-tooltip': InfoTooltip,
         };
     }
 
@@ -483,6 +485,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 width: 60%;
             }
             
+            .tooltip{
+                margin-left: 5px;
+            }
             
             @media only screen
             and (orientation: landscape)
@@ -570,7 +575,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     render() {
         const i18n = this._i18n;
-
+        const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
         return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -592,8 +597,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
-                                <strong>${this.locationName}</strong>
-                                ${this.getReadableDate(ticket.validUntil)}
+                                <span>${i18n.t('show-active-tickets.entry-ticket')}: <strong>${this.locationName}</strong></span>
+                                <span>
+                                    ${i18n.t('valid-till')}
+                                    ${i18n.t('date-time', {clock: this.person.validUntil ?
+                                    this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
+                                    <dbp-info-tooltip class="tooltip" text-content='<a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip')}</a>' interactive></dbp-info-tooltip>
+                                </span>
                             </span>
                             <div class="btn">
                                 <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>

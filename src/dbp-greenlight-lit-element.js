@@ -204,6 +204,21 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
 
+    formatValidUntilDate(date) {
+        return date.toLocaleDateString('de-DE', {
+            day: 'numeric',
+            year: 'numeric',
+            month: 'numeric',
+        });
+    };
+
+    formatValidUntilTime(date) {
+        return date.toLocaleTimeString('de-DE', {
+            hour: 'numeric',
+            minute: 'numeric',
+        });
+    };
+
 
     /**
      * Decode data from QR code
