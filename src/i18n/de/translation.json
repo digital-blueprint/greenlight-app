@@ -45,7 +45,7 @@
     "remove-proof": "Nachweis entfernen",
     "found-valid-3g-preCheck": "Es wurden lokal gespeicherte gültige 3-G-Informationen gefunden.",
     "found-valid-3g": "Es wurde ein gültiger 3-G-Nachweis importiert.",
-    "valid-till": "Gültig bis: ",
+    "valid-till": "gültig bis ",
     "found-valid-selftest-preCheck": "Es wurde ein lokal gespeicherter Selbsttest gefunden.",
     "found-valid-selftest": "Es wurde ein Selbsttest gefunden.",
     "invalid-document": "Der 3-G-Nachweis ist aktuell nicht für den Eintritt gültig.",
@@ -101,6 +101,7 @@
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht."
   },
   "validity-tooltip": "Nach den aktuellen Bestimmungen.",
+  "validity-tooltip-2": "Zu den Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis: ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
