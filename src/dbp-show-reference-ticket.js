@@ -130,7 +130,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 3-G-Nachweis in Form eines validen grünen Passes gefunden, wird das Ticket in Farbe und der Grüne Pass QR Code angezeigt. Dieser kann dann auf
                 <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank">Green Check</a> gescannt und validiert werden. <br>
                 Ist ein Selbsttests des Landes Steiermarks oder Kärntens lokal gespeichert, wird das Ticket in Graustufen und der QR Code vom Selbsttest angezeigt. Dieser QR-Code ist ein Link und kann mit einer QR Code scanner aufgerufen und manuell validiert werden.<br>
-                    Ist kein 3-G-Nachweis vorhanden, wird das Ticket in Graustufen angezeigt und kein QR-Code. Der 3-G-Nachweis muss manuell überprüft werden.
+                    Ist kein 3-G-Nachweis vorhanden, wird das Ticket in Graustufen angezeigt und kein QR-Code. Der 3-G-Nachweis muss zusätzlich erbracht erbracht werden.
                 </p>-->
                     
                     

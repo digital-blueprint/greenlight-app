@@ -571,7 +571,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
 
-
         return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -645,7 +644,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
                                             </span>
                                         </div>
-                                        <div class="selfe-test-evidence ${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <span>
                                                 <h4>${i18n.t('show-active-tickets.self-test-found')}</h4>
                                                 ${i18n.t('show-active-tickets.self-test-information')}
