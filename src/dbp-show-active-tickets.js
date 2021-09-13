@@ -364,53 +364,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${commonStyles.getLinkCss()}
-            
-            .proof-container, .information-container   {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-            }
-            
-            .foto-container {
-                width: 60%;
-            }
-
-            .qr-code-wrapper {
-                width: 100%;
-            }
-
-
-            .self-test-qr {
-                width: 40%;
-            }
-            
-            #qr-code-hash {
-                flex-grow: 1;
-                width: 80%;
-                display: block;
-                margin: 0em auto;
-            }
-            
-             #qr-code-hash img {
-                margin: auto;
-                display: block;
-            }
-            
-            .self-test-qr #qr-code-hash {
-                margin: 1em auto;
-            }
-
-            .foto-container img {
-                width: 100%;
-                display: block;
-            }
-            
-            .proof-container h4 {
-                margin-top: 0px;
-            }
-            
+          
             .ticket {
                 display: flex;
                 justify-content: space-between;
@@ -423,16 +377,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .tickets {
                 margin-top: 2em;
             }
+            
+            .header {
+                display: grid;
+                align-items: center;
+            }           
 
             .btn {
                 display: flex;
                 justify-content: space-between;
                 column-gap: 0.5em;
-            }
-
-            .header {
-                display: grid;
-                align-items: center;
             }
             
             .border {
@@ -444,54 +398,108 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             #ticket-modal-box {
                 display: flex;
                 flex-direction: column;
-                padding: 10px 14px 40px 14px;
-                max-height: 100%;
+                padding: 0px;
+                min-width: 700px;
+                max-width: 700px;
                 min-height: unset;
-                min-width: 680px;
-                max-width: 680px;
                 height: auto;
             }
-
-            #ticket-modal-box .modal-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: baseline;
+            
+            #qr-code-hash svg{
+                display: block;
+                width: 80%;
+                margin: auto;
             }
-
-            #ticket-modal-box .content-wrapper{
+            
+            .green-pass-evidence {
+                line-height: 20px;
+            }
+            
+            .proof-container, .information-container{
+                background-color: #245b78;
+                color: white;
+                padding: 40px 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .proof-container {
+                text-align: center;
+            }
+            
+            .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal{
+                border-bottom: 1px solid white;;
+            }
+            
+            .proof-container .int-link-external::after{
+                filter: invert(100%);
+                -webkit-filter: invert(100%);
+            }
+            
+            .foto-container{
+                width: 80%;
+            }
+            
+            .foto-container img{
+                width: 100%;
+                display: block;
+            }
+            
+            .left-container h3, .proof-container h4, .information-container h4 {
+                margin: 0px 0px 10px 0px;
+            }
+            
+            .left-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 10px;
+                justify-content: space-evenly;
+            }
+            
+            .content-wrapper{
+                padding-right: 44px;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-gap: 10px;
                 grid-auto-rows: 100%;
             }
             
-            
-            #ticket-modal-box .modal-header {
-                padding: 0px;
-            }
-
-            #ticket-modal-content {
-                padding: 0px;
-                align-items: start;
+            .modal-close {
+                position: absolute;
+                right: 10px;
+                top: 5px;
             }
             
             .hidden {
                 display: none;
             }
             
-            .left-container {
-                justify-content: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                row-gap: 1em;
+            .self-test-qr {
+                margin: 20px auto;
+                width: 60%;
             }
-
+            
+            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
                 #ticket-modal-box {
                     height: 100%;
+                    width: 100%;
+                    max-width: unset;
+                    max-heigth: unset;
+                }
+                
+                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper{
+                    height: 100%;                   
+                }
+                
+                .left-container, .proof-container, .information-container{
+                    justify-content: space-evenly;
                 }
             }
 
@@ -499,7 +507,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             and (orientation: portrait)
             and (max-width:768px) {
 
-                .ticket {
+               .ticket {
                     display: block;
                     margin-bottom: 0;
                 }
@@ -525,81 +533,36 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     justify-content: center;
                 }
                 
-                #ticket-modal-box {
+                 #ticket-modal-box {
                     width: 100%;
                     height: 100%;
                     min-width: 100%;
                     min-height: 100%;
-                    padding: 10px;
-                }
-                
-                #ticket-modal-box .content-wrapper {
-                    display: block
-                }
-                
-                .foto-container {
-                    width: 60%;
-                }
-                
-                .proof-container {
-                    width: 100%;
-                }
-
-                #ticket-modal-title {
-                    width: 100%;
-                    text-align: center;
-                    margin: 0px;
-                    line-height: 37px; 
-                }
-                
-                #ticket-modal-box .modal-close {
-                    position: absolute;
-                    right: 20px;
-                }
-                
-                #ticket-modal-box {
                     padding: 0px;
                 }
-
-                #ticket-modal-content {
-                    height: 100%;
+                
+                .left-container{
+                    padding: 11px 20px 20px 20px;
+                }
+                
+                .foto-container, #qr-code-hash svg{
+                    width: 90%;
+                }
+                
+                .content-wrapper{
                     display: flex;
+                    flex-direction: column;
+                    padding: 0px;    
+                    grid-gap: inherit;
+                    min-height: 100vh;
                 }
-                
-                #ticket-modal-box .modal-header, #ticket-modal-content {
-                    padding-top: 10px;
-                }
-                
-                .foto-container {
-                    width: 100%;
-                    padding: 0px 20px 20px 20px;
-                }
-                
+
                 .proof-container, .information-container {
-                    padding: 20px; 
-                    background-color: var(--dbp-primary-bg-color);
-                    color: var(--dbp-primary-text-color);
+                    padding: 20px;
                 }
                 
-                .proof-container .int-link-external, .information-container .int-link-external{
-                    border-bottom: 1px solid white;
-                }
-                
-                .proof-container .int-link-external::after, .information-container .int-link-external:after{
-                    filter: invert(100%);
-                    -webkit-filter: invert(100%);
-                }
-                
-                .proof-container .int-link-internal, .information-container .int-link-internal{
-                    border-bottom: 1px solid white;
-                }
-                
-                .self-test-qr {
-                    width: 60%;
-                }
-                
-                #qr-code-hash {
-                    width: 100%;
+                .information-container  {
+                    flex-grow: 1;
                 }
             }
         `;
@@ -654,16 +617,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <div class="modal-overlay" tabindex="-2" data-micromodal-close>
                     <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
                          aria-labelledby="ticket-modal-title">
-                        <header class="modal-header">
-                            <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
-                            <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
-                                <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
-                            </button>
-                        </header>
                         <main class="modal-content" id="ticket-modal-content">
                             <div class="${classMap({hidden: this.loading})}">
-                                <div class="content-wrapper ${classMap({hidden: this.loading})}">
+                                <div class="content-wrapper">
                                     <div class="left-container">
+                                        <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
                                         <div class="foto-container">
                                             <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
                                         </div>
@@ -682,12 +640,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </div>
                                   
                                     <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
-                                        <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                                        <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                             <span>
                                                 <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
                                             </span>
                                         </div>
-                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                        <div class="selfe-test-evidence ${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <span>
                                                 <h4>${i18n.t('show-active-tickets.self-test-found')}</h4>
                                                 ${i18n.t('show-active-tickets.self-test-information')}
@@ -703,6 +661,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             </slot>
                                         </div>
                                     </div>
+
+                                    <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
+                                        <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                                    </button>
                                 </div>
                             </div>
                             <span class="control ${classMap({hidden: !this.loading})}">
