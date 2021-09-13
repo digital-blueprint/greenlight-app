@@ -120,6 +120,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             showCertificateSwitch: { type: Boolean, attribute: false },
             person: { type: Object, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
+            // preselectionCheck: { type: Boolean, attribute: false },
+            // preCheck: { type: Boolean, attribute: false },
+            
 
             showProofUpload: { type: Boolean, attribute: false },
             proofUploadFailed: { type: Boolean, attribute: false },
@@ -927,7 +930,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             </a>"
                             ></dbp-inline-notification>
                         </div>
-
+                        
                         <dbp-loading-button 
                             type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
                             id="confirm-ticket-btn"
@@ -935,6 +938,32 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             @click="${() => {  this.processStarted = true; }}" 
                             title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
                         ></dbp-loading-button>
+
+                        <!-- ${ !this.preCheck && !this.preselectionCheck ? html`
+                            ${ !this.hasTicket && !this.hasTicketForThisPlace ? html`
+                                <dbp-loading-button 
+                                    type="is-primary" 
+                                    id="confirm-ticket-btn"
+                                    value="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}" 
+                                    @click="${() => {  this.processStarted = true; }}" 
+                                    title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
+                                ></dbp-loading-button>
+                                `: html`
+                                <dbp-loading-button  
+                                    id="confirm-ticket-btn"
+                                    value="${i18n.t('acquire-3g-ticket.create-new-ticket')}" 
+                                    @click="${() => {  this.processStarted = true; }}" 
+                                    title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
+                                ></dbp-loading-button>`
+                            }
+                        `: html`
+                            <div class="control">
+                                <span class="loading">
+                                    <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                                </span>
+                            </div>
+                        `}  -->
+
                     </div>
                     <!-- Create ticket start end -->
 
@@ -1039,9 +1068,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <strong>${i18n.t('acquire-3g-ticket.3g-proof-status-valid-1')}${i18n.t('acquire-3g-ticket.3g-proof-status-valid-2', {clock: this.person.validUntil ? 
                                                 formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <a href=${link3gRules} target="_blank">
-                                                <dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.validity-tooltip')}"></dbp-info-tooltip>
-                                            </a>
+                                            <dbp-info-tooltip text-content='<a href="${link3gRules}" target="_blank">${i18n.t('acquire-3g-ticket.validity-tooltip')}</a>' interactive></dbp-info-tooltip>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
