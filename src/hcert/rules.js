@@ -62,6 +62,25 @@ export class BusinessRules {
     }
 
     /**
+     * Replace a set of rules matching the passed information with
+     * a new rule.
+     *
+     * @param {string} identifier 
+     * @param {string} country
+     * @param {string} [region]
+     * @param {object} newRule
+     */
+    override(identifier, country, region, newRule)
+    {
+        this.rules = this.rules.filter((rule) => {
+            return (rule.Identifier !== identifier) ||
+                (rule.Country !== country) ||
+                (rule.Region !== region);
+        });
+        this.rules.push(newRule);
+    }
+
+    /**
      * Filters based on country and region
      * 
      * @param {string} country 
@@ -163,7 +182,8 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
         if (dateTime < new Date(rule.validFrom) || dateTime > new Date(rule.validTo)) {
             console.warn(`rule ${rule.Identifier} not valid anymore`);
         }
-        let result = certlogic.evaluate(rule.Logic, logicInput);
+        let result = false;
+        result = certlogic.evaluate(rule.Logic, logicInput);
         if (result !== true) {
             errors.push(getRuleErrorDescription(rule));
         }
