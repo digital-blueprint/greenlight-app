@@ -1055,7 +1055,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
                                                 this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <dbp-info-tooltip text-content='${i18n.t('validity-tooltip')} <a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip-2')}</a>' interactive></dbp-info-tooltip>
+                                            <dbp-info-tooltip text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }

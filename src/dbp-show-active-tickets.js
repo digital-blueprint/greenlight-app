@@ -612,7 +612,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         ${i18n.t('date-time', {clock: this.person.validUntil ?
                                          this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                         </span>
-                                        <dbp-info-tooltip class="tooltip" text-content='${i18n.t('validity-tooltip')} <a href="${link3gRules}" target="_blank">${i18n.t('validity-tooltip-2')}</a>' interactive></dbp-info-tooltip>
+                                        <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                     </span></b>
                                      <span>
                                         Auf diesem Gerät wurde ein valider 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
