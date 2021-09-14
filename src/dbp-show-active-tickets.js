@@ -432,7 +432,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 flex-direction: column;
                 padding: 0px;
                 min-width: 700px;
-                max-width: 700px;
+                max-width: 880px;
                 min-height: unset;
                 height: auto;
             }
