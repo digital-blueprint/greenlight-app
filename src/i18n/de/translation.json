@@ -1,8 +1,4 @@
 {
-  "acquire-ticket": {
-    "other-error-title": "Fehler!",
-    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
-  },
   "acquire-3g-ticket": {
     "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) hochladen indem Sie den entsprechenden QR-Code scannen oder ein vorhandenes PDF oder Bild mit QR-Code hochladen und sich damit ein Ticket für einen Ort ausstellen lassen. Dieses wird benötigt, um einen Ort betreten zu dürfen. Alternativ können Sie auch manuell bestätigen, dass Sie einen 3-G-Nachweis bei sich tragen und diesen im Falle einer manuellen Kontrolle nachweisen können.",
     "qr-button-text": "QR-Code scannen",

@@ -389,8 +389,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             default: //TODO error handling - more cases
                /* send({
-                    "summary": i18n.t('acquire-ticket.other-error-title'),
-                    "body": i18n.t('acquire-ticket.other-error-body'),
+                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });*/

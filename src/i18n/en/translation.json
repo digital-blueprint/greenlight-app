@@ -1,8 +1,4 @@
 {
-  "acquire-ticket": {
-    "other-error-title": "Error!",
-    "other-error-body": "An unknown error has occurred."
-  },
   "acquire-3g-ticket": {
     "additional-information": "You can scan a QR code or upload an existing PDF or image to use it to log in directly at a location for a certain period of time. This is needed to be allowed to enter a location. Alternatively, you can manually confirm that you are carrying 3-G-evidence and be able to prove it in case of a manual control.",
     "qr-button-text": "Scan QR code",
