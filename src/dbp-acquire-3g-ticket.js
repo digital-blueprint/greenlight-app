@@ -695,11 +695,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: center;
             }
 
-            .inline-notification {
-                margin-top: 2rem;
-                display: block;
-            }
-
             .show-file {
                 margin-right: 15px;
             }
@@ -790,7 +785,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 animation: 0s linkIconIn;
                 font-size: 103%;
             }
-            
+
+            .inline-notification .int-link-internal {
+                border-bottom-color: var(--dbp-primary-text-color);
+            }
+
             .check-icon{
                 padding: 0px 4px;
             }
@@ -962,11 +961,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <!-- Create ticket start -->
                     <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading })}">
                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof})}">
-                            <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
-                                            <a href='show-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
-                                                <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
-                                            </a>"
-                            ></dbp-inline-notification>
+                            <dbp-inline-notification class="inline-notification">
+                                <div slot="body">
+                                    ${i18n.t('acquire-3g-ticket.manage-tickets-text')}
+                                    <a href='#' @click="${
+                                                (e) => {
+                                                    this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'show-tickets'}}));
+                                                    e.preventDefault();
+                                                }
+                                            }" title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' class="int-link-internal">
+                                        <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
+                                    </a>
+                                </div>
+                            </dbp-inline-notification>
                         </div>
                         
                         ${ !this.preselectionLoading ? html`
