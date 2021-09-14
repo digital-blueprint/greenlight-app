@@ -98,7 +98,8 @@
     "no-evidence": "No valid stored 3-G-evidence was found. Show your evidence manually or upload new evidence by creating a new ticket.",
     "invalid-evidence": "If the 3-G-evidence is no longer valid, you can create a new ticket and upload a new evidence.",
     "delete-ticket-notfound-title": "Ticket not found!",
-    "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted."
+    "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted.",
+    "status": "Status: "
   },
   "validity-tooltip": "According to the current regulations",
   "validity-tooltip-2": "Current regulations",

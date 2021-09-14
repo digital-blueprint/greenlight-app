@@ -497,6 +497,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 color: var(--dbp-override-success-bg-color);
             }
             
+            .ticket h3  {
+                margin-bottom: 0.2rem;
+            }
+            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
@@ -605,24 +609,31 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
-                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: <strong>${this.locationName}</strong></h3>
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
                                 <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                    <span> <b>Ticketstatus: <span class="green">
+                                    <span> <b>${i18n.t('show-active-tickets.status')}<span class="green">
                                         ${i18n.t('valid-till')}
                                         ${i18n.t('date-time', {clock: this.person.validUntil ?
                                          this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                         </span>
                                         <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                     </span></b>
-                                     <span>
-                                        Auf diesem Gerät wurde ein valider 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                     <span class="${classMap({hidden: this.isSelfTest})}">
+                                        Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                      </span>
+                                    <span class="${classMap({hidden: !this.isSelfTest})}">
+                                        Auf diesem Gerät wurde ein Selbsttest gefunden. Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                    </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                   <p> <b>Ticketstatus: <span class="red">Ungültig</span></b>
-                                   Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
-                                   Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter Eintrittsticket erstellen anfordern. 
-                                   </p>
+                                   <b>Status: <span class="red">kein 3-G-Nachweis gefunden</span></b>
+                                   <span>Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
+                                  Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
+                                        <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
+                                        <span>Eintrittsticket erstellen</span>
+                                        </a>
+                                    anfordern.</span>
+                                   
                                 </span>
                             </span>
                             <div class="btn">
