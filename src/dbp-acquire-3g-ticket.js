@@ -868,7 +868,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
-            this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done'));
+            this.loading = true;
+            this.checkForValidProofLocal().then(() =>  {
+                this.loading = false;
+                console.log('3G proof importing done')
+            });
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
