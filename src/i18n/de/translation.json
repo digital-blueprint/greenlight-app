@@ -99,7 +99,8 @@
     "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen.",
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht.",
-    "status": "Status: "
+    "status": "Status: ",
+    "loading-message-ticket": "Ticket wird geladen ..."
   },
   "validity-tooltip": "Nach den aktuellen Bestimmungen.",
   "validity-tooltip-2": "Zu den Bestimmungen",

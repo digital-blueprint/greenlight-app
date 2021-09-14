@@ -331,7 +331,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async checkForValidProofLocal() {
         this.greenPassHash = '';
         console.log("checkForValidProofLocal");
-        this.loading = true;
 
         try {
             let hash = null;
@@ -345,7 +344,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.checkQRCode(hash);
             }
         } finally {
-            this.loading = false;
             if (this.preCheck)
                 this.preCheck = false;
         }
@@ -359,7 +357,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.isSelfTest = false;
             this.hasValidProof = true;
             this.proofUploadFailed = false;
-
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
             return;
         }
@@ -459,22 +456,22 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         switch (status) {
             case 201:
                 // Check Person
-               /* if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
+                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
-                   /* if (!preCheck) {
-                        send({
+                    if (!preCheck) {
+                        this.message = i18nKey('acquire-3g-ticket.not-same-person');
+                       /* send({
                             "summary": i18n.t('acquire-3g-ticket.invalid-title'),
                             // "body": i18n.t('acquire-3g-ticket.invalid-body'),
                             "type": "warning",
                             "timeout": 5,
-                        });
-                    }*/
-                   /* this.proofUploadFailed = true;
+                        });*/
+                    }
+                    this.proofUploadFailed = true;
                     this.hasValidProof = false;
-                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     return;
 
-                }*/
+                }
                 if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
                 {
                     await this.encryptAndSaveHash();

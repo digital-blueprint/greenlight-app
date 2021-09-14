@@ -19,6 +19,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
         this.loading = false;
+        this.ticketLoading = false;
 
         this.activeTickets = [];
         this.locationName = 'Ticket';
@@ -49,6 +50,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             lang: { type: String },
             entryPointUrl: { type: String, attribute: 'entry-point-url' },
             loading: { type: Boolean, attribute: false },
+            ticketLoading: { type: Boolean, attribute: false },
             activeTickets: { type: Array, attribute: false },
             locationName: { type: String, attribute: 'preselected-option' },
             currentTicket: { type: Object, attribute: false },
@@ -84,7 +86,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     loginCallback() {
         super.loginCallback();
         this.getListOfActiveTickets();
-        this.generateQrCode();
+        this.checkForValidProofLocalWrapper();
     }
 
 
@@ -209,14 +211,25 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
+    async checkForValidProofLocalWrapper() {
+        this.loading = true;
+        console.log("start");
+        await this.checkForValidProofLocal();
+        if (this.greenPassHash === '' || this.greenPassHash === -1) {
+            this.hasValidProof = false;
+            this.isSelfTest = false;
+        }
+        console.log("end");
+
+        this.loading = false;
+    }
+
     /**
      * Generate a QR Code at #qr-code-hash
      * if a valid local stored evidence is found
      *
      */
     async generateQrCode() {
-        this.loading = true;
-
         await this.checkForValidProofLocal();
         if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
             let typeNumber = 0;
@@ -234,7 +247,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.hasValidProof = false;
             this.isSelfTest = false;
         }
-        this.loading = false;
     }
 
     /**
@@ -244,19 +256,22 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param ticket
      */
     async showTicket(ticket) {
+        this.ticketLoading = true;
+        if (this._('#show-ticket-modal')) {
+            MicroModal.show(this._('#show-ticket-modal'), {
+                disableScroll: true,
+                onClose: modal => {
+                    this.ticketLoading = false;
+                },
+            });
+        }
         await this.generateQrCode();
         let success = await this.updateTicket(this, ticket);
         if (success) {
             this.currentTicket = ticket;
-            if (this._('#show-ticket-modal')) {
-                MicroModal.show(this._('#show-ticket-modal'), {
-                    disableScroll: true,
-                    onClose: modal => {
-                        this.loading = false;
-                    },
-                });
-            }
+
         }
+        this.ticketLoading = false;
     }
 
     /**
@@ -501,6 +516,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-bottom: 0.2rem;
             }
             
+            .ticket-loading {
+                font-size: 1.3rem;
+            }
+            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
@@ -606,6 +625,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <p>${i18n.t('show-active-tickets.description')}</p>
                 
                 <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+                    <div class="${classMap({hidden: this.loading})}">
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">
                             <span class="header">
@@ -645,13 +665,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             </div>
                         </div>
                     `)}
-                    <span class="control ${classMap({hidden: this.isLoggedIn()})}">
+                    </div>
+                    <span class="control ${classMap({hidden: !this.loading})}">
                         <span class="loading">
                             <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                         </span>
                     </span>
                     
-                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
+                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.loading || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
                 </div>
 
             </div>
@@ -661,60 +682,60 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
                          aria-labelledby="ticket-modal-title">
                         <main class="modal-content" id="ticket-modal-content">
-                            <div class="${classMap({hidden: this.loading})}">
-                                <div class="content-wrapper">
-                                    <div class="left-container">
-                                        <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
-                                        <div class="foto-container">
-                                            <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
-                                        </div>
-                                    </div>
-                                    
-                                  
-                                    <div class="information-container ${classMap({hidden: this.hasValidProof})}">
-                                        <div class="${classMap({hidden: this.hasValidProof})}">
-                                            <span>
-                                                    <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
-                                            </span>
-                                            <slot name="greenlight-reference">
-                                                <p>${i18n.t('show-active-tickets.no-evidence')}</p>
-                                            </slot>
-                                        </div>
-                                    </div>
-                                  
-                                    <div class="proof-container ${classMap({hidden: !this.hasValidProof})}">
-                                        <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                            <span>
-                                                <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
-                                            </span>
-                                        </div>
-                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                                            <span>
-                                                <h4>${i18n.t('show-active-tickets.self-test-found')}</h4>
-                                                ${i18n.t('show-active-tickets.self-test-information')}
-                                                <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
-                                            </span>
-                                        </div>
-                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
-                                            <div id="qr-code-hash"></div>
-                                        </div>
-                                        <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                                            <slot name="greenlight-reference-invalid">
-                                                <p>${i18n.t('show-active-tickets.invalid-evidence')}</p>
-                                            </slot>
-                                        </div>
-                                    </div>
-
-                                    <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
-                                        <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
-                                    </button>
-                                </div>
-                            </div>
-                            <span class="control ${classMap({hidden: !this.loading})}">
-                                    <span class="loading">
-                                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
-                                    </span>
+                            <span class="control ticket-loading ${classMap({hidden: !this.ticketLoading})}">
+                                <span class="loading">
+                                    <dbp-mini-spinner text=${i18n.t('show-active-tickets.loading-message-ticket')}></dbp-mini-spinner>
+                                </span>
                             </span>
+                            
+                            <div class="content-wrapper">
+                                <div class="left-container ${classMap({hidden: this.ticketLoading})}">
+                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
+                                    <div class="foto-container">
+                                        <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
+                                    </div>
+                                </div>
+                                
+                              
+                                <div class="information-container ${classMap({hidden: this.hasValidProof || this.ticketLoading})}">
+                                    <div class="${classMap({hidden: this.hasValidProof})}">
+                                        <span>
+                                                <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
+                                        </span>
+                                        <slot name="greenlight-reference">
+                                            <p>${i18n.t('show-active-tickets.no-evidence')}</p>
+                                        </slot>
+                                    </div>
+                                </div>
+                              
+                                <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
+                                    <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                                        <span>
+                                            <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
+                                        </span>
+                                    </div>
+                                    <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                        <span>
+                                            <h4>${i18n.t('show-active-tickets.self-test-found')}</h4>
+                                            ${i18n.t('show-active-tickets.self-test-information')}
+                                            <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
+                                        </span>
+                                    </div>
+                                    <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
+                                        <div id="qr-code-hash"></div>
+                                    </div>
+                                    <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                                        <slot name="greenlight-reference-invalid">
+                                            <p>${i18n.t('show-active-tickets.invalid-evidence')}</p>
+                                        </slot>
+                                    </div>
+                                </div>
+
+                                <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
+                                    <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                                </button>
+                            </div>
+                            
                         </main>
                         
                     </div>
