@@ -47,7 +47,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.updateComplete.then(() => {
             that.updateReferenceTicket(that);
         });
-
+        
         const that = this;
         window.addEventListener('focus', function() {that.updateReferenceTicket(that);});
 
