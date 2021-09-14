@@ -104,8 +104,8 @@
     "status": "Status: ",
     "loading-message-ticket": "Loading the ticket ..."
   },
-  "validity-tooltip": "According to the current regulations",
-  "validity-tooltip-2": "Current regulations",
+  "validity-tooltip": "According to the ",
+  "validity-tooltip-2": "current regulations",
   "valid-till": "Probably valid until: ",
   "date-time": "{{clock}} on {{date}}",
   "error-login-message": "You need to be logged in to use this function!",

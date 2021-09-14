@@ -104,8 +104,8 @@
     "status": "Status: ",
     "loading-message-ticket": "Ticket wird geladen ..."
   },
-  "validity-tooltip": "Nach den aktuellen Bestimmungen.",
-  "validity-tooltip-2": "Zu den Bestimmungen",
+  "validity-tooltip": "Nach den ",
+  "validity-tooltip-2": "aktuellen Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
