@@ -210,14 +210,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             year: 'numeric',
             month: 'numeric',
         });
-    };
+    }
 
     formatValidUntilTime(date) {
         return date.toLocaleTimeString('de-DE', {
             hour: 'numeric',
             minute: 'numeric',
         });
-    };
+    }
 
 
     /**
@@ -459,7 +459,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
                     if (!preCheck) {
-                        this.message = i18nKey('acquire-3g-ticket.not-same-person');
                        /* send({
                             "summary": i18n.t('acquire-3g-ticket.invalid-title'),
                             // "body": i18n.t('acquire-3g-ticket.invalid-body'),
@@ -467,6 +466,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                             "timeout": 5,
                         });*/
                     }
+                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     return;

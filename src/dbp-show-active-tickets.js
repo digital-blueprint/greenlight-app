@@ -12,6 +12,7 @@ import {send} from "@dbp-toolkit/common/notification";
 import qrcode from "qrcode-generator";
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
 
+
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
         super();
@@ -31,6 +32,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this.setTimeoutIsSet = false;
         this.timer = '';
+
+        this.boundFocusHandler = this.updateTicketWrapper.bind(this);
+
 
     }
 
@@ -63,12 +67,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     disconnectedCallback() {
         clearTimeout(this.timer);
+        window.removeEventListener('focus', this.boundFocusHandler);
         super.disconnectedCallback();
     }
 
 
     connectedCallback() {
         super.connectedCallback();
+        window.addEventListener('focus', this.boundFocusHandler);
     }
 
     update(changedProperties) {
@@ -161,6 +167,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
             encodeURIComponent(additionalInformation), options);
+    }
+
+    /**
+     * Wrapps the function updateTicket,
+     * This is for eventListener, which is bind to this
+     *
+     */
+    updateTicketWrapper() {
+        this.updateTicket(this, this.currentTicket);
     }
 
     /**
@@ -543,15 +558,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             and (orientation: portrait)
             and (max-width:768px) {
 
-               .ticket {
+                .ticket {
                     display: block;
                     margin-bottom: 0;
                 }
-
+                
                 .tickets {
                     display: block;
                 }
-
+                
                 .header {
                     margin-bottom: 0.5rem;
                 }
@@ -559,7 +574,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 #delete-btn {
                     margin-bottom: 2rem;
                 }
-
+    
                 .btn {
                     flex-direction: column;
                     row-gap: 0.5em;
@@ -569,7 +584,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     justify-content: center;
                 }
                 
-                 #ticket-modal-box {
+                #ticket-modal-box {
                     width: 100%;
                     height: 100%;
                     min-width: 100%;
@@ -581,8 +596,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     padding: 11px 20px 20px 20px;
                 }
                 
-                .foto-container, #qr-code-hash svg{
+                .foto-container{
                     width: 90%;
+                }
+                
+                #qr-code-hash svg{
+                    width: 100%;
                 }
                 
                 .content-wrapper{
@@ -592,12 +611,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     grid-gap: inherit;
                     min-height: 100vh;
                 }
-
+    
                 .proof-container, .information-container {
                     padding: 20px;
-                }
-                
-                .information-container  {
                     flex-grow: 1;
                 }
             }
