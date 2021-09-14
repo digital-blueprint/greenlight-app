@@ -735,7 +735,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             .close-icon {
-                color: red;
+                color: var(--dbp-danger-bg-color);
+                display: inline;
             }
 
             #no-proof-continue-btn {
@@ -1069,8 +1070,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 ${ i18n.t(this.message) }
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
-                                <dbp-icon name='cross-circle' class="close-icon"></dbp-icon>
-                                ${ i18n.t(this.message) }<!-- TODO Search for other uses of this part -->
+                                <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
+                                <div class="close-icon">${ i18n.t(this.message) }</div><!-- TODO Search for other uses of this part -->
                                 ${ this.detailedError ? html`<dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + this.detailedError }"></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
