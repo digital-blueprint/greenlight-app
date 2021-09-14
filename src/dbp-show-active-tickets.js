@@ -24,7 +24,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activity = new Activity(metadata);
         this.loading = false;
         this.ticketLoading = false;
-
+        this.ticketOpen = false;
         this.activeTickets = [];
         this.locationName = 'Ticket';
         this.currentTicket = {};
@@ -180,9 +180,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param ticket
      */
     async updateTicket() {
-        if (this.currentTicket && Object.keys(this.currentTicket).length === 0)
+        console.log(".....");
+
+        if (this.ticketOpen === false || this.currentTicket && Object.keys(this.currentTicket).length === 0)
             return false;
 
+        console.log("yes");
 
         const i18n = this._i18n;
         let responseData = await this.getActiveTicketRequest(this.currentTicket.identifier);
@@ -267,10 +270,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async showTicket(ticket) {
         this.ticketLoading = true;
         if (this._('#show-ticket-modal')) {
+            this.ticketOpen = true;
             MicroModal.show(this._('#show-ticket-modal'), {
                 disableScroll: true,
                 onClose: modal => {
                     this.ticketLoading = false;
+                    this.ticketOpen = false;
                 },
             });
         }
@@ -439,7 +444,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             .green-pass-evidence {
-                line-height: 20px;
+                line-height: 30px;
             }
             
             .proof-container, .information-container{
@@ -477,6 +482,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .left-container h3, .proof-container h4, .information-container h4 {
                 margin: 0px 0px 10px 0px;
+                line-height: 30px;
             }
             
             .left-container {
@@ -645,23 +651,23 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <span class="header">
                                 <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
                                 <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                    <span> <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span>
-                                        
-                                    </span></b>
-                                     <span class="${classMap({hidden: this.isSelfTest})}">
+                                    <span> 
+                                        <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span></b>
+                                    </span>
+                                    <span class="${classMap({hidden: this.isSelfTest})}">
                                         ${i18n.t('valid-till')}
                                         ${i18n.t('date-time', {clock: this.person.validUntil ?
                                         this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                         <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                         <br>
                                         Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
-                                     </span>
+                                    </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
                                         Auf diesem Gerät wurde ein Selbsttest gefunden. Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                   <b>Status: <span class="red">kein 3-G-Nachweis gefunden</span></b>
+                                   <b>Status: <span class="red">inaktiv</span></b>
                                    <span>Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
                                   Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
                                         <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>

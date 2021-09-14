@@ -21,7 +21,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activity = new Activity(metadata);
         this.loading = false;
         this.ticketLoading = false;
-
+        this.ticketOpen = false;
         this.referenceImage = '';
 
         this.setTimeoutIsSet = false;
@@ -81,6 +81,8 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      *
      */
     async updateReferenceTicket() {
+        if (this.ticketOpen === false)
+            return false;
         const i18n = this._i18n;
         let responseData = await this.getReferenceTicketRequest();
         let responseBody = await responseData.clone().json();
@@ -129,10 +131,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async showTicket(ticket) {
         this.ticketLoading = true;
         if (this._('#show-ticket-modal')) {
+            this.ticketOpen = true;
             MicroModal.show(this._('#show-ticket-modal'), {
                 disableScroll: true,
                 onClose: modal => {
                     this.ticketLoading = false;
+                    this.ticketOpen = false;
                 },
             });
         }
@@ -230,11 +234,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 text-align: center;
             }
             
-            .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal{
-                border-bottom: 1px solid white;;
+            .proof-container .int-link-external, .information-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal{
+                border-bottom: 1px solid white;
             }
             
-            .proof-container .int-link-external::after{
+            .proof-container .int-link-external::after, .information-container .int-link-external::after{
                 filter: invert(100%);
                 -webkit-filter: invert(100%);
             }
@@ -410,10 +414,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="${classMap({hidden: this.loading})}">
                         <div class="ticket">
                             <span class="header">
-                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: LocationName</h3> <!-- TODO Übersetzen -->
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: Location Name</h3> <!-- TODO Übersetzen -->
                                 <span class="header">
-                                   <b>Status: 3-G-Nachweis <span class="green">gültig</span>/<span class="red">ungültig</span></b>
-                                   <span>Hier wird die Gültigkeit eines Tickets angezeigt.</span>
+                                   <b>Status: <span class="green">aktiv</span> / <span class="red">inaktiv</span></b>
+                                   <span>Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt vom lokal importierten 3-G-Nachweis ab.</span>
                                    
                                 </span>
                             </span>
@@ -461,7 +465,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </p>
                                     <p>                            
                                         Ist ein 3-G-Nachweis in Form eines validen <strong>grünen Passes</strong> lokal gespeichert, wird das Ticket in Farbe und der Grüne Pass QR Code angezeigt. Dieser kann dann auf
-                                        <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank">Green Check</a> gescannt und validiert werden.
+                                        <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> gescannt und validiert werden.
                                         <br><br>
                                             Ist ein 3-G-Nachweis in Form eines <strong>Selbsttests</strong> des Landes Steiermarks oder Kärntens lokal gespeichert, wird das Ticket in Graustufen und der QR Code vom Selbsttest angezeigt. 
                                             Dieser QR-Code enthält einen Link und kann mit einem QR-Code Scanner aufgerufen und manuell validiert werden.   
