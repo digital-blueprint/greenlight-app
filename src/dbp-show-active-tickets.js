@@ -33,7 +33,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false;
         this.timer = '';
 
-        this.boundFocusHandler = this.updateTicketWrapper.bind(this);
+        this.boundUpdateTicket = this.updateTicket.bind(this);
 
 
     }
@@ -67,14 +67,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     disconnectedCallback() {
         clearTimeout(this.timer);
-        window.removeEventListener('focus', this.boundFocusHandler);
+        window.removeEventListener('focus', this.boundUpdateTicket);
         super.disconnectedCallback();
     }
 
 
     connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('focus', this.boundFocusHandler);
+        window.addEventListener('focus', this.boundUpdateTicket);
     }
 
     update(changedProperties) {
@@ -170,30 +170,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Wrapps the function updateTicket,
-     * This is for eventListener, which is bind to this
-     *
-     */
-    updateTicketWrapper() {
-        this.updateTicket(this, this.currentTicket);
-    }
-
-    /**
      * Updates a ticket and sets a timer for next update
      * Notifies the user if something went wrong
      *
      * @param that
      * @param ticket
      */
-    async updateTicket(that, ticket) {
+    async updateTicket() {
         const i18n = this._i18n;
-
-        let responseData = await that.getActiveTicketRequest(ticket.identifier);
+        let responseData = await this.getActiveTicketRequest(this.currentTicket.identifier);
         let responseBody = await responseData.clone().json();
-
-
         if (responseData.status === 404) { // Ticket not found
-            that.getListOfActiveTickets();
+            this.getListOfActiveTickets();
             send({
                 "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
                 "body":  i18n.t('show-active-tickets.delete-ticket-notfound-body', { place: this.locationName }),
@@ -202,20 +190,21 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             });
             return false;
         } else if (responseData.status === 200) { // Success
-            that.currentTicket = responseBody;
-            that.currentTicketImage = responseBody.image;
+            this.currentTicket = responseBody;
+            this.currentTicketImage = responseBody.image;
 
-            const that_ = that;
+            const that = this;
             if (!this.setTimeoutIsSet) {
-                that_.setTimeoutIsSet = true;
-                that_.timer = setTimeout(function () {
-                    that_.updateTicket(that_, ticket);
-                    that_.setTimeoutIsSet = false;
+                that.setTimeoutIsSet = true;
+                that.timer = setTimeout(function () {
+                    let boundUpdateTicket = that.updateTicket.bind(that);
+                    boundUpdateTicket();
+                    that.setTimeoutIsSet = false;
                 }, responseBody.imageValidFor * 1000 + 1000 || 3000);
             }
             return true;
         } else {  // Other Error
-            that.getListOfActiveTickets();
+            this.getListOfActiveTickets();
             send({
                 "summary": i18n.t('show-active-tickets.other-error-title'),
                 "body":  i18n.t('show-active-tickets.other-error-body'),
@@ -228,13 +217,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     async checkForValidProofLocalWrapper() {
         this.loading = true;
-        console.log("start");
         await this.checkForValidProofLocal();
         if (this.greenPassHash === '' || this.greenPassHash === -1) {
             this.hasValidProof = false;
             this.isSelfTest = false;
         }
-        console.log("end");
 
         this.loading = false;
     }
@@ -281,10 +268,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             });
         }
         await this.generateQrCode();
-        let success = await this.updateTicket(this, ticket);
-        if (success) {
-            this.currentTicket = ticket;
-
+        this.currentTicket = ticket;
+        let success = await this.updateTicket();
+        if (!success) {
+            this.currentTicket = {};
         }
         this.ticketLoading = false;
     }

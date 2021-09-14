@@ -17,7 +17,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.activity = new Activity(metadata);
         this.referenceImage = '';
         this.error = false;
+
         this.setTimeoutIsSet = false;
+        this.timer = '';
+
+        this.boundFocusHandler = this.updateReferenceTicket.bind(this);
+
     }
 
     static get scopedElements() {
@@ -35,9 +40,8 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     disconnectedCallback() {
-        const that = this;
-        window.removeEventListener('focus', that.updateReferenceTicket);
-        window.clearInterval(this.refreshInterval);// 5min = 300000 ms
+        clearTimeout(this.timer);
+        window.removeEventListener('focus', this.boundFocusHandler);
 
         super.disconnectedCallback();
     }
@@ -45,11 +49,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async connectedCallback() {
         super.connectedCallback();
         this.updateComplete.then(() => {
-            that.updateReferenceTicket(that);
+            this.boundFocusHandler();
         });
-        
-        const that = this;
-        window.addEventListener('focus', function() {that.updateReferenceTicket(that);});
+
+        super.connectedCallback();
+        window.addEventListener('focus', this.boundFocusHandler);
 
     }
 
@@ -67,15 +71,15 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     firstUpdated() {
     }
 
-    async updateReferenceTicket(that) {
-        let responseData = await that.getReferenceTicketRequest();
+    async updateReferenceTicket() {
+        let responseData = await this.getReferenceTicketRequest();
         let responseBody = await responseData.clone().json();
 
         if(responseData.status === 200) {
             console.log("refreshed", responseBody['hydra:member'][0].imageValidFor );
-            that.referenceImage = responseBody['hydra:member'][0].image || '';
-            that.error = false;
-            const that_ = that;
+            this.referenceImage = responseBody['hydra:member'][0].image || '';
+            this.error = false;
+            const that_ = this;
             if (!this.setTimeoutIsSet) {
                 that_.setTimeoutIsSet = true;
                 setTimeout(function () {
@@ -84,7 +88,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
             }
         } else {
-            that.error = true;
+            this.error = true;
         }
     }
 
