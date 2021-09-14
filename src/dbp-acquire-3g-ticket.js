@@ -30,6 +30,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.processStarted = false;
         this.preselectedOption = '';
         this.preselectionCheck = true;
+        this.preselectionLoading = true;
 
         this.hasValidProof = false;
         this.hasTicket = false;
@@ -120,10 +121,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             showCertificateSwitch: { type: Boolean, attribute: false },
             person: { type: Object, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
-            // preselectionCheck: { type: Boolean, attribute: false },
-            // preCheck: { type: Boolean, attribute: false },
+            preselectionLoading: { type: Boolean, attribute: false },
             
-
             showProofUpload: { type: Boolean, attribute: false },
             proofUploadFailed: { type: Boolean, attribute: false },
             showCreateTicket: { type: Boolean, attribute: false },
@@ -166,9 +165,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         super.update(changedProperties);
     }
-
-
-
 
 
     /**
@@ -871,13 +867,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.loading = true;
             this.checkForValidProofLocal().then(() =>  {
                 this.loading = false;
-                console.log('3G proof importing done')
+                console.log('3G proof importing done');
             });
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
             this.location = this.preselectedOption;
-            this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
+            this.checkForValidTickets().then(() =>  { 
+                console.log('Fetch for valid tickets done');
+                this.preselectionLoading = false;
+            });
             this.preselectionCheck = false;
         }
 
@@ -905,14 +904,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     </slot>
                 </div>    
 
-                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck})}">
+                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck && !this.preselectionLoading })}">
                     <span class="loading">
                         <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                     </span>
                 </div>
                     
                     <!-- Create ticket start -->
-                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck})}">
+                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading })}">
                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace)})}">
                             <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
                                             <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
@@ -921,38 +920,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             ></dbp-inline-notification>
                         </div>
                         
-                        <dbp-loading-button 
-                            type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
-                            id="confirm-ticket-btn"
-                            value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
-                            @click="${() => {  this.processStarted = true; }}" 
-                            title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
-                        ></dbp-loading-button>
-
-                        <!-- ${ !this.preCheck && !this.preselectionCheck ? html`
-                            ${ !this.hasTicket && !this.hasTicketForThisPlace ? html`
-                                <dbp-loading-button 
-                                    type="is-primary" 
-                                    id="confirm-ticket-btn"
-                                    value="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}" 
-                                    @click="${() => {  this.processStarted = true; }}" 
-                                    title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
-                                ></dbp-loading-button>
-                                `: html`
-                                <dbp-loading-button  
-                                    id="confirm-ticket-btn"
-                                    value="${i18n.t('acquire-3g-ticket.create-new-ticket')}" 
-                                    @click="${() => {  this.processStarted = true; }}" 
-                                    title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
-                                ></dbp-loading-button>`
-                            }
-                        `: html`
-                            <div class="control">
-                                <span class="loading">
-                                    <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
-                                </span>
-                            </div>
-                        `}  -->
+                        ${ !this.preselectionLoading ? html`
+                            <dbp-loading-button 
+                                type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
+                                id="confirm-ticket-btn"
+                                value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
+                                @click="${() => {  this.processStarted = true; }}" 
+                                title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
+                            ></dbp-loading-button>
+                        `: ``} 
 
                     </div>
                     <!-- Create ticket start end -->
