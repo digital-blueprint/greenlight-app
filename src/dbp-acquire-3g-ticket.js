@@ -963,7 +963,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading })}">
                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof})}">
                             <dbp-inline-notification type="" body="${i18n.t('acquire-3g-ticket.manage-tickets-text')}
-                                            <a href='show-active-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
+                                            <a href='show-tickets' title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' target='_self' class='int-link-internal'>
                                                 <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
                                             </a>"
                             ></dbp-inline-notification>
