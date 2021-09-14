@@ -132,24 +132,21 @@ export async function decodeBusinessRules(hcert, trustData, trustAnchor)
  * Returns a rule description useable for an error message
  * 
  * @param {object} rule 
- * @returns {string}
+ * @returns {object}
  */
-function getRuleErrorDescription(rule) {
-    let msg = '['+rule.Identifier+']';
+function getRuleErrorDescriptions(rule) {
+    let descriptions = {};
     for (let entry of rule.Description) {
-        if (entry.lang === 'en') {
-            msg += ' ' + entry.desc;
-            break;
-        }
+        descriptions[entry.lang] = `[${rule.Identifier}] ${entry.desc}`;
     }
-    return msg;
+    return descriptions;
 }
 
 export class RuleValidationResult {
 
     constructor() {
         this.isValid = false;
-        this.error = null;
+        this.errors = [];
     }
 }
 
@@ -185,14 +182,14 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
         let result = false;
         result = certlogic.evaluate(rule.Logic, logicInput);
         if (result !== true) {
-            errors.push(getRuleErrorDescription(rule));
+            errors.push(getRuleErrorDescriptions(rule));
         }
     }
 
     let result = new RuleValidationResult();
 
     if (errors.length) {
-        result.error = "One or more rules failed:\n" + errors.join("\n");
+        result.errors = errors;
     } else {
         result.isValid = true;
     }

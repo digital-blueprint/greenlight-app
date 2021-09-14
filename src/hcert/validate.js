@@ -2,6 +2,7 @@ import {importHCert, fetchTrustData, trustAnchorProd, trustAnchorTest} from './u
 import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
+import {createInstance} from '../i18n.js';
 
 export class ValidationResult {
 
@@ -78,11 +79,38 @@ export class Validator {
      * 
      * @param {string} cert
      * @param {Date} dateTime
+     * @param {string} [lang]
      * @param {boolean} [computeValidUntil]
      * @returns {ValidationResult}
      */
-     async validate(cert, dateTime, computeValidUntil=false) {
+     async validate(cert, dateTime, lang='en', computeValidUntil=false) {
         await this._ensureData();
+
+        let i18n = createInstance();
+        i18n.changeLanguage(lang);
+
+        // Iterate through all errors and use the description in the language we prefere the most
+        let getTranslatedErrors = (errors) => {
+            let languages = i18n.languages + ['en'];
+            let translated = [];
+            for (let error of errors) {
+                let text = 'unknown';
+                let prio = -1;
+                for (let [ln, desc] of Object.entries(error)) {
+                    let thisPrio = languages.indexOf(ln);
+                    if (prio === -1) {
+                        text = desc;
+                        prio = thisPrio;
+                    } else if (thisPrio !== -1 && thisPrio < prio) {
+                        text = desc;
+                        prio = thisPrio;
+                    }
+                }
+                translated.push(text);
+            }
+            translated.sort();
+            return translated;
+        };
 
         // Verify that the signature is correct and decode the HCERT
         let hcertData = this._verifier.verify(cert);
@@ -105,11 +133,11 @@ export class Validator {
                 }
             } else {
                 result.isValid = false;
-                result.error = res.error;
+                result.error = i18n.t('hcert.cert-not-valid-error', {error: getTranslatedErrors(res.errors).join('\n')});
             }
         } else {
             result.isValid = false;
-            result.error = hcertData.error;
+            result.error = i18n.t('hcert.cert-validation-failed-error', {error: hcertData.error});
         }
     
         return result;

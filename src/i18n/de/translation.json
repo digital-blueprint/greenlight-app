@@ -83,5 +83,9 @@
   "loading-message": "Lädt...",
   "file-sink": {
     "modal-close": "Schließen"
+  },
+  "hcert": {
+    "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
+    "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
   }
 }

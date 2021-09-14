@@ -8,7 +8,7 @@ suite('hcert validate', () => {
     test('validate', async () => {
         let test = new Validator(false);
         try {
-            await test.validate(TEST_VAC, new Date());
+            await test.validate(TEST_VAC, new Date(), 'en');
         } catch (error) {
             // FIXME: not sure why this fails to validate right now...
         }

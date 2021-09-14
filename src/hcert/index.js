@@ -11,9 +11,10 @@ const defaultValidator = new Validator();
  * Use Validator/ValidationResult directly.
  *
  * @param {string} hc1 
+ * @param {string} lang 
  * @returns {object}
  */
-export async function hcertValidation(hc1)
+export async function hcertValidation(hc1, lang)
 {
     let result = {
         status: -1,
@@ -28,7 +29,7 @@ export async function hcertValidation(hc1)
 
     let res;
     try {
-        res = await defaultValidator.validate(hc1, new Date(), true);
+        res = await defaultValidator.validate(hc1, new Date(), lang, true);
     } catch (error) {
         result.status = 500;
         result.error = error.message;

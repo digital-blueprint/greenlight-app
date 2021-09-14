@@ -83,5 +83,9 @@
   "loading-message": "Loading...",
   "file-sink": {
     "modal-close": "Close"
+  },
+  "hcert": {
+    "cert-not-valid-error": "Does not comply with the following rules: {{error}}",
+    "cert-validation-failed-error": "Validation failed: {{error}}"
   }
 }

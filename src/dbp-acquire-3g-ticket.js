@@ -1072,7 +1072,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
                                 <div class="close-icon">${ i18n.t(this.message) }</div><!-- TODO Search for other uses of this part -->
-                                ${ this.detailedError ? html`<dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + this.detailedError }"></dbp-info-tooltip>` : `` }
+                                ${ this.detailedError ? html`<dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
                         <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
