@@ -180,6 +180,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param ticket
      */
     async updateTicket() {
+        if (this.currentTicket && Object.keys(this.currentTicket).length === 0)
+            return false;
+
+
         const i18n = this._i18n;
         let responseData = await this.getActiveTicketRequest(this.currentTicket.identifier);
         let responseBody = await responseData.clone().json();
@@ -641,14 +645,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <span class="header">
                                 <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
                                 <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                    <span> <b>${i18n.t('show-active-tickets.status')}<span class="green">
-                                        ${i18n.t('valid-till')}
-                                        ${i18n.t('date-time', {clock: this.person.validUntil ?
-                                         this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
-                                        </span>
-                                        <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                    <span> <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span>
+                                        
                                     </span></b>
                                      <span class="${classMap({hidden: this.isSelfTest})}">
+                                        ${i18n.t('valid-till')}
+                                        ${i18n.t('date-time', {clock: this.person.validUntil ?
+                                        this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
+                                        <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                        <br>
                                         Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                      </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">

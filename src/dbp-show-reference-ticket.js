@@ -53,19 +53,15 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     disconnectedCallback() {
         clearTimeout(this.timer);
         window.removeEventListener('focus', this.boundFocusHandler);
-
         super.disconnectedCallback();
     }
 
     async connectedCallback() {
         super.connectedCallback();
+        window.addEventListener('focus', this.boundFocusHandler);
         this.updateComplete.then(() => {
             this.boundFocusHandler();
         });
-
-        super.connectedCallback();
-        window.addEventListener('focus', this.boundFocusHandler);
-
     }
 
     update(changedProperties) {
