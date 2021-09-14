@@ -68,7 +68,9 @@
     "create-new-ticket": "Neues Ticket anfordern",
     "request-ticket-button-text": "Ticket anfordern",
     "confirm-not-checked-title": "Zustimmung nicht erteilt!",
-    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann."
+    "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
+    "other-error-title": "Fehler!",
+    "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
   },
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",

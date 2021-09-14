@@ -402,6 +402,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
         let checkInPlaceSelect;
 
+        let responseBody = await response.clone().json();
+
         switch(response.status) {
             case 201:
 
@@ -446,20 +448,66 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 break;
 
-            case 500:
+            case 400: // Invalid input
+                switch(responseBody['relay:errorId']) {
+                    case 'greenlight:consent-assurance-not-true':
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
+                            "body":  i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    case 'greenlight:additional-information-not-valid':
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'), //TODO
+                            "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    default:
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                            "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                }
+                break;
+            
+            case 403: // Forbidden - Access Denied
                 send({
-                    "summary": i18n.t('acquire-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-ticket.other-error-body'),
+                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
                 break;
 
-            default: //TODO error handling - more cases
-                
+            case 422: // Unprocessable entity
                 send({
-                    "summary": i18n.t('acquire-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-ticket.other-error-body'),
+                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+
+            case 500: // Can't process Data
+                send({
+                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                break;
+            // Error: something else doesn't work
+            default:
+                send({
+                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
