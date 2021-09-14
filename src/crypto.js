@@ -113,13 +113,13 @@ export async function decrypt(ciphertext, key, iv) {
  * token, using A256GCM and PBES2-HS256+A128KW.
  *
  * Since we can't do any server side validation the user needs to confirm in the
- * UI that he/she wont abuse the system.
+ * UI that he/she won't abuse the system.
  *
  * By using the token we make replaying an older requests harder and by using
  * JOSE which needs crypto APIs, abusing the system can't reasonably be done by
  * accident but only deliberately.
  *
- * This doesn't make things more secure, it just makes the intend of the user
+ * This doesn't make things more secure, it just makes the intent of the user
  * more clear in case the API isn't used through our UI flow.
  *
  * @param {string} token 
