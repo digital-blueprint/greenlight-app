@@ -11,6 +11,8 @@ import * as CheckinStyles from './styles';
 import {send} from "@dbp-toolkit/common/notification";
 import qrcode from "qrcode-generator";
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
+import {Activity} from "./activity";
+import metadata from "./dbp-show-active-tickets.metadata.json";
 
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
@@ -19,6 +21,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._i18n = createInstance();
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
+        this.activity = new Activity(metadata);
         this.loading = false;
         this.ticketLoading = false;
 
@@ -378,6 +381,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         return css`
             ${commonStyles.getThemeCSS()}
             ${commonStyles.getGeneralCSS(false)}
+            ${commonStyles.getActivityCSS()}
             ${commonStyles.getNotificationCSS()}
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
@@ -623,8 +627,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             </div>
 
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-                
-                <h2>${i18n.t('show-active-tickets.title')}</h2>
+
+                <h2>${this.activity.getName(this.lang)}</h2>
+                <p class="subheadline">
+                    ${this.activity.getDescription(this.lang)}
+                </p>
                 <p>${i18n.t('show-active-tickets.description')}</p>
                 
                 <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
