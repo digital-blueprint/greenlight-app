@@ -387,13 +387,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
                 break;
 
-            default: //TODO error handling - more cases
-               /* send({
-                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });*/
+            default: // Do we need to do something here?
                 break;
         }
     }
@@ -598,6 +592,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-bottom: 1.5rem;
             }
 
+            .info-icon {
+                padding-left: 5px;
+            }
+
             .tickets-notifications {
                 margin-top: 3rem;
             }
@@ -693,6 +691,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .header {
                 display: grid;
                 align-items: center;
+                white-space: nowrap;
             }
 
             .show-file {
@@ -846,6 +845,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 .header {
                     margin-bottom: 0.5rem;
+                    white-space: initial;
                 }
 
                 .btn {
@@ -1008,7 +1008,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                              <label id="last-checkbox" class="button-container">
                                  ${i18n.t('acquire-3g-ticket.trust-and-save-1')}
-                                 <dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.trust-and-save-2')}"></dbp-info-tooltip>
+                                 <dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.trust-and-save-2')}"></dbp-info-tooltip>
                                  <input type="checkbox" id="trust-button" name="trust-button" value="trust-button" @click="${this.checkTrustButtonCheckmark}">
                                  <span class="checkmark" id="trust-button-checkmark"></span>
                              </label>
@@ -1079,7 +1079,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
                                 <div class="close-icon">${ i18n.t(this.message) }</div><!-- TODO Search for other uses of this part -->
-                                ${ this.detailedError ? html`<dbp-info-tooltip text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
+                                ${ this.detailedError ? html`<dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
                         <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
@@ -1091,7 +1091,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
                                                 this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <dbp-info-tooltip text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                            <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
