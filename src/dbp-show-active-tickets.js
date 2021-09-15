@@ -36,7 +36,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false;
         this.timer = '';
 
-        this.boundUpdateTicket = this.updateTicket.bind(this);
+        this.boundUpdateTicket = this.updateTicketWrapper.bind(this);
 
 
     }
@@ -172,6 +172,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             encodeURIComponent(additionalInformation), options);
     }
 
+    async updateTicketWrapper() {
+        this.setTimeoutIsSet = false; //reset timer if focus event is triggered
+        this.updateTicket();
+    }
+
     /**
      * Updates a ticket and sets a timer for next update
      * Notifies the user if something went wrong
@@ -179,16 +184,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @returns {boolean}
      */
     async updateTicket() {
-        console.log(".....");
-
         if (this.ticketOpen === false || this.currentTicket && Object.keys(this.currentTicket).length === 0)
             return false;
 
-        console.log("yes");
-
         const i18n = this._i18n;
         let responseData = await this.getActiveTicketRequest(this.currentTicket.identifier);
-        let responseBody = await responseData.clone().json();
+        let responseBody = "";
+        try {
+            responseBody = await responseData.clone().json();
+        } catch (e) {
+            this.setTimeoutIsSet = false;
+            this.setTimer(6000);
+            return false;
+        }
+
         if (responseData.status === 404) { // Ticket not found
             this.getListOfActiveTickets();
             send({
@@ -202,18 +211,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (responseData.status === 200) { // Success
             this.currentTicket = responseBody;
             this.currentTicketImage = responseBody.image;
-
-            const that = this;
-            if (!this.setTimeoutIsSet) {
-                this.setTimeoutIsSet = true;
-                this.timer = setTimeout(function () {
-                    let boundUpdateTicket = that.updateTicket.bind(that);
-                    boundUpdateTicket();
-                    that.setTimeoutIsSet = false;
-                }, responseBody.imageValidFor * 1000 + 1000 || 3000);
-            }
+            this.setTimer(responseBody.imageValidFor * 1000 + 1000 || 3000);
             return true;
         }
+
         this.getListOfActiveTickets();
         send({
             "summary": i18n.t('show-active-tickets.other-error-title'),
@@ -221,8 +222,30 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             "type": "danger",
             "timeout": 5,
         });
+        this.setTimeoutIsSet = false;
+        this.setTimer(6000);
         return false;
     }
+
+    /**
+     * Sets a timer: this.timer
+     * and resets the old if this.setTimeoutIsSet
+     *
+     * @param {number} time in milliseconds
+     */
+    setTimer(time) {
+        const that = this;
+        if (!this.setTimeoutIsSet) {
+            this.setTimeoutIsSet = true;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(function () {
+                that.setTimeoutIsSet = false;
+                let boundUpdateTicket = that.updateTicket.bind(that);
+                boundUpdateTicket();
+            },  time);
+        }
+    }
+
 
     async checkForValidProofLocalWrapper() {
         this.loading = true;
@@ -231,7 +254,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.hasValidProof = false;
             this.isSelfTest = false;
         }
-
         this.loading = false;
     }
 
@@ -279,10 +301,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             });
         }
         await this.generateQrCode();
+        console.log("sucess generate qr");
         this.currentTicket = ticket;
         let success = await this.updateTicket();
         if (!success) {
             this.currentTicket = {};
+            console.log("update ticket failed");
         }
         this.ticketLoading = false;
     }
@@ -623,7 +647,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
         const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
-        return html`
+        const validTill = i18n.t('valid-till')
+            + i18n.t('date-time', {clock: this.person.validUntil ? this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})
+            + ". "
+            + i18n.t('validity-tooltip') + "<a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>";
+
+        console.log(".............", validTill);
+    return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
@@ -654,10 +684,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span></b>
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest})}">
-                                        ${i18n.t('valid-till')}
-                                        ${i18n.t('date-time', {clock: this.person.validUntil ?
-                                        this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
-                                        <dbp-info-tooltip class="tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                        <strong>3-G-Nachweis: <span class="green">gültig</span></strong>
+                                        <dbp-info-tooltip class="tooltip" text-content='${ validTill + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                        <!--<dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>-->
                                         <br>
                                         Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                     </span>

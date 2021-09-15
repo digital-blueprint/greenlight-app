@@ -37,6 +37,9 @@ export async function save(payload, publicId, privateId, expiresAt=undefined) {
  * @returns {null|string}
  */
 export async function fetch(publicId, privateId, currentTime=undefined) {
+    if (localStorage.length <= 0)
+        return null;
+
     let key, salt, cipher, iv, maxTime;
     cipher = localStorage.getItem("dbp-gp-" + publicId);
     salt = localStorage.getItem("dbp-gp-salt-" + publicId);
