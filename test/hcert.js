@@ -1,5 +1,7 @@
 
+import {assert} from 'chai';
 import {Validator} from '../src/hcert';
+import {validateHCertRules, BusinessRules, ValueSets} from '../src/hcert/rules';
 
 suite('hcert validate', () => {
     // https://github.com/eu-digital-green-certificates/dcc-quality-assurance/blob/main/AT/1.3.0/VAC.png
@@ -12,5 +14,14 @@ suite('hcert validate', () => {
         } catch (error) {
             // FIXME: not sure why this fails to validate right now...
         }
+    });
+
+    test('rules validate empty', async () => {
+        let rules = new BusinessRules();
+        let valueSets = new ValueSets();
+        let datetime = new Date("2021-09-15T14:01:17Z");
+        let result = validateHCertRules({}, rules, valueSets, datetime, datetime);
+        assert.isTrue(result.isValid);
+        assert.isEmpty(result.errors);
     });
 });
