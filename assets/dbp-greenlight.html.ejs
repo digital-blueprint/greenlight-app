@@ -217,8 +217,10 @@
                         Sie können Ihren 3-G-Nachweis vorab prüfen, indem sie den entsprechenden QR Code scannen oder ein vorhandenes PDF oder Bild hochladen und sich damit ein Ticket für einen Ort ausstellen lassen.
                         Alternativ können Sie auch manuell bestätigen, dass Sie einen 3-G-Nachweis bei sich tragen und diesen im Falle einer Kontrolle nachweisen können.
                         <br /><br />
-                        Selbsttests des Landes Steiermarks und Kärntens können ebenfalls hochgeladen werden. Diese werden aber im Gegensatz zu einem EU-weit gültigen Nachweis nicht am Gerät validiert. Sie müssen sicherstellen, dass Ihr Testergebnis noch gültig ist.
-                        <br /><br />
+                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== ''){ %>
+                            Selbsttests des Landes Steiermarks und Kärntens können ebenfalls hochgeladen werden. Diese werden aber im Gegensatz zu einem EU-weit gültigen Nachweis nicht am Gerät validiert. Sie müssen sicherstellen, dass Ihr Testergebnis noch gültig ist.
+                            <br /><br />
+                        <% } %>
                         Weitere Informationen über die aktuell geltenden Bestimmungen an der TU Graz erhalten Sie unter
                         <a target="_blank" rel="noopener" href="https://www.tugraz.at/go/coronavirus" class="int-link-external"><span>www.tugraz.at/go/coronavirus</span></a>
                     </p>
@@ -243,9 +245,11 @@
                         You can check your 3-G-evidence in advance by scanning the corresponding QR code or uploading an existing PDF or image and using it to issue a ticket for a location.
                         Alternatively, you can manually confirm that you have a 3-G-certificate with you and that you can prove it in the event of a control.
                         <br /><br />
-                        Self-tests from the state of Styria and Carinthia can also be uploaded. However, in contrast to an EU-wide valid proof, these are not validated on the device.
-                        You need to make sure that your test result is still valid.
-                        <br /><br />
+                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== ''){ %>
+                            Self-tests from the state of Styria and Carinthia can also be uploaded. However, in contrast to an EU-wide valid proof, these are not validated on the device.
+                            You need to make sure that your test result is still valid.
+                            <br /><br />
+                        <% } %>
                         For more information about the currently valid regulations at Graz University of Technology, please visit
                         <a target="_blank" rel="noopener" href="https://www.tugraz.at/go/coronavirus" class="int-link-external"><span>www.tugraz.at/go/coronavirus</span></a>
                     </p>

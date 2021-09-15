@@ -13,6 +13,7 @@ import qrcode from "qrcode-generator";
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
 import {Activity} from "./activity";
 import metadata from "./dbp-show-active-tickets.metadata.json";
+import {encodeAdditionalInformation} from "./crypto";
 
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
@@ -141,6 +142,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param ticketID
      */
     async getActiveTicketRequest(ticketID) {
+
         const options = {
             method: 'GET',
             headers: {
@@ -148,7 +150,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 Authorization: "Bearer " + this.auth.token
             },
         };
-        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
+
+        const additionalInformation =  await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : '');
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID + '?additional-information=' +
             encodeURIComponent(additionalInformation), options);
@@ -641,6 +644,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     padding: 20px;
                     flex-grow: 1;
                 }
+                
+                .new-ticket-button{
+                    width: 100%;
+                    display: block;
+                    margin: auto;
+                    box-sizing: border-box;
+                }
             }
         `;
     }
@@ -653,7 +663,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             + ". "
             + i18n.t('validity-tooltip') + "<a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>";
 
-        console.log(".............", validTill);
     return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -685,33 +694,39 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span></b>
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest})}">
-                                        <b>3-G-Nachweis: <span class="green">gültig</span></b>
+                                        <b>3-G-Nachweis: <span class="green">grüner Pass auf diesem Gerät importiert und gültig</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                         <br>
-                                        Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.<br><br>
+                                        Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                         Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
-                                        <b>3-G-Nachweis: <span class="warning">Selbsttest</span></b><br>
-                                        Auf diesem Gerät wurde ein Selbsttest gefunden. Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        <b>3-G-Nachweis: <span class="warning">Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig</span></b><br>
+                                        Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                    </span>
+                                    <span class="${classMap({hidden: !this.isInternalTest})}">
+                                        <b>3-G-Nachweis: <span class="warning">TU Graz Test auf diesem Gerät importiert und gültig</span></b><br>
+                                        Bitte überprüfen Sie manuell die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
                                    <b>Status: <span class="red">inaktiv</span></b>
-                                    <b>3-G-Nachweis: <span class="red">ungültig</span></b>
-                                   <span>Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
-                                  Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
+                                    <b>3-G-Nachweis: <span class="red">kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden</span></b>
+                                   <span>Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der 3-G-Nachweis ist abgelaufen oder der lokale Speicher wurde gelöscht.
+                                        Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
                                         <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
                                         <span>Eintrittsticket erstellen</span>
                                         </a>
-                                    anfordern.</span>
+                                        anfordern. Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
+                                    </span> 
                                    
                                 </span>
                             </span>
                             <div class="btn">
                                 <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}" type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
                                 <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket"> 
-                                    <button class="button">Neues Ticket anfordern</button>
+                                    <button class="button new-ticket-button">Neues Ticket anfordern</button>
                                 </a>
                                 <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${() => { this.deleteTicket(ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
