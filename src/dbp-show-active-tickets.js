@@ -151,7 +151,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             },
         };
 
-        const additionalInformation =  await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : '');
+        const additionalInformation =  this.hasValidProof && !this.isSelfTest ? 'local-proof' : '';
 
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID + '?additional-information=' +
             encodeURIComponent(additionalInformation), options);
@@ -176,6 +176,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async updateTicketWrapper() {
+
+
+
         this.setTimeoutIsSet = false; //reset timer if focus event is triggered
         this.updateTicket();
     }
@@ -293,6 +296,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param ticket
      */
     async showTicket(ticket) {
+
+        let cache = await caches.open('test');
+        let request = 'cache';
+        const response = await cache.match(request);
+        let responseBody = await response.clone().json();
+        console.log("----------", responseBody);
+        if (responseBody.hello) {
+            console.log("-----------");
+            this._(".header").classList.add("yes");
+        }
+
+
         this.ticketLoading = true;
         if (this._('#show-ticket-modal')) {
             this.ticketOpen = true;
@@ -561,6 +576,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .ticket-loading {
                 font-size: 1.3rem;
+            }
+            
+            .yes {
+                background-color: green;
             }
             
             @media only screen
