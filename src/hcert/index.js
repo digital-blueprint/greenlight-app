@@ -9,6 +9,7 @@ const defaultValidator = new Validator();
  * this is just a shim to provide a similar interface to the server one.
  * 
  * Use Validator/ValidationResult directly.
+ * No personal data are returned in case of error!
  *
  * @param {string} hc1 
  * @param {string} lang 
@@ -33,7 +34,7 @@ export async function hcertValidation(hc1, lang)
     } catch (error) {
         result.status = 500;
         result.error = error.message;
-        console.log("Validation error", error);
+        console.log("HCert validation error", error);
         return result;
     }
 
@@ -44,6 +45,7 @@ export async function hcertValidation(hc1, lang)
         result.data.dob = res.dob;
         result.data.validUntil = res.validUntil;
     } else {
+        console.log("HCert invalid");
         result.status = 422;
         result.error = res.error;
     }
