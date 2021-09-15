@@ -539,10 +539,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 width: 60%;
             }
             
-            .tooltip{
-                margin-left: 5px;
-            }
-            
             .red {
                 color: var(--dbp-override-danger-bg-color);
             }
@@ -684,7 +680,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span></b>
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest})}">
-                                        <strong>3-G-Nachweis: <span class="green">gültig</span></strong>
+                                        <b>3-G-Nachweis: <span class="green">gültig</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content='${ validTill + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
                                         <!--<dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>-->
                                         <br>
