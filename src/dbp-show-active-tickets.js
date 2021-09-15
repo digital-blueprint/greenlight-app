@@ -540,11 +540,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             .red {
-                color: var(--dbp-override-danger-bg-color);
+                color: var(--dbp-danger-bg-color);
             }
             
             .green {
-                color: var(--dbp-override-success-bg-color);
+                color: var(--dbp-success-bg-color);
+            }
+            
+            .warning {
+                color: var(--dbp-info-bg-color);
             }
             
             .ticket h3  {
@@ -683,14 +687,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <b>3-G-Nachweis: <span class="green">gültig</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                         <br>
-                                        Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.<br><br>
+                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
+                                        <b>3-G-Nachweis: <span class="warning">Selbsttest</span></b><br>
                                         Auf diesem Gerät wurde ein Selbsttest gefunden. Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
                                    <b>Status: <span class="red">inaktiv</span></b>
+                                    <b>3-G-Nachweis: <span class="red">ungültig</span></b>
                                    <span>Auf diesem Gerät wurde kein gültiger 3-G-Nachweis gefunden. Vielleicht haben Sie Ihren Nachweis auf einem anderen Gerät importiert.
                                   Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
                                         <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
