@@ -772,7 +772,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin: 1.5em 0;
                 border: var(--dbp-border-width) solid var(--dbp-border-color);
                 padding: 1.25rem 1.5rem 1.25rem 1.5rem;
-                position: relative;
                 border-radius: var(--dbp-border-radius);
                 display: flex;
                 justify-content: space-between;
