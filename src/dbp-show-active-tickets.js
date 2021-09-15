@@ -199,6 +199,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         if (responseData.status === 404) { // Ticket not found
+            this.sendErrorAnalyticsEvent('ShowTicketRequest', 'NotFound', this.location, responseData);
             this.getListOfActiveTickets();
             send({
                 "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
@@ -343,20 +344,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "type": "success",
                     "timeout": 5,
                 });
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketSuccess', 'name': this.location.name});
                 break;
 
             case 404:
+                this.sendErrorAnalyticsEvent('DeleteTicketRequest', 'NotFound', this.location, response);
                 send({
                     "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
                     "body":  i18n.t('show-active-tickets.delete-ticket-notfound-body', { place: this.locationName }),
                     "type": "warning",
                     "timeout": 5,
                 });
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'CreateTicketNotfound', 'name': this.location.name});
                 break;
 
             default:
+                this.sendErrorAnalyticsEvent('DeleteTicketRequest', 'UnknownError', this.location, response);
                 send({
                     "summary": i18n.t('show-active-tickets.other-error-title'),
                     "body":  i18n.t('show-active-tickets.other-error-body'),
