@@ -79,7 +79,7 @@
   "validity-tooltip-2": "aktuellen Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis ",
   "date-time": "{{clock}} Uhr am {{date}}",
-  "error-login-message": "Sie müssen eingeloggt sein um diese Funktion nutzen zu können!",
+  "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",
   "file-sink": {
     "modal-close": "Schließen"
