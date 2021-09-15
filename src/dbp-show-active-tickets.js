@@ -681,8 +681,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest})}">
                                         <b>3-G-Nachweis: <span class="green">gültig</span></b>
-                                        <dbp-info-tooltip class="tooltip" text-content='${ validTill + " <a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
-                                        <!--<dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>-->
+                                        <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                         <br>
                                         Auf diesem Gerät wurde ein gültiger 3-G-Nachweis gefunden. Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                     </span>
