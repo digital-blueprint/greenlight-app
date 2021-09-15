@@ -443,6 +443,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 400: // Invalid input
+                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput', this.location, response);
                 switch(responseBody['relay:errorId']) {
                     case 'greenlight:consent-assurance-not-true':
                         send({
@@ -472,6 +473,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
             
             case 403: // Forbidden - Access Denied
+                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'AccessDenied', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                     "body":  i18n.t('acquire-3g-ticket.other-error-body'),
@@ -481,6 +483,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 422: // Unprocessable entity
+                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnprocessableEntity', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                     "body":  i18n.t('acquire-3g-ticket.other-error-body'),
@@ -490,6 +493,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 500: // Can't process Data
+                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'ErrorInData', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                     "body":  i18n.t('acquire-3g-ticket.other-error-body'),
@@ -499,6 +503,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
             // Error: something else doesn't work
             default:
+                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnknownError', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                     "body":  i18n.t('acquire-3g-ticket.other-error-body'),

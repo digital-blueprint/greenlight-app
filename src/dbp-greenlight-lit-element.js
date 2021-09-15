@@ -124,7 +124,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         try {
             responseBody = await responseData.clone().json();
         } catch (e) {
-            // NOP
+            responseBody = responseData; // got already decoded data
         }
 
         const data = {
@@ -302,10 +302,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {boolean} false if data is invalid QR code data
      */
     async decodeUrlWithoutCheck(data, searchHashString) {
-        let passData;
+        //let passData;
         try {
-            passData = parseGreenPassQRCode(data, searchHashString);
-            console.log("passdata", passData);
+            //passData = parseGreenPassQRCode(data, searchHashString);
+            parseGreenPassQRCode(data, searchHashString);
+            //console.log("passdata", passData);
         } catch(error) {
 
             return false;
@@ -353,7 +354,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
         if (check) {
             this.greenPassHash = data;
-            console.log("gp", this.greenPassHash);
+            //console.log("gp", this.greenPassHash);
             this.isSelfTest = false;
             this.hasValidProof = true;
             this.proofUploadFailed = false;
@@ -508,15 +509,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
                 }
                 break;
-            case 403: // HCert has expired
-                this.proofUploadFailed = true;
-                this.hasValidProof = false;
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
-                this.detailedError = responseData.error;
-                if (!preCheck)
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                break;
             case 422: // HCert has expired
+                await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
@@ -525,6 +519,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
                 break;
             case 500: // Can't process Data
+                await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
@@ -534,13 +529,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 break;
             // Error: something else doesn't work
             default:
+                await this.sendErrorAnalyticsEvent('HCertValidation', 'UnknownError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
                 this.detailedError = responseData.error;
                 if (!preCheck)
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                //this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': 'ActivationFailed', 'name': locationName});
                 break;
         }
     }
