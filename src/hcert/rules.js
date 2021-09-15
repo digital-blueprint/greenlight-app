@@ -158,10 +158,11 @@ export class RuleValidationResult {
  * @param {object} cert
  * @param {BusinessRules} businessRules 
  * @param {ValueSets} valueSets 
- * @param {Date} dateTime
+ * @param {Date} dateTime The time used as input for the rules
+ * @param {Date} rulesDateTime The time used to select the active set of rules
  * @returns {RuleValidationResult}
  */
-export function validateHCertRules(cert, businessRules, valueSets, dateTime)
+export function validateHCertRules(cert, businessRules, valueSets, dateTime, rulesDateTime)
 {
     let logicInput = {
         payload: cert,
@@ -173,11 +174,11 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 
     let errors = [];
     for(let rule of businessRules.rules) {
-        // FIXME: should we ignore rules not valid at that time, or should we fail?
-        // I can't find anything in the spec, except that this means when the rules are "valid"
-        // but not what to do when they aren't
-        if (dateTime < new Date(rule.validFrom) || dateTime > new Date(rule.validTo)) {
-            console.warn(`rule ${rule.Identifier} not valid anymore`);
+        // In case a rule isn't valid we should just ignore it. This is usually used to update
+        // rules at a specific time, in which case there will be rule X which will stop being
+        // valid at time T and rule Y which will start being valid at time T.
+        if (rulesDateTime < new Date(rule.ValidFrom) || rulesDateTime > new Date(rule.ValidTo)) {
+            continue;
         }
         let result = false;
         result = certlogic.evaluate(rule.Logic, logicInput);
@@ -217,7 +218,10 @@ export function validateHCertRules(cert, businessRules, valueSets, dateTime)
 export function getValidUntil(hcert, businessRules, valueSets, fromDate)
 {
     let isValid = (checkTime) => {
-        return validateHCertRules(hcert, businessRules, valueSets, checkTime).isValid;
+        // We pass as static fromDate so we always use the same set of rules and
+        // so that validity of HCERTs doesn't flip back from invalid to valid in case
+        // rules change.
+        return validateHCertRules(hcert, businessRules, valueSets, checkTime, fromDate).isValid;
     };
 
     let fromTimestamp = (timestamp) => {

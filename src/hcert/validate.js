@@ -120,7 +120,7 @@ export class Validator {
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
             /** @type {RuleValidationResult} */
-            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime);
+            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime, dateTime);
 
             if (res.isValid) {
                 result.isValid = true;
