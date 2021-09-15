@@ -176,8 +176,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Updates a ticket and sets a timer for next update
      * Notifies the user if something went wrong
      *
-     * @param that
-     * @param ticket
+     * @returns {boolean}
      */
     async updateTicket() {
         console.log(".....");
@@ -199,30 +198,30 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 "timeout": 5,
             });
             return false;
-        } else if (responseData.status === 200) { // Success
+        }
+        if (responseData.status === 200) { // Success
             this.currentTicket = responseBody;
             this.currentTicketImage = responseBody.image;
 
             const that = this;
             if (!this.setTimeoutIsSet) {
-                that.setTimeoutIsSet = true;
-                that.timer = setTimeout(function () {
+                this.setTimeoutIsSet = true;
+                this.timer = setTimeout(function () {
                     let boundUpdateTicket = that.updateTicket.bind(that);
                     boundUpdateTicket();
                     that.setTimeoutIsSet = false;
                 }, responseBody.imageValidFor * 1000 + 1000 || 3000);
             }
             return true;
-        } else {  // Other Error
-            this.getListOfActiveTickets();
-            send({
-                "summary": i18n.t('show-active-tickets.other-error-title'),
-                "body":  i18n.t('show-active-tickets.other-error-body'),
-                "type": "danger",
-                "timeout": 5,
-            });
-            return false;
         }
+        this.getListOfActiveTickets();
+        send({
+            "summary": i18n.t('show-active-tickets.other-error-title'),
+            "body":  i18n.t('show-active-tickets.other-error-body'),
+            "type": "danger",
+            "timeout": 5,
+        });
+        return false;
     }
 
     async checkForValidProofLocalWrapper() {
