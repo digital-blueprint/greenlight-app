@@ -28,16 +28,6 @@ export async function save(payload, publicId, privateId, expiresAt=undefined) {
     if (expiresAt) {
         localStorage.setItem("dbp-gp-maxTime-" + publicId, expiresAt);
     }
-
-    let debug = {hello: "world"};
-    let myBlob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/json'});
-    let init = { "status" : 200 , "statusText" : "Cached!"};
-    let myResponse = new Response(myBlob,init);
-
-    let request = 'cache';
-    let cache = await caches.open('test');
-    await cache.put(request, myResponse);
-
 }
 
 /**

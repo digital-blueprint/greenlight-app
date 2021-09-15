@@ -289,18 +289,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-    async test() {
-        let cache = await caches.open('test');
-        let request = 'cache';
-        const response = await cache.match(request);
-        let responseBody = await response.clone().json();
-        console.log("----------", responseBody);
-        if (responseBody.hello) {
-            console.log("-----------");
-            this._(".header").classList.add("yes");
-        }
-    }
-
     /**
      * Generate a QR Code if a hash is avaible and valid,
      * updates the ticket and shows it in modal view
@@ -579,10 +567,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 font-size: 1.3rem;
             }
             
-            .yes {
-                background-color: green;
-            }
-            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
@@ -702,7 +686,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     ${this.activity.getDescription(this.lang)}
                 </p>
                 <p>${i18n.t('show-active-tickets.description')}</p>
-                <dbp-loading-button class="" type="is-primary" value="test" @click="${() => { this.test(); }}" title="test"></dbp-loading-button>
 
                 <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
                     <div class="${classMap({hidden: this.loading})}">
