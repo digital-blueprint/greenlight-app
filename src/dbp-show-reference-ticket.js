@@ -414,7 +414,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="${classMap({hidden: this.loading})}">
                         <div class="ticket">
                             <span class="header">
-                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: Location Name</h3> <!-- TODO Übersetzen -->
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: Ort</h3> <!-- TODO Übersetzen -->
                                 <span class="header">
                                    <b>Status: <span class="green">aktiv</span> / <span class="red">inaktiv</span></b>
                                    <span>Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt vom lokal importierten 3-G-Nachweis ab.</span>
@@ -450,7 +450,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>LocationName</strong></h3><!--TODO Übersetzen -->
+                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>Ort</strong></h3><!--TODO Übersetzen -->
                                     <div class="foto-container">
                                         <img src="${this.referenceImage || ''}" alt="Ticketfoto" />
                                     </div>
@@ -459,16 +459,18 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                               
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
                                     
-                                    <h4> Der 3-G-Nachweis</h3>
-                                    <p>
+                                    <h4>Informationen zum 3-G-Nachweis</h3>
+                                    <!-- <p>
                                     Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser hier angezeigt.
-                                    </p>
+                                    </p> -->
                                     <p>                            
-                                        Ist ein 3-G-Nachweis in Form eines validen <strong>grünen Passes</strong> lokal gespeichert, wird das Ticket in Farbe und der Grüne Pass QR Code angezeigt. Dieser kann dann auf
-                                        <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> gescannt und validiert werden.
+                                        Ist ein gültiger <strong>grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
+                                        <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> validiert werden.
                                         <br><br>
-                                            Ist ein 3-G-Nachweis in Form eines <strong>Selbsttests</strong> des Landes Steiermarks oder Kärntens lokal gespeichert, wird das Ticket in Graustufen und der QR Code vom Selbsttest angezeigt. 
-                                            Dieser QR-Code enthält einen Link und kann mit einem QR-Code Scanner aufgerufen und manuell validiert werden.   
+                                            Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
+                                            Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. 
+                                            <br><br>
+                                            Ist ein gültiger <strong>Test</strong> der <strong>Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
                                     </p>
                                    
                                
