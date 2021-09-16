@@ -54,10 +54,36 @@ suite('hcert validate', () => {
         let res = await test.validate(TEST_VAC, checkDate, 'en');
         assert.isFalse(res.isValid);
         assert.isNotEmpty(res.error);
-        assert.isNull(res.firstname, 'Gabriele');
-        assert.isNull(res.lastname, 'Musterfrau-Gößinger');
-        assert.isNull(res.dob, '1998-02-26');
+        assert.isNull(res.firstname);
+        assert.isNull(res.lastname);
+        assert.isNull(res.dob);
         assert.isNull(res.validUntil);
+    });
+
+    // https://github.com/eu-digital-green-certificates/dcc-quality-assurance/blob/main/AT/1.3.0/TEST.png
+    let TEST_TEST = `HC1:NCFOXN%TSMAHN-H3ZSUZK+.V0ET9%6-AH+VE1ROR$SIOOA+IS96:RI.I5STGFN9F/8X*G3M9BM9Z0BZW4Z*AK.GNNVR*G0C7PHBO33BC719BXM3WNN$IJ6LBFCN.NB2SJ%KN9J3 DJUC7VGJ9E3LOJ2H3-F7LJ3SZ4ZI0%V98T5UEIY0Q$UPR$5:NLOEPNRAE69K P4NPDDAJP5DMH1$4R/S+:KLD3JJ3FU2P4JY73JC3DG3LWT1OJ523*BBXSJ$IJGX8K%I17JLXKB6J57TJK57ALD-I3 28XGL4LQ/SLE5M*4CZKHKB-43.E3KD3OAJ:50BL69L6-96QW6U46%E5%NPC71RF6+17S%MBX69/9-3AKI6*N03W12XEZ%P WUQRELS431TCRVC$BDKBO.AI9BVYTOCFOPS258QJABPINXU: RFTIDG62QE/UIGSUYI93O89N86UG8KGQN88.R: BRQG84W: BCPI2YUFJ6LX3+KG% BTVBUVPQRHIY1+ H1O1UP3U3V1MAV9BLBFW5P2-OUVMZ:L/BR4PN6NE40R4LP97KF7LJF10AKMBT40OTM08CI W3-UCN:A0SIDP7N5C$+MSSJ*7C5A49*U//PUK7Z$LFTI`;
+
+    test('validate TEST', async () => {
+        let checkDate = new Date('2021-07-14T12:34:57Z');
+
+        let test = new Validator(TEST_TRUSTDATA_DATE, false);
+        let res = await test.validate(TEST_TEST, checkDate, 'en');
+        assert.isTrue(res.isValid);
+        assert.isNull(res.error);
+        assert.equal(res.firstname, 'Gabriele');
+        assert.equal(res.lastname, 'Musterfrau-Gößinger');
+        assert.equal(res.dob, '1998-02-26');
+        assert.equal(res.validUntil.toISOString(), '2021-07-16T12:34:55.999Z');
+
+        // Right before it becomes invalid
+        checkDate = new Date('2021-07-16T12:34:55.999Z');
+        res = await test.validate(TEST_TEST, checkDate, 'en');
+        assert.isTrue(res.isValid);
+
+        // Now its invalid
+        checkDate = new Date('2021-07-16T12:34:56Z');
+        res = await test.validate(TEST_TEST, checkDate, 'en');
+        assert.isFalse(res.isValid);
     });
 
     test('rules validate empty', async () => {
