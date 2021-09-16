@@ -214,7 +214,7 @@ export default (async () => {
                     {src: 'assets/manifest.json', dest: 'dist', rename: pkg.internalName + '.manifest.json'},
                     {src: 'assets/silent-check-sso.html', dest: 'dist'},
                     {src: 'assets/dbp-greenlight-coming-soon.html', dest: 'dist'},
-                    {src: 'assets/hcert-kotlin.js', dest: 'dist/' + await getDistPath(pkg.name)},
+                    {src: 'assets/hcert-kotlin.js*', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: await getPackagePath('@dbp-toolkit/font-source-sans-pro', 'files/*'), dest: 'dist/' + await getDistPath(pkg.name, 'fonts/source-sans-pro')},
                     {src: await getPackagePath('@dbp-toolkit/common', 'src/spinner.js'), dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: await getPackagePath('@dbp-toolkit/common', 'misc/browser-check.js'), dest: 'dist/' + await getDistPath(pkg.name)},
