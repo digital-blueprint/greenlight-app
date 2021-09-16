@@ -3,6 +3,8 @@ import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBus
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {createInstance} from '../i18n.js';
+import { withDate } from './utils.js';
+
 
 export class ValidationResult {
 
@@ -25,9 +27,10 @@ export class ValidationResult {
 export class Validator {
 
     /**
+     * @param {Date} trustDate - The date used to verify the trust data and to select the rules
      * @param {boolean} production
      */
-    constructor(production=true) {
+    constructor(trustDate, production=true) {
         let dir = production ? 'prod' : 'test';
         this._trustAnchor = production ? trustAnchorProd : trustAnchorTest;
         this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/' + dir);
@@ -38,6 +41,7 @@ export class Validator {
         /** @type {ValueSets} */
         this._valueSets = null;
         this._loaded = false;
+        this._trustDate = trustDate;
     }
 
     async _applyRulesOverrides() {
@@ -55,17 +59,20 @@ export class Validator {
     async _ensureData()
     {
         // Does all the one time setup if not already done
+        // XXX: this is racy if called concurrently
         if (this._loaded === true)
             return;
         let hcert = await importHCert();
         let trustData = await fetchTrustData(this._baseUrl);
-        this._verifier = new hcert.VerifierTrustList(
-            this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
-        this._businessRules = await decodeBusinessRules(hcert, trustData, this._trustAnchor);
+        this._verifier = withDate(this._trustDate, () => {
+            return new hcert.VerifierTrustList(
+                this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
+        });
+        this._businessRules = await decodeBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
         this._businessRules = this._businessRules.filter('AT', 'ET');
         // XXX: We don't do overrides atm, so don't fetch them
         // await this._applyRulesOverrides();
-        this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor);
+        this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor, this._trustDate);
         this._loaded = true;
     }
 
@@ -78,12 +85,12 @@ export class Validator {
      * the validUntil property set.
      * 
      * @param {string} cert
-     * @param {Date} dateTime
+     * @param {Date} date
      * @param {string} [lang]
      * @param {boolean} [computeValidUntil]
      * @returns {ValidationResult}
      */
-     async validate(cert, dateTime, lang='en', computeValidUntil=false) {
+     async validate(cert, date, lang='en', computeValidUntil=false) {
         await this._ensureData();
 
         let i18n = createInstance();
@@ -120,7 +127,7 @@ export class Validator {
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
             /** @type {RuleValidationResult} */
-            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, dateTime, dateTime);
+            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, date, this._trustDate);
 
             if (res.isValid) {
                 result.isValid = true;
@@ -129,7 +136,7 @@ export class Validator {
                 result.dob = greenCertificate.dob ?? '';
                 if (computeValidUntil) {
                     result.validUntil = getValidUntil(
-                        greenCertificate, this._businessRules, this._valueSets, dateTime);
+                        greenCertificate, this._businessRules, this._valueSets, date);
                 }
             } else {
                 result.isValid = false;

@@ -1,5 +1,19 @@
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {name as pkgName} from './../../package.json';
+import MockDate from 'mockdate';
+
+/**
+ * @param {Date} date 
+ * @param {callback} callback 
+ */
+export function withDate(date, callback) {
+    MockDate.set(date.toISOString());
+    try {
+        return callback();
+    } finally {
+        MockDate.reset();
+    }
+}
 
 /**
  * Returns the hcert-kotlin module

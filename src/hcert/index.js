@@ -2,7 +2,7 @@ import {Validator} from './validate.js';
 export {Validator, ValidationResult} from './validate.js';
 
 
-const defaultValidator = new Validator();
+const defaultValidator = new Validator(new Date(), true);
 
 /**
  * FIXME: remove this function,

@@ -58,6 +58,7 @@
     "jose": "^3.16.1",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
+    "mockdate": "^3.0.5",
     "pdfjs-dist": "2.10.377",
     "qrcode-generator": "^1.4.4",
     "string-similarity": "^4.0.4"
