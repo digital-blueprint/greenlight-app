@@ -175,6 +175,8 @@ export function validateHCertRules(cert, businessRules, valueSets, date, rulesDa
         }
     };
 
+    let valResult = new RuleValidationResult();
+    valResult.isValid = true;
     let errors = [];
     for(let rule of businessRules.rules) {
         // In case a rule isn't valid we should just ignore it. This is usually used to update
@@ -184,21 +186,24 @@ export function validateHCertRules(cert, businessRules, valueSets, date, rulesDa
             continue;
         }
         let result = false;
-        result = certlogic.evaluate(rule.Logic, logicInput);
+        try {
+            result = certlogic.evaluate(rule.Logic, logicInput);
+        } catch (error) {
+            // this can happen on ver large timestamps for example
+            valResult.isValid = false;
+            continue;
+        }
         if (result !== true) {
             errors.push(getRuleErrorDescriptions(rule));
         }
     }
 
-    let result = new RuleValidationResult();
-
     if (errors.length) {
-        result.errors = errors;
-    } else {
-        result.isValid = true;
+        valResult.errors = errors;
+        valResult.isValid = false;
     }
 
-    return result;
+    return valResult;
 }
 
 /**
@@ -251,7 +256,7 @@ export function getValidUntil(hcert, businessRules, valueSets, fromDate)
     while (1) {
         let timestamp = start + offset;
         if (timestamp >= Number.MAX_VALUE) {
-            return checkTime;
+            return null;
         }
         checkTime = fromTimestamp(timestamp);
         if (checkTime === null) {

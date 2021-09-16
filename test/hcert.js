@@ -21,6 +21,11 @@ suite('hcert validate', () => {
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
         assert.equal(res.validUntil.toISOString(), '2021-12-30T00:00:00.000Z');
+
+        const LARGEST_VALID_TIMESTAMP = 8640000000000000;
+        checkDate = new Date(LARGEST_VALID_TIMESTAMP);
+        res = await test.validate(TEST_REC, checkDate, 'en', true);
+        assert.isFalse(res.isValid);
     });
 
     test('validate no rules', async () => {
