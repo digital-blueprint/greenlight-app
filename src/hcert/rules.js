@@ -189,9 +189,7 @@ export function validateHCertRules(cert, businessRules, valueSets, date, rulesDa
         try {
             result = certlogic.evaluate(rule.Logic, logicInput);
         } catch (error) {
-            // this can happen on ver large timestamps for example
-            valResult.isValid = false;
-            continue;
+            // this can happen with very large timestamps for example
         }
         if (result !== true) {
             errors.push(getRuleErrorDescriptions(rule));
@@ -234,12 +232,11 @@ export function getValidUntil(hcert, businessRules, valueSets, fromDate)
     };
 
     let fromTimestamp = (timestamp) => {
-        let date = new Date(timestamp);
-        // in case it is invalid return null
-        if (isNaN(date.getTime())) {
-            return null;
-        }
-        return date;
+        return new Date(timestamp);
+    };
+
+    let isValidDate = (date) => {
+        return !isNaN(date.getTime());
     };
 
     // If not valid at fromDate then there is no end date
@@ -252,16 +249,21 @@ export function getValidUntil(hcert, businessRules, valueSets, fromDate)
     let start = fromDate.getTime();
     let offset = 3600 * 1000 * 24;
     let checkTime = fromDate;
+    // Max 1000 years
+    const maxTime = new Date(fromDate.getTime());
+    maxTime.setFullYear(maxTime.getFullYear() + 1000);
     // eslint-disable-next-line no-constant-condition
     while (1) {
         let timestamp = start + offset;
-        if (timestamp >= Number.MAX_VALUE) {
-            return null;
-        }
         checkTime = fromTimestamp(timestamp);
-        if (checkTime === null) {
-            // the timestamp is out of range, assume the hcert
-            // never becomes invalid
+        if (!isValidDate(checkTime) || checkTime > maxTime) {
+            // If we overflow we check the largest possible date
+            // and if that also is valid we give up and assume it
+            // can never become invalid
+            if (!isValid(maxTime)) {
+                checkTime = maxTime;
+                break;
+            }
             return null;
         }
         if (!isValid(checkTime)) {

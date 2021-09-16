@@ -26,6 +26,10 @@ suite('hcert validate', () => {
         checkDate = new Date(LARGEST_VALID_TIMESTAMP);
         res = await test.validate(TEST_REC, checkDate, 'en', true);
         assert.isFalse(res.isValid);
+
+        checkDate = new Date(LARGEST_VALID_TIMESTAMP / 2);
+        res = await test.validate(TEST_REC, checkDate, 'en', true);
+        assert.isFalse(res.isValid);
     });
 
     test('validate no rules', async () => {
