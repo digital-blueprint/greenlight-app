@@ -717,13 +717,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
                                    <b>Status: <span class="red">inaktiv</span></b>
                                     <b>3-G-Nachweis: <span class="red">kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden</span></b>
-                                   <span>Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der 3-G-Nachweis ist abgelaufen oder der lokale Speicher wurde gelöscht.
+                                   <!-- <span>Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der 3-G-Nachweis ist abgelaufen oder der lokale Speicher wurde gelöscht.
                                         Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
                                         <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
                                         <span>Eintrittsticket erstellen</span>
                                         </a>
                                         anfordern. Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
-                                    </span> 
+                                    </span>  -->
                                    
                                 </span>
                             </span>
