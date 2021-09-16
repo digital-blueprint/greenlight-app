@@ -5,6 +5,7 @@ module.exports = function(config) {
     client: {
       mocha: {
         ui: 'tdd',
+        timeout : 6000
       },
     },
     files: [
