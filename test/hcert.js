@@ -35,8 +35,8 @@ suite('hcert validate', () => {
         assert.equal(res.firstname, 'Gabriele');
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
-        // No rules, so we can't tell an end date
-        assert.isNull(res.validUntil);
+        // No rules, so the expiration date of the hcert defines the end date
+        assert.equal(res.validUntil.toISOString(), '2022-07-15T13:32:58.000Z');
     });
 
     // https://github.com/eu-digital-green-certificates/dcc-quality-assurance/blob/main/AT/1.3.0/VAC.png

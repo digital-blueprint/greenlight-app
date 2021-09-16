@@ -135,8 +135,33 @@ export class Validator {
                 result.lastname = greenCertificate.nam.fn ?? '';
                 result.dob = greenCertificate.dob ?? '';
                 if (computeValidUntil) {
-                    result.validUntil = getValidUntil(
+                    // according to the rules, returns null if it never becomes invalid
+                    let validUntil = getValidUntil(
                         greenCertificate, this._businessRules, this._valueSets, date);
+
+                    let isFullDate = (date) => {
+                        // https://github.com/ehn-dcc-development/hcert-kotlin/pull/64
+                        return (date && date.includes("T"));
+                    };
+
+                    // If anything regarding the certificate stops being valid earlier
+                    // than the rules then it takes precedence
+                    let meta = hcertData.metaInformation;
+                    if (isFullDate(meta.certificateValidUntil)) {
+                        let certificateValidUntil = new Date(meta.certificateValidUntil);
+                        if (validUntil === null || certificateValidUntil < validUntil) {
+                            validUntil = certificateValidUntil;
+                        }
+                    }
+
+                    if (isFullDate(meta.expirationTime)) {
+                        let expirationTime = new Date(meta.expirationTime);
+                        if (validUntil === null || expirationTime < validUntil) {
+                            validUntil = expirationTime;
+                        }
+                    }
+
+                    result.validUntil = validUntil;
                 }
             } else {
                 result.isValid = false;
