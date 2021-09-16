@@ -700,18 +700,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span class="${classMap({hidden: this.isSelfTest})}">
                                         <b>3-G-Nachweis: <span class="green">grüner Pass auf diesem Gerät importiert und gültig</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                        <br>
+                                        <!-- <br>
                                         Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
-                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
+                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
                                         <b>3-G-Nachweis: <span class="warning">Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig</span></b><br>
-                                        Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        <!-- Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket. -->
                                     </span>
                                     <span class="${classMap({hidden: !this.isInternalTest})}">
                                         <b>3-G-Nachweis: <span class="warning">TU Graz Test auf diesem Gerät importiert und gültig</span></b><br>
-                                        Bitte überprüfen Sie manuell die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
-                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
+                                        <!-- Bitte überprüfen Sie manuell die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
