@@ -185,12 +185,7 @@ export function validateHCertRules(cert, businessRules, valueSets, date, rulesDa
         if (rulesDate < new Date(rule.ValidFrom) || rulesDate > new Date(rule.ValidTo)) {
             continue;
         }
-        let result = false;
-        try {
-            result = certlogic.evaluate(rule.Logic, logicInput);
-        } catch (error) {
-            // this can happen with very large timestamps for example
-        }
+        let result = certlogic.evaluate(rule.Logic, logicInput);
         if (result !== true) {
             errors.push(getRuleErrorDescriptions(rule));
         }
