@@ -49,6 +49,11 @@ If you want to update the DBP greenlight App in the current folder you can call:
 npx @digital-blueprint/cli update-app greenlight
 ```
 
+## Cron job
+
+Before you can use this app you need to download the business rules. There is a script `assets/dgc-trust/update.sh`
+which can do this. You need to call it regularly in a cron job.
+
 ## Activities
 
 ### dbp-acquire-3g-ticket
