@@ -957,7 +957,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         
                         ${ !this.preselectionLoading ? html`
                             <dbp-loading-button 
-                                type="${(!this.hasTicket && !this.hasTicketForThisPlace) ? "is-primary" : ""}" 
+                                type="${(!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof ? "is-primary" : ""}" 
                                 id="confirm-ticket-btn"
                                 value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
                                 @click="${() => {  this.processStarted = true; }}" 
