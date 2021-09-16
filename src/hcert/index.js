@@ -30,7 +30,7 @@ export async function hcertValidation(hc1, lang)
 
     let res;
     try {
-        res = await defaultValidator.validate(hc1, new Date(), lang, true);
+        res = await defaultValidator.validate(hc1, new Date(), lang);
     } catch (error) {
         result.status = 500;
         result.error = error.message;

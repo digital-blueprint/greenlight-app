@@ -14,7 +14,7 @@ suite('hcert validate', () => {
         let checkDate = new Date('2021-08-09T15:35:44Z');
 
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
-        let res = await test.validate(TEST_REC, checkDate, 'en', true);
+        let res = await test.validate(TEST_REC, checkDate, 'en');
         assert.isTrue(res.isValid);
         assert.isNull(res.error);
         assert.equal(res.firstname, 'Gabriele');
@@ -24,11 +24,11 @@ suite('hcert validate', () => {
 
         const LARGEST_VALID_TIMESTAMP = 8640000000000000;
         checkDate = new Date(LARGEST_VALID_TIMESTAMP);
-        res = await test.validate(TEST_REC, checkDate, 'en', true);
+        res = await test.validate(TEST_REC, checkDate, 'en');
         assert.isFalse(res.isValid);
 
         checkDate = new Date(LARGEST_VALID_TIMESTAMP / 2);
-        res = await test.validate(TEST_REC, checkDate, 'en', true);
+        res = await test.validate(TEST_REC, checkDate, 'en');
         assert.isFalse(res.isValid);
     });
 
@@ -38,7 +38,7 @@ suite('hcert validate', () => {
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
         await test._ensureData();
         test._businessRules = test._businessRules.filter('NOPE', 'NOPE');
-        let res = await test.validate(TEST_REC, checkDate, 'en', true);
+        let res = await test.validate(TEST_REC, checkDate, 'en');
         assert.isTrue(res.isValid);
         assert.isNull(res.error);
         assert.equal(res.firstname, 'Gabriele');
@@ -55,7 +55,7 @@ suite('hcert validate', () => {
         let checkDate = new Date('2021-08-09T15:35:44Z');
 
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
-        let res = await test.validate(TEST_VAC, checkDate, 'en', true);
+        let res = await test.validate(TEST_VAC, checkDate, 'en');
         assert.isFalse(res.isValid);
         assert.isNotEmpty(res.error);
         assert.isNull(res.firstname, 'Gabriele');
