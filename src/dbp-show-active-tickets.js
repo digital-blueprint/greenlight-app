@@ -700,18 +700,23 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span class="${classMap({hidden: this.isSelfTest})}">
                                         <b>3-G-Nachweis: <span class="green">grüner Pass auf diesem Gerät importiert und gültig</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                        <!-- <br>
-                                        Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
+                                        <div>
+                                        <!-- Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                         Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
+                                        </div>
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
-                                        <b>3-G-Nachweis: <span class="warning">Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig</span></b><br>
+                                        <b>3-G-Nachweis: <span class="warning">Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig</span></b>
+                                        <div>
                                         <!-- Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket. -->
+                                        </div>
                                     </span>
                                     <span class="${classMap({hidden: !this.isInternalTest})}">
-                                        <b>3-G-Nachweis: <span class="warning">TU Graz Test auf diesem Gerät importiert und gültig</span></b><br>
+                                        <b>3-G-Nachweis: <span class="warning">TU Graz Test auf diesem Gerät importiert und gültig</span></b>
+                                        <div>
                                         <!-- Bitte überprüfen Sie manuell die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
                                         Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
+                                        </div>
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
@@ -724,7 +729,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </a>
                                         anfordern. Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
                                     </span>  -->
-                                   
                                 </span>
                             </span>
                             <div class="btn">
