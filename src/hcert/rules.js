@@ -64,22 +64,33 @@ export class BusinessRules {
     }
 
     /**
-     * Replace a set of rules matching the passed information with
-     * a new rule.
+     * Remove all rules matching the partial rule object.
+     * If the passed object is empty, none are removed.
      *
-     * @param {string} identifier 
-     * @param {string} country
-     * @param {string} [region]
-     * @param {object} newRule
+     * @param {object} ruleFilter 
      */
-    override(identifier, country, region, newRule)
+    removeAll(ruleFilter)
     {
+        let entries = Object.entries(ruleFilter);
+        if (entries.length === 0)
+            return;
         this.rules = this.rules.filter((rule) => {
-            return (rule.Identifier !== identifier) ||
-                (rule.Country !== country) ||
-                (rule.Region !== region);
+            for(let [key, value] in entries) {
+                if (rule[key] !== value)
+                    return true;
+            }
+            return false;
         });
-        this.rules.push(newRule);
+    }
+
+    /**
+     * Add a new rule
+     *
+     * @param {object} rule 
+     */
+    add(rule)
+    {
+        this.rules.push(rule);
     }
 
     /**

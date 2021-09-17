@@ -1,6 +1,13 @@
 {
-    "overrides": {
-        "VR-AT-0009": {
+    "remove": [
+        {
+            "Identifier": "VR-AT-0009",
+            "Country": "AT",
+            "Region": "ET"
+        }
+    ],
+    "add": [
+        {
             "Identifier": "VR-AT-0009-TUGRAZ",
             "Type": "Acceptance",
             "Country": "AT",
@@ -82,5 +89,5 @@
             },
             "Region": "ET"
         }
-    }
+    ]
 }

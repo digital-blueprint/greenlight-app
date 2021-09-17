@@ -50,9 +50,11 @@ export class Validator {
             throw new Error(r);
         }
         let overrides = await r.json();
-        console.assert(this._businessRules);
-        for(let [id, rule] of Object.entries(overrides.overrides)) {
-            this._businessRules.override(id, 'AT', 'ET', rule);
+        for(let rem of overrides.remove) {
+            this._businessRules.removeAll(rem);
+        }
+        for(let rule of overrides.add) {
+            this._businessRules.add(rule);
         }
     }
 
@@ -69,9 +71,9 @@ export class Validator {
                 this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
         });
         this._businessRules = await decodeBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
-        this._businessRules = this._businessRules.filter('AT', 'ET');
         // XXX: We don't do overrides atm, so don't fetch them
         // await this._applyRulesOverrides();
+        this._businessRules = this._businessRules.filter('AT', 'ET');
         this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor, this._trustDate);
         this._loaded = true;
     }
