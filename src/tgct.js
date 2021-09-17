@@ -2,15 +2,31 @@ import {decode as b45decode} from 'base45-web';
 import {compactVerify} from 'jose/jws/compact/verify';
 import {parseJwk} from 'jose/jwk/parse';
 
-export const DEFAULT_PUBLIC_KEY= {
-    kty:  "EC",
+/**
+ * See https://gitlab.tugraz.at/dbp/greenlight/tugraz-covid-test-cert for the
+ * format documentation
+ */
+
+ export const TEST_PUBLIC_KEY= {
+    kty: "EC",
     crv: "P-256",
-    x:"Qv7m4gjqJoyikM76jjS1YUGkxn_29NP10GBQnxZMOsY",
-    y: "3nkVieAj0P5cR97yghINR_uAVNQJMHQAKqCwhCJbcEY",
+    x: "3XlWImsznd8IRk7E9rglPNL0opdOiREINjisZbsnLLs",
+    y: "fuu73gDiiUi3UYdNcpEXU1zZfBSLooTuzYIpwbI84J8",
     alg: "ES256"
 };
 
-const PREFIX = 'TGCT:';
+// FIXME: this is currently the test key from
+// https://gitlab.tugraz.at/dbp/greenlight/tugraz-covid-test-cert/-/tree/main/test-cert
+// Needs to be replaced with the real public key
+export const PROD_PUBLIC_KEY= {
+    kty: "EC",
+    crv: "P-256",
+    x: "3XlWImsznd8IRk7E9rglPNL0opdOiREINjisZbsnLLs",
+    y: "fuu73gDiiUi3UYdNcpEXU1zZfBSLooTuzYIpwbI84J8",
+    alg: "ES256"
+};
+
+export const PREFIX = 'TGCT:';
 
 export class TestResult {
 
@@ -41,7 +57,7 @@ export class TestResult {
  */
 export async function decodeTestResult(payload, publicKey) {
     if (publicKey === undefined) {
-        publicKey = DEFAULT_PUBLIC_KEY;
+        publicKey = PROD_PUBLIC_KEY;
     }
     if (!payload.startsWith(PREFIX)) {
         throw new Error('Not supported');
