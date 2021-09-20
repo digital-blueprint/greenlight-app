@@ -458,7 +458,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 
                               
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
-                                    
+                                    ${this.lang === 'de' ? html`
                                     <h4>Informationen zum 3-G-Nachweis</h3>
                                     <!-- <p>
                                     Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser hier angezeigt.
@@ -467,11 +467,24 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         Ist ein <strong>gültiger grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
                                         <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> validiert werden.
                                         <br><br>
-                                            Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
-                                            Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. 
-                                            <br><br>
-                                            Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
-                                    </p>
+                                        Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
+                                        Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. 
+                                        <br><br>
+                                        Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
+                                    </p>` : html`
+                                    <h4>Information about 3-G rule</h3>
+                                    <!-- <p>
+                                    An evidence according to the 3-G rule (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
+                                    </p> -->
+                                    <p>                            
+                                        Is a <strong>vaild health certitificate</strong> available on this device then its QR-code is displayed and the ticked is shown in color.
+                                        This QR-code can be checked with <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a>.
+                                        <br><br>
+                                        Is a <strong>self-test</strong> issued by Land Steiermark or Land Kärnten available on this device then its QR-code is displayed and the ticket is shown in black and white. 
+                                        This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner. 
+                                        <br><br>
+                                        Is a <strong>valid test made by Teststraße of TU Graz</strong> available on this device then the ticket is shown in color. The test has to be evaluated manually.
+                                    </p>`}
                                    
                                
                                 </div>
