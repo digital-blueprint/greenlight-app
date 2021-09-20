@@ -695,46 +695,35 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
                                 <span class="header ${classMap({hidden: !this.hasValidProof})}">
                                     <span> 
-                                        <b>${i18n.t('show-active-tickets.status')}<span class="green">aktiv</span></b>
+                                        <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest})}">
-                                        <b>3-G-Nachweis: <span class="green">grüner Pass auf diesem Gerät importiert und gültig</span></b>
+                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                        <div>
-                                        <!-- Bitte beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
-                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
-                                        </div>
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
-                                        <b>3-G-Nachweis: <span class="warning">Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig</span></b>
-                                        <div>
-                                        <!-- Bitte überprüfen Sie die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket. -->
-                                        </div>
+                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
                                     </span>
                                     <span class="${classMap({hidden: !this.isInternalTest})}">
-                                        <b>3-G-Nachweis: <span class="warning">TU Graz Test auf diesem Gerät importiert und gültig</span></b>
-                                        <div>
-                                        <!-- Bitte überprüfen Sie manuell die Gültigkeit und beachten Sie, dass dieser Nachweis nur auf diesem Gerät für eine bestimmte Zeit gespeichert ist. Kontrollieren Sie regelmäßig Ihr Ticket.
-                                        Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>. -->
-                                        </div>
+                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green"><slot name="internal-test-valid">${i18n.t('show-active-tickets.3-g-evidence-internal-test')}</slot></span></b>
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                   <b>Status: <span class="red">inaktiv</span></b>
-                                    <b>3-G-Nachweis: <span class="red">kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden</span></b>
-                                   <!-- <span>Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der 3-G-Nachweis ist abgelaufen oder der lokale Speicher wurde gelöscht.
-                                        Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
-                                        <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal'>
-                                        <span>Eintrittsticket erstellen</span>
-                                        </a>
-                                        anfordern. Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie <a href="#" class="int-link-internal">HIER</a>.
-                                    </span>  -->
+                                   <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
+                                    <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
+                                    <span>
+                                        ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
+                                        ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
+                                        <a href="#" class="int-link-internal" title="${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-title')}"><!-- TODO link einfügen -->
+                                            ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-here')}
+                                        </a>.
+                                    </span> 
                                 </span>
                             </span>
                             <div class="btn">
                                 <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}" type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
                                 <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket"> 
-                                    <button class="button new-ticket-button">Neues Ticket anfordern</button>
+                                    <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
                                 </a>
                                 <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${() => { this.deleteTicket(ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
                             </div>
