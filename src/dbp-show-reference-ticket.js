@@ -464,7 +464,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser hier angezeigt.
                                     </p> -->
                                     <p>                            
-                                        Ist ein gültiger <strong>grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
+                                        Ist ein <strong>gültiger grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
                                         <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> validiert werden.
                                         <br><br>
                                             Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
