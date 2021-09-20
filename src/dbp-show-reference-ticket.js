@@ -470,7 +470,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
                                             Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. 
                                             <br><br>
-                                            Ist ein gültiger <strong>Test</strong> der <strong>Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
+                                            Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
                                     </p>
                                    
                                
