@@ -1,6 +1,8 @@
 import {decode as b45decode} from 'base45-web';
 import {compactVerify} from 'jose/jws/compact/verify';
 import {parseJwk} from 'jose/jwk/parse';
+import * as commonUtils from "@dbp-toolkit/common/utils";
+import {name as pkgName} from "../package.json";
 
 /**
  * See https://gitlab.tugraz.at/dbp/greenlight/tugraz-covid-test-cert for the
@@ -87,8 +89,9 @@ export async function decodeTestResult(payload, publicKey) {
  * No personal data are returned in case of error!
  *
  * @param {string} tgtc
+ * @param {string} lang
  */
-export async function tgctValidation(tgtc)
+export async function tgctValidation(tgtc, lang)
 {
     let result = {
         status: -1,
@@ -104,7 +107,10 @@ export async function tgctValidation(tgtc)
     let res;
     try {
         res = await decodeTestResult(tgtc, PROD_PUBLIC_KEY); //TODO add validation
-        res.isValid = true; //TODO fix me
+        const url = commonUtils.getAssetURL(pkgName, 'internal/university-internal-test-rules.json');
+        const rules = await fetch(url).then(x => x.json());
+        const now = Date.now();
+        res.isValid = checkAgainstRules(res, rules, now, lang);
 
     } catch (error) {
         result.status = 500;
@@ -126,4 +132,34 @@ export async function tgctValidation(tgtc)
     }
 
     return result;
+}
+
+/**
+ * Check the decoded test against the internal test business rules
+ *
+ * @param {object} decodedTest
+ * @param {object} rules
+ * @param {number} date
+ * @param {string} lang 'de' or 'en'
+ */
+export function checkAgainstRules(decodedTest, rules, date, lang="en")
+{
+    date = Date.parse('2021-09-10T10:00:00'); // TODO: remove after testing
+
+    const test_date = Date.parse(decodedTest.date);
+    for (let i = 0; i < rules.rules.length; i++) {
+        const r = rules.rules[i];
+        const from = Date.parse(r.from);
+        const until = Date.parse(r.until);
+        //console.log(date, (test_date + r['hours-valid']*3600000), date <= (test_date + r['hours-valid']*3600000));
+        if (date >= from && date <= until && r.type === decodedTest.type) {
+            if (date <= (test_date + r['hours-valid']*3600000)) {
+                return true;
+            }
+            decodedTest.error = r['invalid-messages'][lang];
+            return false;
+        }
+    }
+    decodedTest.error = lang === 'de' ? 'Keine anwendbare Regel gefunden.' : 'no applicable rule found.';
+    return false;
 }

@@ -1,0 +1,24 @@
+{
+  "rules": [
+    {
+      "type": "RAT",
+      "hours-valid": 24,
+      "from": "2021-09-09T00:00:00",
+      "until": "2021-12-31T23:59:59",
+      "invalid-messages": {
+        "DE": "Ihr Antigen-Test ist bereits abgelaufen.",
+        "EN": "Your test became invalid."
+      }
+    },
+    {
+      "type": "NAAT",
+      "hours-valid": 48,
+      "from": "2021-09-09T00:00:00",
+      "until": "2021-12-31T23:59:59",
+      "invalid-messages": {
+        "DE": "Ihr PCR-Test ist bereits abgelaufen.",
+        "EN": "Your PCR-test became invalid."
+      }
+    }
+  ]
+}

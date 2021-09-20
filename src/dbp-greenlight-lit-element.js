@@ -457,7 +457,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async checkActivationResponse(greenPassHash, category, preCheck, internalTest = false) {
         const i18n = this._i18n;
 
-        let responseData = internalTest ? await tgct.tgctValidation(greenPassHash) : await hcertValidation(greenPassHash, this.lang);
+        let responseData = internalTest ? await tgct.tgctValidation(greenPassHash, this.lang) : await hcertValidation(greenPassHash, this.lang);
         let status = responseData.status;
         let responseBody = responseData.data;
         switch (status) {
