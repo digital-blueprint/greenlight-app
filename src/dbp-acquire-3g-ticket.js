@@ -597,6 +597,17 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-bottom: 1.5rem;
             }
 
+            .checkmark {
+                height: 18px;
+                width: 18px;
+                top: 5px;
+            }
+
+            .button-container input[type="checkbox"]:checked ~ .checkmark::after {
+                top: 1px;
+                left: 6px;
+            }
+
             .info-icon {
                 padding-left: 5px;
             }
@@ -770,6 +781,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             .check-icon{
+                font-size: 18px;
+                opacity: 0.7;
                 padding: 0px 4px;
             }
             
