@@ -413,9 +413,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="${classMap({hidden: this.loading})}">
                         <div class="ticket">
                             <span class="header">
-                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-active-tickets.place-name')}</h3>
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-reference-ticket.place-name')}</h3>
                                 <span class="header">
-                                   <b>${i18n.t('show-active-tickets.status-title')} <span class="green">${i18n.t('show-reference-ticket.active')}</span> / <span class="red">${i18n.t('show-reference-ticket.inactive')}</span></b>
+                                   <b>${i18n.t('show-active-tickets.status')} <span class="green">${i18n.t('show-reference-ticket.active')}</span> / <span class="red">${i18n.t('show-reference-ticket.inactive')}</span></b>
                                    <span>${i18n.t('show-reference-ticket.description')}</span>
                                 </span>
                             </span>
@@ -448,9 +448,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-active-tickets.place-name')}</strong></h3>
+                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong></h3>
                                     <div class="foto-container">
-                                        <img src="${this.referenceImage || ''}" alt="Ticketfoto" />
+                                        <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                     </div>
                                 </div>
                                 

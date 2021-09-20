@@ -50,8 +50,6 @@
   },
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",
-    "place-name": "Ort",
-    "status-title": "Status:",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
     "valid-until-message-1": "Gültig für: ",
     "valid-until-message-2": "{{hours}} Stunde(n)",
@@ -83,13 +81,15 @@
     "status-inactive": "inaktiv",
     "3-g-evidence-invalid": "kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden",
     "3-g-evidence-invalid-text": "Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der Nachweis ist nicht mehr gültig oder die Applikation wurde für einen längeren Zeitraum nicht genutzt.",
-    "3-g-evidence-maximize-saving": "Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie ",
+    "3-g-evidence-maximize-saving": "Fügen Sie die App auf dem Startbildschirm hinzu, um die Speicherdauer des 3-G-Nachweises zu maximieren. Wie das geht erfahren Sie ",
     "3-g-evidence-maximize-saving-here": "hier",
-    "3-g-evidence-maximize-saving-title": "Maximierung der Speicherdauer des importierten 3-G-Nachweises",
+    "3-g-evidence-maximize-saving-title": "FAQs",
     "new-ticket": "Neues Ticket anfordern",
-    "internal-test-found": "Universitäts interner Test gefunden"
+    "internal-test-found": "Universitäts interner Test gefunden",
+    "image-alt-text": "Ticketfoto"
   },
   "show-reference-ticket": {
+    "place-name": "Ort",
     "active": "aktiv",
     "inactive": "inaktiv",
     "description": "Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt vom lokal importierten 3-G-Nachweis ab."

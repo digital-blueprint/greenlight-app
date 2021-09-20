@@ -721,7 +721,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span>
                                         ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
                                         ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
-                                        <a href="#" class="int-link-internal" title="${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-title')}"><!-- TODO link einfügen -->
+                                        <a href="#" class="int-link-external" title="${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-title')}"><!-- TODO link einfügen -->
                                             ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-here')}
                                         </a>.
                                     </span> 
@@ -763,7 +763,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
                                     <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
                                     <div class="foto-container">
-                                        <img src="${this.currentTicketImage || ''}" alt="Ticketfoto" />
+                                        <img src="${this.currentTicketImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                     </div>
                                 </div>
                                 

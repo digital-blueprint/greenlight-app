@@ -50,8 +50,6 @@
   },
   "show-active-tickets": {
     "entry-ticket": "Entry Ticket",
-    "place-name": "Place",
-    "status-title": "Status:",
     "no-tickets-message": "You do not have any tickets!",
     "valid-until-message-1": "Valid for: ",
     "valid-until-message-2": "{{hours}} hour(s)",
@@ -83,13 +81,15 @@
     "status-inactive": "inactive",
     "3-g-evidence-invalid": "No valid 3-G evidence found on this device",
     "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
-    "3-g-evidence-maximize-saving": "You can find out how to maximize the storage time of the imported 3-G evidence",
-    "3-g-evidence-maximize-saving-title": "Maximize the storage time of the imported 3-G evidence",
+    "3-g-evidence-maximize-saving": "Add the app to the home screen to maximize the storage time of the 3-G evidence. How to do this you can read ",
+    "3-g-evidence-maximize-saving-title": "FAQs",
     "3-g-evidence-maximize-saving-here": "here",
     "new-ticket": "Request a new ticket",
-    "internal-test-found": "found university internal test"
+    "internal-test-found": "found university internal test",
+    "image-alt-text": "Ticket image"
   },
   "show-reference-ticket": {
+    "place-name": "Place",
     "active": "activ",
     "inactive": "inactiv",
     "description": "The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive."
