@@ -440,7 +440,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             .tickets {
-                margin-top: 2em;
+                margin-top: 2.3em;
             }
             
             .header {
@@ -691,9 +691,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 <p class="subheadline">
                     ${this.activity.getDescription(this.lang)}
                 </p>
-                <p>${i18n.t('show-active-tickets.description')}</p>
 
-                <div class="border tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+                <div class="tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
                     <div class="${classMap({hidden: this.loading})}">
                     ${ this.activeTickets.map(ticket => html`
                         <div class="ticket">

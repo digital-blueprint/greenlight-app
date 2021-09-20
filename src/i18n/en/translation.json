@@ -50,7 +50,7 @@
   },
   "show-active-tickets": {
     "entry-ticket": "Entry Ticket",
-    "description": "Here you can see the list of all tickets. You have to show them in case of a manual control.",
+    "description": "Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the university.",
     "no-tickets-message": "You do not have any tickets!",
     "valid-until-message-1": "Valid for: ",
     "valid-until-message-2": "{{hours}} hour(s)",
