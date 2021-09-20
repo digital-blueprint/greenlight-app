@@ -177,7 +177,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
             
             .tickets {
-                margin-top: 2em;
+                margin-top: 2.3em;
             }
             
             .header {
@@ -404,13 +404,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    ${this.activity.getDescription(this.lang)}
+                    <slot name="greenlight-reference-ticket-description">
+                        ${this.activity.getDescription(this.lang)}
+                    </slot>
                 </p>
-                <slot name="greenlight-reference-ticket-description">
-                    <p>${i18n.t('show-active-tickets.description')}</p>
-                </slot>
                 
-                <div class="border tickets ${classMap({hidden: this.isLoading()})}">
+                <div class="tickets ${classMap({hidden: this.isLoading()})}">
                     <div class="${classMap({hidden: this.loading})}">
                         <div class="ticket">
                             <span class="header">

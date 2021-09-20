@@ -50,7 +50,6 @@
   },
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",
-    "description": "Hier können Sie das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen. Dieses Ticket berechtigt nicht zum Eintritt an die Universität.",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
     "valid-until-message-1": "Gültig für: ",
     "valid-until-message-2": "{{hours}} Stunde(n)",
