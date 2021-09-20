@@ -274,7 +274,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async generateQrCode() {
         await this.checkForValidProofLocal();
         if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
-            console.log("this.greenpass", this.greenPassHash);
             let typeNumber = 0;
             let errorCorrectionLevel = 'H';
             let qr = qrcode(typeNumber, errorCorrectionLevel);

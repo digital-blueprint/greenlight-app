@@ -86,8 +86,7 @@ export async function decodeTestResult(payload, publicKey) {
  * Use Validator/ValidationResult directly.
  * No personal data are returned in case of error!
  *
- * @param {string} hc1
- * @returns {object}
+ * @param {string} tgtc
  */
 export async function tgctValidation(tgtc)
 {

@@ -424,6 +424,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param greenPassHash
      * @param category
      * @param precheck
+     * @param internalTest
      */
     async doActivation(greenPassHash, category, precheck = false, internalTest = false) {
         const i18n = this._i18n;
@@ -451,8 +452,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param greenPassHash
      * @param category
      * @param preCheck
+     * @param internalTest
      */
-    async checkActivationResponse(greenPassHash, category, preCheck, internalTest) {
+    async checkActivationResponse(greenPassHash, category, preCheck, internalTest = false) {
         const i18n = this._i18n;
 
         let responseData = internalTest ? await tgct.tgctValidation(greenPassHash) : await hcertValidation(greenPassHash, this.lang);

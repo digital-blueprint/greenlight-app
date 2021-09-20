@@ -140,9 +140,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 },
             });
         }
-        let success = await this.updateReferenceTicket();
-        if (!success) {
-        }
+        await this.updateReferenceTicket();
         this.ticketLoading = false;
     }
 
