@@ -50,6 +50,8 @@
   },
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",
+    "place-name": "Ort",
+    "status-title": "Status:",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
     "valid-until-message-1": "Gültig für: ",
     "valid-until-message-2": "{{hours}} Stunde(n)",
