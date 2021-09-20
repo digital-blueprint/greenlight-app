@@ -48,6 +48,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.QRCodeFile = null;
 
         this.searchHashString = '';
+        this.searchHashInternalTestString = '';
         this.searchSelfTestStringArray = '';
         this.wrongHash = [];
         this.wrongQR = [];
@@ -58,6 +59,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._activationInProgress = false;
         this.preCheck = true;
 
+        this.isInternalTest = false;
         this.isSelfTest = false;
         this.isUploadSkipped = false;
         this.isConfirmChecked = false;
@@ -120,6 +122,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             storeCertificate: { type: Boolean, attribute: false },
             showCertificateSwitch: { type: Boolean, attribute: false },
             person: { type: Object, attribute: false },
+            isInternalTest: { type: Boolean, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
             preselectionLoading: { type: Boolean, attribute: false },
             
@@ -131,6 +134,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             message: { type: String, attribute: false },
 
             searchHashString: { type: String, attribute: 'gp-search-hash-string' },
+            searchHashInternalTestString: { type: String, attribute: 'gp-search-hash-internal-test-string' },
             searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},

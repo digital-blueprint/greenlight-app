@@ -77,3 +77,54 @@ export async function decodeTestResult(payload, publicKey) {
 
     return result;
 }
+
+
+/**
+ * FIXME: remove this function,
+ * this is just a shim to provide a similar interface to the server one.
+ *
+ * Use Validator/ValidationResult directly.
+ * No personal data are returned in case of error!
+ *
+ * @param {string} hc1
+ * @returns {object}
+ */
+export async function tgctValidation(tgtc)
+{
+    let result = {
+        status: -1,
+        error: null,
+        data : {
+            firstname: null,
+            lastname: null,
+            dob: null,
+            validUntil: null,
+        }
+    };
+
+    let res;
+    try {
+        res = await decodeTestResult(tgtc, PROD_PUBLIC_KEY); //TODO add validation
+        res.isValid = true; //TODO fix me
+
+    } catch (error) {
+        result.status = 500;
+        result.error = error.message;
+        console.log("HCert validation error", error);
+        return result;
+    }
+
+    if (res.isValid) {
+        result.status = 201;
+        result.data.firstname = res.firstname;
+        result.data.lastname = res.lastname;
+        result.data.dob = res.dob;
+        result.data.validUntil =  new Date('2022-09-09T12:53:22Z');  //TODO fix me
+    } else {
+        console.log("Tgtcert invalid");
+        result.status = 422;
+        result.error = res.error;
+    }
+
+    return result;
+}

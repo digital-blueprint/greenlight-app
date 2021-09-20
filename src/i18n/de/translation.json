@@ -74,7 +74,7 @@
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht.",
     "status": "Status: ",
     "loading-message-ticket": "Ticket wird geladen ...",
-    "status-active": "akWie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie tiv",
+    "status-active": "aktiv",
     "3-g-evidence": "3-G-Nachweis",
     "3-g-evidence-green-pass-valid": "grüner Pass auf diesem Gerät importiert und gültig",
     "3-g-evidence-selftest": "Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig",
@@ -85,7 +85,8 @@
     "3-g-evidence-maximize-saving": "Wie Sie die Dauer der Speicherung des importierten 3-G-Nachweises verlängern erfahren Sie ",
     "3-g-evidence-maximize-saving-here": "hier",
     "3-g-evidence-maximize-saving-title": "Maximierung der Speicherdauer des importierten 3-G-Nachweises",
-    "new-ticket": "Neues Ticket anfordern"
+    "new-ticket": "Neues Ticket anfordern",
+    "internal-test-found": "Universitäts interner Test gefunden"
   },
   "show-reference-ticket": {
     "active": "aktiv",

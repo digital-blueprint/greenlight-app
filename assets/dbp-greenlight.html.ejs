@@ -70,6 +70,7 @@
     provider-root
     lang="de" entry-point-url="<%= entryPointURL %>"
     gp-search-hash-string="<%= gpSearchQRString %>"
+    gp-search-hash-internal-test-string="<%= gpSearchQRInternalTestString %>"
     gp-search-self-test-string-array="<%= gpSearchSelfTestStringArray %>"
     preselected-option="<%= preselectedOption %>"
     file-handling-enabled-targets="local,nextcloud"
@@ -262,6 +263,16 @@
         </div>
     </template>
     <template id="dbp-show-active-tickets">
+        <div slot="found-university-internal-test">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    TU Graz Test gefunden
+                </div>
+                <div slot="en">
+                    Found TU Graz test
+                </div>
+            </dbp-translated>
+        </div>
         <div slot="internal-test-valid">
             <dbp-translated subscribe="lang">
                 <div slot="de">
