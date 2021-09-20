@@ -471,18 +471,18 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <br><br>
                                         Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
                                     </p>` : html`
-                                    <h4>Information about 3-G rule</h3>
+                                    <h4>Information about 3-G evidence</h3>
                                     <!-- <p>
-                                    An evidence according to the 3-G rule (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
+                                    An evidence according to the 3-G evidence (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
                                     </p> -->
                                     <p>                            
-                                        Is a <strong>valid health certitificate</strong> available on this device then its QR-code is displayed and the ticked is shown in color.
+                                        If a <strong>valid health certitificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
                                         This QR-code can be checked with <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a>.
                                         <br><br>
-                                        Is a <strong>self-test</strong> issued by Land Steiermark or Land Kärnten available on this device then its QR-code is displayed and the ticket is shown in black and white. 
+                                        If a <strong>self-test</strong> was issued by Land Steiermark or Land Kärnten is available on this device then its QR-code is displayed and the ticket is shown in black and white. 
                                         This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner. 
                                         <br><br>
-                                        Is a <strong>valid test made by Teststraße of TU Graz</strong> available on this device then the ticket is shown in color. The test has to be evaluated manually.
+                                        If a <strong>valid test made by Teststraße of TU Graz</strong> is available on this device then the ticket is shown in color. The test has to be evaluated manually.
                                     </p>`}
                                    
                                
