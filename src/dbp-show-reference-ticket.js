@@ -477,7 +477,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     An evidence according to the 3-G rule (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
                                     </p> -->
                                     <p>                            
-                                        Is a <strong>vaild health certitificate</strong> available on this device then its QR-code is displayed and the ticked is shown in color.
+                                        Is a <strong>valid health certitificate</strong> available on this device then its QR-code is displayed and the ticked is shown in color.
                                         This QR-code can be checked with <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a>.
                                         <br><br>
                                         Is a <strong>self-test</strong> issued by Land Steiermark or Land Kärnten available on this device then its QR-code is displayed and the ticket is shown in black and white. 
