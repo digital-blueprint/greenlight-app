@@ -416,9 +416,8 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <span class="header">
                                 <h3>${i18n.t('show-active-tickets.entry-ticket')}: Ort</h3> <!-- TODO Übersetzen -->
                                 <span class="header">
-                                   <b>Status: <span class="green">aktiv</span> / <span class="red">inaktiv</span></b>
-                                   <span>Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt vom lokal importierten 3-G-Nachweis ab.</span>
-                                   
+                                   <b>Status: <span class="green">${i18n.t('show-reference-ticket.active')}</span> / <span class="red">${i18n.t('show-reference-ticket.inactive')}</span></b>
+                                   <span>${i18n.t('show-reference-ticket.description')}</span>
                                 </span>
                             </span>
                             <div class="btn">

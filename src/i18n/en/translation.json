@@ -87,6 +87,11 @@
     "3-g-evidence-maximize-saving-here": "here",
     "new-ticket": "Request a new ticket"
   },
+  "show-reference-ticket": {
+    "active": "activ",
+    "inactive": "inactiv",
+    "description": "The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive."
+  },
   "validity-tooltip": "According to the ",
   "validity-tooltip-2": "current regulations",
   "valid-till": "Probably valid until: ",

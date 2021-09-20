@@ -87,6 +87,11 @@
     "3-g-evidence-maximize-saving-title": "Maximierung der Speicherdauer des importierten 3-G-Nachweises",
     "new-ticket": "Neues Ticket anfordern"
   },
+  "show-reference-ticket": {
+    "active": "aktiv",
+    "inactive": "inaktiv",
+    "description": "Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt vom lokal importierten 3-G-Nachweis ab."
+  },
   "validity-tooltip": "Nach den ",
   "validity-tooltip-2": "aktuellen Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis ",
