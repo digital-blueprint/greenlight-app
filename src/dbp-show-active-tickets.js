@@ -13,7 +13,6 @@ import qrcode from "qrcode-generator";
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
 import {Activity} from "./activity";
 import metadata from "./dbp-show-active-tickets.metadata.json";
-import {encodeAdditionalInformation} from "./crypto";
 
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
