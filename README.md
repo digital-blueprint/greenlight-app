@@ -196,7 +196,7 @@ Example:
 </template>
 ```
 
-##### greenlight-internal-test-text
+##### internal-test-text
 
 The content of this slot will be shown in a ticket. 
 Without this slot "university internal test" default text is shown here.
@@ -205,7 +205,7 @@ Example:
 
 ```html
 <template id="dbp-show-active-tickets">
-  <div slot="greenlight-internal-test-text">
+  <div slot="internal-test-text">
     <dbp-translated subscribe="lang">
       <div slot="de">
         Der Test der Teststraße der TU Graz wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.
@@ -226,27 +226,28 @@ Without this slot "university internal test" default text is shown here.
 Example:
 
 ```html
+
 <template id="dbp-show-active-tickets">
-  <div slot="internal-test-valid">
-    <dbp-translated subscribe="lang">
-      <div slot="de">
-        <b>
-          3-G-Nachweis:
-          <span class="green">
-                            TU Graz Test auf diesem Gerät importiert und gültig
-                        </span>
-        </b>
-      </div>
-      <div slot="en">
-        <b>
-          3-G-evidence:
-          <span class="green">
-                            TU Graz test imported on this device and valid
-                        </span>
-        </b>
-      </div>
-    </dbp-translated>
-  </div>
+    <div slot="internal-test-valid">
+        <dbp-translated subscribe="lang">
+            <div slot="de">
+                <b>
+                    3-G-Nachweis:
+                    <span class="green">
+                        TU Graz Test auf diesem Gerät importiert und gültig
+                    </span>
+                </b>
+            </div>
+            <div slot="en">
+                <b>
+                    3-G-evidence:
+                    <span class="green">
+                        TU Graz test imported on this device and valid
+                    </span>
+                </b>
+            </div>
+        </dbp-translated>
+    </div>
 </template>
 ```
 
@@ -309,15 +310,15 @@ Note that you will need a Keycloak server along with a client id for the domain 
 You use templates tags to inject slots into the activity.
 These templates will be converted to div containers when the page is loaded and will not show up before that.
 
-##### greenlight-reference-ticket-description
+##### description
 
 The content of this slot will be shown in the ticket reference activity description.
 
 Example:
 
 ```html
-<template id="dbp-show-active-tickets">
-  <div slot="greenlight-reference-ticket-description">
+<template id="dbp-show-reference-ticket">
+  <div slot="description">
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
@@ -341,7 +342,7 @@ The content of this slot will be shown when you open the reference ticket in the
 Example:
 
 ```html
-<template id="dbp-show-active-tickets">
+<template id="dbp-show-reference-ticket">
   <div slot="information-container">
     <dbp-translated subscribe="lang">
       <div slot="de">

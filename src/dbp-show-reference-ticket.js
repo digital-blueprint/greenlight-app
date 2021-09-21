@@ -426,7 +426,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    <slot name="greenlight-reference-ticket-description">
+                    <slot name="description">
                         ${this.activity.getDescription(this.lang)}
                     </slot>
                 </p>

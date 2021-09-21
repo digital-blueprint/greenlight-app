@@ -808,7 +808,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <div id="qr-code-hash"></div>
                                     </div>
                                     <div class="${classMap({hidden: !this.isInternalTest})}">
-                                        <slot name="greenlight-internal-test-text">
+                                        <slot name="internal-test-text">
                                             <p>${i18n.t('show-active-tickets.internal-test-text')}</p>
                                         </slot>
                                     </div>
