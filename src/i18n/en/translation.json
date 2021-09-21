@@ -93,7 +93,9 @@
     "place-name": "Place",
     "active": "activ",
     "inactive": "inactiv",
-    "description": "The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive."
+    "description": "The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive.",
+    "information-container-headline": "Information about 3-G evidence",
+    "information-container-body": "If a valid health certitificate is available on this device then its QR-code is displayed and the ticked is shown in color."
   },
   "validity-tooltip": "According to the ",
   "validity-tooltip-2": "current regulations",

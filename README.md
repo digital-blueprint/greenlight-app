@@ -311,7 +311,7 @@ These templates will be converted to div containers when the page is loaded and 
 
 ##### greenlight-reference-ticket-description
 
-The content of this slot will be shown in the ticket reference activity description
+The content of this slot will be shown in the ticket reference activity description.
 
 Example:
 
@@ -334,6 +334,32 @@ Example:
 </template>
 ```
 
+##### information-container
+
+The content of this slot will be shown when you open the reference ticket in the reference ticket activity.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="information-container">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <h4>Informationen zum 3-G-Nachweis</h4>
+          <p>
+              Ist ein <strong>gültiger grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt.
+          </p>
+      </div>
+      <div slot="en">
+          <h4>Information about 3-G evidence</h4>
+          <p>
+              If a <strong>valid health certitificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
+          </p>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
 
 ### Design Note
 

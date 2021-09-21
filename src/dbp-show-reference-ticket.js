@@ -475,40 +475,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                     </div>
                                 </div>
-                                
-                              
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
-                                    ${this.lang === 'de' ? html`
-                                    <h4>Informationen zum 3-G-Nachweis</h3>
-                                    <!-- <p>
-                                    Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser hier angezeigt.
-                                    </p> -->
-                                    <p>                            
-                                        Ist ein <strong>gültiger grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
-                                        <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a> validiert werden.
-                                        <br><br>
-                                        Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. 
-                                        Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. 
-                                        <br><br>
-                                        Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
-                                    </p>` : html`
-                                    <h4>Information about 3-G evidence</h3>
-                                    <!-- <p>
-                                    An evidence according to the 3-G evidence (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
-                                    </p> -->
-                                    <p>                            
-                                        If a <strong>valid health certitificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
-                                        This QR-code can be checked with <a href="https://greencheck.gv.at/" title="Greencheck" taget="_blank" class="int-link-external">Green Check</a>.
-                                        <br><br>
-                                        If a <strong>self-test</strong> was issued by Land Steiermark or Land Kärnten is available on this device then its QR-code is displayed and the ticket is shown in black and white. 
-                                        This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner. 
-                                        <br><br>
-                                        If a <strong>valid test made by Teststraße of TU Graz</strong> is available on this device then the ticket is shown in color. The test has to be evaluated manually.
-                                    </p>`}
-                                   
-                               
+                                    <slot name="information-container">
+                                        <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h3>
+                                        ${i18n.t('show-active-tickets.information-container-body')}
+                                    </slot>
                                 </div>
-
                                 <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
                                     <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
                                 </button>

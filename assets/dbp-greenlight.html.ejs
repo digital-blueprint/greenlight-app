@@ -212,12 +212,10 @@
                     animation: 0s linkIconIn;
                     font-size: 103%;
                 }
-
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
                     <p>
-                        
                         Mit dieser Applikation können Sie ein Eintrittsticket erstellen. Sie können Ihren <a target="_blank" rel="noopener" href="https://www.tugraz.at/icoe/coronavirus/ampelstatus-traffic-light-status/#c398763" class="int-link-external">
                             Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel)
                         </a> hochladen, indem Sie den entsprechenden QR-Code scannen oder ein vorhandenes PDF oder Bild mit QR-Code hochladen und sich damit ein Ticket ausstellen lassen.
@@ -334,8 +332,6 @@
                         border-bottom: 1px solid white;
                     }
                 }
-
-
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
@@ -407,6 +403,76 @@
                 <div slot="en">
                     <p>
                         Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the TU Graz.
+                    </p>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="information-container">
+            <style>
+                .int-link-external {
+                    transition: background-color 0.15s, color 0.15s;
+                    border-bottom: 1px solid white;
+                }
+
+                .int-link-external:hover {
+                    background-color: black;
+                    color: white;
+                }
+
+                .int-link-external:after {
+                    filter: invert(100%);
+                    content: "\00a0\00a0\00a0";
+                    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%228.6836mm%22%20width%3D%225.2043mm%22%20version%3D%221.1%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%20viewBox%3D%220%200%2018.440707%2030.768605%22%3E%3Cg%20transform%3D%22translate(-382.21%20-336.98)%22%3E%3Cpath%20style%3D%22stroke-linejoin%3Around%3Bstroke%3A%23000%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3Bstroke-width%3A2%3Bfill%3Anone%22%20d%3D%22m383.22%20366.74%2016.43-14.38-16.43-14.37%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+                    background-size: 73%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    margin: 0 0 0 3px;
+                    padding: 0 0 0.25% 0;
+                    animation: 0.15s linkIconOut;
+                    font-size: 103%;
+                }
+
+                .int-link-external:hover::after {
+                    content: "\00a0\00a0\00a0";
+                    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%228.6836mm%22%20width%3D%225.2043mm%22%20version%3D%221.1%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%20viewBox%3D%220%200%2018.440707%2030.768605%22%3E%3Cg%20transform%3D%22translate(-382.21%20-336.98)%22%3E%3Cpath%20style%3D%22stroke-linejoin%3Around%3Bstroke%3A%23FFF%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3Bstroke-width%3A2%3Bfill%3Anone%22%20d%3D%22m383.22%20366.74%2016.43-14.38-16.43-14.37%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+                    background-size: 73%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    margin: 0 0 0 3px;
+                    padding: 0 0 0.25% 0;
+                    animation: 0s linkIconIn;
+                    font-size: 103%;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <h4>Informationen zum 3-G-Nachweis</h4>
+                    <!-- <p>
+                    Ist ein Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) lokal gespeichert, dann wird dieser hier angezeigt.
+                    </p> -->
+                    <p>
+                        Ist ein <strong>gültiger grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit
+                        <a href="https://greencheck.gv.at/" title="Greencheck" target="_blank" class="int-link-external">Green Check</a> validiert werden.
+                        <br><br>
+                        Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
+                        Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen.
+                        <br><br>
+                        Ist ein <strong>gültiger Test der Teststraße der TU Graz</strong> auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden.
+                    </p>
+                </div>
+                <div slot="en">
+                    <h4>Information about 3-G evidence</h4>
+                    <!-- <p>
+                    An evidence according to the 3-G evidence (German: geimpft, getestet, genesen – vaccinated, tested, recovered) shows your low epidemiological risk.
+                    </p> -->
+                    <p>
+                        If a <strong>valid health certitificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
+                        This QR-code can be checked with <a href="https://greencheck.gv.at/" title="Greencheck" target="_blank" class="int-link-external">Green Check</a>.
+                        <br><br>
+                        If a <strong>self-test</strong> was issued by Land Steiermark or Land Kärnten is available on this device then its QR-code is displayed and the ticket is shown in black and white.
+                        This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner.
+                        <br><br>
+                        If a <strong>valid test made by Teststraße of TU Graz</strong> is available on this device then the ticket is shown in color. The test has to be evaluated manually.
                     </p>
                 </div>
             </dbp-translated>
