@@ -78,7 +78,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         super.disconnectedCallback();
     }
 
-
     connectedCallback() {
         super.connectedCallback();
         window.addEventListener('focus', this.boundUpdateTicket);
@@ -92,7 +91,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     break;
             }
         });
-
         super.update(changedProperties);
     }
 
@@ -101,7 +99,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.getListOfActiveTickets();
         this.checkForValidProofLocalWrapper();
     }
-
 
     /**
      * Parse an activeTicket response and return a list
@@ -143,6 +140,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Gets a specific ticket
      *
      * @param ticketID
+     * @returns {object} response
      */
     async getActiveTicketRequest(ticketID) {
 
@@ -163,6 +161,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     /**
      * Gets the active tickets
      *
+     * @returns {object} response
      */
     async getActiveTicketsRequest() {
         const options = {
@@ -178,6 +177,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             encodeURIComponent(additionalInformation), options);
     }
 
+    /**
+     * A wrapper for update ticket for calling it in an event handler
+     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     *
+     */
     async updateTicketWrapper() {
         this.setTimeoutIsSet = false; //reset timer if focus event is triggered
         this.updateTicket();
@@ -223,13 +227,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         this.getListOfActiveTickets();
-        /*send({
+        /* fail soft
+            send({
             "summary": i18n.t('show-active-tickets.other-error-title'),
             "body":  i18n.t('show-active-tickets.other-error-body'),
             "type": "danger",
             "timeout": 5,
         });*/
-        console.log("------------------------- cant refresh");
+        console.log("cant refresh");
         this.setTimeoutIsSet = false;
         this.setTimer(6000);
         return false;
@@ -254,7 +259,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
     }
 
-
+    /**
+     * Check if a local Proof exists wrapper
+     *
+     */
     async checkForValidProofLocalWrapper() {
         this.loading = true;
         await this.checkForValidProofLocal();
@@ -295,7 +303,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Generate a QR Code if a hash is avaible and valid,
      * updates the ticket and shows it in modal view
      *
-     * @param ticket
+     * @param {object}ticket
      */
     async showTicket(ticket) {
 
@@ -311,12 +319,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             });
         }
         await this.generateQrCode();
-        console.log("sucess generate qr");
         this.currentTicket = ticket;
         let success = await this.updateTicket();
         if (!success) {
             this.currentTicket = {};
-            console.log("update ticket failed");
         }
         this.ticketLoading = false;
     }
@@ -325,7 +331,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Sends a delete Ticket Request for the specific entry,
      * Checks the response and update the listview
      *
-     * @param ticket
+     * @param {object} ticket
      */
     async deleteTicket(ticket) {
         let response = await this.sendDeleteTicketRequest(ticket.identifier);
@@ -340,7 +346,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Checks the response from DeleteTicketRequest
      * and notify the user
      *
-     * @param response
+     * @param {object} response
      */
     async checkDeleteTicketResponse(response) {
         const i18n = this._i18n;
@@ -378,7 +384,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Get a list of active tickets
+     * Get a list of active tickets and checks the response of the request
      *
      */
     async getListOfActiveTickets() {
@@ -391,14 +397,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * updates the ticket list
      * and notify the user if something went wrong
      *
-     * @param response
+     * @param {object} response
      */
     async checkActiveTicketsRequest(response) {
-        // const i18n = this._i18n;
-
         let responseBody = await response.clone().json();
         if (responseBody !== undefined && response.status === 200) {
             this.activeTickets = this.parseActiveTickets(responseBody);
+        } else {
+            // else it failed, but we want to fail soft
+            console.log("refresh failed");
         }
     }
 
@@ -446,12 +453,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 justify-content: space-between;
                 column-gap: 0.5em;
             }
-            
-            .border {
-                margin-top: 2rem;
-                padding-top: 2rem;
-                border-top: 1px solid black;
-            }
 
             #ticket-modal-box {
                 display: flex;
@@ -473,9 +474,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 line-height: 30px;
             }
             
-            .proof-container, .information-container{
-                background-color: #245b78;
-                color: white;
+            .proof-container, .information-container {
+                background-color: var(--dbp-info-bg-color);;
+                color: var(--dbp-info-text-color);;
                 padding: 40px 10px;
                 display: flex;
                 flex-direction: column;
@@ -488,20 +489,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 text-align: center;
             }
             
-            .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal{
+            .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal {
                 border-bottom: 1px solid white;;
             }
             
-            .proof-container .int-link-external::after{
+            .proof-container .int-link-external::after {
                 filter: invert(100%);
                 -webkit-filter: invert(100%);
             }
             
-            .foto-container{
+            .foto-container {
                 width: 80%;
             }
             
-            .foto-container img{
+            .foto-container img {
                 width: 100%;
                 display: block;
             }
@@ -519,7 +520,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 justify-content: space-evenly;
             }
             
-            .content-wrapper{
+            .content-wrapper {
                 padding-right: 44px;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -580,11 +581,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     max-heigth: unset;
                 }
                 
-                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper{
+                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper {
                     height: 100%;                   
                 }
                 
-                .left-container, .proof-container, .information-container{
+                .left-container, .proof-container, .information-container {
                     justify-content: space-evenly;
                 }
             }
@@ -627,19 +628,19 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     padding: 0px;
                 }
                 
-                .left-container{
+                .left-container {
                     padding: 11px 20px 20px 20px;
                 }
                 
-                .foto-container{
+                .foto-container {
                     width: 90%;
                 }
                 
-                #qr-code-hash svg{
+                #qr-code-hash svg {
                     width: 100%;
                 }
                 
-                .content-wrapper{
+                .content-wrapper {
                     display: flex;
                     flex-direction: column;
                     padding: 0px;    
@@ -652,7 +653,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     flex-grow: 1;
                 }
                 
-                .new-ticket-button{
+                .new-ticket-button {
                     width: 100%;
                     display: block;
                     margin: auto;
@@ -668,7 +669,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const validTill = i18n.t('valid-till')
             + i18n.t('date-time', {clock: this.person.validUntil ? this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})
             + ". "
-            + i18n.t('validity-tooltip') + "<a href='" + link3gRules + "' target='_blank'>" + i18n.t('validity-tooltip-2') + "</a>";
+            + i18n.t('validity-tooltip') + "<a href='" + link3gRules + "' target='_blank' title='" + i18n.t('validity-tooltip-title') + "'>" + i18n.t('validity-tooltip-2') + "</a>";
 
     return html`
 
@@ -720,7 +721,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                   <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
+                                    <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
                                     <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
                                     <span>
                                         ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}

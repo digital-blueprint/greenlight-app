@@ -97,6 +97,7 @@
   },
   "validity-tooltip": "Nach den ",
   "validity-tooltip-2": "aktuellen Bestimmungen",
+  "validity-tooltip-title": "Aktuelle Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
