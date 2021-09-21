@@ -448,7 +448,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param preCheck
      * @param internalTest
      */
-    async checkActivationResponse(greenPassHash, category, preCheck, internalTest = false) {
+    async checkActivationResponse(greenPassHash, category, preCheck = false, internalTest = false) {
         const i18n = this._i18n;
 
         let responseData = internalTest ? await tgct.tgctValidation(greenPassHash, this.lang) : await hcertValidation(greenPassHash, this.lang);
@@ -457,7 +457,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         switch (status) {
             case 201:
                 // Check Person
-             /*   if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
+                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
                 {
                     if (!preCheck) {
                        /* send({
@@ -466,13 +466,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                             "type": "warning",
                             "timeout": 5,
                         });*/
-                   /* }
+                    }
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     return;
 
-                }*/
+                }
                 if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
                 {
                     await this.encryptAndSaveHash();
