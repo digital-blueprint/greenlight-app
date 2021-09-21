@@ -69,6 +69,30 @@ Note that you will need a Keycloak server along with a client id for the domain 
 - `auth` object: you need to set that object property for the auth token
     - example auth property: `{token: "THE_BEARER_TOKEN"}`
     - note: most often this should be an attribute that is not set directly, but subscribed at a provider
+- `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
+  - example `gp-search-hash-string="HC1"`
+- `gp-search-hash-internal-test-string`: String used in the qr code to determine if the qr code is a valid 3G proof for university internal tests
+  - example `gp-search-hash-internal-test-string="TGCT"`
+- `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
+  - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
+- `preselected-option`: String used in the Ticket, to show where it should be valid
+  - example `preselected-option="University"`
+- `file-handling-enabled-targets` (optional, default: `local`): sets which destination are enabled
+  - you can use `local` and `nextcloud`
+  - example `file-handling-enabled-targets="local,nextcloud,clipboard"`
+- `nextcloud-web-app-password-url` (optional): Nextcloud Auth Url to use with the Nextcloud file picker
+  - example `nextcloud-web-app-password-url="http://localhost:8081/index.php/apps/webapppassword"`
+  - `nextcloud-web-dav-url` also needs to be set for the Nextcloud file picker to be active
+- `nextcloud-web-dav-url` (optional): Nextcloud WebDav Url to use with the Nextcloud file picker
+  - example `nextcloud-web-dav-url="http://localhost:8081/remote.php/dav/files"`
+  - `nextcloud-auth-url` also needs to be set for the Nextcloud file picker to be active
+- `nextcloud-file-url` (optional): Nextcloud File Url to use with the Nextcloud file picker
+  - example `nextcloud-file-url="http://localhost:8081/apps/files/?dir="`
+- `nextcloud-auth-info` (optional): Additional authentication information text that is shown in the Nextcloud file picker
+  - example `nextcloud-auth-info="You need special permissions for this function"`
+- `nextcloud-name` (optional): the name of the nextcloud
+  - example `nextcloud-name="Your university cloud"`
+  
 
 #### Slots
 
@@ -138,6 +162,8 @@ Note that you will need a Keycloak server along with a client id for the domain 
   - note: most often this should be an attribute that is not set directly, but subscribed at a provider
 - `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
   - example `gp-search-hash-string="HC1"`
+- `gp-search-hash-internal-test-string`: String used in the qr code to determine if the qr code is a valid 3G proof for university internal tests
+  - example `gp-search-hash-internal-test-string="TGCT"`
 - `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
   - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
 - `preselected-option`: String used in the Ticket, to show where it should be valid
@@ -147,6 +173,82 @@ Note that you will need a Keycloak server along with a client id for the domain 
 
 You use templates tags to inject slots into the activity.
 These templates will be converted to div containers when the page is loaded and will not show up before that.
+
+##### found-university-internal-test
+
+The content of this slot will be shown in a ticket if a university internal test is found and valid. 
+Without this slot "university internal test" is shown here.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="found-university-internal-test">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        TU Graz Test gefunden
+      </div>
+      <div slot="en">
+        Found TU Graz test
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### greenlight-internal-test-text
+
+The content of this slot will be shown in a ticket. 
+Without this slot "university internal test" default text is shown here.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="greenlight-internal-test-text">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        Der Test der Teststraße der TU Graz wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.
+      </div>
+      <div slot="en">
+        The test of the test lane at TU Graz was validated during the import. A manual check is only possible with the original document.
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### internal-test-valid
+
+The content of this slot will be shown in the overview of the tickets.
+Without this slot "university internal test" default text is shown here.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="internal-test-valid">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <b>
+          3-G-Nachweis:
+          <span class="green">
+                            TU Graz Test auf diesem Gerät importiert und gültig
+                        </span>
+        </b>
+      </div>
+      <div slot="en">
+        <b>
+          3-G-evidence:
+          <span class="green">
+                            TU Graz test imported on this device and valid
+                        </span>
+        </b>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
 
 ##### greenlight-reference
 
@@ -189,6 +291,49 @@ Example:
   </div>
 </template>
 ```
+
+### dbp-show-reference-ticket
+
+Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
+
+#### Attributes
+
+- `lang` (optional, default: `de`): set to `de` or `en` for German or English
+  - example `lang="de"`
+- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
+  - example `entry-point-url="https://api-dev.tugraz.at"`
+
+
+#### Slots
+
+You use templates tags to inject slots into the activity.
+These templates will be converted to div containers when the page is loaded and will not show up before that.
+
+##### greenlight-reference-ticket-description
+
+The content of this slot will be shown in the ticket reference activity description
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="greenlight-reference-ticket-description">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <p>
+          Hier können Sie das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen. Dieses Ticket berechtigt nicht zum Eintritt an die TU Graz.
+        </p>
+      </div>
+      <div slot="en">
+        <p>
+          Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the TU Graz.
+        </p>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
 
 ### Design Note
 

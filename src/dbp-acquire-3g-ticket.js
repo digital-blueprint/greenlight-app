@@ -47,9 +47,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.qrParsingLoading = false;
         this.QRCodeFile = null;
 
-        this.searchHashString = '';
-        this.searchHashInternalTestString = '';
-        this.searchSelfTestStringArray = '';
         this.wrongHash = [];
         this.wrongQR = [];
         this.resetWrongQr = false;
@@ -132,10 +129,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             detailedError: { type: String, attribute: false },
 
             message: { type: String, attribute: false },
-
-            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
-            searchHashInternalTestString: { type: String, attribute: 'gp-search-hash-internal-test-string' },
-            searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},
             nextcloudWebAppPasswordURL: { type: String, attribute: 'nextcloud-web-app-password-url' },
