@@ -536,10 +536,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         button.start();
         try {
             response = await this.sendCreateTicketRequest();
+            await this.checkCreateTicketResponse(response);
         } finally {
             button.stop();
         }
-        await this.checkCreateTicketResponse(response);
     }
 
     setLocation(event) {
@@ -573,7 +573,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasValidProof = false;
         this.showCreateTicket = false;
         this.greenPassHash = '';
-
     }
 
     static get styles() {
@@ -1074,7 +1073,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
-                                <div class="close-icon">${ i18n.t(this.message) }</div><!-- TODO Search for other uses of this part -->
+                                <div class="close-icon">${ i18n.t(this.message) }</div>
                                 ${ this.detailedError ? html`<dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
                             </div>
                         </div>

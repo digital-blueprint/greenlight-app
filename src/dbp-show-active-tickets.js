@@ -33,6 +33,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.hasValidProof = false;
         this.isSelfTest = false;
         this.isInternalTest = false;
+        this.loadingTickets = true;
 
         this.setTimeoutIsSet = false;
         this.timer = '';
@@ -67,6 +68,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             hasValidProof: { type: Boolean, attribute: false },
             isSelfTest: { type: Boolean, attribute: false },
             isInternalTest: { type: Boolean, attribute: false },
+            loadingTickets: { type: Boolean, attribute: false },
         };
     }
 
@@ -739,13 +741,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </div>
                     `)}
                     </div>
-                    <span class="control ${classMap({hidden: !this.loading})}">
+                    <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
                         <span class="loading">
                             <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                         </span>
                     </span>
                     
-                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.loading || this.activeTickets.length !== 0})}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
+                    <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.loading || this.activeTickets.length !== 0 || this.loadingTickets })}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
                 </div>
 
             </div>
