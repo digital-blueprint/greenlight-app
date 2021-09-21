@@ -10,7 +10,6 @@ import * as CheckinStyles from './styles';
 import {classMap} from 'lit-html/directives/class-map.js';
 import MicroModal from "./micromodal.es";
 import {Icon, LoadingButton, MiniSpinner} from "@dbp-toolkit/common";
-import {send} from "@dbp-toolkit/common/notification";
 
 class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -27,7 +26,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false;
         this.timer = '';
 
-        this.boundFocusHandler = this.updateReferenceTicket.bind(this);
+        this.boundUpdateTicket = this.updateReferenceTicketWrapper.bind(this);
 
     }
 
@@ -52,16 +51,13 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     disconnectedCallback() {
         clearTimeout(this.timer);
-        window.removeEventListener('focus', this.boundFocusHandler);
+        window.removeEventListener('focus', this.boundUpdateTicket);
         super.disconnectedCallback();
     }
 
     async connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('focus', this.boundFocusHandler);
-        this.updateComplete.then(() => {
-            this.boundFocusHandler();
-        });
+        window.addEventListener('focus', this.boundUpdateTicket);
     }
 
     update(changedProperties) {
@@ -76,36 +72,65 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
+     * A wrapper for update ticket for calling it in an event handler
+     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     *
+     */
+    async updateReferenceTicketWrapper() {
+        this.setTimeoutIsSet = false; //reset timer if focus event is triggered
+        this.updateReferenceTicket();
+    }
+
+    /**
      * Updates the referenceTicket and sets a timer for next update
      * Notifies the user if something went wrong
      *
+     * @returns {boolean}
      */
     async updateReferenceTicket() {
         if (this.ticketOpen === false)
             return false;
-        //const i18n = this._i18n;
         let responseData = await this.getReferenceTicketRequest();
-        let responseBody = await responseData.clone().json();
+        let responseBody = "";
+        try {
+            responseBody = await responseData.clone().json();
+        } catch (e) {
+            console.log("Update reference ticket failed");
+            this.setTimeoutIsSet = false;
+            this.setTimer(6000);
+            return false;
+        }
         if (responseData.status === 200) { // Success
             this.referenceImage = responseBody['hydra:member'][0].image || '';
-            const that = this;
-            if (!this.setTimeoutIsSet) {
-                that.setTimeoutIsSet = true;
-                that.timer = setTimeout(function () {
-                    let boundUpdateTicket = that.updateReferenceTicket.bind(that);
-                    boundUpdateTicket();
-                    that.setTimeoutIsSet = false;
-                }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
-            }
-            return;
-        } // Other Error
-            // fail soft if we cant update it
-            /*send({
-                "summary": i18n.t('show-active-tickets.other-error-title'),
-                "body":  i18n.t('show-active-tickets.other-error-body'),
-                "type": "danger",
-                "timeout": 5,
-            });*/
+            this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
+            return true;
+        }
+        // Other Error
+        // fail soft if we cant update it
+
+        console.log("Update reference ticket failed");
+        this.setTimeoutIsSet = false;
+        this.setTimer(6000);
+        return false;
+    }
+
+    /**
+     * Sets a timer: this.timer
+     * and resets the old if this.setTimeoutIsSet
+     *
+     * @param {number} time in milliseconds
+     */
+    setTimer(time) {
+        const that = this;
+        if (!this.setTimeoutIsSet) {
+            this.setTimeoutIsSet = true;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(function () {
+                that.setTimeoutIsSet = false;
+                let boundUpdateTicket = that.updateReferenceTicket.bind(that);
+                boundUpdateTicket();
+            },  time);
+        }
     }
 
     async getReferenceTicketRequest() {
@@ -123,7 +148,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Generate a QR Code if a hash is avaible and valid,
      * updates the ticket and shows it in modal view
      *
-     * @param ticket
+     * @param {object} ticket
      */
     async showTicket(ticket) {
         this.ticketLoading = true;

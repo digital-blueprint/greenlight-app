@@ -304,10 +304,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * Generate a QR Code if a hash is avaible and valid,
      * updates the ticket and shows it in modal view
      *
-     * @param {object}ticket
+     * @param {object} ticket
      */
     async showTicket(ticket) {
-
         this.ticketLoading = true;
         if (this._('#show-ticket-modal')) {
             this.ticketOpen = true;
