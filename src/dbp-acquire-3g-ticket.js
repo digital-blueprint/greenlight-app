@@ -296,8 +296,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let currDate = new Date(this.activationEndTime);
         newDate.setTime(newDate.getTime() + (hours * 60 * 60 * 1000));
         currDate.setTime(currDate.getTime() + (hours * 60 * 60 * 1000));
-        // console.log('computed minimal validity: ', newDate.getDate() + '.' + (newDate.getMonth() + 1) + '.' + newDate.getFullYear() + ' at ' + newDate.getHours() + ':' + ("0" + newDate.getMinutes()).slice(-2));
-        // console.log('current 3G proof validity: ', currDate.getDate() + '.' + (currDate.getMonth() + 1) + '.' + currDate.getFullYear() + ' at ' + currDate.getHours() + ':' + ("0" + currDate.getMinutes()).slice(-2));
         return currDate.getTime() >= newDate.getTime();
     }
 
@@ -391,7 +389,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
                 break;
 
-            default: // Do we need to do something here?
+            default:
+                console.log("Get valid ticket request failed");
                 break;
         }
     }
@@ -433,7 +432,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 if (this.hasValidProof) {
                     this.hasValidProof = false; //Could be expired until now
                     this.preCheck = true;
-                    this.checkForValidProofLocal().then(function(){console.log('3G proof importing done');});
+                    this.checkForValidProofLocal();
                 }
 
                 checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
@@ -543,10 +542,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     setLocation(event) {
-        if(event.detail.room) {
+        if (event.detail.room) {
             this.location = event.detail.name;
-            this.checkForValidProofLocal().then(() =>  console.log('3G proof importing done')); //Check this each time because proof validity could expire
-            this.checkForValidTickets().then(() =>  console.log('Fetch for valid tickets done'));
+            this.checkForValidProofLocal(); //Check this each time because proof validity could expire
+            this.checkForValidTickets();
         } else {
             this.location = '';
         }
@@ -910,14 +909,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.loading = true;
             this.checkForValidProofLocal().then(() =>  {
                 this.loading = false;
-                console.log('3G proof importing done');
             });
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
             this.location = this.preselectedOption;
             this.checkForValidTickets().then(() =>  { 
-                console.log('Fetch for valid tickets done');
                 this.preselectionLoading = false;
             });
             this.preselectionCheck = false;

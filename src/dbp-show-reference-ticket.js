@@ -86,9 +86,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
         let responseData = await this.getReferenceTicketRequest();
         let responseBody = await responseData.clone().json();
-        console.log("++++++++++++++++", responseBody);
         if (responseData.status === 200) { // Success
-            console.log("-------------____----");
             this.referenceImage = responseBody['hydra:member'][0].image || '';
             const that = this;
             if (!this.setTimeoutIsSet) {

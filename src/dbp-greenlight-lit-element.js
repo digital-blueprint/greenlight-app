@@ -139,7 +139,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             stack: getStackTrace().slice(1, 6)
         };
 
-        // console.log("sendErrorEvent", data);
         this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': action, 'name': JSON.stringify(data)});
     }
 
@@ -305,13 +304,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {boolean} false if data is invalid QR code data
      */
     async decodeUrlWithoutCheck(data, searchHashString) {
-        //let passData;
         try {
-            //passData = parseGreenPassQRCode(data, searchHashString);
             parseGreenPassQRCode(data, searchHashString);
-            //console.log("passdata", passData);
         } catch(error) {
-
             return false;
         }
         let gpAlreadySend = false;
@@ -334,7 +329,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async checkForValidProofLocal() {
         this.greenPassHash = '';
-        console.log("checkForValidProofLocal");
 
         try {
             let hash = null;
@@ -358,7 +352,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let check2 = check ? false : await this.decodeUrlWithoutCheck(data, this.searchHashInternalTestString);
         if (check || check2) {
             this.greenPassHash = data;
-            //console.log("gp", this.greenPassHash);
             this.isSelfTest = false;
             this.isInternalTest = check2 ? true : false;
             this.hasValidProof = true;
@@ -385,6 +378,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             }
 
             this.isSelfTest = true;
+            this.isInternalTest = false;
             this.greenPassHash = selfTestURL;
 
             if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
@@ -505,7 +499,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
 
                 if (preCheck) {
-                    console.log("Found an evidence in local storage");
                     this.storeCertificate = true;
                     if (this._("#store-cert-mode")) {
                         this._("#store-cert-mode").checked = true;
@@ -558,8 +551,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (this.isSelfTest) {
             expiresAt = Date.now() + 60000*1440; //24 hours
         }
-
-        console.log("save: ", this.greenPassHash);
         await storage.save(this.greenPassHash, this.auth['person-id'], this.auth['subject'], expiresAt);
     }
 

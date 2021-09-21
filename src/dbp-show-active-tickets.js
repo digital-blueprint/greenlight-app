@@ -234,7 +234,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             "type": "danger",
             "timeout": 5,
         });*/
-        console.log("cant refresh");
+        console.log("Update ticket failed");
         this.setTimeoutIsSet = false;
         this.setTimer(6000);
         return false;
@@ -295,6 +295,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
         } else {
             this.hasValidProof = false;
+            this.isInternalTest = false;
             this.isSelfTest = false;
         }
     }
@@ -405,7 +406,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.activeTickets = this.parseActiveTickets(responseBody);
         } else {
             // else it failed, but we want to fail soft
-            console.log("refresh failed");
+            console.log("Update tickets failed");
         }
     }
 
@@ -534,10 +535,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 top: 5px;
             }
             
-            .hidden {
-                display: none;
-            }
-            
             .self-test-qr {
                 margin: 20px auto;
                 width: 60%;
@@ -569,6 +566,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             
             .flex-center {
                 justify-content: center;
+            }
+
+            .hidden {
+                display: none;
             }
             
             @media only screen
@@ -724,11 +725,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
                                     <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
                                     <span>
-                                        ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
-                                        ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
-                                        <a href="#" class="int-link-external" title="${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-title')}"><!-- TODO link einfügen -->
-                                            ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving-here')}
-                                        </a>.
+                                        <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
+                                            ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
+                                            ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
+                                        </slot>
                                     </span> 
                                 </span>
                             </span>
