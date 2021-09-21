@@ -408,6 +408,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             // else it failed, but we want to fail soft
             console.log("Update tickets failed");
         }
+        this.loadingTickets = false;
     }
 
     /**
