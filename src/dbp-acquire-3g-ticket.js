@@ -86,7 +86,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             'dbp-mini-spinner': MiniSpinner,
             'dbp-loading-button': LoadingButton,
             'dbp-inline-notification': InlineNotification,
-            'dbp-check-in-place-select': CheckInPlaceSelect, //TODO replace with correct place selector
+            'dbp-check-in-place-select': CheckInPlaceSelect,
             'dbp-textswitch': TextSwitch,
             'dbp-qr-code-scanner': QrCodeScanner,
             'dbp-file-source': FileSource,
@@ -370,15 +370,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         switch (status) {
             case 200:   
                 for (let i = 0; i < numTypes; i++ ) {
-
-                    // console.log('resp2: ', responseBody['hydra:member'][i]);
-                    //let item = responseBody['hydra:member'][i];
-
-                    // if (item['place'] === this.location) { //only if this is the same ticket as selected 
-                    //     //TODO check if item is still valid
-                        this.hasTicketForThisPlace = true;
-                        console.log('Found a valid ticket for this room.');
-                    // } 
+                    //For the case we have more then one possible ticket (places), we need to check here if it is the same ticket as the selected
+                    this.hasTicketForThisPlace = true;
+                    console.log('Found a valid ticket for this room.');
                 }
                 break;
 
@@ -433,15 +427,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     checkInPlaceSelect.clear();
                 }
 
-                this._("#checkin-reference").scrollIntoView({ behavior: 'smooth', block: 'start' }); //TODO doesn't work?
+                this._("#checkin-reference").scrollIntoView({ block: 'start', behavior: 'smooth' });
+                
                 this.preCheck = true; //initiates a new check and sets validProof to true
 
                 break;
 
             case 400: // Invalid input
-                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput', this.location, response);
                 switch(responseBody['relay:errorId']) {
                     case 'greenlight:consent-assurance-not-true':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: consent-assurance-not-true', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
                             "body":  i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
@@ -450,14 +445,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         });
                         break;
                     case 'greenlight:additional-information-not-valid':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: additional-information-not-valid', this.location, response);
                         send({
-                            "summary": i18n.t('acquire-3g-ticket.other-error-title'), //TODO
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                             "body":  i18n.t('acquire-3g-ticket.other-error-body'),
                             "type": "danger",
                             "timeout": 5,
                         });
                         break;
                     default:
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: default', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.other-error-title'),
                             "body":  i18n.t('acquire-3g-ticket.other-error-body'),
@@ -983,7 +980,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
                             <div class="control">
                                 <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
-                                <select disabled class="${classMap({'hidden': !(this.preselectedOption && this.preselectedOption !== '') })}"><option selected="selected">${this.preselectedOption}</option></select>
                             </div>
                         </div>
                         
@@ -1008,13 +1004,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     value1="${i18n.t('acquire-3g-ticket.qr-button-text')}"
                                     value2="${i18n.t('acquire-3g-ticket.manually-button-text')}"
                                     @change=${ (e) => this.uploadSwitch(e.target.name) }></dbp-textswitch>
-        
-                                
-        
-                                <!-- <dbp-loading-button id="no-upload-btn" value="${i18n.t('acquire-3g-ticket.skip-button-text')}" 
-                                                    @click="${(event) => { this.skipUpload(event); }}"
-                                                    title="${i18n.t('acquire-3g-ticket.skip-button-text')}"
-                                ></dbp-loading-button> -->
                             </div>
                              
                              <dbp-file-source
@@ -1029,7 +1018,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 enabled-targets="${this.fileHandlingEnabledTargets}"
                                                 decompress-zip
                                                 lang="${this.lang}"
-                                                text="TODO Upload area text"
+                                                text="${i18n.t('acquire-3g-ticket.filepicker-context')}"
                                                 button-label="${i18n.t('acquire-3g-ticket.filepicker-button-title')}"
                                                 number-of-files="1"
                                                 @dbp-file-source-file-selected="${this.getFilesToActivate}"
@@ -1131,8 +1120,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         
                         
                         <!-- Ticket Notification -->
-                         <div class="tickets-notifications hidden"> <!-- TODO Proof if needed and the right place to be -->
-                            
+                         <div class="tickets-notifications hidden">
                             <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
                                 <dbp-inline-notification type="">
                                     <div slot="body">
