@@ -85,7 +85,8 @@
     "3-g-evidence-maximize-saving-title": "FAQs",
     "3-g-evidence-maximize-saving-here": "here",
     "new-ticket": "Request a new ticket",
-    "internal-test-found": "found university internal test",
+    "internal-test-found": "University-internal test found",
+    "internal-test-text": "The university-internal test was validated during the import. A manual check is only possible with the original document.",
     "image-alt-text": "Ticket image"
   },
   "show-reference-ticket": {

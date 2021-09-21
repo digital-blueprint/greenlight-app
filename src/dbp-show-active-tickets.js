@@ -177,9 +177,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     async updateTicketWrapper() {
-
-
-
         this.setTimeoutIsSet = false; //reset timer if focus event is triggered
         this.updateTicket();
     }
@@ -224,12 +221,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         this.getListOfActiveTickets();
-        send({
+        /*send({
             "summary": i18n.t('show-active-tickets.other-error-title'),
             "body":  i18n.t('show-active-tickets.other-error-body'),
             "type": "danger",
             "timeout": 5,
-        });
+        });*/
+        console.log("------------------------- cant refresh");
         this.setTimeoutIsSet = false;
         this.setTimer(6000);
         return false;
@@ -394,18 +392,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      * @param response
      */
     async checkActiveTicketsRequest(response) {
-        const i18n = this._i18n;
+        // const i18n = this._i18n;
 
         let responseBody = await response.clone().json();
         if (responseBody !== undefined && response.status === 200) {
             this.activeTickets = this.parseActiveTickets(responseBody);
-        } else {
-            send({
-                "summary": i18n.t('show-active-tickets.other-error-title'),
-                "body":  i18n.t('show-active-tickets.other-error-body'),
-                "type": "danger",
-                "timeout": 5,
-            });
         }
     }
 
@@ -573,6 +564,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 display: flex;
             }
             
+            .flex-center {
+                justify-content: center;
+            }
+            
             @media only screen
             and (orientation: landscape)
             and (max-width:768px) {
@@ -710,7 +705,14 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
                                     </span>
                                     <span class="flex ${classMap({hidden: !this.isInternalTest})}">
-                                        <b class="flex">${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp;<span class="green"><slot name="internal-test-valid">${i18n.t('show-active-tickets.3-g-evidence-internal-test')}</slot></span></b>
+                                        <slot name="internal-test-valid">
+                                            <b>
+                                                ${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp
+                                                <span class="green">
+                                                    ${i18n.t('show-active-tickets.3-g-evidence-internal-test')}
+                                                </span>
+                                            </b>
+                                        </slot>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
 
                                     </span>
@@ -779,7 +781,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </div>
                                 </div>
                               
-                                <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
+                                <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading, 'flex-center': this.isInternalTest})}">
                                     <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                         <span class="${classMap({hidden: this.isInternalTest})}">
                                             <h4>${i18n.t('show-active-tickets.3g-evidence')}</h4>
@@ -799,8 +801,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                         </span>
                                     </div>
-                                    <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
+                                    <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest, hidden: this.isInternalTest})}">
                                         <div id="qr-code-hash"></div>
+                                    </div>
+                                    <div class="${classMap({hidden: !this.isInternalTest})}">
+                                        <slot name="greenlight-internal-test-text">
+                                            <p>${i18n.t('show-active-tickets.internal-test-text')}</p>
+                                        </slot>
                                     </div>
                                     <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                         <slot name="greenlight-reference-invalid">

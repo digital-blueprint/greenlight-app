@@ -85,7 +85,8 @@
     "3-g-evidence-maximize-saving-here": "hier",
     "3-g-evidence-maximize-saving-title": "FAQs",
     "new-ticket": "Neues Ticket anfordern",
-    "internal-test-found": "Universitäts interner Test gefunden",
+    "internal-test-found": "Universitätsinterner Test gefunden",
+    "internal-test-text": "Der universitätsinterne Test wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.",
     "image-alt-text": "Ticketfoto"
   },
   "show-reference-ticket": {

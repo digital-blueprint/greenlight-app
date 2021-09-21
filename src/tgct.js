@@ -106,16 +106,17 @@ export async function tgctValidation(tgtc, lang)
 
     let res;
     try {
-        res = await decodeTestResult(tgtc, PROD_PUBLIC_KEY); //TODO add validation
+        res = await decodeTestResult(tgtc, PROD_PUBLIC_KEY);
         const url = commonUtils.getAssetURL(pkgName, 'internal/university-internal-test-rules.json');
         const rules = await fetch(url).then(x => x.json());
         const now = Date.now();
-        res.isValid = checkAgainstRules(res, rules, now, lang);
-
+        let validUntil = checkAgainstRules(res, rules, now, lang);
+        res.isValid = validUntil ? true : false;
+        res.validUntil = typeof validUntil === "number" ? new Date(validUntil) : "";
     } catch (error) {
         result.status = 500;
         result.error = error.message;
-        console.log("HCert validation error", error);
+        console.log("TgCert validation error", error);
         return result;
     }
 
@@ -124,9 +125,9 @@ export async function tgctValidation(tgtc, lang)
         result.data.firstname = res.firstname;
         result.data.lastname = res.lastname;
         result.data.dob = res.dob;
-        result.data.validUntil =  new Date('2022-09-09T12:53:22Z');  //TODO fix me
+        result.data.validUntil =  res.validUntil;
     } else {
-        console.log("Tgtcert invalid");
+        console.log("Tgcert invalid");
         result.status = 422;
         result.error = res.error;
     }
@@ -154,7 +155,7 @@ export function checkAgainstRules(decodedTest, rules, date, lang="en")
         //console.log(date, (test_date + r['hours-valid']*3600000), date <= (test_date + r['hours-valid']*3600000));
         if (date >= from && date <= until && r.type === decodedTest.type) {
             if (date <= (test_date + r['hours-valid']*3600000)) {
-                return true;
+                return test_date + r['hours-valid']*3600000;
             }
             decodedTest.error = r['invalid-messages'][lang];
             return false;
