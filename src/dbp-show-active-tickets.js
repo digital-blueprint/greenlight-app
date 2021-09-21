@@ -38,7 +38,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false;
         this.timer = '';
 
-        this.boundUpdateTicket = this.updateTicketWrapper.bind(this);
+        this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
 
 
     }
@@ -74,13 +74,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     disconnectedCallback() {
         clearTimeout(this.timer);
-        window.removeEventListener('focus', this.boundUpdateTicket);
+        window.removeEventListener('focus', this.boundUpdateTicketwrapper);
         super.disconnectedCallback();
     }
 
     connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('focus', this.boundUpdateTicket);
+        window.addEventListener('focus', this.boundUpdateTicketwrapper);
     }
 
     update(changedProperties) {
