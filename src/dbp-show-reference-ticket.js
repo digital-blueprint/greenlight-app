@@ -83,7 +83,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async updateReferenceTicket() {
         if (this.ticketOpen === false)
             return false;
-        const i18n = this._i18n;
+        //const i18n = this._i18n;
         let responseData = await this.getReferenceTicketRequest();
         let responseBody = await responseData.clone().json();
         if (responseData.status === 200) { // Success
@@ -97,16 +97,15 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     that.setTimeoutIsSet = false;
                 }, responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
             }
-            return true;
-        } else {  // Other Error
-            send({
-                "summary": i18n.t('show-active-tickets.other-error-title'), //TODO anpassen
+            return;
+        } // Other Error
+            // fail soft if we cant update it
+            /*send({
+                "summary": i18n.t('show-active-tickets.other-error-title'),
                 "body":  i18n.t('show-active-tickets.other-error-body'),
                 "type": "danger",
                 "timeout": 5,
-            });
-            return false;
-        }
+            });*/
     }
 
     async getReferenceTicketRequest() {

@@ -769,6 +769,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .int-link-internal:hover{
                 background-color: black;
                 color: white;
+                text-decoration: none;
             }
 
             .inline-notification .int-link-internal {
