@@ -7,7 +7,6 @@
     "filepicker-context": "Choose File for 3-G Verification",
     "manual-uploading-message": "Search for valid QR code...",
     "place-select-title": "Select a place",
-    "manual-proof-text": "I certify that I am vaccinated, tested, or recovered and carry valid evidence of such for the duration of my stay in this place and can present such evidence in the event of a manual inspection.",
     "confirm-button-text": "Create a Ticket",
     "create-ticket": "Create ticket",
     "create-ticket-success-title": "Ticket successfully created!",
@@ -15,9 +14,7 @@
     "check-in-link-description": "Also consider using contact tracing!",
     "manage-tickets-link": "Show tickets",
     "manage-tickets-text": "Active tickets could be found. You can manage your active tickets at: ",
-    "skip-button-text": "Skip",
     "confirm-checkbox-valid-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
-    "confirm-checkbox-no-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
     "3g-proof-label-text": "Import 3-G-evidence",
     "valid-till": "valid until ",
     "remove-proof": "Remove evidence",
@@ -51,9 +48,6 @@
   "show-active-tickets": {
     "entry-ticket": "Entry Ticket",
     "no-tickets-message": "You do not have any tickets!",
-    "valid-until-message-1": "Valid for: ",
-    "valid-until-message-2": "{{hours}} hour(s)",
-    "valid-until-message-3": "{{minutes}} minute(s)",
     "delete-btn-text": "Delete",
     "show-btn-text": "Show",
     "show-ticket-title": "Ticket: ",
@@ -82,12 +76,13 @@
     "3-g-evidence-invalid": "No valid 3-G evidence found on this device",
     "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
     "3-g-evidence-maximize-saving": "Add the app to the home screen to maximize the storage time of the 3-G evidence. How to do this you can read ",
-    "3-g-evidence-maximize-saving-title": "FAQs",
-    "3-g-evidence-maximize-saving-here": "here",
     "new-ticket": "Request a new ticket",
     "internal-test-found": "University-internal test found",
     "internal-test-text": "The university-internal test was validated during the import. A manual check is only possible with the original document.",
-    "image-alt-text": "Ticket image"
+    "image-alt-text": "Ticket image",
+    "reload-error-title": "Update failed",
+    "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
+    "reload": "Refresh"
   },
   "show-reference-ticket": {
     "place-name": "Place",
@@ -95,7 +90,7 @@
     "inactive": "inactiv",
     "description": "The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive. The reference ticket does not entitle you to enter the university.",
     "information-container-headline": "Information about 3-G evidence",
-    "information-container-body": "If a valid health certitificate is available on this device then its QR-code is displayed and the ticked is shown in color."
+    "information-container-body": " If a valid health certitificate is available on this device then its QR-code is displayed and the ticked is shown in color. This QR-code can be checked with Green Check</a>. If a self-test was issued by Land Steiermark or Land Kärnten is available on this device then its QR-code is displayed and the ticket is shown in black and white. This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner. If a valid test made by Teststraße of TU Graz is available on this device then the ticket is shown in color. The test has to be evaluated manually."
   },
   "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
   "valid-till": "Probably valid until: ",

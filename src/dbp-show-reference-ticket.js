@@ -10,6 +10,7 @@ import * as CheckinStyles from './styles';
 import {classMap} from 'lit-html/directives/class-map.js';
 import MicroModal from "./micromodal.es";
 import {Icon, LoadingButton, MiniSpinner} from "@dbp-toolkit/common";
+import {send} from "@dbp-toolkit/common/notification";
 
 class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
@@ -24,6 +25,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.referenceImage = '';
         this.setTimeoutIsSet = false;
         this.timer = '';
+        this.showReloadButton = false;
 
         this.boundUpdateTicket = this.updateReferenceTicketWrapper.bind(this);
     }
@@ -43,6 +45,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             entryPointUrl: {type: String, attribute: 'entry-point-url'},
             loading: {type: Boolean, attribute: false},
             ticketLoading: {type: Boolean, attribute: false},
+            showReloadButton: {type: Boolean, attribute: false},
             referenceImage: {type: String, attribute: false},
         };
     }
@@ -80,6 +83,27 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
+     * A wrapper for update ticket for calling it in an event handler
+     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     *
+     */
+    async updateTicketAndNotify() {
+        this.setTimeoutIsSet = false; //reset timer if focus event is triggered
+        this.showReloadButton = false;
+        let check = await this.updateReferenceTicket();
+        if (!check) {
+            const i18n = this._i18n;
+            send({
+                "summary": i18n.t('show-active-tickets.reload-error-title'),
+                "body":  i18n.t('show-active-tickets.reload-error-body'),
+                "type": "danger",
+                "timeout": 5,
+            });
+            this.showReloadButton = true;
+        }
+    }
+
+    /**
      * Updates the referenceTicket and sets a timer for next update
      * Notifies the user if something went wrong
      *
@@ -95,13 +119,13 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         try {
             responseBody = await responseData.clone().json();
         } catch (e) {
-            console.log("Update reference ticket failed");
             this.setTimeoutIsSet = false;
-            this.setTimer(6000);
+            this.showReloadButton = true;
             return false;
         }
 
         if (responseData.status === 200) { // Success
+            this.showReloadButton = false;
             this.referenceImage = responseBody['hydra:member'][0].image || '';
             this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000);
             return true;
@@ -111,7 +135,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         console.log("Update reference ticket failed");
         this.setTimeoutIsSet = false;
-        this.setTimer(6000);
+        this.showReloadButton = true;
         return false;
     }
 
@@ -299,10 +323,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 top: 5px;
             }
 
-            .hidden {
-                display: none;
-            }
-
             .self-test-qr {
                 margin: 20px auto;
                 width: 60%;
@@ -326,6 +346,28 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .ticket-loading {
                 font-size: 1.3rem;
+            }
+
+            .reload-failed {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1em;
+            }
+
+            .reload-failed p {
+                color: var(--dbp-danger-bg-color);
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            #reload-btn {
+                margin-left: 10px;
+            }
+
+            .hidden {
+                display: none;
             }
 
             @media only screen
@@ -409,6 +451,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     padding: 20px;
                     flex-grow: 1;
                 }
+
+                .reload-failed {
+                    width: 90%;
+                }
             }
         `;
     }
@@ -490,6 +536,15 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <h3 id="ticket-modal-title">
                                         ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
                                     </h3>
+                                    <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
+                                        <p> Automatische Aktualisierung fehlgeschlagen</p>
+                                        <button id="reload-btn"
+                                                class="button"
+                                                @click="${() => {this.updateTicketAndNotify();}}"
+                                                title="${i18n.t('show-active-tickets.reload')}">
+                                            <dbp-icon title="${i18n.t('show-active-tickets.reload')}" name="reload" class="reload-icon"></dbp-icon>
+                                        </button>
+                                    </div>
                                     <div class="foto-container">
                                         <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}"/>
                                     </div>
@@ -497,7 +552,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
                                     <slot name="information-container">
                                         <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h4>
-                                        ${i18n.t('show-active-tickets.information-container-body')}
+                                        ${i18n.t('show-reference-ticket.information-container-body')}
                                     </slot>
                                 </div>
                                 <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => {

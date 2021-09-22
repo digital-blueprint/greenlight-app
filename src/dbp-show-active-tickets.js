@@ -36,6 +36,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.loadingTickets = true;
         this.setTimeoutIsSet = false;
         this.timer = '';
+        this.showReloadButton = false;
 
         this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
     }
@@ -66,6 +67,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             isSelfTest: {type: Boolean, attribute: false},
             isInternalTest: {type: Boolean, attribute: false},
             loadingTickets: {type: Boolean, attribute: false},
+            showReloadButton: {type: Boolean, attribute: false},
         };
     }
 
@@ -181,7 +183,29 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async updateTicketWrapper() {
         this.setTimeoutIsSet = false; //reset timer if focus event is triggered
+        this.showReloadButton = false;
         this.updateTicket();
+    }
+
+    /**
+     * A wrapper for update ticket for calling it in an event handler
+     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     *
+     */
+    async updateTicketAndNotify() {
+        this.setTimeoutIsSet = false; //reset timer if focus event is triggered
+        this.showReloadButton = false;
+        let check = await this.updateTicket();
+        if (!check) {
+            const i18n = this._i18n;
+            send({
+                "summary": i18n.t('show-active-tickets.reload-error-title'),
+                "body":  i18n.t('show-active-tickets.reload-error-body'),
+                "type": "danger",
+                "timeout": 5,
+            });
+            this.showReloadButton = true;
+        }
     }
 
     /**
@@ -201,7 +225,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             responseBody = await responseData.clone().json();
         } catch (e) {
             this.setTimeoutIsSet = false;
-            this.setTimer(6000);
+            this.showReloadButton = true;
             return false;
         }
 
@@ -218,6 +242,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         if (responseData.status === 200) { // Success
+            this.showReloadButton = false;
             this.currentTicket = responseBody;
             this.currentTicketImage = responseBody.image;
             this.setTimer(responseBody.imageValidFor * 1000 + 1000);
@@ -225,16 +250,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         this.getListOfActiveTickets();
-        /* fail soft
-            send({
-            "summary": i18n.t('show-active-tickets.other-error-title'),
-            "body":  i18n.t('show-active-tickets.other-error-body'),
-            "type": "danger",
-            "timeout": 5,
-        });*/
         console.log("Update ticket failed");
         this.setTimeoutIsSet = false;
-        this.setTimer(6000);
+        this.showReloadButton = true;
         return false;
     }
 
@@ -565,6 +583,24 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 justify-content: center;
             }
 
+            .reload-failed {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1em;
+            }
+
+            .reload-failed p {
+                color: var(--dbp-danger-bg-color);
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            #reload-btn {
+                margin-left: 10px;
+            }
+
             .hidden {
                 display: none;
             }
@@ -656,6 +692,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     display: block;
                     margin: auto;
                     box-sizing: border-box;
+                }
+
+                .reload-failed {
+                    width: 90%;
                 }
             }
         `;
@@ -775,6 +815,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
                                     <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
+                                    <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
+                                        <p> Automatische Aktualisierung fehlgeschlagen</p>
+                                        <button id="reload-btn"
+                                                            class="button"
+                                                            @click="${() => {this.updateTicketAndNotify();}}"
+                                                            title="${i18n.t('show-active-tickets.reload')}">
+                                            <dbp-icon title="${i18n.t('show-active-tickets.reload')}" name="reload" class="reload-icon"></dbp-icon>
+                                        </button>
+                                    </div>
                                     <div class="foto-container">
                                         <img src="${this.currentTicketImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                     </div>

@@ -7,7 +7,6 @@
     "filepicker-context": "PDF oder Bild zur Überprüfung auswählen",
     "manual-uploading-message": "Suche nach gültigem QR-Code...",
     "place-select-title": "Ticket für",
-    "manual-proof-text": "Ich bestätige, dass ich geimpft, getestet oder genesen bin und einen gültigen Nachweis für die Dauer meines Aufenthalts in diesem Ort bei mir trage. Außerdem nehme ich zur Kenntnis, dass ich verpflichtet bin, diesen bei einer manuellen Kontrolle vorzuweisen.",
     "confirm-button-text": "Ticket erstellen",
     "create-ticket": "Ticket erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
@@ -15,9 +14,7 @@
     "check-in-link-description": "Denken Sie auch an die Möglichkeit am Contact Tracing teilzunehmen!",
     "manage-tickets-link": "Tickets anzeigen",
     "manage-tickets-text": "Es wurden aktive Tickets gefunden. Sie können Ihre aktiven Tickets vorzeigen oder löschen unter: ",
-    "skip-button-text": "Überspringen",
     "confirm-checkbox-valid-cert-text": "Ich bestätige, dass mein Nachweis für die Dauer meines Aufenthalts gültig ist, sowie die Richtigkeit meiner Angaben, und nehme zur Kenntnis, dass jeglicher Missbrauch der App greenlight oder die Angabe falscher Daten zu rechtlichen Konsequenzen führen kann.",
-    "confirm-checkbox-no-cert-text": "Ich bestätige, dass mein Nachweis für die Dauer meines Aufenthalts gültig ist, sowie die Richtigkeit meiner Angaben, und nehme zur Kenntnis, dass jeglicher Missbrauch der App greenlight oder die Angabe falscher Daten zu rechtlichen Konsequenzen führen kann.",
     "3g-proof-label-text": "3-G-Nachweis importieren",
     "remove-proof": "Nachweis entfernen",
     "found-valid-3g-preCheck": "Es wurden lokal gespeicherte gültige 3-G-Informationen gefunden.",
@@ -51,9 +48,6 @@
   "show-active-tickets": {
     "entry-ticket": "Eintrittsticket",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
-    "valid-until-message-1": "Gültig für: ",
-    "valid-until-message-2": "{{hours}} Stunde(n)",
-    "valid-until-message-3": "{{minutes}} Minute(n)",
     "delete-btn-text": "Löschen",
     "show-btn-text": "Zeigen",
     "show-ticket-title": "Ticket: ",
@@ -82,12 +76,13 @@
     "3-g-evidence-invalid": "kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden",
     "3-g-evidence-invalid-text": "Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der Nachweis ist nicht mehr gültig oder die Applikation wurde für einen längeren Zeitraum nicht genutzt.",
     "3-g-evidence-maximize-saving": "Fügen Sie die App auf dem Startbildschirm hinzu, um die Speicherdauer des 3-G-Nachweises zu maximieren.",
-    "3-g-evidence-maximize-saving-here": "hier",
-    "3-g-evidence-maximize-saving-title": "FAQs",
     "new-ticket": "Neues Ticket anfordern",
     "internal-test-found": "Universitätsinterner Test gefunden",
     "internal-test-text": "Der universitätsinterne Test wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.",
-    "image-alt-text": "Ticketfoto"
+    "image-alt-text": "Ticketfoto",
+    "reload-error-title": "Aktualisierung fehlgeschlagen",
+    "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
+    "reload": "Aktualisieren"
   },
   "show-reference-ticket": {
     "place-name": "Ort",
@@ -95,10 +90,9 @@
     "inactive": "inaktiv",
     "description": "Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt von dem auf diesem Gerät importierten 3-G-Nachweis ab. Das Referenzticket berechtigt nicht zum Eintritt an die Universität.",
     "information-container-headline": "Informationen zum 3-G-Nachweis",
-    "information-container-body": "Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt."
+    "information-container-body": " Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt. Der QR-Code kann mit Greencheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger Test der Teststraße der TU Graz auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Dieser Nachweis kann nur manuell validiert werden."
   },
   "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
-  "validity-tooltip-title": "Aktuelle Bestimmungen",
   "valid-till": "Voraussichtlich gültig bis ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
