@@ -1,7 +1,9 @@
 {
   "short_name": "TU Graz greenlight",
   "name": "TU Graz greenlight",
+  "app_name": "TU Graz greenlight",
   "start_url": "./",
+  "display": "fullscreen",
   "icons": [
     {
       "src": "local/@dbp-topics/greenlight/icon/icon-72x72.png",
