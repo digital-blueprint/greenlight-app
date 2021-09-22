@@ -314,9 +314,34 @@ Example:
 </template>
 ```
 
+##### ticket-description
+
+The content of this slot will be shown in the ticket reference activity description.
+
+Example:
+
+```html
+<template id="dbp-show-reference-ticket">
+  <div slot="ticket-description">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <span>
+            Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt von dem auf diesem Gerät importierten 3-G-Nachweis ab. Das Referenzticket berechtigt nicht zum Eintritt an die Universität.
+        </span>
+      </div>
+      <div slot="en">
+        <span>
+            The validity of the access test is displayed here. Depending on the available evidence the ticket is shown as active or inactive. The reference ticket does not entitle you to enter the university.
+        </span>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
 ##### information-container
 
-The content of this slot will be shown when you open the reference ticket in the reference ticket activity.
+The content of this slot will be shown under the reference ticket in the reference ticket activity.
 
 Example:
 
