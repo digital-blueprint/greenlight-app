@@ -390,7 +390,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this._("#text-switch")._active = "";
 
             this.showCreateTicket = true;
-            if (this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped) {
+            if (this._("#trust-button") && this._("#trust-button").checked) {
                 await this.encryptAndSaveHash();
             }
 
@@ -466,7 +466,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     return;
 
                 }
-                if (this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped) {
+                if (this._("#trust-button") && this._("#trust-button").checked) {
                     await this.encryptAndSaveHash();
                 }
                 this.person.firstname = responseBody.firstname;
@@ -490,10 +490,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this.showCreateTicket = true;
 
                 if (preCheck) {
-                    this.storeCertificate = true;
-                    if (this._("#store-cert-mode")) {
-                        this._("#store-cert-mode").checked = true;
-                    }
                     this.message = i18nKey('acquire-3g-ticket.found-valid-3g-preCheck');
                 } else {
                     this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
