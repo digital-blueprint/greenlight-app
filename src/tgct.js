@@ -145,8 +145,6 @@ export async function tgctValidation(tgtc, lang)
  */
 export function checkAgainstRules(decodedTest, rules, date, lang="en")
 {
-    date = Date.parse('2021-09-10T10:00:00'); // TODO: remove after testing
-
     const test_date = Date.parse(decodedTest.date);
     for (let i = 0; i < rules.rules.length; i++) {
         const r = rules.rules[i];
