@@ -22,12 +22,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.ticketLoading = false;
         this.ticketOpen = false;
         this.referenceImage = '';
-
         this.setTimeoutIsSet = false;
         this.timer = '';
 
         this.boundUpdateTicket = this.updateReferenceTicketWrapper.bind(this);
-
     }
 
     static get scopedElements() {
@@ -41,11 +39,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     static get properties() {
         return {
             ...super.properties,
-            lang: { type: String },
-            entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            loading: { type: Boolean, attribute: false },
-            ticketLoading: { type: Boolean, attribute: false },
-            referenceImage: { type: String, attribute: false },
+            lang: {type: String},
+            entryPointUrl: {type: String, attribute: 'entry-point-url'},
+            loading: {type: Boolean, attribute: false},
+            ticketLoading: {type: Boolean, attribute: false},
+            referenceImage: {type: String, attribute: false},
         };
     }
 
@@ -90,8 +88,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     async updateReferenceTicket() {
         if (this.ticketOpen === false)
             return false;
+
         let responseData = await this.getReferenceTicketRequest();
         let responseBody = "";
+
         try {
             responseBody = await responseData.clone().json();
         } catch (e) {
@@ -100,6 +100,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.setTimer(6000);
             return false;
         }
+
         if (responseData.status === 200) { // Success
             this.referenceImage = responseBody['hydra:member'][0].image || '';
             this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000);
@@ -122,14 +123,16 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     setTimer(time) {
         const that = this;
+
         if (!this.setTimeoutIsSet) {
             this.setTimeoutIsSet = true;
             clearTimeout(this.timer);
+
             this.timer = setTimeout(function () {
                 that.setTimeoutIsSet = false;
                 let boundUpdateTicket = that.updateReferenceTicket.bind(that);
                 boundUpdateTicket();
-            },  time);
+            }, time);
         }
     }
 
@@ -152,6 +155,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async showTicket(ticket) {
         this.ticketLoading = true;
+
         if (this._('#show-ticket-modal')) {
             this.ticketOpen = true;
             MicroModal.show(this._('#show-ticket-modal'), {
@@ -166,7 +170,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.ticketLoading = false;
     }
 
-
     /**
      * Close modal dialog #show-ticket-modal
      *
@@ -175,7 +178,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (this._('#show-ticket-modal'))
             MicroModal.close(this._('#show-ticket-modal'));
     }
-
 
     static get styles() {
         // language=css
@@ -188,7 +190,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${commonStyles.getLinkCss()}
-          
             .ticket {
                 display: flex;
                 justify-content: space-between;
@@ -197,22 +198,22 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: center;
                 margin-bottom: 2em;
             }
-            
+
             .tickets {
                 margin-top: 2.3em;
             }
-            
+
             .header {
                 display: grid;
                 align-items: center;
-            }           
+            }
 
             .btn {
                 display: flex;
                 justify-content: space-between;
                 column-gap: 0.5em;
             }
-            
+
             .border {
                 margin-top: 2rem;
                 padding-top: 2rem;
@@ -228,18 +229,18 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 min-height: unset;
                 height: auto;
             }
-            
-            #qr-code-hash svg{
+
+            #qr-code-hash svg {
                 display: block;
                 width: 80%;
                 margin: auto;
             }
-            
+
             .green-pass-evidence {
                 line-height: 20px;
             }
-            
-            .proof-container, .information-container{
+
+            .proof-container, .information-container {
                 background-color: #245b78;
                 color: white;
                 padding: 40px 10px;
@@ -249,33 +250,33 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: center;
                 text-align: center;
             }
-            
+
             .proof-container {
                 text-align: center;
             }
-            
-            .proof-container .int-link-external, .information-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal{
+
+            .proof-container .int-link-external, .information-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal {
                 border-bottom: 1px solid white;
             }
-            
-            .proof-container .int-link-external::after, .information-container .int-link-external::after{
+
+            .proof-container .int-link-external::after, .information-container .int-link-external::after {
                 filter: invert(100%);
                 -webkit-filter: invert(100%);
             }
-            
-            .foto-container{
+
+            .foto-container {
                 width: 80%;
             }
-            
-            .foto-container img{
+
+            .foto-container img {
                 width: 100%;
                 display: block;
             }
-            
+
             .left-container h3, .proof-container h4, .information-container h4 {
                 margin: 0px 0px 10px 0px;
             }
-            
+
             .left-container {
                 display: flex;
                 flex-direction: column;
@@ -283,82 +284,82 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 padding: 40px 10px;
                 justify-content: space-evenly;
             }
-            
-            .content-wrapper{
+
+            .content-wrapper {
                 padding-right: 44px;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-gap: 10px;
                 grid-auto-rows: 100%;
             }
-            
+
             .modal-close {
                 position: absolute;
                 right: 10px;
                 top: 5px;
             }
-            
+
             .hidden {
                 display: none;
             }
-            
+
             .self-test-qr {
                 margin: 20px auto;
                 width: 60%;
             }
-            
-            .tooltip{
+
+            .tooltip {
                 margin-left: 5px;
             }
-            
+
             .red {
                 color: var(--dbp-override-danger-bg-color);
             }
-            
+
             .green {
                 color: var(--dbp-override-success-bg-color);
             }
-            
-            .ticket h3  {
+
+            .ticket h3 {
                 margin-bottom: 0.2rem;
             }
-            
+
             .ticket-loading {
                 font-size: 1.3rem;
             }
-            
+
             @media only screen
             and (orientation: landscape)
-            and (max-width:768px) {
+            and (max-width: 768px) {
                 #ticket-modal-box {
                     height: 100%;
                     width: 100%;
                     max-width: unset;
                     max-heigth: unset;
                 }
-                
-                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper{
-                    height: 100%;                   
+
+                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper {
+                    height: 100%;
                 }
-                
-                .left-container, .proof-container, .information-container{
+
+                .left-container, .proof-container, .information-container {
                     justify-content: space-evenly;
                 }
             }
 
             @media only screen
             and (orientation: portrait)
-            and (max-width:768px) {
+            and (max-width: 768px) {
 
                 .ticket {
                     display: block;
                     margin-bottom: 0;
                 }
-                
+
                 .tickets {
                     display: block;
                 }
-                
+
                 .header {
                     margin-bottom: 0.5rem;
                 }
@@ -366,16 +367,16 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 #delete-btn {
                     margin-bottom: 2rem;
                 }
-    
+
                 .btn {
                     flex-direction: column;
                     row-gap: 0.5em;
                 }
-                
+
                 .loading {
                     justify-content: center;
                 }
-                
+
                 #ticket-modal-box {
                     width: 100%;
                     height: 100%;
@@ -383,27 +384,27 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     min-height: 100%;
                     padding: 0px;
                 }
-                
-                .left-container{
+
+                .left-container {
                     padding: 11px 20px 20px 20px;
                 }
-                
-                .foto-container{
+
+                .foto-container {
                     width: 90%;
                 }
-                
-                #qr-code-hash svg{
+
+                #qr-code-hash svg {
                     width: 100%;
                 }
-                
-                .content-wrapper{
+
+                .content-wrapper {
                     display: flex;
                     flex-direction: column;
-                    padding: 0px;    
+                    padding: 0px;
                     grid-gap: inherit;
                     min-height: 100vh;
                 }
-    
+
                 .proof-container, .information-container {
                     padding: 20px;
                     flex-grow: 1;
@@ -430,20 +431,36 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         ${this.activity.getDescription(this.lang)}
                     </slot>
                 </p>
-                
+
                 <div class="tickets ${classMap({hidden: this.isLoading()})}">
                     <div class="${classMap({hidden: this.loading})}">
                         <div class="ticket">
                             <span class="header">
-                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-reference-ticket.place-name')}</h3>
+                                <h3>
+                                    ${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-reference-ticket.place-name')}
+                                </h3>
                                 <span class="header">
-                                   <b>${i18n.t('show-active-tickets.status')} <span class="green">${i18n.t('show-reference-ticket.active')}</span> / <span class="red">${i18n.t('show-reference-ticket.inactive')}</span></b>
+                                   <b>
+                                       ${i18n.t('show-active-tickets.status')}
+                                       <span class="green">
+                                           ${i18n.t('show-reference-ticket.active')}
+                                       </span> / <span class="red">
+                                           ${i18n.t('show-reference-ticket.inactive')}
+                                       </span>
+                                   </b>
                                    <span>${i18n.t('show-reference-ticket.description')}</span>
                                 </span>
                             </span>
                             <div class="btn">
-                                <dbp-loading-button type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                                <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" disabled></dbp-loading-button>
+                                <dbp-loading-button type="is-primary"
+                                                    value="${i18n.t('show-active-tickets.show-btn-text')}"
+                                                    @click="${() => {
+                                                        this.showTicket();
+                                                    }}"
+                                                    title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button id="delete-btn"
+                                                    value="${i18n.t('show-active-tickets.delete-btn-text')}"
+                                                    disabled></dbp-loading-button>
                             </div>
                         </div>
                     </div>
@@ -452,11 +469,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                         </span>
                     </span>
-                   
                 </div>
-
             </div>
-            
+
             <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
                 <div class="modal-overlay" tabindex="-2" data-micromodal-close>
                     <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
@@ -467,12 +482,14 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <dbp-mini-spinner text=${i18n.t('show-active-tickets.loading-message-ticket')}></dbp-mini-spinner>
                                 </span>
                             </span>
-                            
+
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                    <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong></h3>
+                                    <h3 id="ticket-modal-title">
+                                        ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
+                                    </h3>
                                     <div class="foto-container">
-                                        <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
+                                        <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}"/>
                                     </div>
                                 </div>
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
@@ -481,13 +498,14 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         ${i18n.t('show-active-tickets.information-container-body')}
                                     </slot>
                                 </div>
-                                <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
-                                    <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                                <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => {
+                                    this.closeDialog();
+                                }}">
+                                    <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close"
+                                              class="close-icon"></dbp-icon>
                                 </button>
                             </div>
-                            
                         </main>
-                        
                     </div>
                 </div>
             </div>

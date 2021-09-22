@@ -34,13 +34,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.isSelfTest = false;
         this.isInternalTest = false;
         this.loadingTickets = true;
-
         this.setTimeoutIsSet = false;
         this.timer = '';
 
         this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
-
-
     }
 
     static get scopedElements() {
@@ -219,6 +216,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             });
             return false;
         }
+
         if (responseData.status === 200) { // Success
             this.currentTicket = responseBody;
             this.currentTicketImage = responseBody.image;
@@ -430,7 +428,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${commonStyles.getLinkCss()}
-          
             .ticket {
                 display: flex;
                 justify-content: space-between;
@@ -439,15 +436,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: center;
                 margin-bottom: 2em;
             }
-            
+
             .tickets {
                 margin-top: 2.3em;
             }
-            
+
             .header {
                 display: grid;
                 align-items: center;
-            }           
+            }
 
             .btn {
                 display: flex;
@@ -464,17 +461,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 min-height: unset;
                 height: auto;
             }
-            
-            #qr-code-hash svg{
+
+            #qr-code-hash svg {
                 display: block;
                 width: 80%;
                 margin: auto;
             }
-            
+
             .green-pass-evidence {
                 line-height: 30px;
             }
-            
+
             .proof-container, .information-container {
                 background-color: var(--dbp-info-bg-color);;
                 color: var(--dbp-info-text-color);;
@@ -485,34 +482,34 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 align-items: center;
                 text-align: center;
             }
-            
+
             .proof-container {
                 text-align: center;
             }
-            
+
             .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal {
                 border-bottom: 1px solid white;;
             }
-            
+
             .proof-container .int-link-external::after {
                 filter: invert(100%);
                 -webkit-filter: invert(100%);
             }
-            
+
             .foto-container {
                 width: 80%;
             }
-            
+
             .foto-container img {
                 width: 100%;
                 display: block;
             }
-            
+
             .left-container h3, .proof-container h4, .information-container h4 {
                 margin: 0px 0px 10px 0px;
                 line-height: 30px;
             }
-            
+
             .left-container {
                 display: flex;
                 flex-direction: column;
@@ -520,7 +517,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 padding: 40px 10px;
                 justify-content: space-evenly;
             }
-            
+
             .content-wrapper {
                 padding-right: 44px;
                 display: grid;
@@ -528,42 +525,42 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 grid-gap: 10px;
                 grid-auto-rows: 100%;
             }
-            
+
             .modal-close {
                 position: absolute;
                 right: 10px;
                 top: 5px;
             }
-            
+
             .self-test-qr {
                 margin: 20px auto;
                 width: 60%;
             }
-            
+
             .red {
                 color: var(--dbp-danger-bg-color);
             }
-            
+
             .green {
                 color: var(--dbp-success-bg-color);
             }
-            
+
             .warning {
                 color: var(--dbp-info-bg-color);
             }
-            
-            .ticket h3  {
+
+            .ticket h3 {
                 margin-bottom: 0.2rem;
             }
-            
+
             .ticket-loading {
                 font-size: 1.3rem;
             }
-            
+
             .flex {
                 display: flex;
             }
-            
+
             .flex-center {
                 justify-content: center;
             }
@@ -571,21 +568,21 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .hidden {
                 display: none;
             }
-            
+
             @media only screen
             and (orientation: landscape)
-            and (max-width:768px) {
+            and (max-width: 768px) {
                 #ticket-modal-box {
                     height: 100%;
                     width: 100%;
                     max-width: unset;
                     max-heigth: unset;
                 }
-                
+
                 #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper {
-                    height: 100%;                   
+                    height: 100%;
                 }
-                
+
                 .left-container, .proof-container, .information-container {
                     justify-content: space-evenly;
                 }
@@ -593,17 +590,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             @media only screen
             and (orientation: portrait)
-            and (max-width:768px) {
+            and (max-width: 768px) {
 
                 .ticket {
                     display: block;
                     margin-bottom: 0;
                 }
-                
+
                 .tickets {
                     display: block;
                 }
-                
+
                 .header {
                     margin-bottom: 0.5rem;
                 }
@@ -611,16 +608,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 #delete-btn {
                     margin-bottom: 2rem;
                 }
-    
+
                 .btn {
                     flex-direction: column;
                     row-gap: 0.5em;
                 }
-                
+
                 .loading {
                     justify-content: center;
                 }
-                
+
                 #ticket-modal-box {
                     width: 100%;
                     height: 100%;
@@ -628,32 +625,32 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     min-height: 100%;
                     padding: 0px;
                 }
-                
+
                 .left-container {
                     padding: 11px 20px 20px 20px;
                 }
-                
+
                 .foto-container {
                     width: 90%;
                 }
-                
+
                 #qr-code-hash svg {
                     width: 100%;
                 }
-                
+
                 .content-wrapper {
                     display: flex;
                     flex-direction: column;
-                    padding: 0px;    
+                    padding: 0px;
                     grid-gap: inherit;
                     min-height: 100vh;
                 }
-    
+
                 .proof-container, .information-container {
                     padding: 20px;
                     flex-grow: 1;
                 }
-                
+
                 .new-ticket-button {
                     width: 100%;
                     display: block;
@@ -697,7 +694,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <span class="header">
                                 <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
                                 <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                    <span> 
+                                    <span>
                                         <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
                                     </span>
                                     <span class="${classMap({hidden: this.isSelfTest || this.isInternalTest})}">
@@ -705,7 +702,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
-                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
+                                        <b>
+                                            ${i18n.t('show-active-tickets.3-g-evidence')}:
+                                            <span class="warning">
+                                                ${i18n.t('show-active-tickets.3-g-evidence-selftest')}
+                                            </span>
+                                        </b>
                                     </span>
                                     <span class="flex ${classMap({hidden: !this.isInternalTest})}">
                                         <slot name="internal-test-valid">
@@ -717,26 +719,42 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             </b>
                                         </slot>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                    <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
-                                    <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
+                                    <b>
+                                        ${i18n.t('show-active-tickets.status')}
+                                        <span class="red">
+                                            ${i18n.t('show-active-tickets.status-inactive')}
+                                        </span>
+                                    </b>
+                                    <b>
+                                        ${i18n.t('show-active-tickets.3-g-evidence')}:
+                                        <span class="red">
+                                            ${i18n.t('show-active-tickets.3-g-evidence-invalid')}
+                                        </span>
+                                    </b>
                                     <span>
                                         <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
                                             ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
                                             ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
                                         </slot>
-                                    </span> 
+                                    </span>
                                 </span>
                             </span>
                             <div class="btn">
-                                <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}" type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}" @click="${() => { this.showTicket(ticket); }}" title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
-                                <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket"> 
+                                <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
+                                                    type="is-primary" value="${i18n.t('show-active-tickets.show-btn-text')}"
+                                                    @click="${() => { this.showTicket(ticket); }}"
+                                                    title="${i18n.t('show-active-tickets.show-btn-text')}">
+                                </dbp-loading-button>
+                                <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
                                     <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
                                 </a>
-                                <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}" @click="${() => { this.deleteTicket(ticket); }}" title="${i18n.t('show-active-tickets.delete-btn-text')}"></dbp-loading-button>
+                                <dbp-loading-button id="delete-btn" value="${i18n.t('show-active-tickets.delete-btn-text')}"
+                                                    @click="${() => { this.deleteTicket(ticket); }}"
+                                                    title="${i18n.t('show-active-tickets.delete-btn-text')}">
+                                </dbp-loading-button>
                             </div>
                         </div>
                     `)}
@@ -746,23 +764,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                         </span>
                     </span>
-                    
                     <div class="no-tickets ${classMap({hidden: !this.isLoggedIn() || this.loading || this.activeTickets.length !== 0 || this.loadingTickets })}">${i18n.t('show-active-tickets.no-tickets-message')}</div>
                 </div>
-
             </div>
-            
+
             <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
                 <div class="modal-overlay" tabindex="-2" data-micromodal-close>
-                    <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
-                         aria-labelledby="ticket-modal-title">
+                    <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true" aria-labelledby="ticket-modal-title">
                         <main class="modal-content" id="ticket-modal-content">
                             <span class="control ticket-loading ${classMap({hidden: !this.ticketLoading})}">
                                 <span class="loading">
                                     <dbp-mini-spinner text=${i18n.t('show-active-tickets.loading-message-ticket')}></dbp-mini-spinner>
                                 </span>
                             </span>
-                            
+
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
                                     <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
@@ -770,8 +785,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         <img src="${this.currentTicketImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                     </div>
                                 </div>
-                                
-                              
+
                                 <div class="information-container ${classMap({hidden: this.hasValidProof || this.ticketLoading})}">
                                     <div class="${classMap({hidden: this.hasValidProof})}">
                                         <span>
@@ -782,7 +796,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </slot>
                                     </div>
                                 </div>
-                              
+
                                 <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading, 'flex-center': this.isInternalTest})}">
                                     <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                         <span class="${classMap({hidden: this.isInternalTest})}">
@@ -817,14 +831,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </slot>
                                     </div>
                                 </div>
-
                                 <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => { this.closeDialog(); }}">
                                     <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
                                 </button>
                             </div>
-                            
                         </main>
-                        
                     </div>
                 </div>
             </div>

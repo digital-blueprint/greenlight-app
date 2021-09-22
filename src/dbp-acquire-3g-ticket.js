@@ -8,7 +8,7 @@ import {classMap} from 'lit-html/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {CheckInPlaceSelect} from '@dbp-toolkit/check-in-place-select';
-import { send } from '@dbp-toolkit/common/notification';
+import {send} from '@dbp-toolkit/common/notification';
 import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
@@ -28,14 +28,18 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this.loading = false;
         this.processStarted = false;
+        this.preselectionLoading = true;
+        this._activationInProgress = false;
+        this.preCheck = true;
+
         this.preselectedOption = '';
         this.preselectionCheck = true;
-        this.preselectionLoading = true;
+        this.location = '';
 
         this.hasValidProof = false;
         this.hasTicket = false;
         this.hasTicketForThisPlace = false;
-        this.location = '';
+
         this.trustButtonChecked = false;
         this.detailedError = '';
 
@@ -52,10 +56,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.resetWrongQr = false;
         this.resetWrongHash = false;
         this.greenPassHash = '';
-
-        this._activationInProgress = false;
-        this.preCheck = true;
-
         this.isInternalTest = false;
         this.isSelfTest = false;
         this.isUploadSkipped = false;
@@ -97,44 +97,44 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     static get properties() {
         return {
             ...super.properties,
-            lang: { type: String },
-            loading: { type: Boolean, attribute: false },
-            processStarted: { type: Boolean, attribute: false },
-            entryPointUrl: { type: String, attribute: 'entry-point-url' },
-            preselectedOption: { type: String, attribute: 'preselected-option' },
-            hasValidProof: { type: Boolean, attribute: false },
-            hasTicket: { type: Boolean, attribute: false },
-            hasTicketForThisPlace: { type: Boolean, attribute: false },
-            location: { type: String, attribute: false },
-            showQrContainer: { type: Boolean, attribute: false},
-            activationEndTime: { type: String, attribute: false },
+            lang: {type: String},
+            loading: {type: Boolean, attribute: false},
+            processStarted: {type: Boolean, attribute: false},
+            entryPointUrl: {type: String, attribute: 'entry-point-url'},
+            preselectedOption: {type: String, attribute: 'preselected-option'},
+            hasValidProof: {type: Boolean, attribute: false},
+            hasTicket: {type: Boolean, attribute: false},
+            hasTicketForThisPlace: {type: Boolean, attribute: false},
+            location: {type: String, attribute: false},
+            showQrContainer: {type: Boolean, attribute: false},
+            activationEndTime: {type: String, attribute: false},
             qrParsingLoading: {type: Boolean, attribute: false},
-            status: { type: Object, attribute: false },
-            wrongQR : { type: Array, attribute: false },
-            wrongHash : { type: Array, attribute: false },
-            QRCodeFile: { type: Object, attribute: false },
-            isUploadSkipped: { type: Boolean, attribute: false },
-            trustButtonChecked: { type: Boolean, attribute: false },
-            isConfirmChecked: { type: Boolean, attribute: false },
-            storeCertificate: { type: Boolean, attribute: false },
-            showCertificateSwitch: { type: Boolean, attribute: false },
-            person: { type: Object, attribute: false },
-            isInternalTest: { type: Boolean, attribute: false },
-            isSelfTest: { type: Boolean, attribute: false },
-            preselectionLoading: { type: Boolean, attribute: false },
-            
-            showProofUpload: { type: Boolean, attribute: false },
-            proofUploadFailed: { type: Boolean, attribute: false },
-            showCreateTicket: { type: Boolean, attribute: false },
-            detailedError: { type: String, attribute: false },
+            status: {type: Object, attribute: false},
+            wrongQR: {type: Array, attribute: false},
+            wrongHash: {type: Array, attribute: false},
+            QRCodeFile: {type: Object, attribute: false},
+            isUploadSkipped: {type: Boolean, attribute: false},
+            trustButtonChecked: {type: Boolean, attribute: false},
+            isConfirmChecked: {type: Boolean, attribute: false},
+            storeCertificate: {type: Boolean, attribute: false},
+            showCertificateSwitch: {type: Boolean, attribute: false},
+            person: {type: Object, attribute: false},
+            isInternalTest: {type: Boolean, attribute: false},
+            isSelfTest: {type: Boolean, attribute: false},
+            preselectionLoading: {type: Boolean, attribute: false},
 
-            message: { type: String, attribute: false },
+            showProofUpload: {type: Boolean, attribute: false},
+            proofUploadFailed: {type: Boolean, attribute: false},
+            showCreateTicket: {type: Boolean, attribute: false},
+            detailedError: {type: String, attribute: false},
+
+            message: {type: String, attribute: false},
 
             fileHandlingEnabledTargets: {type: String, attribute: 'file-handling-enabled-targets'},
-            nextcloudWebAppPasswordURL: { type: String, attribute: 'nextcloud-web-app-password-url' },
-            nextcloudWebDavURL: { type: String, attribute: 'nextcloud-webdav-url' },
-            nextcloudName: { type: String, attribute: 'nextcloud-name' },
-            nextcloudFileURL: { type: String, attribute: 'nextcloud-file-url' },
+            nextcloudWebAppPasswordURL: {type: String, attribute: 'nextcloud-web-app-password-url'},
+            nextcloudWebDavURL: {type: String, attribute: 'nextcloud-webdav-url'},
+            nextcloudName: {type: String, attribute: 'nextcloud-name'},
+            nextcloudFileURL: {type: String, attribute: 'nextcloud-file-url'},
             nextcloudAuthInfo: {type: String, attribute: 'nextcloud-auth-info'},
         };
     }
@@ -153,7 +153,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 case "status":
                     if (oldValue !== undefined) {
                         setTimeout(function () {
-                            that._("#notification-wrapper").scrollIntoView({ behavior: 'smooth', block: 'end' });
+                            that._("#notification-wrapper").scrollIntoView({behavior: 'smooth', block: 'end'});
                         }, 10);
                     }
                     break;
@@ -225,8 +225,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
 
-
-
     /**
      * Searches in the uploaded file for an QR Code
      * If the file is a pdf the search in all pages
@@ -258,7 +256,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     showQrReader() {
         this.showQrContainer = true;
-        if ( this._('#qr-scanner') ) {
+        if (this._('#qr-scanner')) {
             this._('#qr-scanner').stopScan = false;
         }
         //this._("#manualPassUploadWrapper").classList.add('hidden');
@@ -273,7 +271,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this._("#qr-scanner").stopScan = true;
         this.showQrContainer = false;
 
-        this._(".proof-upload-container").scrollIntoView({ behavior: 'smooth', block: 'start' });
+        this._(".proof-upload-container").scrollIntoView({behavior: 'smooth', block: 'start'});
 
         this.openFileSource();
     }
@@ -368,8 +366,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         switch (status) {
-            case 200:   
-                for (let i = 0; i < numTypes; i++ ) {
+            case 200:
+                for (let i = 0; i < numTypes; i++) {
                     //For the case we have more then one possible ticket (places), we need to check here if it is the same ticket as the selected
                     this.hasTicketForThisPlace = true;
                     console.log('Found a valid ticket for this room.');
@@ -388,12 +386,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         let responseBody = await response.clone().json();
 
-        switch(response.status) {
+        switch (response.status) {
             case 201:
 
                 send({
                     "summary": i18n.t('acquire-3g-ticket.create-ticket-success-title'),
-                    "body":  i18n.t('acquire-3g-ticket.create-ticket-success-body', { place: this.location }),
+                    "body": i18n.t('acquire-3g-ticket.create-ticket-success-body', {place: this.location}),
                     "type": "success",
                     "timeout": 5,
                 });
@@ -427,19 +425,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     checkInPlaceSelect.clear();
                 }
 
-                this._("#checkin-reference").scrollIntoView({ block: 'start', behavior: 'smooth' });
-                
+                this._("#checkin-reference").scrollIntoView({block: 'start', behavior: 'smooth'});
+
                 this.preCheck = true; //initiates a new check and sets validProof to true
 
                 break;
 
             case 400: // Invalid input
-                switch(responseBody['relay:errorId']) {
+                switch (responseBody['relay:errorId']) {
                     case 'greenlight:consent-assurance-not-true':
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: consent-assurance-not-true', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
-                            "body":  i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                            "body": i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
                             "type": "danger",
                             "timeout": 5,
                         });
@@ -448,7 +446,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: additional-information-not-valid', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                            "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                            "body": i18n.t('acquire-3g-ticket.other-error-body'),
                             "type": "danger",
                             "timeout": 5,
                         });
@@ -457,19 +455,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: default', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                            "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                            "body": i18n.t('acquire-3g-ticket.other-error-body'),
                             "type": "danger",
                             "timeout": 5,
                         });
                         break;
                 }
                 break;
-            
+
             case 403: // Forbidden - Access Denied
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'AccessDenied', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -479,7 +477,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnprocessableEntity', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -489,7 +487,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'ErrorInData', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -499,7 +497,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnknownError', this.location, response);
                 send({
                     "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body":  i18n.t('acquire-3g-ticket.other-error-body'),
+                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
                     "type": "danger",
                     "timeout": 5,
                 });
@@ -515,7 +513,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (!this.isConfirmChecked) {
             send({
                 "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
-                "body":  i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                "body": i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
                 "type": "danger",
                 "timeout": 8,
             });
@@ -575,15 +573,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
             ${commonStyles.getLinkCss()}
-
             h2 {
                 margin-top: 0;
             }
-            
-            h3{
+
+            h3 {
                 margin-top: 2rem;
             }
-            
+
             #last-checkbox {
                 margin-top: 1rem;
                 margin-bottom: 1.5rem;
@@ -669,7 +666,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 -moz-appearance: textfield;
             }
 
-            @keyframes linkIconOut{
+            @keyframes linkIconOut {
                 0% {
                     filter: invert(100%);
                     -webkit-filter: invert(100%);
@@ -710,7 +707,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             label.button {
                 display: inline-block;
             }
-            
+
             select:not(.select) {
                 /*background-size: 13px;*/
                 /*background-position-x: calc(100% - 0.4rem);*/
@@ -721,11 +718,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 font-weight: 300;
                 border: 1px solid #aaa;
             }
-            
+
             .loading-proof {
                 padding: 0;
             }
-            
+
             .tickets-wrapper {
                 margin-top: 1.5rem;
                 margin-bottom: 1.5rem;
@@ -754,12 +751,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-top: 1rem;
             }
 
-            .int-link-internal{
+            .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
-                border-bottom: 1px solid rgba(0,0,0,0.3);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
             }
-            
-            .int-link-internal:hover{
+
+            .int-link-internal:hover {
                 background-color: black;
                 color: white;
                 text-decoration: none;
@@ -769,38 +766,38 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 border-bottom-color: var(--dbp-primary-text-color);
             }
 
-            .check-icon{
+            .check-icon {
                 font-size: 18px;
                 opacity: 0.7;
                 padding: 0px 4px;
             }
-            
-            .g-proof-information{
+
+            .g-proof-information {
                 margin: 1.5em 0;
                 border: var(--dbp-border-width) solid var(--dbp-border-color);
                 padding: 1.25rem 1.5rem 1.25rem 1.5rem;
                 border-radius: var(--dbp-border-radius);
                 display: flex;
                 justify-content: space-between;
-              }
-              
-            .g-proof-information h4{
+            }
+
+            .g-proof-information h4 {
                 margin-top: 0px;
                 margin-bottom: 0.5em;
-              }
-            
+            }
+
             .wrapper {
                 margin: 1.5em 0;
             }
-            
-            .confirm-btn label{
+
+            .confirm-btn label {
                 margin-top: 1em;
             }
 
             @media only screen
             and (orientation: portrait)
-            and (max-width:768px) {
-                
+            and (max-width: 768px) {
+
                 .confirm-btn {
                     display: flex;
                     flex-direction: column;
@@ -810,7 +807,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 .confirm-btn.hidden {
                     display: none;
                 }
-                
+
                 #no-proof-continue-btn {
                     display: block;
                 }
@@ -834,6 +831,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     flex-direction: column;
                     text-align: center;
                 }
+
                 .logout {
                     width: 100%;
                     box-sizing: border-box;
@@ -848,7 +846,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     margin-top: 0.5rem;
                 }
 
-                .loading{
+                .loading {
                     justify-content: center;
                 }
 
@@ -865,11 +863,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     width: 100%;
                     margin-bottom: 0.5em;
                 }
-                
+
                 .g-proof-information {
                     flex-direction: column;
                 }
-                
+
                 .checkmark {
                     top: 10%;
                 }
@@ -882,7 +880,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         // We want to scroll after the next re-layout
         requestAnimationFrame(() => {
             setTimeout(() => {
-                this._("#qr-scanner").scrollIntoView({ behavior: 'smooth', block: 'start' });
+                this._("#qr-scanner").scrollIntoView({behavior: 'smooth', block: 'start'});
             }, 0);
         });
     }
@@ -893,14 +891,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
             this.loading = true;
-            this.checkForValidProofLocal().then(() =>  {
+            this.checkForValidProofLocal().then(() => {
                 this.loading = false;
             });
         }
 
         if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
             this.location = this.preselectedOption;
-            this.checkForValidTickets().then(() =>  { 
+            this.checkForValidTickets().then(() => {
                 this.preselectionLoading = false;
             });
             this.preselectionCheck = false;
@@ -911,15 +909,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
             </div>
-    
+
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                 </span>
             </div>
-    
+
             <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-    
+
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
                     <slot name="description">
@@ -930,207 +928,242 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <slot name="additional-information">
                         <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
                     </slot>
-                </div>    
+                </div>
 
-                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck && !this.preselectionLoading })}">
+                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck && !this.preselectionLoading})}">
                     <span class="loading">
                         <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
                     </span>
                 </div>
-                    
-                    <!-- Create ticket start -->
-                    <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading })}">
-                       <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof})}">
-                            <dbp-inline-notification class="inline-notification">
-                                <div slot="body">
-                                    ${i18n.t('acquire-3g-ticket.manage-tickets-text')}
-                                    <a href='#' @click="${
-                                                (e) => {
-                                                    this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'show-tickets'}}));
-                                                    e.preventDefault();
-                                                }
-                                            }" title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' class="int-link-internal">
-                                        <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
-                                    </a>
-                                </div>
-                            </dbp-inline-notification>
-                        </div>
-                        
-                        ${ !this.preselectionLoading ? html`
-                            <dbp-loading-button 
-                                type="${(!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof ? "is-primary" : ""}" 
-                                id="confirm-ticket-btn"
-                                value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket') }" 
-                                @click="${() => {  this.processStarted = true; }}" 
-                                title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
-                            ></dbp-loading-button>
-                        `: ``} 
 
+                <!-- Create ticket start -->
+                <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading})}">
+                    <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof})}">
+                        <dbp-inline-notification class="inline-notification">
+                            <div slot="body">
+                                ${i18n.t('acquire-3g-ticket.manage-tickets-text')}
+                                <a href='#' @click="${
+                                        (e) => {
+                                            this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'show-tickets'}}));
+                                            e.preventDefault();
+                                        }
+                                }" title='${i18n.t('acquire-3g-ticket.manage-tickets-link')}' class="int-link-internal">
+                                    <span>${i18n.t('acquire-3g-ticket.manage-tickets-link')}.</span>
+                                </a>
+                            </div>
+                        </dbp-inline-notification>
                     </div>
-                    <!-- Create ticket start end -->
 
-                <div class="border ${classMap({'hidden': !this.processStarted })}"></div>
+                    ${!this.preselectionLoading ? html`
+                        <dbp-loading-button
+                                type="${(!this.hasTicket && !this.hasTicketForThisPlace) || !this.hasValidProof ? "is-primary" : ""}"
+                                id="confirm-ticket-btn"
+                                value="${(!this.hasTicket && !this.hasTicketForThisPlace) ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket')}"
+                                @click="${() => {
+                                    this.processStarted = true;
+                                }}"
+                                title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
+                        ></dbp-loading-button>
+                    ` : ``}
 
-                    <div class="container ${classMap({'hidden': !this.processStarted })}">
-                        <!-- Place Selector -->
-                        <div class="field ${classMap({'hidden': this.preselectedOption && this.preselectedOption !== '' })}">
-                            <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
-                            <div class="control">
-                                <dbp-check-in-place-select subscribe="auth" lang="${this.lang}" entry-point-url="${this.entryPointUrl}" @change="${(event) => { this.setLocation(event); }}"></dbp-check-in-place-select>
-                            </div>
+                </div>
+                <!-- Create ticket start end -->
+
+                <div class="border ${classMap({'hidden': !this.processStarted})}"></div>
+
+                <div class="container ${classMap({'hidden': !this.processStarted})}">
+                    <!-- Place Selector -->
+                    <div class="field ${classMap({'hidden': this.preselectedOption && this.preselectedOption !== ''})}">
+                        <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
+                        <div class="control">
+                            <dbp-check-in-place-select subscribe="auth" lang="${this.lang}"
+                                                       entry-point-url="${this.entryPointUrl}" @change="${(event) => {
+                                this.setLocation(event);
+                            }}"></dbp-check-in-place-select>
                         </div>
-                        
-                        <!-- 3G Proof Upload -->
-                         <div class="proof-upload-container ${classMap({'hidden': !this.showProofUpload || this.location === '' || this.showCreateTicket})}">
-        
-                            <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
+                    </div>
 
-                             <label id="last-checkbox" class="button-container">
-                                 ${i18n.t('acquire-3g-ticket.trust-and-save-1')}
-                                 <dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.trust-and-save-2')}"></dbp-info-tooltip>
-                                 <input type="checkbox" id="trust-button" name="trust-button" value="trust-button" @click="${this.checkTrustButtonCheckmark}">
-                                 <span class="checkmark" id="trust-button-checkmark"></span>
-                             </label>
+                    <!-- 3G Proof Upload -->
+                    <div class="proof-upload-container ${classMap({'hidden': !this.showProofUpload || this.location === '' || this.showCreateTicket})}">
 
-                             <div id="btn-container" class="btn-container wrapper">
-                                <dbp-textswitch id="text-switch" name1="qr-reader"
-                                    ?disabled="${!this.trustButtonChecked}"        
-                                    name2="manual"
-                                    name="${i18n.t('acquire-3g-ticket.qr-button-text')} || ${i18n.t('acquire-3g-ticket.manually-button-text')}"
-                                    class="switch"
-                                    value1="${i18n.t('acquire-3g-ticket.qr-button-text')}"
-                                    value2="${i18n.t('acquire-3g-ticket.manually-button-text')}"
-                                    @change=${ (e) => this.uploadSwitch(e.target.name) }></dbp-textswitch>
+                        <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
+
+                        <label id="last-checkbox" class="button-container">
+                            ${i18n.t('acquire-3g-ticket.trust-and-save-1')}
+                            <dbp-info-tooltip class="info-tooltip"
+                                              text-content="${i18n.t('acquire-3g-ticket.trust-and-save-2')}"></dbp-info-tooltip>
+                            <input type="checkbox" id="trust-button" name="trust-button" value="trust-button"
+                                   @click="${this.checkTrustButtonCheckmark}">
+                            <span class="checkmark" id="trust-button-checkmark"></span>
+                        </label>
+
+                        <div id="btn-container" class="btn-container wrapper">
+                            <dbp-textswitch id="text-switch" name1="qr-reader"
+                                            ?disabled="${!this.trustButtonChecked}"
+                                            name2="manual"
+                                            name="${i18n.t('acquire-3g-ticket.qr-button-text')} || ${i18n.t('acquire-3g-ticket.manually-button-text')}"
+                                            class="switch"
+                                            value1="${i18n.t('acquire-3g-ticket.qr-button-text')}"
+                                            value2="${i18n.t('acquire-3g-ticket.manually-button-text')}"
+                                            @change=${(e) => this.uploadSwitch(e.target.name)}></dbp-textswitch>
+                        </div>
+
+                        <dbp-file-source
+                                id="file-source"
+                                context="${i18n.t('acquire-3g-ticket.filepicker-context')}"
+                                allowed-mime-types="image/*,application/pdf,.pdf"
+                                nextcloud-auth-url="${this.nextcloudWebAppPasswordURL}"
+                                nextcloud-web-dav-url="${this.nextcloudWebDavURL}"
+                                nextcloud-name="${this.nextcloudName}"
+                                nextcloud-file-url="${this.nextcloudFileURL}"
+                                nexcloud-auth-info="${this.nextcloudAuthInfo}"
+                                enabled-targets="${this.fileHandlingEnabledTargets}"
+                                decompress-zip
+                                lang="${this.lang}"
+                                text="${i18n.t('acquire-3g-ticket.filepicker-context')}"
+                                button-label="${i18n.t('acquire-3g-ticket.filepicker-button-title')}"
+                                number-of-files="1"
+                                @dbp-file-source-file-selected="${this.getFilesToActivate}"
+                        ></dbp-file-source>
+
+                        <div class="border ${classMap({hidden: !this.showQrContainer})}">
+                            <div class="element">
+                                <dbp-qr-code-scanner id="qr-scanner" lang="${this.lang}" stop-scan
+                                                     match-regex="${matchRegexString}"
+                                                     @scan-started="${this._onScanStarted}"
+                                                     @code-detected="${(event) => {
+                                                         this.doActivationWithQR(event);
+                                                     }}"></dbp-qr-code-scanner>
                             </div>
-                             
-                             <dbp-file-source
-                                                id="file-source"
-                                                context="${i18n.t('acquire-3g-ticket.filepicker-context')}"
-                                                allowed-mime-types="image/*,application/pdf,.pdf"
-                                                nextcloud-auth-url="${this.nextcloudWebAppPasswordURL}"
-                                                nextcloud-web-dav-url="${this.nextcloudWebDavURL}"
-                                                nextcloud-name="${this.nextcloudName}"
-                                                nextcloud-file-url="${this.nextcloudFileURL}"
-                                                nexcloud-auth-info="${this.nextcloudAuthInfo}"
-                                                enabled-targets="${this.fileHandlingEnabledTargets}"
-                                                decompress-zip
-                                                lang="${this.lang}"
-                                                text="${i18n.t('acquire-3g-ticket.filepicker-context')}"
-                                                button-label="${i18n.t('acquire-3g-ticket.filepicker-button-title')}"
-                                                number-of-files="1"
-                                                @dbp-file-source-file-selected="${this.getFilesToActivate}"
-                             ></dbp-file-source>
-                             
-                             <div class="border ${classMap({hidden: !this.showQrContainer})}">
-                                <div class="element">
-                                    <dbp-qr-code-scanner id="qr-scanner" lang="${this.lang}" stop-scan match-regex="${matchRegexString}" @scan-started="${this._onScanStarted}" @code-detected="${(event) => { this.doActivationWithQR(event);}}"></dbp-qr-code-scanner>
-                                </div>
-            
-                                <div class="control ${classMap({hidden: !this.loading})}">
+
+                            <div class="control ${classMap({hidden: !this.loading})}">
                                     <span class="loading">
                                         <dbp-mini-spinner></dbp-mini-spinner>
                                     </span>
-                                </div>
-                            </div>
-
-                             <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
-                                    <span class="qr-loading">
-                                        <dbp-mini-spinner text=${i18n.t('acquire-3g-ticket.manual-uploading-message')}></dbp-mini-spinner>
-                                    </span>
-                             </div>
-                         </div>
-                        <!-- End 3G Proof Upload-->
-                             
-                        <!-- Show Proof -->
-                        <h3 class="${classMap({hidden: !this.showProofUpload && !this.isUploadSkipped || !this.showCreateTicket && !this.isUploadSkipped})}">${i18n.t('acquire-3g-ticket.create-ticket')}</h3>
-                        <div class="${classMap({hidden: this.location === '' || this.isUploadSkipped || this.loading})}">
-                            <div class="${classMap({'hidden': !this.hasValidProof || this.loading})}">
-                                <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
-                                ${ i18n.t(this.message, { place: this.location }) }
-                            </div>
-                            <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
-                                <div class="close-icon">${ i18n.t(this.message, { place: this.location }) }</div>
-                                ${ this.detailedError ? html`<dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
-                        <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
-                            <div class="g-proof-information">
-                                <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+
+                        <div class="control ${classMap({hidden: !this.qrParsingLoading})}">
+                                    <span class="qr-loading">
+                                        <dbp-mini-spinner
+                                                text=${i18n.t('acquire-3g-ticket.manual-uploading-message')}></dbp-mini-spinner>
+                                    </span>
+
+                        </div>
+                    </div>
+                    <!-- End 3G Proof Upload-->
+
+                    <!-- Show Proof -->
+                    <h3 class="${classMap({hidden: !this.showProofUpload && !this.isUploadSkipped || !this.showCreateTicket && !this.isUploadSkipped})}">
+                        ${i18n.t('acquire-3g-ticket.create-ticket')}</h3>
+                    <div class="${classMap({hidden: this.location === '' || this.isUploadSkipped || this.loading})}">
+                        <div class="${classMap({'hidden': !this.hasValidProof || this.loading})}">
+                            <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
+                            ${i18n.t(this.message)}
+                        </div>
+                        <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
+                            <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
+                            <div class="close-icon">${i18n.t(this.message)}</div>
+                            ${this.detailedError ? html`
+                                <dbp-info-tooltip class="info-tooltip"
+                                                  text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>')}"
+                                                  interactive></dbp-info-tooltip>` : ``}
+                        </div>
+                    </div>
+                    <div class="notification-wrapper ${classMap({hidden: this.isUploadSkipped || this.location === '' || !this.showCreateTicket})}">
+                        <div class="g-proof-information">
+                            <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
                                         <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
                                         <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
-                                            <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
-                                                this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
+                                            <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {
+                                                clock: this.person.validUntil ?
+                                                        this.formatValidUntilTime(this.person.validUntil) : '',
+                                                date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''
+                                            })}
                                             </strong>
                                             <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
+
                                         </span> 
-                                        <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
-                                        ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }
+                                        <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}
+                                        : ${this.person.firstname ? this.person.firstname + " " : ""}
+                                        ${this.person.lastname} ${this.person.dob ? html`
+                                        <br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : ""}
                                     </span>
-                                </div>
-                                <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
+                            </div>
+                            <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                     <span class="header">
                                         <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4> 
                                         ${i18n.t('acquire-3g-ticket.self-test-information')}
-                                        <span>${i18n.t('acquire-3g-ticket.self-test-link')}: <a class="int-link-external" title="${i18n.t('acquire-3g-ticket.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${this.greenPassHash}</a></span>
+                                        <span>${i18n.t('acquire-3g-ticket.self-test-link')}: <a
+                                                class="int-link-external"
+                                                title="${i18n.t('acquire-3g-ticket.self-test')}" target="_blank"
+                                                rel="noopener"
+                                                href="${this.greenPassHash}">${this.greenPassHash}</a></span>
                                     </span>
-                                </div>
-                                <dbp-loading-button id="remove-proof-btn"
-                                                    value="${i18n.t('acquire-3g-ticket.remove-proof')}" 
-                                                    @click="${() => { this.removeProof(); }}"
-                                                    title="${i18n.t('acquire-3g-ticket.remove-proof')}"
-                                ></dbp-loading-button>
                             </div>
-                            
+                            <dbp-loading-button id="remove-proof-btn"
+                                                value="${i18n.t('acquire-3g-ticket.remove-proof')}"
+                                                @click="${() => {
+                                                    this.removeProof();
+                                                }}"
+                                                title="${i18n.t('acquire-3g-ticket.remove-proof')}"
+                            ></dbp-loading-button>
                         </div>
-                        <!-- End Show Proof -->
-             
-                        <!-- Create Ticket part -->
-                        <div class="confirm-btn wrapper ${classMap({hidden: !this.showCreateTicket && !this.isUploadSkipped})}">
-                            <div class="${classMap({hidden: !this.isUploadSkipped})}">
-                                <label class="button-container">
-                                    ${i18n.t('acquire-3g-ticket.manual-proof-text')}
-                                    <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode" value="manual-proof-mode" @click="${this.checkConfirmCheckmark}">
-                                    <span class="checkmark" id="manual-proof-checkmark"></span>
-                                </label>
-                            </div>
-                           
-                            <div class="">
-                                <label id="last-checkbox" class="button-container">
-                                    ${ !this.isUploadSkipped ? i18n.t('acquire-3g-ticket.confirm-checkbox-no-cert-text') : i18n.t('acquire-3g-ticket.confirm-checkbox-valid-cert-text') }
-                                    <input type="checkbox" id="digital-proof-mode" name="digital-proof-mode" value="digital-proof-mode" @click="${this.checkConfirmCheckmark}">
-                                    <span class="checkmark" id="digital-proof-checkmark"></span>
-                                </label>
-                                
-                                <dbp-loading-button ?disabled="${this.loading || this.location === '' || !this.isConfirmChecked}"
-                                                type="is-primary" 
-                                                id="confirm-ticket-btn"
-                                                value="${i18n.t('acquire-3g-ticket.confirm-button-text')}" 
-                                                @click="${(event) => { this.createTicket(event); }}" 
-                                                title="${i18n.t('acquire-3g-ticket.confirm-button-text')}"
-                                ></dbp-loading-button>
-                            </div>
-                            
-                        </div>
-                        <!-- End Create Ticket part -->
-                        
-                        
-                        <!-- Ticket Notification -->
-                         <div class="tickets-notifications hidden">
-                            <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
-                                <dbp-inline-notification type="">
-                                    <div slot="body">
-                                        <slot name="contact-tracing-information">
-                                            ${i18n.t('acquire-3g-ticket.check-in-link-description')}
-                                        </slot>
-                                    </div>
-                                </dbp-inline-notification>
-                            </div>
-                        </div>
-                        <!-- End Ticket Notification -->
-                        
+
                     </div>
+                    <!-- End Show Proof -->
+
+                    <!-- Create Ticket part -->
+                    <div class="confirm-btn wrapper ${classMap({hidden: !this.showCreateTicket && !this.isUploadSkipped})}">
+                        <div class="${classMap({hidden: !this.isUploadSkipped})}">
+                            <label class="button-container">
+                                ${i18n.t('acquire-3g-ticket.manual-proof-text')}
+                                <input type="checkbox" id="manual-proof-mode" name="manual-proof-mode"
+                                       value="manual-proof-mode" @click="${this.checkConfirmCheckmark}">
+                                <span class="checkmark" id="manual-proof-checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="">
+                            <label id="last-checkbox" class="button-container">
+                                ${!this.isUploadSkipped ? i18n.t('acquire-3g-ticket.confirm-checkbox-no-cert-text') : i18n.t('acquire-3g-ticket.confirm-checkbox-valid-cert-text')}
+                                <input type="checkbox" id="digital-proof-mode" name="digital-proof-mode"
+                                       value="digital-proof-mode" @click="${this.checkConfirmCheckmark}">
+                                <span class="checkmark" id="digital-proof-checkmark"></span>
+                            </label>
+
+                            <dbp-loading-button
+                                    ?disabled="${this.loading || this.location === '' || !this.isConfirmChecked}"
+                                    type="is-primary"
+                                    id="confirm-ticket-btn"
+                                    value="${i18n.t('acquire-3g-ticket.confirm-button-text')}"
+                                    @click="${(event) => {
+                                        this.createTicket(event);
+                                    }}"
+                                    title="${i18n.t('acquire-3g-ticket.confirm-button-text')}"
+                            ></dbp-loading-button>
+                        </div>
+
+                    </div>
+                    <!-- End Create Ticket part -->
+
+                    <!-- Ticket Notification -->
+                    <div class="tickets-notifications hidden">
+                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
+                            <dbp-inline-notification type="">
+                                <div slot="body">
+                                    <slot name="contact-tracing-information">
+                                        ${i18n.t('acquire-3g-ticket.check-in-link-description')}
+                                    </slot>
+                                </div>
+                            </dbp-inline-notification>
+                        </div>
+                    </div>
+                    <!-- End Ticket Notification -->
+
                 </div>
+            </div>
             </div>
         `;
     }

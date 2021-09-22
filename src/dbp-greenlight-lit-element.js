@@ -13,7 +13,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         super();
         this.isSessionRefreshed = false;
         this.auth = {};
-
         this.person = {};
 
         this.searchHashString = '';
@@ -24,10 +23,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     static get properties() {
         return {
             ...super.properties,
-            auth: { type: Object },
-            searchSelfTestStringArray: { type: String, attribute: 'gp-search-self-test-string-array' },
-            searchHashInternalTestString: { type: String, attribute: 'gp-search-hash-internal-test-string' },
-            searchHashString: { type: String, attribute: 'gp-search-hash-string' },
+            auth: {type: Object},
+
+            searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
+            searchHashInternalTestString: {type: String, attribute: 'gp-search-hash-internal-test-string'},
+            searchHashString: {type: String, attribute: 'gp-search-hash-string'},
         };
     }
 
@@ -46,9 +46,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this._loginStatus = this.auth['login-status'];
 
         let newLoginState = [this.isLoggedIn(), this.isLoading()];
+
         if (this._loginState.toString() !== newLoginState.toString()) {
             this.requestUpdate();
         }
+
         this._loginState = newLoginState;
 
         if (this.isLoggedIn() && !this._loginCalled) {
@@ -90,6 +92,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     isLoading() {
         if (this._loginStatus === "logged-out")
             return false;
+
         return (!this.isLoggedIn() && this.auth.token !== undefined);
     }
 
@@ -102,7 +105,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      */
     async httpGetAsync(url, options) {
         let response = await fetch(url, options).then(result => {
+
             if (!result.ok) throw result;
+
             return result;
         }).catch(error => {
             return error;
@@ -139,13 +144,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             stack: getStackTrace().slice(1, 6)
         };
 
-        this.sendSetPropertyEvent('analytics-event', {'category': category, 'action': action, 'name': JSON.stringify(data)});
+        this.sendSetPropertyEvent('analytics-event', {
+            'category': category,
+            'action': action,
+            'name': JSON.stringify(data)
+        });
     }
 
     async sendCreateTicketRequest() {
         let body = {
             // "place": this.location,
-            "consentAssurance": this.isConfirmChecked, 
+            "consentAssurance": this.isConfirmChecked,
             "additionalInformation": await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : ''),
         };
 
@@ -168,28 +177,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             "type": "danger",
             "timeout": 5,
         });
+
         if (this.wrongHash)
             this.wrongHash.push(hash);
-    }
-
-    /**
-     * Parse a incoming date to a readable date
-     *
-     * @returns {string} readable date
-     * @param startDate
-     * @param endDate
-     */
-    getReadableDuration(startDate, endDate) {
-        const i18n = this._i18n;
-        let newDate1 = new Date(startDate);
-        let newDate2 = new Date(endDate);
-        const diff_minutes = (newDate2 - newDate1)/1000/60;
-        const diff_hours = diff_minutes/60;
-
-        let result = i18n.t('show-active-tickets.valid-until-message-1');
-        result += diff_hours > 0 ? i18n.t('show-active-tickets.valid-until-message-2', { hours: diff_hours }) : i18n.t('show-active-tickets.valid-until-message-3', { minutes: ("0" + diff_minutes).slice(-2) });
-
-        return result;
     }
 
     /**
@@ -202,9 +192,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         const i18n = this._i18n;
         let newDate = new Date(date);
         let month = newDate.getMonth() + 1;
+
         return i18n.t('valid-till', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)}) + " " + newDate.getDate() + "." + month + "." + newDate.getFullYear();
     }
-
 
     formatValidUntilDate(date) {
         return date.toLocaleDateString('de-DE', {
@@ -220,7 +210,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             minute: 'numeric',
         });
     }
-
 
     /**
      * Decode data from QR code
@@ -238,7 +227,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let passData;
         try {
             passData = parseGreenPassQRCode(data, searchHashString);
-        } catch(error) {
+        } catch (error) {
             if (this.wrongQR !== undefined)
                 await this.checkAlreadySend(data, this.resetWrongQr, this.wrongQR);
             return false;
@@ -247,14 +236,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.greenPassHash = passData;
 
         let gpAlreadySend = false;
+
         if (this.wrongHash !== undefined)
             gpAlreadySend = await this.wrongHash.includes(data);
+
         if (gpAlreadySend) {
             const that = this;
             if (!this.resetWrongHash) {
                 this.resetWrongHash = true;
-                setTimeout( function () {
-                    that.wrongHash.splice(0,that.wrongHash.length);
+                setTimeout(function () {
+                    that.wrongHash.splice(0, that.wrongHash.length);
                     that.wrongHash.length = 0;
                     that.resetWrongHash = false;
                 }, 3000);
@@ -270,21 +261,20 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let checkAlreadySend = await wrongQrArray.includes(data);
 
         if (checkAlreadySend) {
-
             if (!reset) {
                 reset = true;
-
-                setTimeout( function () {
-                    wrongQrArray.splice(0,wrongQrArray.length);
+                setTimeout(function () {
+                    wrongQrArray.splice(0, wrongQrArray.length);
                     wrongQrArray.length = 0;
                     reset = false;
                 }, 3000);
             }
         }
+
         wrongQrArray.push(data);
         send({
             "summary": i18n.t('acquire-3g-ticket.invalid-title'),
-            "body":  i18n.t('acquire-3g-ticket.invalid-body'),
+            "body": i18n.t('acquire-3g-ticket.invalid-body'),
             "type": "danger",
             "timeout": 5,
         });
@@ -306,18 +296,22 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async decodeUrlWithoutCheck(data, searchHashString) {
         try {
             parseGreenPassQRCode(data, searchHashString);
-        } catch(error) {
+        } catch (error) {
             return false;
         }
+
         let gpAlreadySend = false;
+
         if (this.wrongHash !== undefined)
             gpAlreadySend = await this.wrongHash.includes(data);
+
         if (gpAlreadySend) {
             const that = this;
+
             if (!this.resetWrongHash) {
                 this.resetWrongHash = true;
-                setTimeout( function () {
-                    that.wrongHash.splice(0,that.wrongHash.length);
+                setTimeout(function () {
+                    that.wrongHash.splice(0, that.wrongHash.length);
                     that.wrongHash.length = 0;
                     that.resetWrongHash = false;
                 }, 3000);
@@ -332,6 +326,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         try {
             let hash = null;
+
             try {
                 hash = await storage.fetch(this.auth['person-id'], this.auth['subject']);
             } catch (error) {
@@ -350,6 +345,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async checkQRCode(data) {
         let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
         let check2 = check ? false : await this.decodeUrlWithoutCheck(data, this.searchHashInternalTestString);
+
         if (check || check2) {
             this.greenPassHash = data;
             this.isSelfTest = false;
@@ -394,8 +390,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 this._("#text-switch")._active = "";
 
             this.showCreateTicket = true;
-            if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
-            {
+            if (this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped) {
                 await this.encryptAndSaveHash();
             }
 
@@ -404,7 +399,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR);
         }
     }
-
 
 
     /**
@@ -457,15 +451,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         switch (status) {
             case 201:
                 // Check Person
-                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate))
-                {
+                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate)) {
                     if (!preCheck) {
-                       /* send({
-                            "summary": i18n.t('acquire-3g-ticket.invalid-title'),
-                            // "body": i18n.t('acquire-3g-ticket.invalid-body'),
-                            "type": "warning",
-                            "timeout": 5,
-                        });*/
+                        /* send({
+                             "summary": i18n.t('acquire-3g-ticket.invalid-title'),
+                             // "body": i18n.t('acquire-3g-ticket.invalid-body'),
+                             "type": "warning",
+                             "timeout": 5,
+                         });*/
                     }
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     this.proofUploadFailed = true;
@@ -473,8 +466,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     return;
 
                 }
-                if ( this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped)
-                {
+                if (this._("#trust-button") && this._("#trust-button").checked && !this.isUploadSkipped) {
                     await this.encryptAndSaveHash();
                 }
                 this.person.firstname = responseBody.firstname;
@@ -496,7 +488,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 if (this._("#text-switch"))
                     this._("#text-switch")._active = "";
                 this.showCreateTicket = true;
-
 
                 if (preCheck) {
                     this.storeCertificate = true;
@@ -549,7 +540,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         let expiresAt;
         if (this.isSelfTest) {
-            expiresAt = Date.now() + 60000*1440; //24 hours
+            expiresAt = Date.now() + 60000 * 1440; //24 hours
         }
         await storage.save(this.greenPassHash, this.auth['person-id'], this.auth['subject'], expiresAt);
     }
