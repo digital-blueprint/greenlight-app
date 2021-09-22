@@ -222,7 +222,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (responseData.status === 200) { // Success
             this.currentTicket = responseBody;
             this.currentTicketImage = responseBody.image;
-            this.setTimer(responseBody.imageValidFor * 1000 + 1000 || 3000);
+            this.setTimer(responseBody.imageValidFor * 1000 + 1000);
             return true;
         }
 

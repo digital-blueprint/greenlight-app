@@ -102,7 +102,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
         if (responseData.status === 200) { // Success
             this.referenceImage = responseBody['hydra:member'][0].image || '';
-            this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000 || 3000);
+            this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000);
             return true;
         }
         // Other Error
