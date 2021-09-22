@@ -384,8 +384,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     checkInPlaceSelect.clear();
                 }
 
-                this._("#checkin-reference").scrollIntoView({block: 'start', behavior: 'smooth'});
-
                 this.preCheck = true; //initiates a new check and sets validProof to true
 
                 break;
@@ -1090,21 +1088,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                     </div>
                     <!-- End Create Ticket part -->
-
-                    <!-- Ticket Notification -->
-                    <div class="tickets-notifications hidden">
-                        <div class="tickets-wrapper ${classMap({'hidden': (!this.hasTicket)})}" id="checkin-reference">
-                            <dbp-inline-notification type="">
-                                <div slot="body">
-                                    <slot name="contact-tracing-information">
-                                        ${i18n.t('acquire-3g-ticket.check-in-link-description')}
-                                    </slot>
-                                </div>
-                            </dbp-inline-notification>
-                        </div>
-                    </div>
-                    <!-- End Ticket Notification -->
-
                 </div>
             </div>
             </div>
