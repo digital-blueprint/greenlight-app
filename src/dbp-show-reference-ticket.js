@@ -448,7 +448,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                            ${i18n.t('show-reference-ticket.inactive')}
                                        </span>
                                    </b>
-                                   <span>${i18n.t('show-reference-ticket.description')}</span>
+                                    <slot name="ticket-description">
+                                        <span>${i18n.t('show-reference-ticket.description')}</span>
+                                    </slot>
                                 </span>
                             </span>
                             <div class="btn">

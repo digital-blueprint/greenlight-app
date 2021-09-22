@@ -93,7 +93,7 @@
     "place-name": "Ort",
     "active": "aktiv",
     "inactive": "inaktiv",
-    "description": "Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt von dem auf diesem Gerät importierten 3-G-Nachweis ab.",
+    "description": "Hier wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist hängt von dem auf diesem Gerät importierten 3-G-Nachweis ab. Das Referenzticket berechtigt nicht zum Eintritt an die Universität.",
     "information-container-headline": "Informationen zum 3-G-Nachweis",
     "information-container-body": "Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt das Ticket in Farbe dargestellt."
   },
