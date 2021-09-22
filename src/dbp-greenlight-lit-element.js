@@ -459,8 +459,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                              "type": "warning",
                              "timeout": 5,
                          });*/
+                        this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     }
-                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
                     return;

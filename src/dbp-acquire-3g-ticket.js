@@ -638,11 +638,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .btn {
                 display: contents;
             }
-            description
-            .border {
-                margin-top: 2rem;
-                border-top: 1px solid black;
-            }
 
             .grid-container {
                 margin-top: 2rem;
@@ -792,6 +787,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .confirm-btn label {
                 margin-top: 1em;
+            }
+
+            .element {
+                margin-top: 1.5rem;
             }
 
             @media only screen
