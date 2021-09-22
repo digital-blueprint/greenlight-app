@@ -350,7 +350,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async checkDeleteTicketResponse(response) {
         const i18n = this._i18n;
-        this.locationName = '';
         switch(response.status) {
             case 204:
                 send({
@@ -381,6 +380,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 });
                 break;
         }
+        this.locationName = '';
     }
 
     /**
@@ -666,11 +666,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     render() {
         const i18n = this._i18n;
-        const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
         const validTill = i18n.t('valid-till')
             + i18n.t('date-time', {clock: this.person.validUntil ? this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})
             + ". "
-            + i18n.t('validity-tooltip') + "<a href='" + link3gRules + "' target='_blank' title='" + i18n.t('validity-tooltip-title') + "'>" + i18n.t('validity-tooltip-2') + "</a>";
+            + i18n.t('validity-tooltip', { place: this.locationName });
 
     return html`
 

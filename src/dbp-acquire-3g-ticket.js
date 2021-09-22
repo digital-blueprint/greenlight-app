@@ -641,11 +641,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .btn {
                 display: contents;
             }
-
-            .element {
-                margin-top: 1.5rem;
-            }
-
+            description
             .border {
                 margin-top: 2rem;
                 border-top: 1px solid black;
@@ -894,7 +890,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     render() {
         const i18n = this._i18n;
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
-        const link3gRules = 'https://corona-ampel.gv.at/aktuelle-massnahmen/bundesweite-massnahmen/#toc-3-g-regel';
 
         if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
             this.loading = true;
@@ -927,7 +922,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    ${this.activity.getDescription(this.lang)}
+                    <slot name="description">
+                        ${this.activity.getDescription(this.lang)}
+                    </slot>
                 </p>
                 <div>
                     <slot name="additional-information">
@@ -1049,11 +1046,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <div class="${classMap({hidden: this.location === '' || this.isUploadSkipped || this.loading})}">
                             <div class="${classMap({'hidden': !this.hasValidProof || this.loading})}">
                                 <dbp-icon name='checkmark-circle' class="check-icon"></dbp-icon>
-                                ${ i18n.t(this.message) }
+                                ${ i18n.t(this.message, { place: this.location }) }
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
-                                <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
-                                <div class="close-icon">${ i18n.t(this.message) }</div>
+                                <div class="close-icon">${ i18n.t(this.message, { place: this.location }) }</div>
                                 ${ this.detailedError ? html`<dbp-info-tooltip class="info-tooltip" text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>') }" interactive></dbp-info-tooltip>` : `` }
                             </div>
                         </div>
@@ -1066,7 +1062,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {clock: this.person.validUntil ? 
                                                 this.formatValidUntilTime(this.person.validUntil) : '', date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''})}
                                             </strong>
-                                            <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip') + " <a href='" + link3gRules + "' target='_blank' title='" + i18n.t('validity-tooltip-title') + "'>" + i18n.t('validity-tooltip-2') + "</a>" }' interactive></dbp-info-tooltip>
+                                            <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
                                         </span> 
                                         <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: ${this.person.firstname ? this.person.firstname + " " : "" }
                                         ${this.person.lastname} ${this.person.dob ? html`<br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : "" }

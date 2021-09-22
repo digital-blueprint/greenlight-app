@@ -477,7 +477,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </div>
                                 <div class="information-container ${classMap({hidden: this.ticketLoading})}">
                                     <slot name="information-container">
-                                        <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h3>
+                                        <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h4>
                                         ${i18n.t('show-active-tickets.information-container-body')}
                                     </slot>
                                 </div>
