@@ -99,6 +99,28 @@ Note that you will need a Keycloak server along with a client id for the domain 
 You use templates tags to inject slots into the activity.
 These templates will be converted to div containers when the page is loaded and will not show up before that.
 
+##### description
+
+The content of this slot will be shown below the headline and can be used to provide
+further information about the page.
+
+Example:
+
+```html
+<dbp-acquire-3g-ticket lang="de">
+  <template slot="description">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          Erstellt ein Ticket für den Zugang zu Räumlichkeiten der TU Graz.
+      </div>
+      <div slot="en">
+          Creates a ticket for access to premises of TU Graz.
+      </div>
+    </dbp-translated>
+  </template>
+</dbp-acquire-3g-ticket>
+```
+
 ##### additional-information
 
 The content of this slot will be shown below the other text and can be used to provide
