@@ -65,6 +65,8 @@
     "invalid-evidence": "If the 3-G-evidence is no longer valid, you can create a new ticket and upload a new evidence.",
     "delete-ticket-notfound-title": "Ticket not found!",
     "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted.",
+    "logged-out-title": "Session expired!",
+    "logged-out-body": "The session has expired. Please log in again.",
     "status": "Status: ",
     "loading-message-ticket": "Loading the ticket ...",
     "status-active": "active",

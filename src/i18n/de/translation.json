@@ -65,6 +65,8 @@
     "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen.",
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
     "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht.",
+    "logged-out-title": "Sitzung abgelaufen!",
+    "logged-out-body": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "status": "Status: ",
     "loading-message-ticket": "Ticket wird geladen ...",
     "status-active": "aktiv",

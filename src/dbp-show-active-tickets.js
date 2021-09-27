@@ -37,6 +37,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false;
         this.timer = '';
         this.showReloadButton = false;
+        this.preCheck = false;
 
         this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
     }
@@ -196,7 +197,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.setTimeoutIsSet = false; //reset timer if focus event is triggered
         this.showReloadButton = false;
         let check = await this.updateTicket();
-        if (!check) {
+        if (!check && this.showReloadButton) {
             const i18n = this._i18n;
             send({
                 "summary": i18n.t('show-active-tickets.reload-error-title'),
@@ -229,31 +230,55 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             return false;
         }
 
-        if (responseData.status === 404) { // Ticket not found
-            this.sendErrorAnalyticsEvent('ShowTicketRequest', 'NotFound', this.location, responseData);
-            this.getListOfActiveTickets();
-            send({
-                "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
-                "body": i18n.t('show-active-tickets.delete-ticket-notfound-body', {place: this.locationName}),
-                "type": "warning",
-                "timeout": 5,
-            });
-            return false;
+        let ret;
+
+        switch (responseData.status) {
+            case 200: // Success
+                this.showReloadButton = false;
+                this.currentTicket = responseBody;
+                this.currentTicketImage = responseBody.image;
+                this.setTimer(responseBody.imageValidFor * 1000 + 1000);
+                ret = true;
+                break;
+
+            case 401:
+                this.sendErrorAnalyticsEvent('ShowTicketRequest', 'LoggedOut', this.location, responseData);
+                this.getListOfActiveTickets();
+                send({
+                    "summary": i18n.t('show-active-tickets.logged-out-title'),
+                    "body": i18n.t('show-active-tickets.logged-out-body', {place: this.locationName}),
+                    "type": "warning",
+                    "timeout": 5,
+                });
+                this.showReloadButton = false;
+                this.setTimeoutIsSet = false;
+                ret = false;
+                break;
+
+            case 404:
+                this.sendErrorAnalyticsEvent('ShowTicketRequest', 'NotFound', this.location, responseData);
+                this.getListOfActiveTickets();
+                send({
+                    "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
+                    "body": i18n.t('show-active-tickets.delete-ticket-notfound-body', {place: this.locationName}),
+                    "type": "warning",
+                    "timeout": 5,
+                });
+                this.showReloadButton = false;
+                this.setTimeoutIsSet = false;
+                ret = false;
+                break;
+
+            default:
+                this.getListOfActiveTickets();
+                console.log("Update ticket failed");
+                this.setTimeoutIsSet = false;
+                this.showReloadButton = true;
+                ret = false;
+                break;
         }
 
-        if (responseData.status === 200) { // Success
-            this.showReloadButton = false;
-            this.currentTicket = responseBody;
-            this.currentTicketImage = responseBody.image;
-            this.setTimer(responseBody.imageValidFor * 1000 + 1000);
-            return true;
-        }
-
-        this.getListOfActiveTickets();
-        console.log("Update ticket failed");
-        this.setTimeoutIsSet = false;
-        this.showReloadButton = true;
-        return false;
+       return ret;
     }
 
     /**
@@ -281,6 +306,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async checkForValidProofLocalWrapper() {
         this.loading = true;
+        this.preCheck = true;
         await this.checkForValidProofLocal();
         if (this.greenPassHash === '' || this.greenPassHash === -1) {
             this.hasValidProof = false;
@@ -354,8 +380,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let responseBody = await response.clone();
         await this.checkDeleteTicketResponse(responseBody);
 
-        response = await this.getActiveTicketsRequest();
-        await this.checkActiveTicketsRequest(response);
+        await this.getListOfActiveTickets();
     }
 
     /**
@@ -372,6 +397,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "summary": i18n.t('show-active-tickets.delete-ticket-success-title'),
                     "body": i18n.t('show-active-tickets.delete-ticket-success-body', {place: this.locationName}),
                     "type": "success",
+                    "timeout": 5,
+                });
+                break;
+
+            case 401:
+                send({
+                    "summary": i18n.t('show-active-tickets.logged-out-title'),
+                    "body": i18n.t('show-active-tickets.logged-out-body'),
+                    "type": "warning",
                     "timeout": 5,
                 });
                 break;
@@ -404,6 +438,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      *
      */
     async getListOfActiveTickets() {
+
         let response = await this.getActiveTicketsRequest();
         await this.checkActiveTicketsRequest(response);
     }
