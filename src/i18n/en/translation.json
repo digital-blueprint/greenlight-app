@@ -99,6 +99,7 @@
   "date-time": "{{clock}} on {{date}}",
   "error-login-message": "You need to be logged in to use this function!",
   "loading-message": "Loading...",
+  "error-permission-message": "This application is currently only available for students",
   "file-sink": {
     "modal-close": "Close"
   },

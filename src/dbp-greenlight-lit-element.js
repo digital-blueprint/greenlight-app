@@ -96,6 +96,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return (!this.isLoggedIn() && this.auth.token !== undefined);
     }
 
+    hasPermissions() {
+        if (!this.auth.person || !Array.isArray(this.auth.person.roles))
+            return false;
+
+        if (this.auth.person.roles.includes('ROLE_STUDENT'))
+            return true;
+
+        return false;
+    }
+
     /**
      * Send a fetch to given url with given options
      *
