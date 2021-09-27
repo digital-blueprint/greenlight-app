@@ -100,8 +100,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (!this.auth.person || !Array.isArray(this.auth.person.roles))
             return false;
 
-        if (this.auth.person.roles.includes('ROLE_STUDENT'))
+        if (this.auth.person.roles.includes('ROLE_STUDENT')) {
+            console.log('Person is a Student');
             return true;
+        }
 
         return false;
     }

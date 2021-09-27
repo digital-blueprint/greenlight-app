@@ -759,7 +759,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </span>
             </div>
 
-            ${!this.hasPermissions ? 
+            ${!this.hasPermissions() ? 
             html` 
                 <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
                     ${i18n.t('error-permission-message')}
