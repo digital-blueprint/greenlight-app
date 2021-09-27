@@ -99,7 +99,7 @@
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
   "loading-message": "Lädt...",
-  "error-permission-message": "Diese Applikation ist aktuell nur für Studierende verfügbar",
+  "error-permission-message": "Diese Applikation ist aktuell nur für Studierende verfügbar!",
   "file-sink": {
     "modal-close": "Schließen"
   },
