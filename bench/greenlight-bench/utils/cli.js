@@ -2,6 +2,12 @@ const meow = require('meow');
 const meowHelp = require('cli-meow-help');
 
 const flags = {
+    token: {
+        type: `string`,
+        alias: `t`,
+        isRequired: true,
+        desc: `Bearer token (mandatory)`
+    },
 	clear: {
 		type: `boolean`,
 		default: true,
@@ -30,10 +36,19 @@ const flags = {
 		default: 'https://api-dev.tugraz.at',
 		desc: `API url`
 	},
-	token: {
-		type: `string`,
-		alias: `t`,
-		desc: `Bearer token`
+    requests: {
+		type: `number`,
+		alias: `r`,
+		default: 1,
+        isRequired: true,
+		desc: `Number of requests to perform for the benchmarking session`
+	},
+    concurrency: {
+		type: `number`,
+		alias: `c`,
+		default: 1,
+        isRequired: true,
+		desc: `Number of multiple requests to perform at a time`
 	},
 };
 
