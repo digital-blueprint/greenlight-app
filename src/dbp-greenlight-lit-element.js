@@ -102,7 +102,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         if (this.auth.person.roles.includes('ROLE_STUDENT')) {
             return true;
-        } else if (this.auth.person.identifier === 'jfink') {
+        } else if (this.auth.person.identifier === 'jfink' || this.auth.person.identifier === 'pbeke') {
             return true;
         }
 
