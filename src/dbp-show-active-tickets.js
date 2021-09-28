@@ -289,15 +289,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     setTimer(time) {
         const that = this;
-        if (!this.setTimeoutIsSet) {
-            this.setTimeoutIsSet = true;
-            clearTimeout(this.timer);
-            this.timer = setTimeout(function () {
-                that.setTimeoutIsSet = false;
-                let boundUpdateTicket = that.updateTicket.bind(that);
-                boundUpdateTicket();
-            }, time);
-        }
+        if (this.setTimeoutIsSet)
+            return;
+
+        this.setTimeoutIsSet = true;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(function () {
+            that.setTimeoutIsSet = false;
+            let boundUpdateTicket = that.updateTicket.bind(that);
+            boundUpdateTicket();
+        }, time);
     }
 
     /**
@@ -308,7 +309,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.loading = true;
         this.preCheck = true;
         await this.checkForValidProofLocal();
-        if (this.greenPassHash === '' || this.greenPassHash === -1) {
+        if (!this.greenPassHash || this.greenPassHash === -1) {
             this.hasValidProof = false;
             this.isSelfTest = false;
             this.isInternalTest = false;
