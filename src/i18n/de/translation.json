@@ -1,13 +1,12 @@
 {
   "acquire-3g-ticket": {
-    "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr (3-G-Regel) hochladen indem Sie den entsprechenden QR-Code scannen oder ein vorhandenes PDF oder Bild mit QR-Code hochladen und sich damit ein Ticket für einen Ort ausstellen lassen. Dieses wird benötigt, um einen Ort betreten zu dürfen. Alternativ können Sie auch manuell bestätigen, dass Sie einen 3-G-Nachweis bei sich tragen und diesen im Falle einer manuellen Kontrolle nachweisen können.",
+    "additional-information": "Sie können Ihren grünen Pass importieren, indem Sie den entsprechenden QR-Code scannen. Alternativ kann auch ein PDF-Dokument oder ein Bild mit dem QR-Code ausgewählt werden.",
     "qr-button-text": "QR-Code scannen",
     "manually-button-text": "Datei hochladen",
     "filepicker-button-title": "PDF oder Bild auswählen",
     "filepicker-context": "PDF oder Bild zur Überprüfung auswählen",
     "manual-uploading-message": "Suche nach gültigem QR-Code...",
     "place-select-title": "Ticket für",
-    "confirm-button-text": "Ticket erstellen",
     "create-ticket": "Ticket erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
     "create-ticket-success-body": "Das angeforderte Eintrittsticket für den Ort {{place}} wurde erfolgreich erstellt.",
@@ -61,7 +60,7 @@
     "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
     "self-test-link": "Link zum Test",
     "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen.",
-    "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist wahrscheinlich schon abgelaufen oder gelöscht.",
+    "delete-ticket-notfound-body": "Es wurde kein aktives Ticket: {{place}} gefunden. Das Ticket ist wahrscheinlich schon abgelaufen oder gelöscht.",
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
     "logged-out-title": "Sitzung abgelaufen!",
     "logged-out-body": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",

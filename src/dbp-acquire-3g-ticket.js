@@ -1096,8 +1096,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         type="is-primary"
                                         id="confirm-ticket-btn"
                                         @click="${(event) => {this.createTicket(event);}}"
-                                        title="${i18n.t('acquire-3g-ticket.confirm-button-text')}">
-                                    ${i18n.t('acquire-3g-ticket.confirm-button-text')}
+                                        title="${i18n.t('acquire-3g-ticket.create-ticket')}">
+                                    ${i18n.t('acquire-3g-ticket.create-ticket')}
                                 </dbp-loading-button>
                                 <div id="scrollToConfirmBtn"></div>
                             </div>

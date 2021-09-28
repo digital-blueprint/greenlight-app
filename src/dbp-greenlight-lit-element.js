@@ -431,8 +431,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
-            this.message = i18nKey('acquire-3g-ticket.invalid-qr-body');
-            this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+            if (!precheck) {
+                this.message = i18nKey('acquire-3g-ticket.invalid-qr-body');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+            }
             return;
         }
 
@@ -464,12 +466,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 // Check Person
                 if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate)) {
                     if (!preCheck) {
-                        /* send({
-                             "summary": i18n.t('acquire-3g-ticket.invalid-title'),
-                             // "body": i18n.t('acquire-3g-ticket.invalid-body'),
-                             "type": "warning",
-                             "timeout": 5,
-                         });*/
                         this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     }
                     this.proofUploadFailed = true;
@@ -510,29 +506,32 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
                 this.detailedError = responseData.error;
-                if (!preCheck)
+                if (!preCheck) {
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
+                }
                 break;
             case 500: // Can't process Data
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
                 this.detailedError = responseData.error;
-                if (!preCheck)
+                if (!preCheck) {
+                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                }
                 break;
             // Error: something else doesn't work
             default:
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'UnknownError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
                 this.detailedError = responseData.error;
-                if (!preCheck)
+                if (!preCheck) {
+                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                }
                 break;
         }
     }

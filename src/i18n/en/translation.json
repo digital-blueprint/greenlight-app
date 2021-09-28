@@ -7,7 +7,6 @@
     "filepicker-context": "Choose File for 3-G Verification",
     "manual-uploading-message": "Search for valid QR code...",
     "place-select-title": "Select a place",
-    "confirm-button-text": "Create a Ticket",
     "create-ticket": "Create ticket",
     "create-ticket-success-title": "Ticket successfully created!",
     "create-ticket-success-body": "The acquired entrance ticket for {{place}} was successfully created.",
