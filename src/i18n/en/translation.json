@@ -11,7 +11,6 @@
     "create-ticket": "Create ticket",
     "create-ticket-success-title": "Ticket successfully created!",
     "create-ticket-success-body": "The acquired entrance ticket for {{place}} was successfully created.",
-    "check-in-link-description": "Also consider using contact tracing!",
     "manage-tickets-link": "Show tickets",
     "manage-tickets-text": "Active tickets could be found. You can manage your active tickets at: ",
     "confirm-checkbox-valid-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
@@ -46,20 +45,20 @@
     "other-error-body": "An unknown error has occurred."
   },
   "show-active-tickets": {
+    "3-g-evidence-green-pass-valid": "Green passport imported and valid on this device",
+    "3-g-evidence-selftest": "Self-test imported on this device, manual control necessary",
     "entry-ticket": "Entry Ticket",
     "no-tickets-message": "You do not have any tickets!",
-    "delete-btn-text": "Delete",
     "show-btn-text": "Show",
     "show-ticket-title": "Ticket: ",
     "delete-ticket-success-title": "Ticket successfully deleted!",
     "delete-ticket-success-body": "The ticket for {{place}} was successfully deleted.",
     "other-error-title": "Error!",
     "other-error-body": "An unknown error occurred.",
-    "3g-evidence": "3-G-evidence: Found Green Pass",
     "no-3g-evidence": "No 3-G-evidence found",
+    "self-test": "self-test",
     "self-test-found": "3-G-evidence: Self-test found",
     "self-test-information": "Please check whether the evidence is still valid.",
-    "self-test": "self-test",
     "self-test-link": "Link to the test",
     "no-evidence": "No valid stored 3-G-evidence was found. Show your evidence manually or upload new evidence by creating a new ticket.",
     "invalid-evidence": "If the 3-G-evidence is no longer valid, you can create a new ticket and upload a new evidence.",
@@ -71,40 +70,39 @@
     "loading-message-ticket": "Loading the ticket ...",
     "status-active": "active",
     "3-g-evidence": "3-G-evidence",
-    "3-g-evidence-green-pass-valid": "Green passport imported and valid on this device",
-    "3-g-evidence-selftest": "Self-test imported on this device, manual control necessary",
-    "3-g-evidence-internal-test": "University internal test imported on this device and valid",
+    "3-g-evidence-internal-test": "University-internal test imported on this device and valid",
     "status-inactive": "inactive",
-    "3-g-evidence-invalid": "No valid 3-G evidence found on this device",
+    "3-g-evidence-invalid": "No valid 3-G-evidence found on this device",
     "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
     "3-g-evidence-maximize-saving": "Add the app to the home screen of your smartphone to maximize the storage time of the 3-G evidence. How to do this you can read ",
     "new-ticket": "Request a new ticket",
     "internal-test-found": "University-internal test found",
     "internal-test-text": "The university-internal test was validated during the import. A manual check is only possible with the original document.",
-    "image-alt-text": "Ticket image",
     "reload-error-title": "Update failed",
     "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
-    "reload": "Refresh"
+    "3-g-evidence-greenpass": "3-G-evidence: Green pass found"
   },
   "show-reference-ticket": {
     "place-name": "Place",
-    "active": "activ",
-    "inactive": "inactiv",
     "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the 3-G evidence imported on the controlled person's device. The reference ticket does not entitle you to enter the university.",
     "information-container-headline": "Information about 3-G evidence",
     "information-container-body": " If a valid health certitificate is available on this device then its QR-code is displayed and the ticket is shown in color. This QR-code can be checked with Green Check. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR-code is displayed and the ticket is shown in black and white. This QR-code cannot be validated by this app, therefore its validation requires a QR-code scanner. If a valid test made by Teststraße of TU Graz is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document."
   },
-  "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
-  "valid-till": "Probably valid until: ",
   "date-time": "{{clock}} on {{date}}",
   "error-login-message": "You need to be logged in to use this function!",
   "loading-message": "Loading...",
-  "error-permission-message": "This application is currently only available for students!",
   "file-sink": {
     "modal-close": "Close"
   },
   "hcert": {
     "cert-not-valid-error": "Does not comply with the following rules: {{error}}",
     "cert-validation-failed-error": "Validation failed: {{error}}"
-  }
+  },
+  "valid-till": "Probably valid until ",
+  "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
+  "delete-btn-text": "Delete",
+  "error-permission-message": "This application is currently only available for students!",
+  "image-alt-text": "Ticket image",
+  "reload": "Refresh",
+  "reload-failed": "Automatic update failed"
 }

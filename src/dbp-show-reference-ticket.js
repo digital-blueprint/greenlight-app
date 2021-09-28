@@ -20,9 +20,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.entryPointUrl = '';
         this.activity = new Activity(metadata);
         this.loading = false;
+        this.isReferenceTicket = true;
         this.ticketLoading = false;
         this.ticketOpen = false;
-        this.referenceImage = '';
+        this.ticketImage = '';
         this.setTimeoutIsSet = false;
         this.timer = '';
         this.showReloadButton = false;
@@ -46,7 +47,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             loading: {type: Boolean, attribute: false},
             ticketLoading: {type: Boolean, attribute: false},
             showReloadButton: {type: Boolean, attribute: false},
-            referenceImage: {type: String, attribute: false},
+            ticketImage: {type: String, attribute: false},
         };
     }
 
@@ -126,7 +127,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         if (responseData.status === 200) { // Success
             this.showReloadButton = false;
-            this.referenceImage = responseBody['hydra:member'][0].image || '';
+            this.ticketImage = responseBody['hydra:member'][0].image || '';
             this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000);
             return true;
         }
@@ -453,6 +454,32 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     render() {
         const i18n = this._i18n;
+
+        const ticketTitle = html`
+            <slot name="ticket-place">
+                ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
+            </slot>
+        `;
+
+        const additionalInformation = html `
+            <div class="information-container ${classMap({hidden: this.ticketLoading})}">
+                <slot name="information-container">
+                    <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h4>
+                    ${i18n.t('show-reference-ticket.information-container-body')}
+                </slot>
+            </div>
+        `;
+
+        const loading = html`
+            <span class="control ${classMap({hidden: !this.loading})}">
+                        <span class="loading">
+                            <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                        </span>
+                    </span>
+        `;
+
+        const noTickets = html``;
+
         return html`
 
             <div class="control ${classMap({hidden: !this.isLoading()})}">
@@ -493,16 +520,15 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                     }}"
                                                     title="${i18n.t('show-active-tickets.show-btn-text')}"></dbp-loading-button>
                                 <dbp-loading-button id="delete-btn"
-                                                    value="${i18n.t('show-active-tickets.delete-btn-text')}"
-                                                    disabled></dbp-loading-button>
+                                                    value="${i18n.t('delete-btn-text')}"
+                                                   disabled >
+                                    ${i18n.t('delete-btn-text')}
+                                </dbp-loading-button>
                             </div>
                         </div>
                     </div>
-                    <span class="control ${classMap({hidden: !this.loading})}">
-                        <span class="loading">
-                            <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
-                        </span>
-                    </span>
+                    ${noTickets}
+                    ${loading}
                 </div>
             </div>
 
@@ -520,29 +546,25 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
                                     <h3 id="ticket-modal-title">
-                                        <slot name="ticket-place">
-                                            ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
-                                        </slot>
+                                        ${ticketTitle}
                                     </h3>
                                     <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
-                                        <p> ${i18n.t('show-active-tickets.reload-failed')}</p>
+                                        <p> ${i18n.t('reload-failed')}</p>
                                         <button id="reload-btn"
                                                 class="button"
                                                 @click="${() => {this.updateTicketAndNotify();}}"
-                                                title="${i18n.t('show-active-tickets.reload')}">
-                                            <dbp-icon title="${i18n.t('show-active-tickets.reload')}" name="reload" class="reload-icon"></dbp-icon>
+                                                title="${i18n.t('reload')}">
+                                            <dbp-icon title="${i18n.t('reload')}" 
+                                                      name="reload" class="reload-icon"></dbp-icon>
                                         </button>
                                     </div>
                                     <div class="foto-container">
-                                        <img src="${this.referenceImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}"/>
+                                        <img src="${this.ticketImage || ''}" 
+                                             alt="${i18n.t('image-alt-text')}"/>
                                     </div>
                                 </div>
-                                <div class="information-container ${classMap({hidden: this.ticketLoading})}">
-                                    <slot name="information-container">
-                                        <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h4>
-                                        ${i18n.t('show-reference-ticket.information-container-body')}
-                                    </slot>
-                                </div>
+                                ${additionalInformation}
+                                
                                 <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => {
                                     this.closeDialog();
                                 }}">

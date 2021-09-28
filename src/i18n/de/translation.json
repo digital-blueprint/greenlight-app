@@ -11,7 +11,6 @@
     "create-ticket": "Ticket erstellen",
     "create-ticket-success-title": "Ticket erfolgreich erstellt!",
     "create-ticket-success-body": "Das angeforderte Eintrittsticket für den Ort {{place}} wurde erfolgreich erstellt.",
-    "check-in-link-description": "Denken Sie auch an die Möglichkeit am Contact Tracing teilzunehmen!",
     "manage-tickets-link": "Tickets anzeigen",
     "manage-tickets-text": "Es wurden aktive Tickets gefunden. Sie können Ihre aktiven Tickets vorzeigen oder löschen unter: ",
     "confirm-checkbox-valid-cert-text": "Ich bestätige, dass mein Nachweis für die Dauer meines Aufenthalts gültig ist, sowie die Richtigkeit meiner Angaben, und nehme zur Kenntnis, dass jeglicher Missbrauch der App greenlight oder die Angabe falscher Daten zu rechtlichen Konsequenzen führen kann.",
@@ -46,33 +45,31 @@
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten."
   },
   "show-active-tickets": {
+    "3-g-evidence": "3-G-Nachweis",
     "entry-ticket": "Eintrittsticket",
+    "no-evidence": "Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
-    "delete-btn-text": "Löschen",
     "show-btn-text": "Zeigen",
     "show-ticket-title": "Ticket: ",
     "delete-ticket-success-title": "Ticket erfolgreich gelöscht!",
     "delete-ticket-success-body": "Das Ticket für den Ort {{place}} wurde erfolgreich gelöscht.",
     "other-error-title": "Fehler!",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
-    "3g-evidence": "3-G-Nachweis: Grüner Pass gefunden",
     "no-3g-evidence": "Kein 3-G-Nachweis gefunden",
+    "self-test": "Selbsttest",
     "self-test-found": "3-G-Nachweis: Selbsttest gefunden",
     "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
-    "self-test": "Selbsttest",
     "self-test-link": "Link zum Test",
-    "no-evidence": "Es wurde kein gültiger gespeicherter 3-G-Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
     "invalid-evidence": "Falls der 3-G-Nachweis nicht mehr gültig ist, können Sie ein neues Ticket erstellen und einen neuen Nachweis hochladen.",
+    "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist wahrscheinlich schon abgelaufen oder gelöscht.",
     "delete-ticket-notfound-title": "Ticket nicht gefunden!",
-    "delete-ticket-notfound-body": "Es wurde keine aktives Ticket: {{place}} gefunden. Das Ticket ist warscheinlich schon abgelaufen oder gelöscht.",
     "logged-out-title": "Sitzung abgelaufen!",
     "logged-out-body": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "status": "Status: ",
     "loading-message-ticket": "Ticket wird geladen ...",
     "status-active": "aktiv",
-    "3-g-evidence": "3-G-Nachweis",
-    "3-g-evidence-green-pass-valid": "grüner Pass auf diesem Gerät importiert und gültig",
     "3-g-evidence-selftest": "Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig",
+    "3-g-evidence-green-pass-valid": "grüner Pass auf diesem Gerät importiert und gültig",
     "3-g-evidence-internal-test": "Universitäts interner Test auf diesem Gerät importiert und gültig",
     "status-inactive": "inaktiv",
     "3-g-evidence-invalid": "kein Gültiger 3-G-Nachweis auf diesem Gerät gefunden",
@@ -81,24 +78,19 @@
     "new-ticket": "Neues Ticket anfordern",
     "internal-test-found": "Universitätsinterner Test gefunden",
     "internal-test-text": "Der universitätsinterne Test wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.",
-    "image-alt-text": "Ticketfoto",
     "reload-error-title": "Aktualisierung fehlgeschlagen",
     "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
-    "reload": "Aktualisieren"
+    "3-g-evidence-greenpass": "3-G-Nachweis: Grüner Pass gefunden"
   },
   "show-reference-ticket": {
     "place-name": "Ort",
-    "active": "aktiv",
-    "inactive": "inaktiv",
     "description": "An dieser Stelle wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist, hängt von dem 3-G-Nachweis ab, der auf dem Gerät der kontrollierten Person importiert ist. Das Referenzticket berechtigt nicht zum Eintritt an die Universität.",
-    "information-container-headline": "Informationen zum 3-G-Nachweis",
-    "information-container-body": " Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit Greencheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger Test der Teststraße der TU Graz auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen."
+    "information-container-body": " Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit Greencheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger Test der Teststraße der TU Graz auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
+    "information-container-headline": "Informationen zum 3-G-Nachweis"
   },
-  "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
   "valid-till": "Voraussichtlich gültig bis ",
   "date-time": "{{clock}} Uhr am {{date}}",
   "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
-  "loading-message": "Lädt...",
   "error-permission-message": "Diese Applikation ist aktuell nur für Studierende verfügbar!",
   "file-sink": {
     "modal-close": "Schließen"
@@ -106,5 +98,11 @@
   "hcert": {
     "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
     "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
-  }
+  },
+  "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
+  "delete-btn-text": "Löschen",
+  "image-alt-text": "Ticketfoto",
+  "loading-message": "Lädt...",
+  "reload": "Aktualisieren",
+  "reload-failed": " Automatische Aktualisierung fehlgeschlagen"
 }
