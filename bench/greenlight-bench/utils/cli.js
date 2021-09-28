@@ -50,6 +50,12 @@ const flags = {
         isRequired: true,
 		desc: `Number of multiple requests to perform at a time`
 	},
+    verbose: {
+        type: `boolean`,
+        alias: `v`,
+        default: false,
+		desc: `Tell Apache Bench to show more information`
+	},
 };
 
 const commands = {

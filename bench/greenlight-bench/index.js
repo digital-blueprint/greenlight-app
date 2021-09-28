@@ -18,7 +18,8 @@ const tmp = require('tmp');
 
 const input = cli.input;
 const flags = cli.flags;
-const { clear, debug, apiUrl, token, requests, concurrency } = flags;
+const { clear, debug, token, requests, concurrency, verbose } = flags;
+let { apiUrl } = flags;
 
 (async () => {
 	init({ clear });
@@ -36,8 +37,14 @@ const { clear, debug, apiUrl, token, requests, concurrency } = flags;
         '-H', 'Authorization: Bearer ' + token,
         '-H', 'accept: application/ld+json',
         '-T', 'application/json',
-        // '-v', '4',
     ];
+
+    if (verbose) {
+        parameters = parameters.concat(['-v', '4']);
+    }
+
+    // remove trailing slash
+    apiUrl = apiUrl.replace(/\/$/, '');
 
     if (input.includes(`permit-post`)) {
         const additionalInformation = await crypto.encodeAdditionalInformation(token, "local-proof");
