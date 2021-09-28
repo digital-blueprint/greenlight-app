@@ -11,8 +11,8 @@
     "en": "Show reference ticket"
   },
   "description": {
-    "de": "Hier können Sie das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen.",
-    "en": "Here you can view the currently valid reference ticket for the purpose of control."
+    "de": "Hier können Überprüfende das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen.",
+    "en": "Here, verifiers can view the currently valid reference ticket for the purpose of control."
   },
   "subscribe": "lang,entry-point-url,auth,html-overrides"
 }

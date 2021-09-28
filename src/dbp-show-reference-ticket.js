@@ -332,14 +332,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 margin-left: 5px;
             }
 
-            .red {
-                color: var(--dbp-override-danger-bg-color);
-            }
-
-            .green {
-                color: var(--dbp-override-success-bg-color);
-            }
-
             .ticket h3 {
                 margin-bottom: 0.2rem;
             }
@@ -488,14 +480,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     </slot>
                                 </h3>
                                 <span class="header">
-                                   <b>
-                                       ${i18n.t('show-active-tickets.status')}
-                                       <span class="green">
-                                           ${i18n.t('show-reference-ticket.active')}
-                                       </span> / <span class="red">
-                                           ${i18n.t('show-reference-ticket.inactive')}
-                                       </span>
-                                   </b>
                                     <slot name="ticket-description">
                                         <span>${i18n.t('show-reference-ticket.description')}</span>
                                     </slot>
