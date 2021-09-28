@@ -100,9 +100,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (!this.auth.person || !Array.isArray(this.auth.person.roles))
             return false;
 
-        if (this.auth.person.roles.includes('ROLE_STUDENT')) {
-            return true;
-        } else if (this.auth.person.identifier === 'jfink' || this.auth.person.identifier === 'pbeke') {
+        if (this.auth.person.roles.includes('ROLE_SCOPE_GREENLIGHT')) {
             return true;
         }
 
