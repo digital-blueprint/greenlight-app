@@ -65,7 +65,7 @@
     "3-g-evidence-internal-test": "University-internal test imported on this device and valid",
     "3-g-evidence-invalid": "No valid 3-G-evidence found on this device",
     "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
-    "3-g-evidence-maximize-saving": "Add the app to the home screen of your smartphone to maximize the storage time of the 3-G evidence.",
+    "3-g-evidence-maximize-saving": "Add the app to the home screen of your smartphone to maximize the storage time of the 3-G-evidence.",
     "3-g-evidence-selftest": "Self-test imported on this device, manual control necessary",
     "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted.",
     "delete-ticket-notfound-title": "Ticket not found!",
