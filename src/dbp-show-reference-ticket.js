@@ -483,7 +483,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <div class="ticket">
                             <span class="header">
                                 <h3>
-                                    ${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-reference-ticket.place-name')}
+                                    <slot name="place">
+                                        ${i18n.t('show-active-tickets.entry-ticket')}: ${i18n.t('show-reference-ticket.place-name')}
+                                    </slot>
                                 </h3>
                                 <span class="header">
                                    <b>
@@ -534,7 +536,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             <div class="content-wrapper">
                                 <div class="left-container ${classMap({hidden: this.ticketLoading})}">
                                     <h3 id="ticket-modal-title">
-                                        ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
+                                        <slot name="ticket-place">
+                                            ${i18n.t('show-active-tickets.show-ticket-title')}<strong>${i18n.t('show-reference-ticket.place-name')}</strong>
+                                        </slot>
                                     </h3>
                                     <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
                                         <p> Automatische Aktualisierung fehlgeschlagen</p>
