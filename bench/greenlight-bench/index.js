@@ -48,9 +48,8 @@ const { clear, debug, apiUrl, token, requests, concurrency } = flags;
         '-p', dataFile.name,
         '-H', 'Authorization: Bearer ' + token,
         '-H', 'accept: application/ld+json',
-        '-H', 'Content-Type: application/json',
         '-T', 'application/json',
-        '-v', '4',
+        // '-v', '4',
         url];
 
     execFile('ab', parameters, (error, stdout, stderr) => {
