@@ -864,10 +864,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.preselectionCheck = false;
         }
 
-
         return html`
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
+            </div>
+
+            <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
+                ${i18n.t('error-permission-message')}
             </div>
 
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
@@ -876,25 +879,28 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </span>
             </div>
 
-                <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+            <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading() || !this.hasPermissions()})}">
 
-                    <h2>${this.activity.getName(this.lang)}</h2>
-                    <p class="subheadline">
-                        <slot name="description">
-                            ${this.activity.getDescription(this.lang)}
-                        </slot>
-                    </p>
-                    <div>
-                        <slot name="additional-information">
-                            <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
-                        </slot>
-                    </div>
+                <h2>${this.activity.getName(this.lang)}</h2>
+                <p class="subheadline">
+                    <slot name="description">
+                        ${this.activity.getDescription(this.lang)}
+                    </slot>
+                </p>
+                <div>
+                    <slot name="additional-information">
+                        <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
+                    </slot>
+                </div>
 
-                    <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck && !this.preselectionLoading})}">
-                        <span class="loading">
-                            <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
-                        </span>
-                    </div>
+                <div class="control ${classMap({hidden: !this.preCheck && !this.preselectionCheck && !this.preselectionLoading})}">
+                    <span class="loading">
+                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                    </span>
+                </div>
+
+            ${this.hasPermissions() ? 
+            html` 
 
                     <!-- Create ticket start -->
                     <div class="container ${classMap({'hidden': this.processStarted || this.preCheck || this.preselectionCheck || this.preselectionLoading})}">
@@ -1024,7 +1030,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
                                 <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
-                                <div class="close-icon">${i18n.t(this.message)}</div>
+                                <div class="close-icon">${i18n.t(this.message, { place: this.location })}</div>
                                 ${this.detailedError ? html`
                                     <dbp-info-tooltip class="info-tooltip"
                                                     text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>')}"
@@ -1099,8 +1105,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         </div>
                         <!-- End Create Ticket part -->
                     </div>
-                </div>
-            
+            ` : html`
+            </div>
+            `}
         `;
     }
 }
