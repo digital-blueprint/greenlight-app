@@ -753,6 +753,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             <strong>${this.locationName}</strong>
            `;
 
+
         const additionalInformation = html`
         <div class="information-container ${classMap({hidden: this.hasValidProof || this.ticketLoading})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
