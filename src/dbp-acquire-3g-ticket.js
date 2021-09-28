@@ -143,7 +143,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     break;
             }
         });
-
         super.update(changedProperties);
     }
 
@@ -167,6 +166,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         } finally {
             this._activationInProgress = false;
             this.loading = false;
+            this.scrollToConfirmButton();
         }
     }
 
@@ -205,6 +205,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         } finally {
             this._activationInProgress = false;
             this.loading = false;
+            this.scrollToConfirmButton();
         }
     }
 
@@ -515,6 +516,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.greenPassHash = '';
     }
 
+    async scrollToConfirmButton() {
+        await this.showCreateTicket === true;
+        if (this.showCreateTicket && this._("#scrollToConfirmBtn")) {
+            this._("#scrollToConfirmBtn").scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }
+
     static get styles() {
         // language=css
         return css`
@@ -811,7 +819,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     flex-direction: column;
                 }
 
-                #confirm-ticket-btn {
+                #confirm-ticket-btn, #start-ticket-btn {
                     width: 100%;
                     margin-bottom: 0.5em;
                 }
@@ -909,10 +917,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         ${!this.preselectionLoading ? html`
                             <dbp-loading-button
                                     type="${!this.hasTicket || !this.hasValidProof ? "is-primary" : ""}"
-                                    id="confirm-ticket-btn"
+                                    id="start-ticket-btn"
                                     value="${!this.hasTicket ? i18n.t('acquire-3g-ticket.request-ticket-button-text') : i18n.t('acquire-3g-ticket.create-new-ticket')}"
                                     @click="${() => {
                                         this.processStarted = true;
+                                        this.scrollToConfirmButton();
                                     }}"
                                     title="${i18n.t('acquire-3g-ticket.request-ticket-button-text')}"
                             ></dbp-loading-button>
@@ -1084,6 +1093,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         title="${i18n.t('acquire-3g-ticket.confirm-button-text')}">
                                     ${i18n.t('acquire-3g-ticket.confirm-button-text')}
                                 </dbp-loading-button>
+                                <div id="scrollToConfirmBtn"></div>
                             </div>
 
                         </div>
