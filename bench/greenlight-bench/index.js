@@ -29,28 +29,41 @@ const { clear, debug, apiUrl, token, requests, concurrency } = flags;
     //     process.exit(1);
     // }
 
-    const additionalInformation = await crypto.encodeAdditionalInformation(token, "local-proof");
-    const data = '{"consentAssurance": true, "additionalInformation": "' + additionalInformation + '"}';
-    const dataFile = tmp.fileSync();
-    let buffer = new Buffer.from(data);
-
-    fs.write(dataFile.fd, buffer, 0, buffer.length, null, function(err) {
-        if (err) {
-            console.error('Cant write to data file!');
-            process.exit(1);
-        }
-    });
-
-    const url = apiUrl + '/greenlight/permits';
-    const parameters = [
+    let url = '';
+    let parameters = [
         '-n', requests,
         '-c', concurrency,
-        '-p', dataFile.name,
         '-H', 'Authorization: Bearer ' + token,
         '-H', 'accept: application/ld+json',
         '-T', 'application/json',
         // '-v', '4',
-        url];
+    ];
+
+    if (input.includes(`permit-post`)) {
+        const additionalInformation = await crypto.encodeAdditionalInformation(token, "local-proof");
+        const data = '{"consentAssurance": true, "additionalInformation": "' + additionalInformation + '"}';
+        const dataFile = tmp.fileSync();
+        let buffer = new Buffer.from(data);
+
+        fs.write(dataFile.fd, buffer, 0, buffer.length, null, function(err) {
+            if (err) {
+                console.error('Cant write to data file!');
+                process.exit(1);
+            }
+        });
+
+        url = apiUrl + '/greenlight/permits';
+        parameters = parameters.concat(['-p', dataFile.name]);
+    } else if (input.includes(`permit-get`)) {
+        url = apiUrl + '/greenlight/permits';
+    }
+
+    if (url === '') {
+        console.error('You need to choose a valid test [permit-post, permit-get].');
+        process.exit(1);
+    }
+
+    parameters = parameters.concat([url]);
 
     execFile('ab', parameters, (error, stdout, stderr) => {
         if (error) {
