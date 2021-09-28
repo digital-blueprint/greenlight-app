@@ -868,13 +868,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </span>
             </div>
 
-            ${!this.hasPermissions() ? 
-            html` 
-                <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
-                    ${i18n.t('error-permission-message')}
-                </div>` :
-            html`
-
                 <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
 
                     <h2>${this.activity.getName(this.lang)}</h2>
@@ -1097,7 +1090,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <!-- End Create Ticket part -->
                     </div>
                 </div>
-            `}
+            
         `;
     }
 }
