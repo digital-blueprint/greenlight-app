@@ -525,7 +525,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </slot>
                                     </h3>
                                     <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
-                                        <p> Automatische Aktualisierung fehlgeschlagen</p>
+                                        <p> ${i18n.t('show-active-tickets.reload-failed')}</p>
                                         <button id="reload-btn"
                                                 class="button"
                                                 @click="${() => {this.updateTicketAndNotify();}}"

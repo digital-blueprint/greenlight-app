@@ -324,7 +324,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
      */
     async generateQrCode() {
         await this.checkForValidProofLocal();
-        if (this.greenPassHash !== '' && this.greenPassHash !== -1 && this.hasValidProof) {
+        if (this.greenPassHash && this.greenPassHash !== -1 && this.hasValidProof) {
             let typeNumber = 0;
             let errorCorrectionLevel = 'H';
             let qr = qrcode(typeNumber, errorCorrectionLevel);
@@ -748,6 +748,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             + ". "
             + i18n.t('validity-tooltip', {place: this.locationName});
 
+
+
         return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
@@ -854,23 +856,25 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 </span>
 
                                 <div class="content-wrapper">
-
                                     <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                        <h3 id="ticket-modal-title">${i18n.t('show-active-tickets.show-ticket-title')}<strong>${this.locationName}</strong></h3>
+                                         <h3 id="ticket-modal-title">
+                                            ${i18n.t('show-active-tickets.show-ticket-title')}
+                                            <strong>${this.locationName}</strong>
+                                        </h3>
                                         <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
-                                            <p> Automatische Aktualisierung fehlgeschlagen</p>
-                                            <button id="reload-btn"
-                                                                class="button"
-                                                                @click="${() => {this.updateTicketAndNotify();}}"
-                                                                title="${i18n.t('show-active-tickets.reload')}">
-                                                <dbp-icon title="${i18n.t('show-active-tickets.reload')}" name="reload" class="reload-icon"></dbp-icon>
+                                            <p> ${i18n.t('show-active-tickets.reload-failed')}</p>
+                                            <button id="reload-btn" class="button" 
+                                                    @click="${() => {this.updateTicketAndNotify();}}"
+                                                    title="${i18n.t('show-active-tickets.reload')}">
+                                                <dbp-icon title="${i18n.t('show-active-tickets.reload')}" 
+                                                      name="reload" class="reload-icon"></dbp-icon>
                                             </button>
                                         </div>
                                         <div class="foto-container">
-                                            <img src="${this.currentTicketImage || ''}" alt="${i18n.t('show-active-tickets.image-alt-text')}" />
+                                            <img src="${this.currentTicketImage || ''}" 
+                                                 alt="${i18n.t('show-active-tickets.image-alt-text')}" />
                                         </div>
                                     </div>
-
                                     <div class="information-container ${classMap({hidden: this.hasValidProof || this.ticketLoading})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
                                             <span>
