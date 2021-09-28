@@ -45,7 +45,7 @@
     "other-error-body": "An unknown error has occurred."
   },
   "show-active-tickets": {
-    "3-g-evidence-green-pass-valid": "Green passport imported and valid on this device",
+    "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
     "3-g-evidence-selftest": "Self-test imported on this device, manual control necessary",
     "entry-ticket": "Entry Ticket",
     "no-tickets-message": "You do not have any tickets!",
@@ -80,7 +80,7 @@
     "internal-test-text": "The university-internal test was validated during the import. A manual check is only possible with the original document.",
     "reload-error-title": "Update failed",
     "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
-    "3-g-evidence-greenpass": "3-G-evidence: Green pass found"
+    "3-g-evidence-greenpass": "3-G-evidence: Green Pass found"
   },
   "show-reference-ticket": {
     "place-name": "Place",

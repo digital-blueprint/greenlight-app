@@ -69,7 +69,7 @@
     "loading-message-ticket": "Ticket wird geladen ...",
     "status-active": "aktiv",
     "3-g-evidence-selftest": "Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig",
-    "3-g-evidence-green-pass-valid": "grüner Pass auf diesem Gerät importiert und gültig",
+    "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",
     "3-g-evidence-internal-test": "Universitäts interner Test auf diesem Gerät importiert und gültig",
     "status-inactive": "inaktiv",
     "3-g-evidence-invalid": "kein gültiger 3-G-Nachweis auf diesem Gerät gefunden",
@@ -85,7 +85,7 @@
   "show-reference-ticket": {
     "place-name": "Ort",
     "description": "An dieser Stelle wird die Gültigkeit eines Eintrittstickets angezeigt. Ob ein Ticket aktiv oder inaktiv ist, hängt von dem 3-G-Nachweis ab, der auf dem Gerät der kontrollierten Person importiert ist. Das Referenzticket berechtigt nicht für den Zugang zu Räumlichkeiten der Universität.",
-    "information-container-body": " Ist ein gültiger grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger Test der Teststraße der TU Graz auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
+    "information-container-body": " Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger Test der Teststraße der TU Graz auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
     "information-container-headline": "Informationen zum 3-G-Nachweis"
   },
   "valid-till": "Voraussichtlich gültig bis ",
