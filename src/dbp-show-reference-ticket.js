@@ -425,7 +425,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 .foto-container {
-                    width: 90%;
+                    width: 100%;
                 }
 
                 #qr-code-hash svg {
@@ -441,7 +441,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 .proof-container, .information-container {
-                    padding: 20px;
+                    padding: 12px 20px 20px 20px;
                     flex-grow: 1;
                 }
 

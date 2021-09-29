@@ -651,13 +651,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     max-heigth: unset;
                 }
 
-                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper {
+                #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper, #qr-code-hash svg {
                     height: 100%;
                 }
 
                 .left-container, .proof-container, .information-container {
                     justify-content: space-evenly;
                 }
+                
+                #qr-code-wrapper {
+                    width: 80%;
+                }
+                
             }
 
             @media only screen
@@ -703,7 +708,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 .foto-container {
-                    width: 90%;
+                    width: 100%;
                 }
 
                 #qr-code-hash svg {
@@ -719,7 +724,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 .proof-container, .information-container {
-                    padding: 20px;
+                    padding: 12px 20px 20px 20px;
                     flex-grow: 1;
                 }
 
