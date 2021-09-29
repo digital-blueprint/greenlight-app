@@ -35,6 +35,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.preselectedOption = '';
         this.preselectionCheck = true;
         this.location = '';
+        this.serviceName = '';
 
         this.hasValidProof = false;
         this.hasTicket = false;
@@ -95,6 +96,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             hasValidProof: {type: Boolean, attribute: false},
             hasTicket: {type: Boolean, attribute: false},
             location: {type: String, attribute: false},
+            serviceName: {type: String, attribute: 'service-name'},
             showQrContainer: {type: Boolean, attribute: false},
             qrParsingLoading: {type: Boolean, attribute: false},
             status: {type: Object, attribute: false},
@@ -457,7 +459,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: current-person-no-photo', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
                             "type": "danger",
                             "timeout": 5,
                         });

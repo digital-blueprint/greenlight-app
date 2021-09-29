@@ -10,6 +10,7 @@ export default {
         nextcloudBaseURL: 'http://localhost:8081',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
+        serviceName: 'TUGRAZonline',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     bs: {
@@ -23,6 +24,7 @@ export default {
         nextcloudBaseURL: 'http://bs-local.com:8081',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
+        serviceName: 'TUGRAZonline',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     development: {
@@ -36,6 +38,7 @@ export default {
         nextcloudBaseURL: 'https://nc-dev.tugraz.at/pers',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
+        serviceName: 'TUGRAZonline',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     demo: {
@@ -49,6 +52,7 @@ export default {
         nextcloudBaseURL: 'https://cloud.tugraz.at',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
+        serviceName: 'TUGRAZonline',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     production: {
@@ -62,6 +66,7 @@ export default {
         nextcloudBaseURL: 'https://cloud.tugraz.at',
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
+        serviceName: 'TUGRAZonline',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
 };

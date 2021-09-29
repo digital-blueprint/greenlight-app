@@ -42,6 +42,7 @@ if (appEnv in appConfig) {
         nextcloudBaseURL: 'https://test',
         nextcloudName: '',
         preselectedOption: '',
+        serviceName: '',
     };
 } else {
     console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(appConfig)}'`);
@@ -148,6 +149,7 @@ export default (async () => {
                     gpSearchSelfTestStringArray: config.gpSearchSelfTestStringArray,
                     showPreselected: config.showPreselected,
                     preselectedOption: config.preselectedOption,
+                    serviceName: config.serviceName,
                     matomoUrl: config.matomoUrl,
                     matomoSiteId: config.matomoSiteId,
                     buildInfo: getBuildInfo(appEnv)
