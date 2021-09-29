@@ -63,7 +63,7 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1:';
-config.gpSearchQRInternalTestString = 'TGCT:';
+// config.gpSearchQRInternalTestString = 'TGCT:';
 
 function getOrigin(url) {
     if (url)
