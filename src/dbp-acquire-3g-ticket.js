@@ -450,6 +450,30 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     "timeout": 5,
                 });
                 break;
+
+            case 503: // Service unavailable
+                switch (responseBody['relay:errorId']) {
+                    case 'greenlight:current-person-no-photo':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: current-person-no-photo', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    default:
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: default', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                            "body": i18n.t('acquire-3g-ticket.other-error-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                }
+                break;
+            
             // Error: something else doesn't work
             default:
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnknownError', this.location, response);

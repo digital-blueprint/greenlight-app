@@ -32,6 +32,8 @@
     "not-same-person": "Der hochgeladene Nachweis konnte der angemeldeten Person nicht zu geordnet werden.",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
     "other-error-title": "Fehler!",
+    "photo-not-available-title": "Ticketerstellung fehlgeschlagen!",
+    "photo-not-available-body": "Es konnte kein Foto von {{serviceName}} geladen werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
     "place-select-title": "Ticket für",
     "qr-button-text": "QR-Code scannen",
     "remove-proof": "Nachweis entfernen",

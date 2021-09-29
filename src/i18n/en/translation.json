@@ -32,6 +32,8 @@
     "not-same-person": "The person in the uploaded evidence does not match the person logged in.",
     "other-error-body": "An unknown error has occurred.",
     "other-error-title": "Error!",
+    "photo-not-available-title": "Ticket creation failed!",
+    "photo-not-available-body": "No photo of {{serviceName}} could be loaded. Please try again at a later time.",
     "place-select-title": "Select a place",
     "qr-button-text": "Scan QR code",
     "remove-proof": "Remove evidence",
