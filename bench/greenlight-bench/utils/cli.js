@@ -56,10 +56,17 @@ const flags = {
         default: false,
 		desc: `Tell Apache Bench to show more information`
 	},
+	help: {
+		type: `boolean`,
+		alias: `h`,
+		default: false,
+		desc: `Show help text`
+	},
 };
 
 const commands = {
-	help: { desc: `Print help info` }
+	'permit-post': { desc: `Create a permit` },
+	'permit-get': { desc: `Read a permit` },
 };
 
 const helpText = meowHelp({
