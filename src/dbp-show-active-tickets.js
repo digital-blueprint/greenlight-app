@@ -234,6 +234,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         switch (responseData.status) {
             case 200: // Success
+                this.sendSuccessAnalyticsEvent('UpdateTicketRequest', 'Success', '');
                 this.showReloadButton = false;
                 this.currentTicket = responseBody;
                 this.ticketImage = responseBody.image;
@@ -242,7 +243,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 401:
-                this.sendErrorAnalyticsEvent('ShowTicketRequest', 'LoggedOut', this.location, responseData);
+                this.sendErrorAnalyticsEvent('UpdateTicketRequest', 'LoggedOut', this.location, responseData);
                 this.getListOfActiveTickets();
                 send({
                     "summary": i18n.t('show-active-tickets.logged-out-title'),
@@ -256,7 +257,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 404:
-                this.sendErrorAnalyticsEvent('ShowTicketRequest', 'NotFound', this.location, responseData);
+                this.sendErrorAnalyticsEvent('UpdateTicketRequest', 'NotFound', this.location, responseData);
                 this.getListOfActiveTickets();
                 send({
                     "summary": i18n.t('show-active-tickets.delete-ticket-notfound-title'),
@@ -270,6 +271,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             default:
+                this.sendErrorAnalyticsEvent('UpdateTicketRequest', 'UnknownError', this.location, responseData);
                 this.getListOfActiveTickets();
                 console.log("Update ticket failed");
                 this.setTimeoutIsSet = false;
@@ -360,6 +362,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this.ticketOpen = false;
                 },
             });
+            await this.sendSuccessAnalyticsEvent('ShowTicket', 'Success', '');
         }
         await this.generateQrCode();
         this.currentTicket = ticket;
@@ -368,6 +371,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.currentTicket = {};
         }
         this.ticketLoading = false;
+
     }
 
     /**
@@ -394,6 +398,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
         switch (response.status) {
             case 204:
+                this.sendSuccessAnalyticsEvent("DeleteTicketRequest", 'Success', "");
                 send({
                     "summary": i18n.t('show-active-tickets.delete-ticket-success-title'),
                     "body": i18n.t('show-active-tickets.delete-ticket-success-body', {place: this.locationName}),
@@ -403,6 +408,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 401:
+                this.sendErrorAnalyticsEvent('DeleteTicketRequest', 'Loggedout', this.location, response);
                 send({
                     "summary": i18n.t('show-active-tickets.logged-out-title'),
                     "body": i18n.t('show-active-tickets.logged-out-body'),

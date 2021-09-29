@@ -135,9 +135,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param room
      * @param responseData
      */
-    async sendErrorAnalyticsEvent(category, action, room, responseData = {}) {
-        let responseBody = {};
+    async sendErrorAnalyticsEvent(category, action, information, responseData = {}) {
 
+        let responseBody = {};
         // Use a clone of responseData to prevent "Failed to execute 'json' on 'Response': body stream already read"
         // after this function, but still a TypeError will occur if .json() was already called before this function
         try {
@@ -150,9 +150,29 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             status: responseData.status || '',
             url: responseData.url || '',
             description: responseBody['hydra:description'] || '',
-            room: room,
+            information: information,
             // get 5 items from the stack trace
             stack: getStackTrace().slice(1, 6)
+        };
+
+        this.sendSetPropertyEvent('analytics-event', {
+            'category': category,
+            'action': action,
+            'name': JSON.stringify(data)
+        });
+    }
+
+    /**
+     * Sends an analytics success event for the request of a room
+     *
+     * @param category
+     * @param action
+     * @param information
+     */
+    async sendSuccessAnalyticsEvent(category, action, information) {
+
+        const data = {
+            information: information,
         };
 
         this.sendSetPropertyEvent('analytics-event', {
@@ -470,6 +490,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     }
                     this.proofUploadFailed = true;
                     this.hasValidProof = false;
+                    await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
                     return;
 
                 }
@@ -501,6 +522,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 } else {
                     this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
                 }
+                await this.sendSuccessAnalyticsEvent('HCertValidation', 'Success', '');
                 break;
             case 422: // HCert has expired
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '', responseData);

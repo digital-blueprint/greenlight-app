@@ -386,7 +386,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 this.preCheck = true; //initiates a new check and sets validProof to true
-
+                await this.sendSuccessAnalyticsEvent('CreateTicketRequest', 'Success', '');
                 break;
 
             case 400: // Invalid input

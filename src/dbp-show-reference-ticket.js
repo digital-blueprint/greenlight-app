@@ -126,6 +126,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
 
         if (responseData.status === 200) { // Success
+            this.sendSuccessAnalyticsEvent('UpdateReferenceTicketRequest', 'Success', '');
             this.showReloadButton = false;
             this.ticketImage = responseBody['hydra:member'][0].image || '';
             this.setTimer(responseBody['hydra:member'][0].imageValidFor * 1000 + 1000);
@@ -133,7 +134,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         }
         // Other Error
         // fail soft if we cant update it
-
+        this.sendErrorAnalyticsEvent('UpdateReferenceTicketRequest', 'UnknownError', "", responseData);
         console.log("Update reference ticket failed");
         this.setTimeoutIsSet = false;
         this.showReloadButton = true;
@@ -190,6 +191,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this.ticketOpen = false;
                 },
             });
+            await this.sendSuccessAnalyticsEvent('ShowReferenceTicket', 'Success', '');
         }
         await this.updateReferenceTicket();
         this.ticketLoading = false;
