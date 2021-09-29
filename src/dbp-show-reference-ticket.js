@@ -75,7 +75,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     /**
      * A wrapper for update ticket for calling it in an event handler
-     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     * Sets this.setTimeoutIsSet to false and calls this.updateTicket()
      *
      */
     async updateReferenceTicketWrapper() {
@@ -85,7 +85,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     /**
      * A wrapper for update ticket for calling it in an event handler
-     * Sets this.setTimeoutIsSet to false and calls this.upddateTicket()
+     * Sets this.setTimeoutIsSet to false and calls this.updateTicket()
      *
      */
     async updateTicketAndNotify() {
@@ -173,7 +173,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     }
 
     /**
-     * Generate a QR Code if a hash is avaible and valid,
+     * Generate a QR Code if a hash is available and valid,
      * updates the ticket and shows it in modal view
      *
      * @param {object} ticket
