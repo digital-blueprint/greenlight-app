@@ -103,5 +103,6 @@
     "place-name": "Place"
   },
   "valid-till": "Probably valid until ",
-  "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change. The ticket is only valid in electronic form"
+  "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
+  "validity-tooltip-ticket-text": "The ticket is only valid in electronic form."
 }

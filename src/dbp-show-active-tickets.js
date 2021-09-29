@@ -746,7 +746,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''
             })
             + ". "
-            + i18n.t('validity-tooltip', {place: this.locationName});
+            + i18n.t('validity-tooltip', {place: this.locationName})
+            + " "
+            + i18n.t('validity-tooltip-ticket-text');
 
         const ticketTitle = html`
             ${i18n.t('show-active-tickets.show-ticket-title')}

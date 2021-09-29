@@ -11,8 +11,8 @@
     "en": "Show tickets"
   },
   "description": {
-    "de": "Zeigt alle Tickets für den angemeldeten Benutzer.",
-    "en": "Shows all tickets for the logged in user."
+    "de": "Zeigt alle Tickets angemeldeter Benutzer*innen.",
+    "en": "Shows all tickets for logged in users."
   },
   "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-hash-internal-test-string,gp-search-self-test-string-array,preselected-option"
 }
