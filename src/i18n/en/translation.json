@@ -48,7 +48,7 @@
   "date-time": "{{clock}} on {{date}}",
   "delete-btn-text": "Delete",
   "error-login-message": "You need to be logged in to use this function!",
-  "error-permission-message": "This application is currently only available for students!",
+  "error-permission-message": "This function is currently only available for students!",
   "file-sink": {
     "modal-close": "Close"
   },
