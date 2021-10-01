@@ -1,6 +1,9 @@
 # Greenlight Bench
 
 ```bash
+# install apache bench
+sudo apt install apache2-utils
+
 # install modules
 npm install
 
