@@ -1059,7 +1059,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="close-icon">${i18n.t(this.message, { place: this.location })}</div>
                                 ${this.detailedError ? html`
                                     <dbp-info-tooltip class="info-tooltip"
-                                                    text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replaceAll(/\n/g, '<br>')}"
+                                                    text-content="${i18n.t('acquire-3g-ticket.invalid-document-prefix') + (this.detailedError).replace(/\n/g, '<br>')}"
                                                     interactive></dbp-info-tooltip>` : ``}
                             </div>
                         </div>
