@@ -1132,8 +1132,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         <!-- End Create Ticket part -->
                     </div>
             ` : html`
-            </div>
             `}
+            </div>
         `;
     }
 }

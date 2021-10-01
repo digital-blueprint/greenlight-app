@@ -654,7 +654,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     height: 100%;
                     width: 100%;
                     max-width: unset;
-                    max-heigth: unset;
+                    max-height: unset;
                 }
 
                 #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper, #qr-code-hash svg {
