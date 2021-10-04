@@ -1,3 +1,4 @@
+
 import {css, html} from 'lit-element';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
@@ -24,6 +25,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         this.greenPassHash = '';
         this.hasValidProof = false;
         this.isSelfTest = false;
+        this.isInternalTest = false;
         this.loadingTickets = true;
         this.preCheck = false;
 
@@ -46,6 +48,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             greenPassHash: {type: String, attribute: false},
             hasValidProof: {type: Boolean, attribute: false},
             isSelfTest: {type: Boolean, attribute: false},
+            isInternalTest: {type: Boolean, attribute: false},
             loadingTickets: {type: Boolean, attribute: false},
         };
     }
@@ -230,6 +233,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         if (!this.greenPassHash || this.greenPassHash === -1) {
             this.hasValidProof = false;
             this.isSelfTest = false;
+            this.isInternalTest = false;
         }
         this.loading = false;
     }
@@ -255,6 +259,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                 this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
         } else {
             this.hasValidProof = false;
+            this.isInternalTest = false;
             this.isSelfTest = false;
         }
     }
@@ -279,6 +284,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         this.ticketLoading = false;
 
     }
+
+
 
     /**
      * Sends a delete Ticket Request for the specific entry,
@@ -421,7 +428,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             .flex {
                 display: flex;
             }
-            
+
+            .flex-center {
+                justify-content: center;
+            }
+
             .hidden {
                 display: none;
             }
@@ -439,6 +450,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             and (orientation: portrait)
             and (max-width: 768px) {
 
+
+
+                
+
                 #qr-code-hash svg {
                     width: 100%;
                 }
@@ -449,6 +464,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     margin: auto;
                     box-sizing: border-box;
                 }
+
+            
             }
         `;
     }
@@ -470,53 +487,64 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         const permissions = !this.isLoggedIn() || this.isLoading() || !this.hasPermissions();
 
         const ticketList = html`
-         ${this.activeTickets.map(ticket => html`
-                        <div class="ticket">
-                            <span class="header">
-                                <slot name="place">
-                                    <h3>${i18n.t('entry-ticket')}: ${this.locationName}</h3>
-                                </slot>
-                                <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                    <span>
-                                        <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
-                                    </span>
-                                    <span class="${classMap({hidden: this.isSelfTest})}">
-                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
-                                        <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                    </span>
-                                    <span class="${classMap({hidden: !this.isSelfTest})}">
-                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
-                                    </span>
-                                </span>
-                                <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                    <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
-                                    <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
-                                    <span>
-                                        <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
-                                            ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
-                                            ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
-                                        </slot>
-                                    </span>
-                                </span>
+            ${this.activeTickets.map(ticket => html`
+                <div class="ticket">
+                    <span class="header">
+                        <slot name="place">
+                            <h3>${i18n.t('entry-ticket')}: ${this.locationName}</h3>
+                        </slot>
+                        <span class="header ${classMap({hidden: !this.hasValidProof})}">
+                            <span>
+                                <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
                             </span>
-                          <div class="btn">
-                            <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
-                                                type="is-primary"
-                                                @click="${() => {this.showTicket(ticket);}}"
-                                                title="${i18n.t('show-active-tickets.show-btn-text')}">
-                                ${i18n.t('show-active-tickets.show-btn-text')}
-                            </dbp-loading-button>
-                            <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
-                                <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
-                            </a>
-                            <dbp-loading-button id="delete-btn"
-                                                @click="${() => {this.deleteTicket(ticket);}}"
-                                                title="${i18n.t('delete-btn-text')}">
-                                ${i18n.t('delete-btn-text')}
-                            </dbp-loading-button>
-                        </div>
+                            <span class="${classMap({hidden: this.isSelfTest || this.isInternalTest})}">
+                                <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
+                                <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
+                            </span>
+                            <span class="${classMap({hidden: !this.isSelfTest})}">
+                                <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
+                            </span>
+                            <span class="flex ${classMap({hidden: !this.isInternalTest})}">
+                                <slot name="internal-test-valid">
+                                    <b>
+                                        ${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp
+                                        <span class="green">
+                                            ${i18n.t('show-active-tickets.3-g-evidence-internal-test')}
+                                        </span>
+                                    </b>
+                                </slot>
+                                <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
+                            </span>
+                        </span>
+                        <span class="header ${classMap({hidden: this.hasValidProof})}">
+                            <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
+                            <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
+                            <span>
+                                <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
+                                    ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
+                                    ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
+                                </slot>
+                            </span>
+                        </span>
+                    </span>
+                    <div class="btn">
+                        <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
+                                            type="is-primary"
+                                            @click="${() => {this.showTicket(ticket);}}"
+                                            title="${i18n.t('show-active-tickets.show-btn-text')}">
+                            ${i18n.t('show-active-tickets.show-btn-text')}
+                        </dbp-loading-button>
+                        <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
+                            <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
+                        </a>
+                        <dbp-loading-button id="delete-btn"
+                                            @click="${() => {this.deleteTicket(ticket);}}"
+                                            title="${i18n.t('delete-btn-text')}">
+                            ${i18n.t('delete-btn-text')}
+                        </dbp-loading-button>
                     </div>
-                `)}
+                </div>
+            `)}
         `;
 
         const additionalInformation = html`
@@ -531,10 +559,17 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                         </div>
                                     </div>
 
-                                    <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
+                                    <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading, 'flex-center': this.isInternalTest})}">
                                         <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                            <span>
+                                            <span class="${classMap({hidden: this.isInternalTest})}">
                                                 <h4>${i18n.t('show-active-tickets.3-g-evidence-greenpass')}</h4>
+                                            </span>
+                                            <span class="${classMap({hidden: !this.isInternalTest})}">
+                                                <h4>
+                                                    <slot name="found-university-internal-test">
+                                                        ${i18n.t('show-active-tickets.internal-test-found')}
+                                                    </slot>
+                                                </h4>
                                             </span>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
@@ -544,8 +579,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                                 <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                             </span>
                                         </div>
-                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
+                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest, hidden: this.isInternalTest})}">
                                             <div id="qr-code-hash"></div>
+                                        </div>
+                                        <div class="${classMap({hidden: !this.isInternalTest})}">
+                                            <slot name="internal-test-text">
+                                                <p>${i18n.t('show-active-tickets.internal-test-text')}</p>
+                                            </slot>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <slot name="greenlight-reference-invalid">
@@ -553,16 +593,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                             </slot>
                                         </div>
                                     </div>
+
         `;
 
         const ticketUI = this.getTicketUI(permissions, ticketList, additionalInformation);
+
 
         return html`
 
             <div class="notification is-warning ${classMap({hidden: this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-login-message')}
             </div>
-            
+
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
