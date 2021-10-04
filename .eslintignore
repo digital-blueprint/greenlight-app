@@ -2,3 +2,4 @@
 /dist/**
 /*.js
 /assets/hcert-kotlin.js
+/bench
