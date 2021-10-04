@@ -16,6 +16,35 @@ export function withDate(date, callback) {
 }
 
 /**
+ * XXX: hcert-kotlin depends on cbor-web, which uses BigInt internally,
+ * but BigInt support isn't available in Safari <=13 and there is no
+ * way to polyfill it (either via a library or babel). Since we don't
+ * use the BigInt functionality of CBOR we fake a minimal replacement
+ * for the time we load hcert-kotlin inm case it is missing.
+ *
+ * @param {callback} callback
+ */
+async function withFakeBigInt(callback) {
+    const fakeBigInt = (v) => {
+        return parseInt(v);
+    };
+    fakeBigInt.prototype = {};
+    if (window.BigInt === undefined) {
+        window.BigInt = fakeBigInt;
+        try {
+            // XXX: since we yield here this whole thing is sadly racy
+            // and other code might see our BigInt
+            return await callback();
+        } finally {
+            if (window.BigInt === fakeBigInt) {
+                delete window.BigInt;
+            }
+        }
+    }
+    return await callback();
+}
+
+/**
  * Returns the hcert-kotlin module
  * 
  * @returns {object} The module
@@ -44,7 +73,8 @@ export async function importHCert() {
           });
           importHCert._pomise = promise;
     }
-    return promise;
+
+    return withFakeBigInt(async () => {return await promise;});
 }
 
 export const trustAnchorProd = `-----BEGIN CERTIFICATE-----
