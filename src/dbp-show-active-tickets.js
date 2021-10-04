@@ -842,123 +842,120 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 </span>
             </div>
 
-            ${!this.hasPermissions() ? 
-            html` 
-                <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
-                    ${i18n.t('error-permission-message')}
-                </div>` :
-            html`
-                <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+            <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
+                ${i18n.t('error-permission-message')}
+            </div>
 
-                    <h2>${this.activity.getName(this.lang)}</h2>
-                    <p class="subheadline">
-                        ${this.activity.getDescription(this.lang)}
-                    </p>
+            <div class="${classMap({hidden: !this.isLoggedIn() || this.isLoading() || !this.hasPermissions()})}">
 
-                    <div class="tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
-                        <div class="${classMap({hidden: this.loading})}">
-                        ${this.activeTickets.map(ticket => html`
-                            <div class="ticket">
-                                <span class="header">
-                                    <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
-                                    <span class="header ${classMap({hidden: !this.hasValidProof})}">
-                                        <span>
-                                            <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
-                                        </span>
-                                        <span class="${classMap({hidden: this.isSelfTest || this.isInternalTest})}">
-                                            <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
-                                            <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                        </span>
-                                        <span class="${classMap({hidden: !this.isSelfTest})}">
-                                            <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
-                                        </span>
-                                        <span class="flex ${classMap({hidden: !this.isInternalTest})}">
-                                            <slot name="internal-test-valid">
-                                                <b>
-                                                    ${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp
-                                                    <span class="green">
-                                                        ${i18n.t('show-active-tickets.3-g-evidence-internal-test')}
-                                                    </span>
-                                                </b>
-                                            </slot>
-                                            <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
-                                        </span>
+                <h2>${this.activity.getName(this.lang)}</h2>
+                <p class="subheadline">
+                    ${this.activity.getDescription(this.lang)}
+                </p>
+
+                <div class="tickets ${classMap({hidden: !this.isLoggedIn() || this.isLoading()})}">
+                    <div class="${classMap({hidden: this.loading})}">
+                    ${this.activeTickets.map(ticket => html`
+                        <div class="ticket">
+                            <span class="header">
+                                <h3>${i18n.t('show-active-tickets.entry-ticket')}: ${this.locationName}</h3>
+                                <span class="header ${classMap({hidden: !this.hasValidProof})}">
+                                    <span>
+                                        <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
                                     </span>
-                                    <span class="header ${classMap({hidden: this.hasValidProof})}">
-                                        <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
-                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
-                                        <span>
-                                            <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
-                                                ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
-                                                ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
-                                            </slot>
-                                        </span>
+                                    <span class="${classMap({hidden: this.isSelfTest || this.isInternalTest})}">
+                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
+                                        <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
+                                    </span>
+                                    <span class="${classMap({hidden: !this.isSelfTest})}">
+                                        <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
+                                    </span>
+                                    <span class="flex ${classMap({hidden: !this.isInternalTest})}">
+                                        <slot name="internal-test-valid">
+                                            <b>
+                                                ${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp
+                                                <span class="green">
+                                                    ${i18n.t('show-active-tickets.3-g-evidence-internal-test')}
+                                                </span>
+                                            </b>
+                                        </slot>
+                                        <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                     </span>
                                 </span>
-                                <div class="btn">
-                                    <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
-                                                        type="is-primary"
-                                                        @click="${() => {this.showTicket(ticket);}}"
-                                                        title="${i18n.t('show-active-tickets.show-btn-text')}">
-                                        ${i18n.t('show-active-tickets.show-btn-text')}
-                                    </dbp-loading-button>
-                                    <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
-                                        <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
-                                    </a>
-                                    <dbp-loading-button id="delete-btn"
-                                                        @click="${() => {this.deleteTicket(ticket);}}"
-                                                        title="${i18n.t('delete-btn-text')}">
-                                        ${i18n.t('delete-btn-text')}
-                                    </dbp-loading-button>
-                                </div>
+                                <span class="header ${classMap({hidden: this.hasValidProof})}">
+                                    <b>${i18n.t('show-active-tickets.status')}<span class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
+                                    <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="red">${i18n.t('show-active-tickets.3-g-evidence-invalid')}</span></b>
+                                    <span>
+                                        <slot name="3-g-evidence-invalid-text"> <!-- TODO Use this slot and add a link to faq-->
+                                            ${i18n.t('show-active-tickets.3-g-evidence-invalid-text')}
+                                            ${i18n.t('show-active-tickets.3-g-evidence-maximize-saving')}
+                                        </slot>
+                                    </span>
+                                </span>
+                            </span>
+                            <div class="btn">
+                                <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
+                                                    type="is-primary"
+                                                    @click="${() => {this.showTicket(ticket);}}"
+                                                    title="${i18n.t('show-active-tickets.show-btn-text')}">
+                                    ${i18n.t('show-active-tickets.show-btn-text')}
+                                </dbp-loading-button>
+                                <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
+                                    <button class="button new-ticket-button" title="${i18n.t('show-active-tickets.new-ticket')}">${i18n.t('show-active-tickets.new-ticket')}</button>
+                                </a>
+                                <dbp-loading-button id="delete-btn"
+                                                    @click="${() => {this.deleteTicket(ticket);}}"
+                                                    title="${i18n.t('delete-btn-text')}">
+                                    ${i18n.t('delete-btn-text')}
+                                </dbp-loading-button>
                             </div>
-                        `)}
                         </div>
-                        ${noTickets}
-                        ${loading}
+                    `)}
                     </div>
+                    ${noTickets}
+                    ${loading}
                 </div>
-                <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
-                    <div class="modal-overlay" tabindex="-2" data-micromodal-close>
-                        <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
-                            aria-labelledby="ticket-modal-title">
-                            <main class="modal-content" id="ticket-modal-content">
-                                <span class="control ticket-loading ${classMap({hidden: !this.ticketLoading})}">
-                                    <span class="loading">
-                                        <dbp-mini-spinner text=${i18n.t('show-active-tickets.loading-message-ticket')}></dbp-mini-spinner>
-                                    </span>
+            </div>
+            <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
+                <div class="modal-overlay" tabindex="-2" data-micromodal-close>
+                    <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
+                        aria-labelledby="ticket-modal-title">
+                        <main class="modal-content" id="ticket-modal-content">
+                            <span class="control ticket-loading ${classMap({hidden: !this.ticketLoading})}">
+                                <span class="loading">
+                                    <dbp-mini-spinner text=${i18n.t('show-active-tickets.loading-message-ticket')}></dbp-mini-spinner>
                                 </span>
+                            </span>
 
-                                <div class="content-wrapper">
-                                    <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                         <h3 id="ticket-modal-title">
-                                            ${ticketTitle}
-                                        </h3>
-                                        <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
-                                            <p> ${i18n.t('reload-failed')}</p>
-                                            <button id="reload-btn" 
-                                                    class="button" 
-                                                    @click="${() => {this.updateTicketAndNotify();}}"
-                                                    title="${i18n.t('reload')}">
-                                                <dbp-icon title="${i18n.t('reload')}" 
-                                                      name="reload" class="reload-icon"></dbp-icon>
-                                            </button>
-                                        </div>
-                                        <div class="foto-container">
-                                            <img src="${this.ticketImage || ''}" 
-                                                 alt="${i18n.t('image-alt-text')}" />
-                                        </div>
+                            <div class="content-wrapper">
+                                <div class="left-container ${classMap({hidden: this.ticketLoading})}">
+                                        <h3 id="ticket-modal-title">
+                                        ${ticketTitle}
+                                    </h3>
+                                    <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
+                                        <p> ${i18n.t('reload-failed')}</p>
+                                        <button id="reload-btn" 
+                                                class="button" 
+                                                @click="${() => {this.updateTicketAndNotify();}}"
+                                                title="${i18n.t('reload')}">
+                                            <dbp-icon title="${i18n.t('reload')}" 
+                                                    name="reload" class="reload-icon"></dbp-icon>
+                                        </button>
                                     </div>
-                                    ${additionalInformation}
-                                    <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => {this.closeDialog();}}">
-                                        <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
-                                    </button>
+                                    <div class="foto-container">
+                                        <img src="${this.ticketImage || ''}" 
+                                                alt="${i18n.t('image-alt-text')}" />
+                                    </div>
                                 </div>
-                            </main>
-                        </div>
+                                ${additionalInformation}
+                                <button title="Close" class="modal-close" aria-label="Close modal" @click="${() => {this.closeDialog();}}">
+                                    <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                                </button>
+                            </div>
+                        </main>
                     </div>
                 </div>
-            `}
+            </div>
         `;
     }
 }
