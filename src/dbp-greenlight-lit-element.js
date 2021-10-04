@@ -132,7 +132,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      *
      * @param category
      * @param action
-     * @param room
+     * @param information
      * @param responseData
      */
     async sendErrorAnalyticsEvent(category, action, information, responseData = {}) {
