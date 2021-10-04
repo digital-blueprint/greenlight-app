@@ -484,7 +484,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         switch (status) {
             case 201:
                 // Check Person
-                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate)) {
+                /*if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate)) {
                     if (!preCheck) {
                         this.message = i18nKey('acquire-3g-ticket.not-same-person');
                     }
@@ -493,7 +493,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
                     return;
 
-                }
+                }*/
                 if (this._("#trust-button") && this._("#trust-button").checked) {
                     await this.encryptAndSaveHash();
                 }

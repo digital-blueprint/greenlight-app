@@ -592,7 +592,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 top: 5px;
             }
 
-            .self-test-qr {
+            .qr-code-wrapper.self-test-qr {
                 margin: 20px auto;
                 width: 60%;
             }
@@ -645,6 +645,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .hidden {
                 display: none;
+            }
+            
+            .qr-code-wrapper  {
+                width: 100%;
             }
 
             @media only screen
@@ -809,7 +813,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <slot name="greenlight-reference-invalid">
-                                                <p>${i18n.t('show-active-tickets.invalid-evidence')}</p>
+                                                ${i18n.t('show-active-tickets.invalid-evidence')}
                                             </slot>
                                         </div>
                                     </div>
