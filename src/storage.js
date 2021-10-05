@@ -20,7 +20,11 @@ export async function save(payload, publicId, privateId, expiresAt=undefined) {
     let key, salt, cipher, iv;
 
     [key, salt] = await generateKey(privateId);
-    [cipher, iv] = await encrypt(key, payload);
+    try {
+        [cipher, iv] = await encrypt(key, payload);
+    } catch (e) {
+        this.sendErrorAnalyticsEvent('LocalStorage', 'encrypt error', "", "");
+    }
 
     localStorage.setItem("dbp-gp-" + publicId, cipher);
     localStorage.setItem("dbp-gp-salt-" + publicId, salt);
@@ -74,12 +78,17 @@ export async function fetch(publicId, privateId, currentTime=undefined) {
         iv_bytes[i] = iv_binary_string.charCodeAt(i);
     }
 
-    [key, salt] = await generateKey(privateId, salt_bytes);
+    try {
+        [key, salt] = await generateKey(privateId, salt_bytes);
+    } catch (e) {
+        this.sendErrorAnalyticsEvent('LocalStorage', 'Key generation error', "", "");
+    }
+
+
 
     try {
         return await decrypt(cipher, key, iv_bytes);
     } catch(error) {
-        console.error("Decryption error");
         return null;
     }
 }
