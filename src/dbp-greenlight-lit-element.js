@@ -53,7 +53,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         this._loginState = newLoginState;
 
-        if (this.isLoggedIn() && !this._loginCalled) {
+        if (this.isLoggedIn() && !this._loginCalled && this.hasPermissions()) {
             this._loginCalled = true;
             this.loginCallback();
         }

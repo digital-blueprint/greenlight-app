@@ -875,14 +875,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         const i18n = this._i18n;
         const matchRegexString = '.*' + escapeRegExp(this.searchHashString) + '.*';
 
-        if (this.isLoggedIn() && !this.isLoading() && this.preCheck && !this.loading) {
+        if (this.isLoggedIn() && this.hasPermissions() && !this.isLoading() && this.preCheck && !this.loading) {
             this.loading = true;
             this.checkForValidProofLocal().then(() => {
                 this.loading = false;
             });
         }
 
-        if (this.isLoggedIn() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
+        if (this.isLoggedIn() && this.hasPermissions() && !this.isLoading() && this.preselectedOption && this.preselectedOption !== '' && this.preselectionCheck) {
             this.location = this.preselectedOption;
             this.checkForValidTickets().then(() => {
                 this.preselectionLoading = false;
