@@ -491,6 +491,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     // Make sure the person matches the proof
                     if (!checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, person.givenName, person.familyName, person.birthDate)) {
                         if (!preCheck) {
+                            this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
                             this.message = i18nKey('acquire-3g-ticket.not-same-person');
                         }
                         this.proofUploadFailed = true;
