@@ -424,14 +424,29 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 403: // Forbidden - Access Denied
-                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'AccessDenied', this.location, response);
-                send({
-                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
+                switch (responseBody['relay:errorId']) {
+                    case 'greenlight:current-person-not-found':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Access Denied: current-person-not-found', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    case 'greenlight:additional-information-not-decoded':
+                    default:
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Access Denied: additional-information-not-decoded', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                            "body": i18n.t('acquire-3g-ticket.other-error-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                }
                 break;
+                
 
             case 422: // Unprocessable entity
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnprocessableEntity', this.location, response);
@@ -444,13 +459,44 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 break;
 
             case 500: // Can't process Data
-                this.sendErrorAnalyticsEvent('CreateTicketRequest', 'ErrorInData', this.location, response);
-                send({
-                    "summary": i18n.t('acquire-3g-ticket.other-error-title'),
-                    "body": i18n.t('acquire-3g-ticket.other-error-body'),
-                    "type": "danger",
-                    "timeout": 5,
-                });
+                switch (responseBody['relay:errorId']) {
+                    case 'greenlight:current-person-no-photo':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: current-person-no-photo', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    case 'greenlight:permit-not-created':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: permit-not-created', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    case 'greenlight:photo-service-error':
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: photo-service-error', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
+                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                    default:
+                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'ErrorInData', this.location, response);
+                        send({
+                            "summary": i18n.t('acquire-3g-ticket.other-error-title'),
+                            "body": i18n.t('acquire-3g-ticket.other-error-body'),
+                            "type": "danger",
+                            "timeout": 5,
+                        });
+                        break;
+                }
                 break;
 
             case 503: // Service unavailable

@@ -150,6 +150,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             status: responseData.status || '',
             url: responseData.url || '',
             description: responseBody['hydra:description'] || '',
+            errorDetails: responseBody['relay:errorDetails'] || '',
             information: information,
             // get 5 items from the stack trace
             stack: getStackTrace().slice(1, 6)
@@ -158,7 +159,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.sendSetPropertyEvent('analytics-event', {
             'category': category,
             'action': action,
-            'name': JSON.stringify(data)
+            'name': JSON.stringify(data),
+            'value': responseBody['relay:errorDetails'] || '',
         });
     }
 
