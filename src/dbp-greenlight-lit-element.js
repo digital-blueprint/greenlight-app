@@ -160,7 +160,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             'category': category,
             'action': action,
             'name': JSON.stringify(data),
-            'value': responseBody['relay:errorDetails'] || '',
         });
     }
 
