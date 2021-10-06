@@ -484,17 +484,31 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         let responseBody = responseData.data;
         switch (status) {
             case 201:
-                // Check Person
-                if (this.auth && this.auth.person && !checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, this.auth.person.givenName, this.auth.person.familyName, this.auth.person.birthDate)) {
-                    if (!preCheck) {
-                        this.message = i18nKey('acquire-3g-ticket.not-same-person');
-                    }
-                    this.proofUploadFailed = true;
-                    this.hasValidProof = false;
-                    await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
-                    return;
+                if (this.auth) {
+                    // Fetch the currently logged in person
+                    let personId = this.auth['person-id'];
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/ld+json',
+                            Authorization: "Bearer " + this.auth.token
+                        },
+                    };
+                    let response = await this.httpGetAsync(this.entryPointUrl + '/people/' + encodeURIComponent(personId), options);
+                    let person = await response.json();
 
+                    // Make sure the person matches the proof
+                    if (!checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, person.givenName, person.familyName, person.birthDate)) {
+                        if (!preCheck) {
+                            this.message = i18nKey('acquire-3g-ticket.not-same-person');
+                        }
+                        this.proofUploadFailed = true;
+                        this.hasValidProof = false;
+                        await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
+                        return;
+                    }
                 }
+
                 if (this._("#trust-button") && this._("#trust-button").checked) {
                     await this.encryptAndSaveHash();
                 }
