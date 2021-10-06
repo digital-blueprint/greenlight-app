@@ -490,7 +490,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     const options = {
                         method: 'GET',
                         headers: {
-                            'Content-Type': 'application/ld+json',
                             Authorization: "Bearer " + this.auth.token
                         },
                     };
