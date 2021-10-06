@@ -559,13 +559,20 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
     }
 
-    async encryptAndSaveHash() {
+    async persistStorageMaybe() {
         if (navigator.storage && navigator.storage.persist) {
             if (await navigator.storage.persist())
                 console.log("Storage will not be cleared except by explicit user action");
             else
                 console.log("Storage may be cleared by the UA under storage pressure.");
         }
+    }
+
+    async encryptAndSaveHash() {
+        // We don't want to await here since it's easy for the user to miss the
+        // permission popup in Firefox while the ticket creation is in progress,
+        // and this also breaks e2e tests in cypress + some versions of firefox
+        this.persistStorageMaybe();
 
         let expiresAt;
         if (this.isSelfTest) {
