@@ -64,7 +64,6 @@ if (watch) {
 }
 
 config.gpSearchQRString = 'HC1:';
-config.gpSearchQRInternalTestString = 'TGCT:';
 
 function getOrigin(url) {
     if (url)
@@ -145,7 +144,6 @@ export default (async () => {
                     keyCloakClientId: config.keyCloakClientId,
                     CSP: config.CSP,
                     gpSearchQRString: config.gpSearchQRString,
-                    gpSearchQRInternalTestString: config.gpSearchQRInternalTestString,
                     gpSearchSelfTestStringArray: config.gpSearchSelfTestStringArray,
                     showPreselected: config.showPreselected,
                     preselectedOption: config.preselectedOption,

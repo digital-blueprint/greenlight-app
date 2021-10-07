@@ -52,7 +52,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.resetWrongQr = false;
         this.resetWrongHash = false;
         this.greenPassHash = '';
-        this.isInternalTest = false;
         this.isSelfTest = false;
         this.isConfirmChecked = false;
 
@@ -106,7 +105,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             trustButtonChecked: {type: Boolean, attribute: false},
             isConfirmChecked: {type: Boolean, attribute: false},
             person: {type: Object, attribute: false},
-            isInternalTest: {type: Boolean, attribute: false},
             isSelfTest: {type: Boolean, attribute: false},
             preselectionLoading: {type: Boolean, attribute: false},
 
