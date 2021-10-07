@@ -1593,11 +1593,6 @@ base-64@^0.1.0:
   resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
   integrity sha1-eAqZyE59YAJgNhURxId2E78k9rs=
 
-base45-web@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/base45-web/-/base45-web-1.0.2.tgz#890c11271656f83d005755b7dbb133334113a741"
-  integrity sha512-9GS/w7MkVbXIKWzG9FjIoSJP/kfxcbvkKEL8gemZxNB21MOyBypSCL7qqFFQSEi699E6bdUA6kPPXFu5THLAPg==
-
 base64-arraybuffer@0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.1.4.tgz#9818c79e059b1355f97e0428a017c838e90ba812"

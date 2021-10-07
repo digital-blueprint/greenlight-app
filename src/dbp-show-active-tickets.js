@@ -32,7 +32,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.greenPassHash = '';
         this.hasValidProof = false;
         this.isSelfTest = false;
-        this.isInternalTest = false;
         this.loadingTickets = true;
         this.setTimeoutIsSet = false;
         this.timer = '';
@@ -66,7 +65,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
             greenPassHash: {type: String, attribute: false},
             hasValidProof: {type: Boolean, attribute: false},
             isSelfTest: {type: Boolean, attribute: false},
-            isInternalTest: {type: Boolean, attribute: false},
             loadingTickets: {type: Boolean, attribute: false},
             showReloadButton: {type: Boolean, attribute: false},
         };
@@ -314,7 +312,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
         if (!this.greenPassHash || this.greenPassHash === -1) {
             this.hasValidProof = false;
             this.isSelfTest = false;
-            this.isInternalTest = false;
         }
         this.loading = false;
     }
@@ -340,7 +337,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 this._("#qr-code-hash").innerHTML = qr.createSvgTag(opts);
         } else {
             this.hasValidProof = false;
-            this.isInternalTest = false;
             this.isSelfTest = false;
         }
     }
@@ -783,17 +779,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                         </div>
                                     </div>
 
-                                    <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading, 'flex-center': this.isInternalTest})}">
+                                    <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
                                         <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
-                                            <span class="${classMap({hidden: this.isInternalTest})}">
+                                            <span>
                                                 <h4>${i18n.t('show-active-tickets.3-g-evidence-greenpass')}</h4>
-                                            </span>
-                                            <span class="${classMap({hidden: !this.isInternalTest})}">
-                                                <h4>
-                                                    <slot name="found-university-internal-test">
-                                                        ${i18n.t('show-active-tickets.internal-test-found')}
-                                                    </slot>
-                                                </h4>
                                             </span>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
@@ -803,13 +792,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 <a class="int-link-external" title="${i18n.t('show-active-tickets.self-test')}" target="_blank" rel="noopener" href="${this.greenPassHash}">${i18n.t('show-active-tickets.self-test-link')}</a>
                                             </span>
                                         </div>
-                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest, hidden: this.isInternalTest})}">
+                                        <div class="qr-code-wrapper ${classMap({'self-test-qr': this.isSelfTest})}">
                                             <div id="qr-code-hash"></div>
-                                        </div>
-                                        <div class="${classMap({hidden: !this.isInternalTest})}">
-                                            <slot name="internal-test-text">
-                                                <p>${i18n.t('show-active-tickets.internal-test-text')}</p>
-                                            </slot>
                                         </div>
                                         <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
                                             <slot name="greenlight-reference-invalid">
@@ -867,23 +851,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                     <span>
                                         <b>${i18n.t('show-active-tickets.status')}<span class="green">${i18n.t('show-active-tickets.status-active')}</span></b>
                                     </span>
-                                    <span class="${classMap({hidden: this.isSelfTest || this.isInternalTest})}">
+                                    <span class="${classMap({hidden: this.isSelfTest})}">
                                         <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="green">${i18n.t('show-active-tickets.3-g-evidence-green-pass-valid')}</span></b>
                                         <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                     </span>
                                     <span class="${classMap({hidden: !this.isSelfTest})}">
                                         <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
-                                    </span>
-                                    <span class="flex ${classMap({hidden: !this.isInternalTest})}">
-                                        <slot name="internal-test-valid">
-                                            <b>
-                                                ${i18n.t('show-active-tickets.3-g-evidence')}:&nbsp
-                                                <span class="green">
-                                                    ${i18n.t('show-active-tickets.3-g-evidence-internal-test')}
-                                                </span>
-                                            </b>
-                                        </slot>
-                                        <dbp-info-tooltip class="tooltip" text-content="${validTill}" interactive></dbp-info-tooltip>
                                     </span>
                                 </span>
                                 <span class="header ${classMap({hidden: this.hasValidProof})}">

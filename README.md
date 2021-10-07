@@ -71,8 +71,6 @@ Note that you will need a Keycloak server along with a client id for the domain 
     - note: most often this should be an attribute that is not set directly, but subscribed at a provider
 - `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
   - example `gp-search-hash-string="HC1"`
-- `gp-search-hash-internal-test-string`: String used in the qr code to determine if the qr code is a valid 3G proof for university internal tests
-  - example `gp-search-hash-internal-test-string="TGCT"`
 - `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
   - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
 - `preselected-option`: String used in the Ticket, to show where it should be valid
@@ -163,8 +161,6 @@ Note that you will need a Keycloak server along with a client id for the domain 
   - note: most often this should be an attribute that is not set directly, but subscribed at a provider
 - `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
   - example `gp-search-hash-string="HC1"`
-- `gp-search-hash-internal-test-string`: String used in the qr code to determine if the qr code is a valid 3G proof for university internal tests
-  - example `gp-search-hash-internal-test-string="TGCT"`
 - `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
   - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
 - `preselected-option`: String used in the Ticket, to show where it should be valid

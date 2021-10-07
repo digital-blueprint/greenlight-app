@@ -6,7 +6,6 @@ import {hcertValidation} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
 import {encodeAdditionalInformation} from "./crypto.js";
 import * as storage from "./storage.js";
-import * as tgct from "./tgct";
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -16,7 +15,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.person = {};
 
         this.searchHashString = '';
-        this.searchHashInternalTestString = '';
         this.searchSelfTestStringArray = '';
     }
 
@@ -26,7 +24,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             auth: {type: Object},
 
             searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
-            searchHashInternalTestString: {type: String, attribute: 'gp-search-hash-internal-test-string'},
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
         };
     }
@@ -376,15 +373,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async checkQRCode(data) {
         let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
-        let check2 = check ? false : await this.decodeUrlWithoutCheck(data, this.searchHashInternalTestString);
 
-        if (check || check2) {
+        if (check) {
             this.greenPassHash = data;
             this.isSelfTest = false;
-            this.isInternalTest = check2 ? true : false;
             this.hasValidProof = true;
             this.proofUploadFailed = false;
-            await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck, this.isInternalTest);
+            await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
             return;
         }
 
@@ -406,7 +401,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             }
 
             this.isSelfTest = true;
-            this.isInternalTest = false;
             this.greenPassHash = selfTestURL;
 
             if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
@@ -444,9 +438,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param greenPassHash
      * @param category
      * @param precheck
-     * @param internalTest
      */
-    async doActivation(greenPassHash, category, precheck = false, internalTest = false) {
+    async doActivation(greenPassHash, category, precheck = false) {
         const i18n = this._i18n;
         this.detailedError = '';
 
@@ -459,7 +452,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             return;
         }
 
-        await this.checkActivationResponse(greenPassHash, category, precheck, internalTest);
+        await this.checkActivationResponse(greenPassHash, category, precheck);
     }
 
 
@@ -474,12 +467,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param greenPassHash
      * @param category
      * @param preCheck
-     * @param internalTest
      */
-    async checkActivationResponse(greenPassHash, category, preCheck = false, internalTest = false) {
+    async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
 
-        let responseData = internalTest ? await tgct.tgctValidation(greenPassHash, this.lang) : await hcertValidation(greenPassHash, this.lang);
+        let responseData = await hcertValidation(greenPassHash, this.lang);
         let status = responseData.status;
         let responseBody = responseData.data;
         switch (status) {
@@ -524,7 +516,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
                 this.hasValidProof = true;
                 this.proofUploadFailed = false;
-                this.isInternalTest = internalTest;
                 this.isSelfTest = false;
 
                 if (this._("#text-switch"))
