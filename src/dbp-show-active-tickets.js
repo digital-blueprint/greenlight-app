@@ -1,4 +1,3 @@
-
 import {css, html} from 'lit-element';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
@@ -281,8 +280,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
 
     }
 
-
-
     /**
      * Sends a delete Ticket Request for the specific entry,
      * Checks the response and update the listview
@@ -521,7 +518,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     </div>
                 `)}
         `;
-        
+
         const additionalInformation = html`
         <div class="information-container ${classMap({hidden: this.hasValidProof || this.ticketLoading})}">
                                         <div class="${classMap({hidden: this.hasValidProof})}">
