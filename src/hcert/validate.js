@@ -121,7 +121,6 @@ export class Validator {
         let hcertData = this._verifier.verify(cert);
 
         let result = new ValidationResult();
-
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
             /** @type {RuleValidationResult} */
@@ -131,6 +130,8 @@ export class Validator {
                 result.isValid = true;
                 result.firstname = greenCertificate.nam.gn ?? '';
                 result.lastname = greenCertificate.nam.fn ?? '';
+                result.firstname_t = greenCertificate.nam.gnt ?? '';
+                result.lastname_t = greenCertificate.nam.fnt ?? '';
                 result.dob = greenCertificate.dob ?? '';
 
                 // according to the rules, returns null if it never becomes invalid

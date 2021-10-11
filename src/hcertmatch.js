@@ -87,9 +87,22 @@ function normalizeName(input) {
  * @param {string} s2 
  * @returns {number}
  */
-function compareNames(s1, s2)
-{
+function compareNames(s1, s2) {
     return stringSimilarity.compareTwoStrings(normalizeName(s1), normalizeName(s2));
+}
+
+function compareMultipleNames(s1, s2, limit) {
+    let firstNameSimilarity = 0;
+    for (let i = 0; i < s1.length; i++) {
+        for (let j = 0; j < s2.length; j++) {
+            firstNameSimilarity = compareNames(s1[i], s2[j]);
+            if (firstNameSimilarity >= limit)
+                break;
+        }
+        if (firstNameSimilarity >= limit)
+            break;
+    }
+    return firstNameSimilarity;
 }
 
 /**
@@ -102,13 +115,16 @@ function compareNames(s1, s2)
  *
  * @param {string} certFirstName
  * @param {string} certLastName
+ * @param {string} certFirstName_transliterate
+ * @param {string} certLastName_transliterate
  * @param {string} certDateOfBirth
  * @param {string} personFirstName
  * @param {string} personLastName
  * @param {string} personDateOfBirth
  * @returns {boolean} - returns if the person mathes with the other person
  */
-export function checkPerson(certFirstName, certLastName, certDateOfBirth, personFirstName, personLastName, personDateOfBirth) {
+export function checkPerson(certFirstName, certLastName, certFirstName_transliterate, certLastName_transliterate, certDateOfBirth, personFirstName, personLastName, personDateOfBirth) {
+
     let dateMatches = compareBirthDateStrings(certDateOfBirth, personDateOfBirth);
     if (dateMatches === false) {
         return false;
@@ -119,19 +135,16 @@ export function checkPerson(certFirstName, certLastName, certDateOfBirth, person
 
     // check firstname if there is one set in the certificate
     if (certFirstName !== "") {
-        let personFirstNameShorted = personFirstName.split(/\s+/);
-        let firstNameShorted = certFirstName.split(/\s+/);
-        let firstNameSimilarity = compareNames(personFirstNameShorted[0], firstNameShorted[0]);
+        let certFirstName_splitted = certFirstName.split(/[-\s+]/);
+        let personFirstName_splitted = personFirstName.split(/[-\s+]/);
 
-        if (personFirstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
-            firstNameSimilarity = compareNames(personFirstNameShorted[1], firstNameShorted[0]);
+        let firstNameSimilarity = compareMultipleNames(certFirstName_splitted, personFirstName_splitted, limit);
+
+        if (firstNameSimilarity < limit && certFirstName_transliterate) {
+            let certFirstName_transliterate_splitted = certFirstName_transliterate.split("<");
+            firstNameSimilarity = compareMultipleNames(certFirstName_transliterate_splitted, personFirstName_splitted, limit);
         }
-        if (firstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
-            firstNameSimilarity = compareNames(personFirstNameShorted[0], firstNameShorted[1]);
-        }
-        if (firstNameShorted[1] !== undefined && personFirstNameShorted[1] !== undefined && firstNameSimilarity <= limit) {
-            firstNameSimilarity = compareNames(personFirstNameShorted[1], firstNameShorted[1]);
-        }
+
         // return false if firstname isn't similar enough
         if (firstNameSimilarity < limit) {
             return false;
@@ -139,6 +152,10 @@ export function checkPerson(certFirstName, certLastName, certDateOfBirth, person
     }
     let lastNameSimilarity = compareNames(certLastName, personLastName);
 
+    if (lastNameSimilarity < limit && certLastName_transliterate) {
+        let certFirstName_transliterate_splitted = certLastName_transliterate.replace(/</g, " ");
+        lastNameSimilarity = compareNames(certFirstName_transliterate_splitted, personLastName);
+    }
     // return false if lastname isn't similar enough
     return lastNameSimilarity >= limit;
 }
