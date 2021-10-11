@@ -424,14 +424,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             .flex {
                 display: flex;
             }
-
-<<<<<<< HEAD
-            .flex-center {
-                justify-content: center;
-            }
-
-=======
->>>>>>> Refactor code of ticket
+            
             .hidden {
                 display: none;
             }
@@ -449,15 +442,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             and (orientation: portrait)
             and (max-width: 768px) {
 
-<<<<<<< HEAD
-
-
-=======
-
-
->>>>>>> Refactor code of ticket
-                
-
                 #qr-code-hash svg {
                     width: 100%;
                 }
@@ -468,8 +452,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     margin: auto;
                     box-sizing: border-box;
                 }
-
-            
             }
         `;
     }
@@ -574,19 +556,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                             </slot>
                                         </div>
                                     </div>
-<<<<<<< HEAD
-
         `;
 
         const ticketUI = this.getTicketUI(permissions, ticketList, additionalInformation);
-
-=======
-        `;
-        
-        
-        
-        const ticketUI = this.getTicketUI(permission, ticketList, additionalInformation);
->>>>>>> Refactor code of ticket
 
         return html`
 
@@ -603,11 +575,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             <div class="notification is-danger ${classMap({hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading()})}">
                 ${i18n.t('error-permission-message')}
             </div>
-<<<<<<< HEAD
             ${ticketUI}
-=======
-            ${ticketUI}   
->>>>>>> Refactor code of ticket
         `;
     }
 }
