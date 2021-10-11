@@ -489,7 +489,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     let person = await response.json();
 
                     // Make sure the person matches the proof
-                    if (!checkPerson(responseBody.firstname, responseBody.lastname, responseBody.dob, person.givenName, person.familyName, person.birthDate)) {
+                    if (!checkPerson(responseBody.firstname, responseBody.lastname, responseBody.firstname_t, responseBody.lastname_t, responseBody.dob, person.givenName, person.familyName, person.birthDate)) {
                         if (!preCheck) {
                             this.message = i18nKey('acquire-3g-ticket.not-same-person');
                         }
