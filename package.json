@@ -1,7 +1,7 @@
 {
   "name": "@dbp-topics/greenlight",
   "internalName": "dbp-greenlight",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "license": "LGPL-2.1-or-later",
   "repository": {
     "type": "git",
