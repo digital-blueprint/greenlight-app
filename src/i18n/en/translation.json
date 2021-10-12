@@ -28,10 +28,13 @@
     "manage-tickets-text": "Active tickets could be found. You can manage your active tickets at: ",
     "manual-uploading-message": "Search for valid QR code...",
     "manually-button-text": "Upload File",
+    "no-photo-body": "There is no valid photo of your student or staff ID in {{serviceName}}. Please contact the studies department.",
     "no-qr-code": "No QR code found!",
     "not-same-person": "The person in the uploaded evidence does not match the person logged in.",
     "other-error-body": "An unknown error has occurred.",
     "other-error-title": "Error!",
+    "photo-not-available-body": "No photo of your student or staff ID card could be loaded from {{serviceName}}. Please try again at a later time.",
+    "photo-not-available-title": "Ticket creation failed!",
     "place-select-title": "Select a place",
     "qr-button-text": "Scan QR code",
     "remove-proof": "Remove evidence",
@@ -47,7 +50,7 @@
   "delete-btn-text": "Delete",
   "entry-ticket": "Entry Ticket",
   "error-login-message": "You need to be logged in to use this function!",
-  "error-permission-message": "This application is currently only available for students!",
+  "error-permission-message": "This function is currently only available for students!",
   "file-sink": {
     "modal-close": "Close"
   },

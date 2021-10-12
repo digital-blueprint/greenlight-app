@@ -391,7 +391,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             case 400: // Invalid input
                 switch (responseBody['relay:errorId']) {
-                    case 'greenlight:consent-assurance-not-true':
+                    case 'greenlight:consent-assurance-not-true': // The content of the consentAssurance attribute was not true.
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: consent-assurance-not-true', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
@@ -400,7 +400,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             "timeout": 5,
                         });
                         break;
-                    case 'greenlight:additional-information-not-valid':
+                    case 'greenlight:additional-information-not-valid': // The content of the additionalInformation attribute was not valid.
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'InvalidInput: additional-information-not-valid', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.other-error-title'),
@@ -423,7 +423,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             case 403: // Forbidden - Access Denied
                 switch (responseBody['relay:errorId']) {
-                    case 'greenlight:current-person-not-found':
+                    case 'greenlight:current-person-not-found': // Current person wasn't found.
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Access Denied: current-person-not-found', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
@@ -432,7 +432,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             "timeout": 5,
                         });
                         break;
-                    case 'greenlight:additional-information-not-decoded':
+                    case 'greenlight:additional-information-not-decoded': // The content of the additionalInformation attribute could not be decoded.
                     default:
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Access Denied: additional-information-not-decoded', this.location, response);
                         send({
@@ -444,7 +444,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                         break;
                 }
                 break;
-                
 
             case 422: // Unprocessable entity
                 this.sendErrorAnalyticsEvent('CreateTicketRequest', 'UnprocessableEntity', this.location, response);
@@ -458,16 +457,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             case 500: // Can't process Data
                 switch (responseBody['relay:errorId']) {
-                    case 'greenlight:current-person-no-photo':
-                        this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: current-person-no-photo', this.location, response);
-                        send({
-                            "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
-                            "type": "danger",
-                            "timeout": 5,
-                        });
-                        break;
-                    case 'greenlight:permit-not-created':
+                    case 'greenlight:permit-not-created': // The permit could not be created.
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: permit-not-created', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
@@ -476,7 +466,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             "timeout": 5,
                         });
                         break;
-                    case 'greenlight:photo-service-error':
+                    case 'greenlight:photo-service-error': // The photo service had an error!
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: photo-service-error', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
@@ -499,11 +489,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             case 503: // Service unavailable
                 switch (responseBody['relay:errorId']) {
-                    case 'greenlight:current-person-no-photo':
+                    case 'greenlight:current-person-no-photo': // Photo for current person could not be loaded!
                         this.sendErrorAnalyticsEvent('CreateTicketRequest', 'Service unavailable: current-person-no-photo', this.location, response);
                         send({
                             "summary": i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            "body": i18n.t('acquire-3g-ticket.photo-not-available-body', { serviceName: this.serviceName }),
+                            "body": i18n.t('acquire-3g-ticket.no-photo-body', { serviceName: this.serviceName }),
                             "type": "danger",
                             "timeout": 5,
                         });

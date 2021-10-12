@@ -28,10 +28,13 @@
     "manage-tickets-text": "Es wurden aktive Tickets gefunden. Sie können Ihre aktiven Tickets vorzeigen oder löschen unter: ",
     "manual-uploading-message": "Suche nach gültigem QR-Code...",
     "manually-button-text": "Datei hochladen",
+    "no-photo-body": "Es existiert kein gültiges Foto von Ihrem Studierenden- oder Bedienstetenausweis in {{serviceName}}. Bitte wenden Sie sich an die Studienabteilung.",
     "no-qr-code": "Kein QR-Code gefunden!",
     "not-same-person": "Der hochgeladene Nachweis konnte der angemeldeten Person nicht zugeordnet werden.",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
     "other-error-title": "Fehler!",
+    "photo-not-available-body": "Es konnte kein Foto von Ihrem Studierenden- oder Bedienstetenausweis aus {{serviceName}} geladen werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+    "photo-not-available-title": "Ticketerstellung fehlgeschlagen!",
     "place-select-title": "Ticket für",
     "qr-button-text": "QR-Code scannen",
     "remove-proof": "Nachweis entfernen",
@@ -47,7 +50,7 @@
   "delete-btn-text": "Löschen",
   "entry-ticket": "Eintrittsticket",
   "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
-  "error-permission-message": "Diese Applikation ist aktuell nur für Studierende verfügbar!",
+  "error-permission-message": "Diese Funktion ist aktuell nur für Studierende verfügbar!",
   "file-sink": {
     "modal-close": "Schließen"
   },
