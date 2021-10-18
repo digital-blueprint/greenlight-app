@@ -70,7 +70,6 @@
     "3-g-evidence": "3-G-evidence",
     "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
     "3-g-evidence-greenpass": "3-G-evidence: Green Pass found",
-    "3-g-evidence-internal-test": "University-internal test imported on this device and valid",
     "3-g-evidence-invalid": "No valid 3-G-evidence found on this device",
     "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
     "3-g-evidence-maximize-saving": "Add the app to the home screen of your smartphone to maximize the storage time of the 3-G-evidence.",
@@ -79,8 +78,6 @@
     "delete-ticket-notfound-title": "Ticket not found!",
     "delete-ticket-success-body": "The ticket for {{place}} was successfully deleted.",
     "delete-ticket-success-title": "Ticket successfully deleted!",
-    "internal-test-found": "University-internal test found",
-    "internal-test-text": "The university-internal test was validated during the import. A manual check is only possible with the original document.",
     "invalid-evidence": "If the 3-G-evidence is no longer valid, you can create a new ticket and upload a new evidence.",
     "logged-out-body": "The session has expired. Please log in again.",
     "logged-out-title": "Session expired!",
@@ -99,7 +96,7 @@
   },
   "show-btn-text": "Show",
   "show-reference-ticket": {
-    "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the 3-G-evidence imported on the controlled person\u0027s device. The reference ticket does not entitle you to enter rooms at the university.",
+    "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the 3-G-evidence imported on the controlled person's device. The reference ticket does not entitle you to enter rooms at the university.",
     "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
     "information-container-headline": "Information about 3-G-evidence",
     "place-name": "Place"
