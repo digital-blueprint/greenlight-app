@@ -171,80 +171,53 @@ Note that you will need a Keycloak server along with a client id for the domain 
 You use templates tags to inject slots into the activity.
 These templates will be converted to div containers when the page is loaded and will not show up before that.
 
-##### found-university-internal-test
+##### description
 
-The content of this slot will be shown in a ticket if a university internal test is found and valid. 
-Without this slot "university internal test" is shown here.
+The content of this slot will be shown in the ticket reference activity description.
 
 Example:
 
 ```html
 <template id="dbp-show-active-tickets">
-  <div slot="found-university-internal-test">
+  <div slot="description">
     <dbp-translated subscribe="lang">
       <div slot="de">
-        TU Graz Test gefunden
+        <p>
+          Zeigt alle Tickets angemeldeter Benutzer*innen.
+        </p>
       </div>
       <div slot="en">
-        Found TU Graz test
+        <p>
+          Shows all tickets for logged in users.
+        </p>
       </div>
     </dbp-translated>
   </div>
 </template>
 ```
 
-##### internal-test-text
+##### ticket-place
 
-The content of this slot will be shown in a ticket. 
-Without this slot "university internal test" default text is shown here.
+The content of this slot will be shown as the ticket place.
 
 Example:
 
 ```html
 <template id="dbp-show-active-tickets">
-  <div slot="internal-test-text">
+  <div slot="ticket-place">
     <dbp-translated subscribe="lang">
       <div slot="de">
-        Der Test der Teststraße der TU Graz wurde beim Import validiert. Eine manuelle Kontrolle ist nur mit dem Originaldokument möglich.
+        <p>
+          Tu Graz
+        </p>
       </div>
       <div slot="en">
-        The test of the test lane at TU Graz was validated during the import. A manual check is only possible with the original document.
+        <p>
+          TU Graz
+        </p>
       </div>
     </dbp-translated>
   </div>
-</template>
-```
-
-##### internal-test-valid
-
-The content of this slot will be shown in the overview of the tickets.
-Without this slot "university internal test" default text is shown here.
-
-Example:
-
-```html
-
-<template id="dbp-show-active-tickets">
-    <div slot="internal-test-valid">
-        <dbp-translated subscribe="lang">
-            <div slot="de">
-                <b>
-                    3-G-Nachweis:
-                    <span class="green">
-                        TU Graz Test auf diesem Gerät importiert und gültig
-                    </span>
-                </b>
-            </div>
-            <div slot="en">
-                <b>
-                    3-G-evidence:
-                    <span class="green">
-                        TU Graz test imported on this device and valid
-                    </span>
-                </b>
-            </div>
-        </dbp-translated>
-    </div>
 </template>
 ```
 
@@ -290,6 +263,29 @@ Example:
 </template>
 ```
 
+##### 3-g-evidence-invalid-text
+
+Use this slot and add a link to faq
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="3-g-evidence-invalid-text">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <a href="/link-to-faq">FAQ</a>
+        Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der Nachweis ist nicht mehr gültig oder die Applikation wurde für einen längeren Zeitraum nicht genutzt.      
+      </div>
+      <div slot="en">
+        <a href="/link-to-faq">FAQ</a>
+        You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.      
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
 ### dbp-show-reference-ticket
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
@@ -325,6 +321,56 @@ Example:
       <div slot="en">
         <p>
           Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the TU Graz.
+        </p>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### place
+
+The content of this slot will be shown as the ticket headline in the modal dialogue.
+
+Example:
+
+```html
+<template id="dbp-show-reference-ticket">
+  <div slot="place">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <p>
+          Ticket: Tu Graz
+        </p>
+      </div>
+      <div slot="en">
+        <p>
+          Ticket: Tu Graz
+        </p>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### ticket-place
+
+The content of this slot will be shown as the ticket place in the ticket overview.
+
+Example:
+
+```html
+<template id="dbp-show-reference-ticket">
+  <div slot="ticket-place">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+        <p>
+          Tu Graz
+        </p>
+      </div>
+      <div slot="en">
+        <p>
+          TU Graz
         </p>
       </div>
     </dbp-translated>
