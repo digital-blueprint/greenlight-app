@@ -485,7 +485,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                             Authorization: "Bearer " + this.auth.token
                         },
                     };
-                    let response = await this.httpGetAsync(this.entryPointUrl + '/people/' + encodeURIComponent(personId), options);
+                    let response = await this.httpGetAsync(this.entryPointUrl + '/base/people/' + encodeURIComponent(personId), options);
                     let person = await response.json();
 
                     // Make sure the person matches the proof
