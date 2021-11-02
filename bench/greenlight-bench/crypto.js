@@ -1,12 +1,5 @@
 
-const { CompactEncrypt } = require('jose/jwe/compact/encrypt');
-const { parseJwk } = require('jose/jwk/parse');
-const {encode} = require('jose/util/base64url');
-
-// const jose = require('node-jose');
-// const jose = require('jose');
-
-// console.log("jose", jose);
+const { CompactEncrypt, importJWK, base64url } = require('jose');
 
 /**
  * This "encrypts" the additional information string using the current oauth2
@@ -28,7 +21,7 @@ const {encode} = require('jose/util/base64url');
  */
 async function encodeAdditionalInformation(token, additionalInformation) {
     const encoder = new TextEncoder();
-    const key = await parseJwk({kty: 'oct', k: encode(token)}, 'PBES2-HS256+A128KW');
+    const key = await importJWK({kty: 'oct', k: base64url.encode(token)}, 'PBES2-HS256+A128KW');
     const jwe = await new CompactEncrypt(encoder.encode(additionalInformation))
         .setProtectedHeader({alg: 'PBES2-HS256+A128KW', enc: 'A256GCM'})
         .encrypt(key);
