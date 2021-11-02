@@ -1,6 +1,4 @@
-import { CompactEncrypt } from 'jose/jwe/compact/encrypt';
-import { parseJwk } from 'jose/jwk/parse';
-import {encode} from 'jose/util/base64url';
+import { CompactEncrypt, importJWK, base64url } from 'jose';
 
 /**
  * @param {string} passphraseKey 
@@ -128,7 +126,7 @@ export async function decrypt(ciphertext, key, iv) {
  */
 export async function encodeAdditionalInformation(token, additionalInformation) {
     const encoder = new TextEncoder();
-    const key = await parseJwk({kty: 'oct', k: encode(token)}, 'PBES2-HS256+A128KW');
+    const key = await importJWK({kty: 'oct', k: base64url.encode(token)}, 'PBES2-HS256+A128KW');
     const jwe = await new CompactEncrypt(encoder.encode(additionalInformation))
         .setProtectedHeader({alg: 'PBES2-HS256+A128KW', enc: 'A256GCM'})
         .encrypt(key);
