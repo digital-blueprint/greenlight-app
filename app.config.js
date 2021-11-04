@@ -11,7 +11,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
-        selfTestValid: true,
+        selfTestValid: false,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     bs: {
