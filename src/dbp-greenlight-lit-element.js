@@ -534,8 +534,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.detailedError = responseData.error;
                 if (!preCheck) {
+                    this.detailedError = responseData.error;
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
                     this.message = i18nKey('acquire-3g-ticket.invalid-document');
                 }
@@ -544,8 +544,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.detailedError = responseData.error;
                 if (!preCheck) {
+                    this.detailedError = responseData.error;
                     this.message = i18nKey('acquire-3g-ticket.invalid-document');
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
                 }
@@ -555,8 +555,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 await this.sendErrorAnalyticsEvent('HCertValidation', 'UnknownError', '', responseData);
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
-                this.detailedError = responseData.error;
                 if (!preCheck) {
+                    this.detailedError = responseData.error;
                     this.message = i18nKey('acquire-3g-ticket.invalid-document');
                     this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
                 }

@@ -1089,7 +1089,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 ${i18n.t(this.message)}
                             </div>
                             <div class="no-proof-found ${classMap({hidden: !this.proofUploadFailed || this.loading})}">
-                                <!-- <dbp-icon name='cross-circle' class="close-icon"></dbp-icon> -->
                                 <div class="close-icon">${i18n.t(this.message, { place: this.location })}</div>
                                 ${this.detailedError ? html`
                                     <dbp-info-tooltip class="info-tooltip"
