@@ -16,6 +16,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         this.searchHashString = '';
         this.searchSelfTestStringArray = '';
+        this.selfTestValid = false;
     }
 
     static get properties() {
@@ -25,6 +26,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
             searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
+            selfTestValid: {type: Boolean, attribute: 'gp-self-test-valid'},
         };
     }
 
@@ -284,9 +286,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return !gpAlreadySend;
     }
 
-    async checkAlreadySend(data, reset, wrongQrArray) {
+    async checkAlreadySend(data, reset, wrongQrArray, title = "", body = "", message = "") {
         const i18n = this._i18n;
-
+        title = title === "" ? i18n.t('acquire-3g-ticket.invalid-title') : title;
+        body = body === "" ? i18n.t('acquire-3g-ticket.invalid-body'): body;
         let checkAlreadySend = await wrongQrArray.includes(data);
 
         if (checkAlreadySend) {
@@ -301,14 +304,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         wrongQrArray.push(data);
-        send({
-            "summary": i18n.t('acquire-3g-ticket.invalid-title'),
-            "body": i18n.t('acquire-3g-ticket.invalid-body'),
-            "type": "danger",
-            "timeout": 5,
-        });
-        this.proofUploadFailed = true;
-        this.message = i18nKey('acquire-3g-ticket.invalid-qr-body');
+        if (!this.preCheck) {
+            send({
+                "summary": title,
+                "body": body,
+                "type": "danger",
+                "timeout": 5,
+            });
+            this.proofUploadFailed = true;
+            this.message = message !== "" ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
+        }
     }
 
     /**
@@ -384,13 +389,20 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         let selfTestURL = '';
-        const array = this.searchSelfTestStringArray.split(",");
-        for (const selfTestString of array) {
-            check = await this.decodeUrlWithoutCheck(data, selfTestString);
-            if (check) {
-                selfTestURL = data;
-                break;
+        if (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== "") {
+            const array = this.searchSelfTestStringArray.split(",");
+            for (const selfTestString of array) {
+                check = await this.decodeUrlWithoutCheck(data, selfTestString);
+                if (check) {
+                    selfTestURL = data;
+                    break;
+                }
             }
+        }
+        if (check && selfTestURL !== '' && !this.selfTestValid) {
+            const i18n = this._i18n;
+            await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR ? this.wrongQR : [], i18n.t('self-test-not-supported-title'), i18n.t('self-test-not-supported-body'), i18n.t('self-test-not-supported-title'));
+            return;
         }
 
         if (check && selfTestURL !== '') {

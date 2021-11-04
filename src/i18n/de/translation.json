@@ -66,6 +66,8 @@
   "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
   "reload-error-title": "Aktualisierung fehlgeschlagen",
   "reload-failed": "Automatische Aktualisierung fehlgeschlagen",
+  "self-test-not-supported-body": "Antigen-Tests mit Selbstabnahme („Wohnzimmertests“) nicht mehr als Eintrittsnachweis zulässig.",
+  "self-test-not-supported-title": "Selbsttests werden nicht unterstützt",
   "show-active-tickets": {
     "3-g-evidence": "3-G-Nachweis",
     "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",

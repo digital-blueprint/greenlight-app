@@ -145,6 +145,7 @@ export default (async () => {
                     CSP: config.CSP,
                     gpSearchQRString: config.gpSearchQRString,
                     gpSearchSelfTestStringArray: config.gpSearchSelfTestStringArray,
+                    selfTestValid: config.selfTestValid,
                     showPreselected: config.showPreselected,
                     preselectedOption: config.preselectedOption,
                     serviceName: config.serviceName,

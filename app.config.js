@@ -11,6 +11,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
+        selfTestValid: true,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     bs: {
@@ -25,6 +26,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
+        selfTestValid: false,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     development: {
@@ -39,6 +41,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
+        selfTestValid: false,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     demo: {
@@ -53,6 +56,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
+        selfTestValid: false,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     production: {
@@ -67,6 +71,7 @@ export default {
         nextcloudName: 'TU Graz cloud',
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
+        selfTestValid: false,
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
 };

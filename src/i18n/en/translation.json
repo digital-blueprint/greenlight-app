@@ -66,6 +66,8 @@
   "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
   "reload-error-title": "Update failed",
   "reload-failed": "Automatic update failed",
+  "self-test-not-supported-body": "Antigen tests with self-acceptance (\"self-tests\") are no longer permitted as proof of entry.",
+  "self-test-not-supported-title": "Self-tests are not supported",
   "show-active-tickets": {
     "3-g-evidence": "3-G-evidence",
     "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
@@ -96,7 +98,7 @@
   },
   "show-btn-text": "Show",
   "show-reference-ticket": {
-    "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the 3-G-evidence imported on the controlled person's device. The reference ticket does not entitle you to enter rooms at the university.",
+    "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the 3-G-evidence imported on the controlled person\u0027s device. The reference ticket does not entitle you to enter rooms at the university.",
     "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
     "information-container-headline": "Information about 3-G-evidence",
     "place-name": "Place"
