@@ -72,7 +72,9 @@ Note that you will need a Keycloak server along with a client id for the domain 
 - `gp-search-hash-string`: String used in the qr code to determine if the qr code is a valid 3G proof
   - example `gp-search-hash-string="HC1"`
 - `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
-  - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
+  - example `gp-search-self-test-string-array="https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id="`
+- `gp-self-test-valid`: Boolean attribute: if self tests are valid or not
+  - example `gp-self-test-valid`
 - `preselected-option`: String used in the Ticket, to show where it should be valid
   - example `preselected-option="University"`
 - `file-handling-enabled-targets` (optional, default: `local`): sets which destination are enabled
@@ -163,6 +165,8 @@ Note that you will need a Keycloak server along with a client id for the domain 
   - example `gp-search-hash-string="HC1"`
 - `gp-search-self-test-string-array`: String used in the qr code to determine if the qr code is a valid selfetestlink. Link prefixes, seperated by comma
   - example `gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id='`
+- `gp-self-test-valid`: Boolean attribute: if self tests are valid or not
+  - example `gp-self-test-valid`
 - `preselected-option`: String used in the Ticket, to show where it should be valid
   - example `preselected-option="University"`
 
