@@ -113,7 +113,9 @@ wkrqDrMdZHZ39qb+Jf/E
  */
 export async function fetchTrustData(baseUrl)
 {
-    let keys = ['rules', 'rulessig', 'trustlist', 'trustlistsig', 'valuesets', 'valuesetssig'];
+    let keys = ['rules.json', 'trustlist', 'trustlistsig', 'valuesets', 'valuesetssig'];
+    // No longer used...
+    // keys.push('rules', 'rulessig');
     let data = {};
 
     for(let key of keys) {

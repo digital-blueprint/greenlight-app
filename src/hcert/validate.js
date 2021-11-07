@@ -1,5 +1,5 @@
 import {importHCert, fetchTrustData, trustAnchorProd, trustAnchorTest} from './utils.js';
-import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
+import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeJSONBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {createInstance} from '../i18n.js';
@@ -70,7 +70,7 @@ export class Validator {
             return new hcert.VerifierTrustList(
                 this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
         });
-        this._businessRules = await decodeBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
+        this._businessRules = await decodeJSONBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
         // XXX: We don't do overrides atm, so don't fetch them
         // await this._applyRulesOverrides();
         this._businessRules = this._businessRules.filter('AT', 'ET');

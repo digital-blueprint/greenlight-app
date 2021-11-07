@@ -73,15 +73,15 @@ suite('hcert validate', () => {
         assert.equal(res.firstname, 'Gabriele');
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
-        assert.equal(res.validUntil.toISOString(), '2021-07-16T12:34:55.999Z');
+        assert.equal(res.validUntil.toISOString(), '2021-07-15T12:34:55.999Z');
 
         // Right before it becomes invalid
-        checkDate = new Date('2021-07-16T12:34:55.999Z');
+        checkDate = new Date('2021-07-15T12:34:55.999Z');
         res = await test.validate(TEST_TEST, checkDate, 'en');
         assert.isTrue(res.isValid);
 
         // Now its invalid
-        checkDate = new Date('2021-07-16T12:34:56Z');
+        checkDate = new Date('2021-07-15T12:34:56Z');
         res = await test.validate(TEST_TEST, checkDate, 'en');
         assert.isFalse(res.isValid);
     });

@@ -56,10 +56,6 @@ export class BusinessRules {
 
     constructor()
     {
-        /** @type {Date} */
-        this.validFrom = null;
-        /** @type {Date} */
-        this.validUntil = null;
         this.rules = [];
     }
 
@@ -111,8 +107,6 @@ export class BusinessRules {
 
         let br = new BusinessRules();
         br.rules = filtered;
-        br.validFrom = this.validFrom;
-        br.validUntil = this.validUntil;
         return br;
     }
 }
@@ -137,10 +131,32 @@ export async function decodeBusinessRules(hcert, trustData, trustAnchor, date)
     }
     let br = new BusinessRules();
     br.rules = result;
-    br.validFrom = new Date(decoded.first.validFrom);
-    br.validUntil = new Date(decoded.first.validUntil);
     return br;
 }
+
+/**
+ * Decode the Austrian version of the business rules from JSON instead of CBOR
+ * 
+ * @param {object} hcert 
+ * @param {object} trustData 
+ * @param {string} trustAnchor 
+ * @param {Date} date 
+ * @returns {BusinessRules}
+ */
+ export async function decodeJSONBusinessRules(hcert, trustData, trustAnchor, date)
+ {
+    let dataView = new DataView(trustData['rules.json']);
+    let decoder = new TextDecoder('utf8');
+    let decoded = JSON.parse(decoder.decode(dataView));
+    let result = [];
+    for (const entry of decoded.r) {
+        result.push(JSON.parse(entry.r));
+    }
+    let br = new BusinessRules();
+    br.rules = result;
+    return br;
+}
+
 
 /**
  * Returns a rule description useable for an error message
