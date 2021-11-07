@@ -7,12 +7,14 @@ TRUST_DIR="${DIR}/test"
 DGC_TRUST_URL="https://dgc-trusttest.qr.gv.at"
 DCC_RULES_URL="https://digital-blueprint.github.io/dcc-at-rule-sets/sets"
 RULE_SET="${1:-TUGRAZ}"
+TRUST_FILES=("trustlist" "trustlistsig" "rules" "rulessig" "valuesets" "valuesetssig")
 
-mkdir -p "${TRUST_DIR}"
-curl --silent --fail "${DCC_RULES_URL}/${RULE_SET}.json" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/rules.json"
-curl --silent --fail "${DGC_TRUST_URL}/trustlist" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/trustlist"
-curl --silent --fail "${DGC_TRUST_URL}/trustlistsig" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/trustlistsig"
-curl --silent --fail "${DGC_TRUST_URL}/rules" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/rules"
-curl --silent --fail "${DGC_TRUST_URL}/rulessig" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/rulessig"
-curl --silent --fail "${DGC_TRUST_URL}/valuesets" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/valuesets"
-curl --silent --fail "${DGC_TRUST_URL}/valuesetssig" -o "${DIR}/_temp" && mv "${DIR}/_temp" "${TRUST_DIR}/valuesetssig"
+TEMP_DIR="${TRUST_DIR}/_temp"
+rm -Rf "${TEMP_DIR}"
+mkdir -p "${TEMP_DIR}"
+curl --silent --fail "${DCC_RULES_URL}/${RULE_SET}.json" -o "${TEMP_DIR}/rules.json"
+for name in ${TRUST_FILES[*]}; do
+    curl --silent --fail "${DGC_TRUST_URL}/${name}" -o "${TEMP_DIR}/${name}"
+done
+mv "${TEMP_DIR}/"* "${TRUST_DIR}"
+rm -Rf "${TEMP_DIR}"
