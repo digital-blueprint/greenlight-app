@@ -212,6 +212,7 @@ export default (async () => {
                     {src: 'assets/images/*', dest: 'dist/images'},
                     {src: 'assets/manifest.json', dest: 'dist', rename: pkg.internalName + '.manifest.json'},
                     {src: 'assets/silent-check-sso.html', dest: 'dist'},
+                    {src: 'assets/update.sh', dest: 'dist'},
                     {src: 'assets/dbp-greenlight-coming-soon.html', dest: 'dist'},
                     {src: 'assets/hcert-kotlin.js*', dest: 'dist/' + await getDistPath(pkg.name)},
                     {src: 'assets/internal', dest: 'dist/' + await getDistPath(pkg.name)},
