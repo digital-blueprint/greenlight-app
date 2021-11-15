@@ -49,10 +49,26 @@ If you want to update the DBP greenlight App in the current folder you can call:
 npx @digital-blueprint/cli update-app greenlight
 ```
 
-## Cron job
+## Cron job for Updating the Trust Data
 
-Before you can use this app you need to download the business rules. There is a script `assets/dgc-trust/update.sh`
-which can do this. You need to call it regularly in a cron job.
+The app depends on the official trust list, value sets and business rules which
+are provided via
+https://github.com/Federal-Ministry-of-Health-AT/green-pass-overview
+
+In addition it depends on a set of business rules which are maintained at
+https://github.com/digital-blueprint/dcc-at-rule-sets
+
+Both data sets need to be updated regularly via a cron job.
+
+```
+0    *    *    *    *     /<my-path>/greenlight-app/public/app/update.sh TUGRAZ
+```
+
+The first argument passed to update.sh defines the rule set which should be
+downloaded. The script depends on `curl` being installed.
+
+NOTE: Failing to update the data will result in signatures expiring after 2 days
+which breaks the core functionality of the app.
 
 ## Activities
 
