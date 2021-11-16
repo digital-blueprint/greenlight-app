@@ -31,7 +31,7 @@ Jump to <https://localhost:8001> and you should get a Single Sign On login page.
 If you want to install the DBP greenlight App in a new folder `greenlight-app` you can call:
 
 ```bash
-npx @digital-blueprint/cli install-app greenlight greenlight-app
+npx @digital-blueprint/cli install-app greenlight greenlight-app /
 ```
 
 Afterwards you can point your Apache web-server to `greenlight-app/public`.
