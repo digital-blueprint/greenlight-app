@@ -12,9 +12,9 @@ TRUST_FILES=("trustlist" "trustlistsig" "rules" "rulessig" "valuesets" "valueset
 TEMP_DIR="${TRUST_DIR}/_temp"
 rm -Rf "${TEMP_DIR}"
 mkdir -p "${TEMP_DIR}"
-curl --silent --fail "${DCC_RULES_URL}/${RULE_SET}.json" -o "${TEMP_DIR}/rules.json"
+curl --max-time 15 --silent --show-error --fail "${DCC_RULES_URL}/${RULE_SET}.json" -o "${TEMP_DIR}/rules.json"
 for name in ${TRUST_FILES[*]}; do
-    curl --silent --fail "${DGC_TRUST_URL}/${name}" -o "${TEMP_DIR}/${name}"
+    curl --max-time 15 --silent --show-error --fail "${DGC_TRUST_URL}/${name}" -o "${TEMP_DIR}/${name}"
 done
 mv "${TEMP_DIR}/"* "${TRUST_DIR}"
 rm -Rf "${TEMP_DIR}"
