@@ -1702,9 +1702,9 @@ caniuse-lite@^1.0.30001271:
   integrity sha512-+Nkvv0fHyhISkiMIjnyjmf5YJcQ1IQHZN6U9TLUMroWR38FNwpsC51Gb68yueafX1V6ifOisInSgP9WJFS13ew==
 
 certlogic-js@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/certlogic-js/-/certlogic-js-1.0.2.tgz#06a145b8207090699a008bdd5c85afb8f2ce0add"
-  integrity sha512-/m+NsqPft+uOOyIz6XViyO6xnzqrK6iMytLGzPiAyMk1fYMBd+ZlgNvO15bKPwjXfSy90u6E3Tlc6L25qRZNgQ==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/certlogic-js/-/certlogic-js-1.0.3.tgz#ef9704a5f60093fba414fa0b931eb9504f78cb56"
+  integrity sha512-xehKfgaIErwto4tlqgZCx79K7k6ipZMm3mpvokXrVrWw1FKSedDVQGrnBKknzqWG22wFmeu3bFPZPbEP+mixSw==
 
 chai-as-promised@^7.1.1:
   version "7.1.1"
