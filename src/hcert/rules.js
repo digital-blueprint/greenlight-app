@@ -183,7 +183,7 @@ export class RuleValidationResult {
 /**
  * Validates a HCERT against specific business rules, value sets and the current time
  * 
- * Will throw an error in case the HCERT breaks one or more rules.
+ * Will set isValid to false in case the HCERT breaks one or more rules.
  * 
  * @param {object} cert
  * @param {BusinessRules} businessRules 
