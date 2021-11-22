@@ -2,7 +2,7 @@ import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
 import {getStackTrace} from "@dbp-toolkit/common/error";
 import {send} from "@dbp-toolkit/common/notification";
 import {parseGreenPassQRCode, i18nKey} from "./utils";
-import {hcertValidation} from "./hcert";
+import {defaultValidator, ValidationResult} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
 import {encodeAdditionalInformation} from "./crypto.js";
 import * as storage from "./storage.js";
@@ -483,97 +483,93 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
 
-        let responseData = await hcertValidation(greenPassHash, this.lang);
-        let status = responseData.status;
-        let responseBody = responseData.data;
-        switch (status) {
-            case 201:
-                if (this.auth) {
-                    // Fetch the currently logged in person
-                    let personId = this.auth['person-id'];
-                    const options = {
-                        method: 'GET',
-                        headers: {
-                            Authorization: "Bearer " + this.auth.token
-                        },
-                    };
-                    let response = await this.httpGetAsync(this.entryPointUrl + '/base/people/' + encodeURIComponent(personId), options);
-                    let person = await response.json();
-
-                    // Make sure the person matches the proof
-                    if (!checkPerson(responseBody.firstname, responseBody.lastname, responseBody.firstname_t, responseBody.lastname_t, responseBody.dob, person.givenName, person.familyName, person.birthDate)) {
-                        if (!preCheck) {
-                            this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                            this.message = i18nKey('acquire-3g-ticket.not-same-person');
-                        }
-                        this.proofUploadFailed = true;
-                        this.hasValidProof = false;
-                        await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
-                        return;
-                    }
-                }
-
-                if (this._("#trust-button") && this._("#trust-button").checked) {
-                    await this.encryptAndSaveHash();
-                }
-                this.person.firstname = responseBody.firstname;
-                this.person.lastname = responseBody.lastname;
-                this.person.dob = responseBody.dob;
-                this.person.validUntil = responseBody.validUntil;
-
-                if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
-                    this.stopQRReader();
-                    this.QRCodeFile = null;
-                    this.showQrContainer = false;
-                }
-
-                this.hasValidProof = true;
-                this.proofUploadFailed = false;
-                this.isSelfTest = false;
-
-                if (this._("#text-switch"))
-                    this._("#text-switch")._active = "";
-                this.showCreateTicket = true;
-
-                if (preCheck) {
-                    this.message = i18nKey('acquire-3g-ticket.found-valid-3g-preCheck');
-                } else {
-                    this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
-                }
-                await this.sendSuccessAnalyticsEvent('HCertValidation', 'Success', '');
-                break;
-            case 422: // HCert has expired
-                await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '', responseData);
-                this.proofUploadFailed = true;
-                this.hasValidProof = false;
-                if (!preCheck) {
-                    this.detailedError = responseData.error;
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
-                }
-                break;
-            case 500: // Can't process Data
-                await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '', responseData);
-                this.proofUploadFailed = true;
-                this.hasValidProof = false;
-                if (!preCheck) {
-                    this.detailedError = responseData.error;
-                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                }
-                break;
-            // Error: something else doesn't work
-            default:
-                await this.sendErrorAnalyticsEvent('HCertValidation', 'UnknownError', '', responseData);
-                this.proofUploadFailed = true;
-                this.hasValidProof = false;
-                if (!preCheck) {
-                    this.detailedError = responseData.error;
-                    this.message = i18nKey('acquire-3g-ticket.invalid-document');
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-                }
-                break;
+        /** @type {ValidationResult} */
+        let res;
+        try {
+            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
+        } catch (error) {
+            // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
+            console.log(error);
+            await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '');
+            this.proofUploadFailed = true;
+            this.hasValidProof = false;
+            if (!preCheck) {
+                this.detailedError = error.message;
+                this.message = i18nKey('acquire-3g-ticket.invalid-document');
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+            }
+            return;
         }
+
+        // HCert has expired or is invalid
+        if (!res.isValid) {
+            await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '');
+            this.proofUploadFailed = true;
+            this.hasValidProof = false;
+            if (!preCheck) {
+                this.detailedError = res.error;
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                this.message = i18nKey('acquire-3g-ticket.invalid-document');
+            }
+            return;
+        }
+
+        // HCert is valid
+        console.assert(res.isValid);
+
+        if (this.auth) {
+            // Fetch the currently logged in person
+            let personId = this.auth['person-id'];
+            const options = {
+                method: 'GET',
+                headers: {
+                    Authorization: "Bearer " + this.auth.token
+                },
+            };
+            let response = await this.httpGetAsync(this.entryPointUrl + '/base/people/' + encodeURIComponent(personId), options);
+            let person = await response.json();
+
+            // Make sure the person matches the proof
+            if (!checkPerson(res.firstname, res.lastname, res.firstname_t, res.lastname_t, res.dob, person.givenName, person.familyName, person.birthDate)) {
+                if (!preCheck) {
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
+                }
+                this.proofUploadFailed = true;
+                this.hasValidProof = false;
+                await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
+                return;
+            }
+        }
+
+        if (this._("#trust-button") && this._("#trust-button").checked) {
+            await this.encryptAndSaveHash();
+        }
+        this.person.firstname = res.firstname;
+        this.person.lastname = res.lastname;
+        this.person.dob = res.dob;
+        this.person.validUntil = res.validUntil;
+
+        if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
+            this.stopQRReader();
+            this.QRCodeFile = null;
+            this.showQrContainer = false;
+        }
+
+        this.hasValidProof = true;
+        this.proofUploadFailed = false;
+        this.isSelfTest = false;
+
+        if (this._("#text-switch"))
+            this._("#text-switch")._active = "";
+        this.showCreateTicket = true;
+
+        if (preCheck) {
+            this.message = i18nKey('acquire-3g-ticket.found-valid-3g-preCheck');
+        } else {
+            this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
+        }
+        await this.sendSuccessAnalyticsEvent('HCertValidation', 'Success', '');
     }
 
     async persistStorageMaybe() {

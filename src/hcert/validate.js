@@ -16,7 +16,11 @@ export class ValidationResult {
         /** @type {string} */
         this.firstname = null;
         /** @type {string} */
+        this.firstname_t = null;
+        /** @type {string} */
         this.lastname = null;
+        /** @type {string} */
+        this.lastname_t = null;
         /** @type {string} */
         this.dob = null;
         /** @type {Date|null} */
