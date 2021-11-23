@@ -105,6 +105,9 @@
   },
   "show-ticket-title": "Ticket: ",
   "valid-till": "Voraussichtlich gültig bis ",
+  "validation-not-possible": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
+  "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
+  "validation-not-possible-title": "Validierung nicht möglich",
   "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
   "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig."
 }

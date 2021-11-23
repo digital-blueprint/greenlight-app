@@ -213,20 +213,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.wrongHash.push(hash);
     }
 
-    /**
-     * Parse a incoming date to a readable date
-     *
-     * @param date
-     * @returns {string} readable date
-     */
-    getReadableDate(date) {
-        const i18n = this._i18n;
-        let newDate = new Date(date);
-        let month = newDate.getMonth() + 1;
-
-        return i18n.t('valid-till', {clock: newDate.getHours() + ":" + ("0" + newDate.getMinutes()).slice(-2)}) + " " + newDate.getDate() + "." + month + "." + newDate.getFullYear();
-    }
-
     formatValidUntilDate(date) {
         return date.toLocaleDateString('de-DE', {
             day: 'numeric',
@@ -240,50 +226,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             hour: 'numeric',
             minute: 'numeric',
         });
-    }
-
-    /**
-     * Decode data from QR code
-     * Check if it is a valid string for this application with this.searchHashString
-     * Saves invalid QR codes, so we don't have to process than more than once
-     * Check if input QR code is already a invalid QR code
-     *
-     * @param data
-     * @param searchHashString
-     * @param hash
-     * @returns {boolean} true if data is valid not yet send QR code data
-     * @returns {boolean} false if data is invalid QR code data
-     */
-    async decodeUrl(data, searchHashString, hash) {
-        let passData;
-        try {
-            passData = parseGreenPassQRCode(data, searchHashString);
-        } catch (error) {
-            if (this.wrongQR !== undefined)
-                await this.checkAlreadySend(data, this.resetWrongQr, this.wrongQR);
-            return false;
-        }
-
-        this.greenPassHash = passData;
-
-        let gpAlreadySend = false;
-
-        if (this.wrongHash !== undefined)
-            gpAlreadySend = await this.wrongHash.includes(data);
-
-        if (gpAlreadySend) {
-            const that = this;
-            if (!this.resetWrongHash) {
-                this.resetWrongHash = true;
-                setTimeout(function () {
-                    that.wrongHash.splice(0, that.wrongHash.length);
-                    that.wrongHash.length = 0;
-                    that.resetWrongHash = false;
-                }, 3000);
-            }
-        }
-
-        return !gpAlreadySend;
     }
 
     async checkAlreadySend(data, reset, wrongQrArray, title = "", body = "", message = "") {
@@ -301,45 +243,55 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     reset = false;
                 }, 3000);
             }
-        }
-
-        wrongQrArray.push(data);
-        if (!this.preCheck) {
-            send({
-                "summary": title,
-                "body": body,
-                "type": "danger",
-                "timeout": 5,
-            });
-            this.proofUploadFailed = true;
-            this.message = message !== "" ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
+        } else {
+            wrongQrArray.push(data);
+            if (!this.preCheck) {
+                send({
+                    "summary": title,
+                    "body": body,
+                    "type": "danger",
+                    "timeout": 5,
+                });
+                this.proofUploadFailed = true;
+                this.message = message !== "" ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
+            }
         }
     }
 
     /**
-     * Decode data from QR code
-     * Check if it is a valid string for this application with this.searchHashString
-     * Saves invalid QR codes, so we don't have to process than more than once
-     * Check if input QR code is already a invalid QR code
+     * wrapping function for parsing the Hashdata with the function parseGreenPassQRCode
      *
      * @param data
      * @param searchHashString
-     * @returns {boolean} true if data is valid not yet send QR code data
-     * @returns {boolean} false if data is invalid QR code data
+     * @returns {boolean} true if data is valid greenpass QR Code
+     * @returns {boolean} false if data is invalid greenpass QR Code
      */
-    async decodeUrlWithoutCheck(data, searchHashString) {
+    async tryParseHash(data, searchHashString) {
         try {
             parseGreenPassQRCode(data, searchHashString);
+            return true;
         } catch (error) {
             return false;
         }
+    }
 
-        let gpAlreadySend = false;
+    /**
+     * Checks if a specific data is already validated before and resets the array where its saved to get
+     * again a notification after 3 seconds
+     *
+     * This function is a migitation for not spaming the screen with notifications
+     *
+     * @param data
+     * @returns {boolean} true if data is already checked
+     * @returns {boolean} false if data is not checked in the last 3 seconds
+     */
+    async isAlreadyChecked(data) {
+        let alreadyChecked = false;
 
         if (this.wrongHash !== undefined)
-            gpAlreadySend = await this.wrongHash.includes(data);
+            alreadyChecked = await this.wrongHash.includes(data);
 
-        if (gpAlreadySend) {
+        if (alreadyChecked) {
             const that = this;
 
             if (!this.resetWrongHash) {
@@ -351,8 +303,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 }, 3000);
             }
         }
-
-        return !gpAlreadySend;
+        return alreadyChecked;
     }
 
     async checkForValidProofLocal() {
@@ -377,7 +328,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async checkQRCode(data) {
-        let check = await this.decodeUrlWithoutCheck(data, this.searchHashString);
+        if (await this.isAlreadyChecked(data))
+            return;
+
+        let check = await this.tryParseHash(data, this.searchHashString);
 
         if (check) {
             this.greenPassHash = data;
@@ -392,13 +346,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== "") {
             const array = this.searchSelfTestStringArray.split(",");
             for (const selfTestString of array) {
-                check = await this.decodeUrlWithoutCheck(data, selfTestString);
+                check = await this.tryParseHash(data, selfTestString);
                 if (check) {
                     selfTestURL = data;
                     break;
                 }
             }
         }
+
         if (check && selfTestURL !== '' && !this.selfTestValid) {
             const i18n = this._i18n;
             await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR ? this.wrongQR : [], i18n.t('self-test-not-supported-title'), i18n.t('self-test-not-supported-body'), i18n.t('self-test-not-supported-title'));
@@ -486,18 +441,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         /** @type {ValidationResult} */
         let res;
         try {
-            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
+           res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
         } catch (error) {
             // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
-            console.log(error);
+            console.error("ERROR:", error);
             await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '');
             this.proofUploadFailed = true;
             this.hasValidProof = false;
-            if (!preCheck) {
-                this.detailedError = error.message;
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
-            }
+            this.detailedError = error.message;
+            this.message = i18nKey('validation-not-possible');
+            this.saveWrongHashAndNotify(i18n.t('validation-not-possible-title'), i18n.t('validation-not-possible-body'), greenPassHash);
             return;
         }
 
@@ -508,15 +461,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.hasValidProof = false;
             if (!preCheck) {
                 this.detailedError = res.error;
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
             return;
         }
 
         // HCert is valid
-        console.assert(res.isValid);
-
         if (this.auth) {
             // Fetch the currently logged in person
             let personId = this.auth['person-id'];
@@ -532,7 +483,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             // Make sure the person matches the proof
             if (!checkPerson(res.firstname, res.lastname, res.firstname_t, res.lastname_t, res.dob, person.givenName, person.familyName, person.birthDate)) {
                 if (!preCheck) {
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body', greenPassHash));
+                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                 }
                 this.proofUploadFailed = true;
