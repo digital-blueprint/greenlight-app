@@ -1,9 +1,9 @@
-import {css, html} from 'lit-element';
+import {css, html} from 'lit';
 import DBPGreenlightTicketLitElement, {getTicketCss} from "./dbp-greenlight-ticket-lit-element";
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {InlineNotification} from '@dbp-toolkit/common';
-import {classMap} from 'lit-html/directives/class-map.js';
+import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {send} from "@dbp-toolkit/common/notification";

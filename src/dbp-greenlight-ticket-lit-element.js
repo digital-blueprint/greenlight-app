@@ -1,4 +1,4 @@
-import {css, html} from "lit-element";
+import {css, html} from 'lit';
 import {createInstance} from "./i18n";
 import {Icon, LoadingButton, MiniSpinner} from "@dbp-toolkit/common";
 import {send} from "@dbp-toolkit/common/notification";

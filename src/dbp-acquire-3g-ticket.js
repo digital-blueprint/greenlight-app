@@ -1,10 +1,10 @@
 import {createInstance} from './i18n.js';
-import {css, html} from 'lit-element';
+import {css, html} from 'lit';
 import DBPGreenlightLitElement from "./dbp-greenlight-lit-element";
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {LoadingButton, Icon, MiniSpinner, InlineNotification} from '@dbp-toolkit/common';
-import {classMap} from 'lit-html/directives/class-map.js';
+import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {CheckInPlaceSelect} from '@dbp-toolkit/check-in-place-select';
