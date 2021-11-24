@@ -201,11 +201,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
     }
 
-    saveWrongHashAndNotify(title, body, hash) {
+    saveWrongHashAndNotify(title, body, hash, notificationType="danger") {
         send({
             "summary": title,
             "body": body,
-            "type": "danger",
+            "type": notificationType,
             "timeout": 5,
         });
 
@@ -437,15 +437,16 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      */
     async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
-
         /** @type {ValidationResult} */
         let res;
         try {
-           res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
+            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
+            this.validationFailed = false;
         } catch (error) {
             // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
             console.error("ERROR:", error);
             await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '');
+            this.validationFailed = true;
             this.proofUploadFailed = true;
             this.hasValidProof = false;
             this.detailedError = error.message;

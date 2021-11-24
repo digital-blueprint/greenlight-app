@@ -26,6 +26,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         this.isSelfTest = false;
         this.loadingTickets = true;
         this.preCheck = false;
+        this.validationFailed = false;
     }
 
 
@@ -520,7 +521,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                         class="warning">${i18n.t('show-active-tickets.3-g-evidence-selftest')}</span></b>
                             </span>
                         </span>
-                        <span class="header ${classMap({hidden: this.hasValidProof})}">
+                        <span class="header ${classMap({hidden: this.hasValidProof || this.validationFailed})}">
                             <b>${i18n.t('show-active-tickets.status')}<span
                                     class="red">${i18n.t('show-active-tickets.status-inactive')}</span></b>
                             <b>${i18n.t('show-active-tickets.3-g-evidence')}: <span
@@ -532,6 +533,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                 </slot>
                             </span>
                         </span>
+                        <span class="header ${classMap({hidden: !this.validationFailed})}">
+                            <b>${i18n.t('show-active-tickets.status')}<span
+                                    class="red">${i18n.t('show-active-tickets.validation-failed')}</span></b>
+                            <span>
+                                ${i18n.t('show-active-tickets.validation-failed-text')}
+                            </span>
+                        </span>
                     </span>
                     <div class="btn">
                         <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
@@ -540,13 +548,13 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                             title="${i18n.t('show-btn-text')}">
                             ${i18n.t('show-btn-text')}
                         </dbp-loading-button>
-                        <a class="${classMap({hidden: this.hasValidProof})}" href="acquire-3g-ticket">
+                        <a class="${classMap({hidden: this.hasValidProof || this.validationFailed})}" href="acquire-3g-ticket">
                             <button class="button new-ticket-button"
                                     title="${i18n.t('show-active-tickets.new-ticket')}">
                                 ${i18n.t('show-active-tickets.new-ticket')}
                             </button>
                         </a>
-                        <dbp-loading-button id="delete-btn"
+                        <dbp-loading-button id="delete-btn" class="${classMap({hidden: this.validationFailed})}"
                                             @click="${() => {this.deleteTicket(ticket);}}"
                                             title="${i18n.t('delete-btn-text')}">
                             ${i18n.t('delete-btn-text')}

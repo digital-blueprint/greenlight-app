@@ -94,7 +94,9 @@
     "self-test-link": "Link zum Test",
     "status": "Status: ",
     "status-active": "aktiv",
-    "status-inactive": "inaktiv"
+    "status-inactive": "inaktiv",
+    "validation-failed": "Validierung aktuell nicht möglich",
+    "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
   },
   "show-btn-text": "Zeigen",
   "show-reference-ticket": {
@@ -105,9 +107,9 @@
   },
   "show-ticket-title": "Ticket: ",
   "valid-till": "Voraussichtlich gültig bis ",
-  "validation-not-possible": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
+  "validation-not-possible": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
   "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
-  "validation-not-possible-title": "Validierung nicht möglich",
+  "validation-not-possible-title": "Validierung aktuell nicht möglich",
   "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
   "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig."
 }

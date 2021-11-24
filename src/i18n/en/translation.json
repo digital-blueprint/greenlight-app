@@ -94,7 +94,9 @@
     "self-test-link": "Link to the test",
     "status": "Status: ",
     "status-active": "active",
-    "status-inactive": "inactive"
+    "status-inactive": "inactive",
+    "validation-failed": "Validation currently not possible",
+    "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
   },
   "show-btn-text": "Show",
   "show-reference-ticket": {
@@ -105,9 +107,9 @@
   },
   "show-ticket-title": "Ticket: ",
   "valid-till": "Probably valid until ",
-  "validation-not-possible": "The evidence cannot currently be validated. Please try again later.",
+  "validation-not-possible": "The validation of the evidence is currently not possible for technical reasons. Please try again later.",
   "validation-not-possible-body": "The evidence cannot currently be validated. Please try again later.",
-  "validation-not-possible-title": "Validation not possible",
+  "validation-not-possible-title": "Validierung aktuell nicht möglich",
   "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
   "validity-tooltip-ticket-text": "The ticket is only valid in electronic form."
 }
