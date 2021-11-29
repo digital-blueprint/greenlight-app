@@ -7,7 +7,6 @@ import {LoadingButton, Icon, MiniSpinner, InlineNotification} from '@dbp-toolkit
 import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
-import {CheckInPlaceSelect} from '@dbp-toolkit/check-in-place-select';
 import {send} from '@dbp-toolkit/common/notification';
 import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
@@ -76,7 +75,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             'dbp-mini-spinner': MiniSpinner,
             'dbp-loading-button': LoadingButton,
             'dbp-inline-notification': InlineNotification,
-            'dbp-check-in-place-select': CheckInPlaceSelect,
             'dbp-textswitch': TextSwitch,
             'dbp-qr-code-scanner': QrCodeScanner,
             'dbp-file-source': FileSource,
@@ -349,7 +347,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
     async checkCreateTicketResponse(response) {
         const i18n = this._i18n;
-        let checkInPlaceSelect;
 
         let responseBody = await response.clone().json();
 
@@ -378,11 +375,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     this.hasValidProof = false; //Could be expired until now
                     this.preCheck = true;
                     this.checkForValidProofLocal();
-                }
-
-                checkInPlaceSelect = this.shadowRoot.querySelector(this.getScopedTagName('dbp-check-in-place-select'));
-                if (checkInPlaceSelect !== null) {
-                    checkInPlaceSelect.clear();
                 }
 
                 this.preCheck = true; //initiates a new check and sets validProof to true
@@ -544,16 +536,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             await this.checkCreateTicketResponse(response);
         } finally {
             button.stop();
-        }
-    }
-
-    setLocation(event) {
-        if (event.detail.room) {
-            this.location = event.detail.name;
-            this.checkForValidProofLocal(); //Check this each time because proof validity could expire
-            this.checkForValidTickets();
-        } else {
-            this.location = '';
         }
     }
 
@@ -999,17 +981,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     <div class="border ${classMap({'hidden': !this.processStarted})}"></div>
 
                     <div class="container ${classMap({'hidden': !this.processStarted})}">
-                        <!-- Place Selector -->
-                        <div class="field ${classMap({'hidden': this.preselectedOption && this.preselectedOption !== ''})}">
-                            <h3>${i18n.t('acquire-3g-ticket.place-select-title')}</h3>
-                            <div class="control">
-                                <dbp-check-in-place-select subscribe="auth" lang="${this.lang}"
-                                                        entry-point-url="${this.entryPointUrl}" @change="${(event) => {
-                                    this.setLocation(event);
-                                }}"></dbp-check-in-place-select>
-                            </div>
-                        </div>
-
                         <!-- 3G Proof Upload -->
                         <div class="proof-upload-container ${classMap({'hidden': this.location === '' || this.showCreateTicket})}">
 
