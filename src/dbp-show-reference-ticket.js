@@ -2,6 +2,7 @@ import {css, html} from 'lit';
 import DBPGreenlightTicketLitElement, {getTicketCss} from "./dbp-greenlight-ticket-lit-element";
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
+import {combineURLs} from '@dbp-toolkit/common';
 import {Activity} from './activity.js';
 import metadata from './dbp-show-reference-ticket.metadata.json';
 import * as commonStyles from '@dbp-toolkit/common/styles';
@@ -79,7 +80,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             },
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/reference-permits?page=1', options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/reference-permits?page=1'), options);
     }
 
 

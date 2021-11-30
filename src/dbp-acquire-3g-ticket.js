@@ -3,7 +3,7 @@ import {css, html} from 'lit';
 import DBPGreenlightLitElement from "./dbp-greenlight-lit-element";
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
-import {LoadingButton, Icon, MiniSpinner, InlineNotification} from '@dbp-toolkit/common';
+import {LoadingButton, Icon, MiniSpinner, InlineNotification, combineURLs} from '@dbp-toolkit/common';
 import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
@@ -315,7 +315,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             },
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits'), options);
     }
 
     async checkForValidTickets() {

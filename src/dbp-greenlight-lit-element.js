@@ -1,6 +1,7 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
 import {getStackTrace} from "@dbp-toolkit/common/error";
 import {send} from "@dbp-toolkit/common/notification";
+import {combineURLs} from "@dbp-toolkit/common";
 import {parseGreenPassQRCode, i18nKey} from "./utils";
 import {defaultValidator, ValidationResult} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
@@ -198,7 +199,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             body: JSON.stringify(body)
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits', options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits'), options);
     }
 
     saveWrongHashAndNotify(title, body, hash, notificationType="danger") {
@@ -478,7 +479,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     Authorization: "Bearer " + this.auth.token
                 },
             };
-            let response = await this.httpGetAsync(this.entryPointUrl + '/base/people/' + encodeURIComponent(personId), options);
+            let response = await this.httpGetAsync(combineURLs(this.entryPointUrl, '/base/people/' + encodeURIComponent(personId)), options);
             let person = await response.json();
 
             // Make sure the person matches the proof

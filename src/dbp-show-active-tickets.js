@@ -2,7 +2,7 @@ import {css, html} from 'lit';
 import DBPGreenlightTicketLitElement, {getTicketCss} from "./dbp-greenlight-ticket-lit-element";
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
-import {InlineNotification} from '@dbp-toolkit/common';
+import {InlineNotification, combineURLs} from '@dbp-toolkit/common';
 import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
@@ -94,7 +94,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             },
         };
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID, options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits/' + encodeURIComponent(ticketID)), options);
     }
 
 
@@ -116,8 +116,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
 
         const additionalInformation = this.hasValidProof && !this.isSelfTest ? 'local-proof' : '';
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits/' + ticketID + '?additional-information=' +
-            encodeURIComponent(additionalInformation), options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits/' + encodeURIComponent(ticketID) + '?additional-information=' +
+            encodeURIComponent(additionalInformation)), options);
     }
 
 
@@ -136,8 +136,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         };
         const additionalInformation = this.hasValidProof ? 'local-proof' : '';
 
-        return await this.httpGetAsync(this.entryPointUrl + '/greenlight/permits?additional-information=' +
-            encodeURIComponent(additionalInformation), options);
+        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits?additional-information=' +
+            encodeURIComponent(additionalInformation)), options);
     }
 
 
