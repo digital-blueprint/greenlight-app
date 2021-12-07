@@ -388,15 +388,15 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getLinkCss()}
             ${getTicketCss()}
             .red {
-                color: var(--dbp-danger-bg-color);
+                color: var(--dbp-danger-dark);
             }
 
             .green {
-                color: var(--dbp-success-bg-color);
+                color: var(--dbp-success-dark);
             }
 
             .warning {
-                color: var(--dbp-info-bg-color);
+                color: var(--dbp-info-dark);
             }
 
             .qr-code-wrapper {

@@ -714,7 +714,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 width: 100%;
                 height: 29px;
                 font-weight: 300;
-                border: 1px solid #aaa;
+                border: var(--dbp-border-dark);
+                border-color: var(--dbp-text-muted-dark);
             }
 
             .loading-proof {
@@ -727,7 +728,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             .close-icon {
-                color: var(--dbp-danger-bg-color);
+                color: var(--dbp-accent-dark);
                 display: inline;
             }
 
@@ -742,7 +743,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .border {
                 margin-top: 2rem;
                 margin-bottom: 2rem;
-                border-top: 1px solid black;
+                border-top: var(--dbp-border-dark);
             }
 
             .field {
@@ -751,17 +752,29 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+                border-bottom: var(--dbp-border-dark);
             }
 
             .int-link-internal:hover {
-                background-color: black;
-                color: white;
+                background-color: var(--dbp-hover-base);
+                color: var(--dbp-hover-text);
                 text-decoration: none;
             }
 
             .inline-notification .int-link-internal {
-                border-bottom-color: var(--dbp-primary-text-color);
+                transition: background-color 0.15s, color 0.15s;
+                border-bottom: var(--dbp-border-light);
+                color: var(--dbp-text-light);
+            }
+
+            .inline-notification .int-link-internal:hover {
+                background-color: var(--dbp-hover-base);
+                color: var(--dbp-hover-text);
+                text-decoration: none;
+            }
+
+            .inline-notification .int-link-internal {
+                border-bottom-color: var(--dbp-border-light);
             }
 
             .check-icon {
@@ -772,7 +785,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .g-proof-information {
                 margin: 1.5em 0;
-                border: var(--dbp-border-width) solid var(--dbp-border-color);
+                border: var(--dbp-border-dark);
                 padding: 1.25rem 1.5rem 1.25rem 1.5rem;
                 border-radius: var(--dbp-border-radius);
                 display: flex;

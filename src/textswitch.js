@@ -59,8 +59,8 @@ export class TextSwitch extends AdapterLitElement {
             }
 
             .active {
-                background-color: black !important;
-                color: var(--dbp-primary-text-color) !important;
+                background-color: var(--dbp-secondary-dark) !important;
+                color: var(--dbp-text-light) !important;
             }
 
             .button {
@@ -69,7 +69,16 @@ export class TextSwitch extends AdapterLitElement {
             }
 
             .button:hover:not([disabled]) {
-                background-color: var(--dbp-secondary-bg-color) !important;
+                background-color: var(--dbp-hover-base) !important;
+                color: var(--dbp-hover-text)
+            }
+
+            .button:first-child{
+                border-radius: var(--dbp-border-radius) 0 0 var(--dbp-border-radius);
+            }
+
+            .button:last-child{
+                border-radius: 0 var(--dbp-border-radius) var(--dbp-border-radius) 0;
             }
 
             @media only screen

@@ -294,8 +294,8 @@ export function getTicketCss() {
         }
 
         .proof-container, .information-container {
-            background-color: var(--dbp-info-bg-color);
-            color: var(--dbp-info-text-color);
+            background-color: var(--dbp-info-dark);
+            color: var(--dbp-text-light);
             padding: 40px 10px;
             display: flex;
             flex-direction: column;
@@ -309,7 +309,7 @@ export function getTicketCss() {
         }
 
         .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal, .information-container .int-link-external {
-            border-bottom: 1px solid var(--dbp-info-text-color);
+            border-bottom: var(--dbp-border-light);
         }
 
         .proof-container .int-link-external::after, .information-container .int-link-external::after {
@@ -370,7 +370,7 @@ export function getTicketCss() {
         }
 
         .reload-failed p {
-            color: var(--dbp-danger-bg-color);
+            color: var(--dbp-danger-dark);
             margin-top: 0px;
             margin-bottom: 0px;
         }
