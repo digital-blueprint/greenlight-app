@@ -310,6 +310,12 @@ export function getTicketCss() {
 
         .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal, .information-container .int-link-external {
             border-bottom: var(--dbp-border-light);
+            color: var(--dbp-text-light)
+        }
+
+        .proof-container a:hover{
+            color: var(--dbp-button-hover-text);
+            background-color: var(--dbp-button-hover-base);
         }
 
         .proof-container .int-link-external::after, .information-container .int-link-external::after {

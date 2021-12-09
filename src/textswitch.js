@@ -69,8 +69,8 @@ export class TextSwitch extends AdapterLitElement {
             }
 
             .button:hover:not([disabled]) {
-                background-color: var(--dbp-hover-base) !important;
-                color: var(--dbp-hover-text)
+                background-color: var(--dbp-button-hover-base) !important;
+                color: var(--dbp-button-hover-text)
             }
 
             .button:first-child{
