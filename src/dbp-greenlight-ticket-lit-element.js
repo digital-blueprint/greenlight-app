@@ -313,11 +313,6 @@ export function getTicketCss() {
             color: var(--dbp-text-light)
         }
 
-        .proof-container a:hover{
-            color: var(--dbp-button-hover-text);
-            background-color: var(--dbp-button-hover-base);
-        }
-
         .proof-container .int-link-external::after, .information-container .int-link-external::after {
             filter: invert(100%);
             -webkit-filter: invert(100%);

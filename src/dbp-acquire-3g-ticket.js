@@ -755,21 +755,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 border-bottom: var(--dbp-border-dark);
             }
 
-            .int-link-internal:hover {
-                color: var(--dbp-accent-dark);
-                border-bottom: var(--dbp-accent-dark);
-            }
-
             .inline-notification .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
                 border-bottom: var(--dbp-border-light);
                 color: var(--dbp-text-light);
-            }
-
-            .inline-notification .int-link-internal:hover {
-                background-color: var(--dbp-button-hover-base);
-                color: var(--dbp-button-hover-text);
-                text-decoration: none;
             }
 
             .inline-notification .int-link-internal {

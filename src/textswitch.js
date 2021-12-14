@@ -68,11 +68,6 @@ export class TextSwitch extends AdapterLitElement {
                 margin: 0px;
             }
 
-            .button:hover:not([disabled]) {
-                background-color: var(--dbp-button-hover-base) !important;
-                color: var(--dbp-button-hover-text)
-            }
-
             .button:first-child{
                 border-radius: var(--dbp-border-radius) 0 0 var(--dbp-border-radius);
             }
