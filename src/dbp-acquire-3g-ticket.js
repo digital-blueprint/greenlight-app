@@ -575,7 +575,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
-            ${commonStyles.getLinkCss()}
             h2 {
                 margin-top: 0;
             }
@@ -755,11 +754,23 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 border-bottom: var(--dbp-border-dark);
             }
 
+            /*.int-link-internal:hover{
+                color: var(--dbp-hover-text);
+                background-color: var(--dbp-hover-base);
+            }*/
+
             .inline-notification .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
                 border-bottom: var(--dbp-border-light);
                 color: var(--dbp-text-light);
             }
+            
+            .inline-notification .int-link-internal:hover{
+                color: inherit;
+                background-color: inherit;
+            }
+           
+
 
             .inline-notification .int-link-internal {
                 border-bottom-color: var(--dbp-border-light);

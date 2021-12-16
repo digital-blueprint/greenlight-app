@@ -79,15 +79,12 @@
              --dbp-override-info-dark: #245b78;
              --dbp-override-success-light: #75c438;
              --dbp-override-success-dark: #148800;
-             --dbp-override-warning-light: #ffad4d;
-             --dbp-override-warning-dark: #af6405;
+             --dbp-override-warning-light: #ffe183;
+             --dbp-override-warning-dark: #c15500;
              --dbp-override-danger-light: #ff5d79;
              --dbp-override-danger-dark: #e4154b;
              --dbp-override-border-light: 1px solid #ffffff;
              --dbp-override-border-dark: 1px solid #000000;
-             --dbp-override-button-hover-base: #000000;
-             --dbp-override-button-hover-text: #ffffff;
-
 
             --dbp-override-image-nextcloud: url(<%= getUrl('') %>images/nextcloud.svg);
         }
@@ -163,6 +160,11 @@
                     text-decoration: none;
                 }
 
+                .footer-links a:hover {
+                    color: var(--dbp-hover-text);
+                    background-color: var(--dbp-hover-base);
+                }
+
                 input::-moz-focus-inner { border: 0; }
 
                 :focus-visible{
@@ -218,6 +220,32 @@
                     animation: 0.15s linkIconOut;
                     font-size: 103%;
                 }
+
+                .int-link-external:hover{
+                    color: var(--dbp-hover-text);
+                    background-color: var(--dbp-hover-base);
+                }
+
+                /* TODO Change color(mask) */
+
+                /*
+                .int-link-external:hover::after{
+                    content: "\00a0\00a0\00a0";
+                    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%228.6836mm%22%20width%3D%225.2043mm%22%20version%3D%221.1%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%20viewBox%3D%220%200%2018.440707%2030.768605%22%3E%3Cg%20transform%3D%22translate(-382.21%20-336.98)%22%3E%3Cpath%20style%3D%22stroke-linejoin%3Around%3Bstroke%3A%23FFF%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3Bstroke-width%3A2%3Bfill%3Anone%22%20d%3D%22m383.22%20366.74%2016.43-14.38-16.43-14.37%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+                    background-size: 73%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    margin: 0 0 0 3px;
+                    padding: 0 0 0.25% 0;
+                    animation: 0s linkIconIn;
+                    font-size: 103%;
+                }
+
+                */
+
+
+
+
 
             </style>
             <dbp-translated subscribe="lang">
@@ -282,9 +310,11 @@
                 @media only screen
                 and (orientation: portrait)
                 and (max-width:768px) {
-                    .int-link-internal{
+                    .int-link-internal-light{
                         border-bottom: var(--dbp-border-light);
                     }
+
+
                 }
             </style>
             <dbp-translated subscribe="lang">
@@ -382,6 +412,29 @@
                     animation: 0.15s linkIconOut;
                     font-size: 103%;
                 }
+
+                .int-link-external:hover{
+                    color: var(--dbp-hover-text);
+                    background-color: var(--dbp-hover-base);
+                }
+
+                /* TODO Change color(mask) */
+
+
+                /*.int-link-external:hover::after{
+                    content: "\00a0\00a0\00a0";
+                    background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20height%3D%228.6836mm%22%20width%3D%225.2043mm%22%20version%3D%221.1%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%20viewBox%3D%220%200%2018.440707%2030.768605%22%3E%3Cg%20transform%3D%22translate(-382.21%20-336.98)%22%3E%3Cpath%20style%3D%22stroke-linejoin%3Around%3Bstroke%3A%23FFF%3Bstroke-linecap%3Around%3Bstroke-miterlimit%3A10%3Bstroke-width%3A2%3Bfill%3Anone%22%20d%3D%22m383.22%20366.74%2016.43-14.38-16.43-14.37%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+                    background-size: 73%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    margin: 0 0 0 3px;
+                    padding: 0 0 0.25% 0;
+                    animation: 0s linkIconIn;
+                    font-size: 103%;
+                }
+                */
+
+
 
             </style>
             <dbp-translated subscribe="lang">

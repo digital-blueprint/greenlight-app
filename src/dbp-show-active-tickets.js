@@ -385,7 +385,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
-            ${commonStyles.getLinkCss()}
             ${getTicketCss()}
             .red {
                 color: var(--dbp-danger-dark);
