@@ -72,6 +72,8 @@ Both data sets need to be updated regularly via a cron job.
 The first argument passed to update.sh defines the rule set which should be
 downloaded. The script depends on `curl` being installed.
 
+You will find the certificates downloaded in `/<my-path>/greenlight-app/public/app/local/@dbp-topics/greenlight/dgc-trust/prod`.
+
 NOTE: Failing to update the data will result in signatures expiring after 2 days
 which breaks the core functionality of the app.
 
