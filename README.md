@@ -33,6 +33,8 @@ If you want to install the DBP greenlight App in a new folder `greenlight-app` y
 ```bash
 npx @digital-blueprint/cli install-app greenlight greenlight-app /
 ```
+**Warning:** There may be issues when you run these commands as root user, best use a non-root user, like `www-data`.
+To do this you can for example open a shell with `runuser -u www-data -- bash`.
 
 Afterwards you can point your Apache web-server to `greenlight-app/public`.
 
@@ -53,6 +55,9 @@ If you want to update the DBP greenlight App in the current folder you can call:
 ```bash
 npx @digital-blueprint/cli update-app greenlight
 ```
+
+**Warning:** There may be issues when you run these commands as root user, best use a non-root user, like `www-data`.
+To do this you can for example open a shell with `runuser -u www-data -- bash`.
 
 ## Cron job for Updating the Trust Data
 
