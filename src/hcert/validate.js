@@ -73,9 +73,11 @@ export class Validator {
      * @param {string} cert
      * @param {Date} date
      * @param {string} [lang]
+     * @param {string} [country]
+     * @param {string} [region]
      * @returns {ValidationResult}
      */
-     async validate(cert, date, lang='en') {
+     async validate(cert, date, lang='en', country='AT', region='ET') {
         await this._ensureData();
 
         let i18n = createInstance();
@@ -110,8 +112,9 @@ export class Validator {
         let result = new ValidationResult();
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
+            let businessRules = this._businessRules.filter(country, region);
             /** @type {RuleValidationResult} */
-            let res = validateHCertRules(greenCertificate, this._businessRules, this._valueSets, date, this._trustDate);
+            let res = validateHCertRules(greenCertificate, businessRules, this._valueSets, date, this._trustDate);
 
             if (res.isValid) {
                 result.isValid = true;
@@ -123,7 +126,7 @@ export class Validator {
 
                 // according to the rules, returns null if it never becomes invalid
                 let validUntil = getValidUntil(
-                    greenCertificate, this._businessRules, this._valueSets, date);
+                    greenCertificate, businessRules, this._valueSets, date);
 
                 let isFullDate = (date) => {
                     // https://github.com/ehn-dcc-development/hcert-kotlin/pull/64
