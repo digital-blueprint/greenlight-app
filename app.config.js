@@ -12,7 +12,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: true,
+        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     bs: {
@@ -28,7 +28,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: true,
+        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     development: {
@@ -44,7 +44,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: true,
+        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     demo: {
@@ -60,7 +60,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: true,
+        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     production: {
@@ -76,7 +76,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: true,
+        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
 };

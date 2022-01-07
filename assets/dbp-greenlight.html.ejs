@@ -103,7 +103,7 @@
     gp-search-hash-string="<%= gpSearchQRString %>"
     gp-search-self-test-string-array="<%= gpSearchSelfTestStringArray %>"
     <% if(selfTestValid) { %> gp-self-test-valid <% } %>
-    <% if(ticketTypes) { %> ticket-types <% } %>
+    <% if(ticketTypes) { %> ticket-types="<%= ticketTypes %>" <% } %>
     preselected-option="<%= preselectedOption %>"
     service-name="<%= serviceName %>"
     file-handling-enabled-targets="local"

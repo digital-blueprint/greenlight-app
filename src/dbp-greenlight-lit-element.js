@@ -18,7 +18,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.searchHashString = '';
         this.searchSelfTestStringArray = '';
         this.selfTestValid = false;
-        this.ticketTypes = false;
+        this.ticketTypes = null;
     }
 
     static get properties() {
@@ -29,7 +29,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
             selfTestValid: {type: Boolean, attribute: 'gp-self-test-valid'},
-            ticketTypes: {type: Boolean, attribute: 'ticket-types'},
+            ticketTypes: {type: Object, attribute: 'ticket-types'},
         };
     }
 
@@ -454,7 +454,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      */
     async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
-        const regions = ['ET', 'ET-LV'];
+
+        let regions = [];
+        let fullProofRegion = '';
+        if (this.ticketTypes) {
+            regions = Object.values(this.ticketTypes);
+            fullProofRegion = this.ticketTypes['full'];
+        } else {
+            regions = ['ET'];
+            fullProofRegion = 'ET';
+        }
+
         /** @type {ValidationResult} */
         let res;
         try {
@@ -503,8 +513,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.proofUploadFailed = true;
             this.hasValidProof = false;
             if (!preCheck) {
-                // just use the error from the first one
-                this.detailedError = res.regions[regions[0]].error;
+                // Use the most strict region for the error message
+                this.detailedError = res.regions[fullProofRegion].error;
                 this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
@@ -566,10 +576,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.proofUploadFailed = false;
         this.isSelfTest = false;
 
-        // If ET-LV -> full proof
         this.isFullProof = false;
         for (let entry of validRegions) {
-            if (entry.region == 'ET-LV') {
+            if (entry.region == fullProofRegion) {
                 this.isFullProof = true;
             }
         }
