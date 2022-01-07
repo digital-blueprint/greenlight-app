@@ -467,15 +467,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                 #qr-code-hash svg {
                     width: 100%;
                 }
-
-                .new-ticket-button {
-                    width: 100%;
-                    display: block;
-                    margin: auto;
-                    box-sizing: border-box;
-                    
-                }
-
             }
         `;
     }
