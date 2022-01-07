@@ -1103,16 +1103,21 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                     <slot name="partial-validity">
                                                         <!--TODO maybe fill slot with a default text-->
                                                     </slot>
-                                                     <!--TODO change tooltip text-->
-                                                    <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
                                                     <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
                                                         <slot name="full-validity">
                                                             ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                                         </slot>
-                                                         <!--TODO change tooltip text-->
-                                                        <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
                                                     </span>
-                                                </span>`
+                                                </span>
+                                                <span>${i18n.t('acquire-3g-ticket.3g-proof-valid-till-title')}: 
+                                                    ${i18n.t('date-time', {
+                                                        clock: this.person.validUntil ?
+                                                                this.formatValidUntilTime(this.person.validUntil) : '',
+                                                        date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''
+                                                    })}
+                                                    <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
+                                                </span>
+                                                `
                                             : html`
                                                 <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
                                                     <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {

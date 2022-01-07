@@ -301,20 +301,20 @@
         <div slot="partial-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <b>Bibliothek, Prüfung, Eintritt</b>
+                    <b>Präsenzprüfungen(i)</b>
                 </div>
                 <div slot="en">
-                    <b>Library, Exam, Entry</b>
+                    <b>On-site exams(i)</b>
                 </div>
             </dbp-translated>
         </div>
         <div slot="full-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <b>Lehrveranstaltungen</b>
+                    <b>Präsenzlehrveranstaltungen(i)</b>
                 </div>
                 <div slot="en">
-                    <b>Lectures</b>
+                    <b>On-site lectures(i)</b>
                 </div>
             </dbp-translated>
         </div>
@@ -389,33 +389,23 @@
                 </div>
             </dbp-translated>
         </div>
-        <div slot="full-proof-title">
-            <dbp-translated subscribe="lang">
-                <div slot="de">
-                    <h4>PCR Test gefunden</h4>
-                </div>
-                <div slot="en">
-                    <h4>PCR test found</h4>
-                </div>
-            </dbp-translated>
-        </div>
         <div slot="partial-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    Bibliothek, Prüfung, Eintritt
+                    Präsenzprüfungen(i)
                 </div>
                 <div slot="en">
-                    Library, Exam, Entry
+                    On-site exams(i)
                 </div>
             </dbp-translated>
         </div>
         <div slot="full-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    Lehrveranstaltungen
+                    Präsenzlehrveranstaltungen(i)
                 </div>
                 <div slot="en">
-                    Lectures
+                    On-site lectures(i)
                 </div>
             </dbp-translated>
         </div>
@@ -546,9 +536,9 @@
                     <br>
                     <p>
                         <% if(ticketTypes){ %>
-                            Ist ein <strong>gültiger PCR Test</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt.
+                            Ist ein <strong>gültiger PCR Test</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in <strong>Farbe</strong> dargestellt.
                             <br><br>
-                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, der <strong>kein PCR Test</strong> ist, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
+                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, der <strong>kein PCR Test</strong> ist, wird dessen QR-Code angezeigt und das Ticket in <strong>Graustufen</strong> dargestellt.
                             <br><br>
                             Der angezeigte QR-Code kann mit <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
                         <% } else { %>
@@ -567,9 +557,9 @@
                     <br>
                     <p>
                         <% if(ticketTypes){ %>
-                            If a <strong>valid PCR Test</strong> is available on this device then its QR code is displayed and the ticket is shown in color. 
+                            If a <strong>valid PCR Test</strong> is available on this device then its QR code is displayed and the ticket is shown in <strong>color</strong>. 
                             <br><br>
-                            If a <strong>valid health certitificate</strong> that is not a PCR test is available on this device, then its QR code is displayed and the ticket is shown in black and white.
+                            If a <strong>valid health certitificate</strong> that is not a PCR test is available on this device, then its QR code is displayed and the ticket is shown in <strong>black and white</strong>.
                             <br><br>
                             The displayed QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
                         <% } else { %>

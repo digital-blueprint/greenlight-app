@@ -502,16 +502,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             </div>
 
             <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
-                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof || this.isFullProof})}">
+                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                     <span>
                         <h4>${i18n.t('show-active-tickets.3-g-evidence-greenpass')}</h4>
-                    </span>
-                </div>
-                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof || !this.isFullProof})}">
-                    <span>
-                        <slot name="full-proof-title">
-                            <h4>${i18n.t('show-active-tickets.3-g-evidence-fullproof')}</h4>
-                        </slot>
                     </span>
                 </div>
                 <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
@@ -574,7 +567,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                 ${i18n.t('show-active-tickets.validation-failed-text')}
                             </span>
                         </span>
-                        <span class="valid-for ${classMap({hidden: !this.ticketTypes})}">
+                        <span class="valid-for ${classMap({hidden: !this.ticketTypes || !this.validationFailed})}">
                             <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
                                 <span class="green"><!--TODO change span class-->
                                     <slot name="partial-validity">
