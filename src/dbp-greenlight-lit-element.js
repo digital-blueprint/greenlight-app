@@ -351,9 +351,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.greenPassHash = data;
             this.isSelfTest = false;
             this.hasValidProof = true;
-
-            // TODO check before setting value
-            // this.isFullProof = true;
+            this.isFullProof = false;
 
             this.proofUploadFailed = false;
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
@@ -396,9 +394,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
             this.hasValidProof = true;
             this.proofUploadFailed = false;
-
-            // TODO check before setting value
-            // this.isFullProof = true;
+            this.isFullProof = false;
 
             if (this._("#text-switch"))
                 this._("#text-switch")._active = "";
@@ -458,10 +454,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      */
     async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
+        const regions = ['ET', 'ET-LV'];
         /** @type {ValidationResult} */
         let res;
         try {
-            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang, 'AT', ['ET']);
+            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang, 'AT', regions);
             this.validationFailed = false;
         } catch (error) {
             // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
@@ -491,15 +488,23 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             return;
         }
 
+        /** @type {RegionResult[]} */
+        let validRegions = [];
+        for (let region of regions) {
+            if (res.regions[region].isValid) {
+                validRegions.push(res.regions[region]);
+            }
+        }
+
         // HCert has expired according ot the "ET" rules
         /** @type {RegionResult} */
-        let etResult = res.regions['ET'];
-        if (!etResult.isValid) {
+        if (!validRegions.length) {
             await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '');
             this.proofUploadFailed = true;
             this.hasValidProof = false;
             if (!preCheck) {
-                this.detailedError = etResult.error;
+                // just use the error from the first one
+                this.detailedError = res.regions[regions[0]].error;
                 this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
@@ -536,10 +541,20 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (this._("#trust-button") && this._("#trust-button").checked) {
             await this.encryptAndSaveHash();
         }
+
+        // XXX: We use the earliest validUntil available since we can't display more of them.
+        // Assuming the rules are a subset of each other then this doesn't change anything.
+        let earliestValidUntil = validRegions[0].validUntil;
+        for (let entry of validRegions) {
+            if (entry.validUntil < earliestValidUntil) {
+                earliestValidUntil = entry.validUntil;
+            }
+        }
+
         this.person.firstname = res.firstname;
         this.person.lastname = res.lastname;
         this.person.dob = res.dob;
-        this.person.validUntil = etResult.validUntil;
+        this.person.validUntil = earliestValidUntil;
 
         if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
             this.stopQRReader();
@@ -551,8 +566,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.proofUploadFailed = false;
         this.isSelfTest = false;
 
-        // TODO check before setting value
-        // this.isFullProof = true;
+        // If ET-LV -> full proof
+        this.isFullProof = false;
+        for (let entry of validRegions) {
+            if (entry.region == 'ET-LV') {
+                this.isFullProof = true;
+            }
+        }
 
         if (this._("#text-switch"))
             this._("#text-switch")._active = "";
