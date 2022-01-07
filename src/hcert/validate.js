@@ -38,7 +38,6 @@ export class Validator {
         let dir = production ? 'prod' : 'test';
         this._trustAnchor = production ? trustAnchorProd : trustAnchorTest;
         this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/' + dir);
-        this._overridesUrl = commonUtils.getAssetURL(pkgName, `dgc-trust/rulesoverrides.${dir}.json`);
         this._verifier = null;
         /** @type {BusinessRules} */
         this._businessRules = null;
@@ -46,20 +45,6 @@ export class Validator {
         this._valueSets = null;
         this._loaded = false;
         this._trustDate = trustDate;
-    }
-
-    async _applyRulesOverrides() {
-        let r = await fetch(this._overridesUrl);
-        if (!r.ok) {
-            throw new Error(r);
-        }
-        let overrides = await r.json();
-        for(let rem of overrides.remove) {
-            this._businessRules.removeAll(rem);
-        }
-        for(let rule of overrides.add) {
-            this._businessRules.add(rule);
-        }
     }
 
     async _ensureData()
@@ -75,8 +60,6 @@ export class Validator {
                 this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
         });
         this._businessRules = await decodeJSONBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
-        // XXX: We don't do overrides atm, so don't fetch them
-        // await this._applyRulesOverrides();
         this._businessRules = this._businessRules.filter('AT', 'ET');
         this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor, this._trustDate);
         this._loaded = true;
