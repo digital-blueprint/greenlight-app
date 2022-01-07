@@ -108,7 +108,9 @@
     "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the evidence imported on the controlled person\u0027s device. The reference ticket does not entitle you to enter rooms at the university.",
     "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
     "information-container-headline": "Information about evidence",
-    "place-name": "Place"
+    "place-name": "Place",
+    "switch-label-in-color": "In color",
+    "switch-label-in-grayscale": "In grayscale"
   },
   "show-ticket-title": "Ticket: ",
   "valid-till": "Probably valid until ",

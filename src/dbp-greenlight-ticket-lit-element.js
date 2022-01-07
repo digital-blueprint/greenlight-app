@@ -23,6 +23,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         this.timer = '';
         this.setTimeoutIsSet = false;
         this.showReloadButton = false;
+        this.forceTicketGrayscale = false;
         this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
     }
 
@@ -36,6 +37,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
             ticketLoading: {type: Boolean, attribute: false},
             showReloadButton: {type: Boolean, attribute: false},
             ticketImage: {type: String, attribute: false},
+            forceTicketGrayscale: {type: Boolean, attribute: false},
         };
     }
 
@@ -178,9 +180,10 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
      * @param permissions
      * @param ticketList
      * @param additionalInformation
+     * @param [buttonArea]
      * @returns {html}
      */
-    getTicketUI(permissions, ticketList, additionalInformation) {
+    getTicketUI(permissions, ticketList, additionalInformation, buttonArea=null) {
         const i18n = this._i18n;
         return html`
             <div class="${classMap({hidden: permissions})}">
@@ -236,8 +239,11 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
                                         </button>
                                     </div>
                                     <div class="foto-container">
-                                        <img src="${this.ticketImage || ''}" 
-                                                alt="${i18n.t('image-alt-text')}" />
+                                        <img 
+                                            class="${classMap({filterGrayscale: this.forceTicketGrayscale, filterNone: !this.forceTicketGrayscale})}"
+                                            src="${this.ticketImage || ''}" 
+                                            alt="${i18n.t('image-alt-text')}" />
+                                        ${buttonArea ?? html``}
                                     </div>
                                 </div>
                                 ${additionalInformation}
@@ -281,6 +287,16 @@ export function getTicketCss() {
             display: flex;
             justify-content: space-between;
             column-gap: 0.5em;
+        }
+
+        .filterNone {
+            filter: none;
+            transition-duration: 0.5s;
+        }
+
+        .filterGrayscale {
+            filter: grayscale(100%);
+            transition-duration: 0.5s;
         }
 
         #ticket-modal-box {

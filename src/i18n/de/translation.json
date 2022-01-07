@@ -108,7 +108,9 @@
     "description": "Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der Universität.",
     "information-container-body": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
     "information-container-headline": "Informationen zum Nachweis",
-    "place-name": "Ort"
+    "place-name": "Ort",
+    "switch-label-in-color": "In Farbe",
+    "switch-label-in-grayscale": "In Graustufen"
   },
   "show-ticket-title": "Ticket: ",
   "valid-till": "Voraussichtlich gültig bis ",

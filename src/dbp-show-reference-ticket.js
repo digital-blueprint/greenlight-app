@@ -8,6 +8,7 @@ import metadata from './dbp-show-reference-ticket.metadata.json';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {classMap} from 'lit/directives/class-map.js';
+import {TextSwitch} from './textswitch.js';
 
 
 class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElement) {
@@ -22,6 +23,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
     static get scopedElements() {
         return {
             ...super.scopedElements,
+            'dbp-textswitch': TextSwitch,
         };
     }
 
@@ -155,6 +157,24 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             </div>
         `;
 
+        let buttonArea = null;
+        if (this.ticketTypes) {
+            let onChange = (e) => {
+                let name = e.target.name;
+                this.forceTicketGrayscale = (name === "grayscale");
+            };
+            buttonArea = html`
+                <dbp-textswitch
+                    name="${this.forceTicketGrayscale ? "grayscale" : "color"}"
+                    name1="color"
+                    name2="grayscale"
+                    value1="${i18n.t('show-reference-ticket.switch-label-in-color')}"
+                    value2="${i18n.t('show-reference-ticket.switch-label-in-grayscale')}"
+                    @change=${(e) => onChange(e)}></dbp-textswitch>
+            `;
+        }
+
+
         const permissions = this.isLoading();
 
         return html`
@@ -165,7 +185,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
                 </span>
             </div>
 
-            ${this.getTicketUI(permissions, ticketList, additionalInformation)}
+            ${this.getTicketUI(permissions, ticketList, additionalInformation, buttonArea)}
         `;
     }
 }
