@@ -67,6 +67,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         this.nextcloudName = '';
         this.nextcloudFileURL = '';
         this.nextcloudAuthInfo = '';
+
+        this.isFullProof = false;
     }
 
     static get scopedElements() {
@@ -105,6 +107,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             person: {type: Object, attribute: false},
             isSelfTest: {type: Boolean, attribute: false},
             preselectionLoading: {type: Boolean, attribute: false},
+            isFullProof: {type: Boolean, attribute: false},
 
             proofUploadFailed: {type: Boolean, attribute: false},
             showCreateTicket: {type: Boolean, attribute: false},
@@ -373,6 +376,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                 if (this.hasValidProof) {
                     this.hasValidProof = false; //Could be expired until now
+                    this.isFullProof = false;
                     this.preCheck = true;
                     this.checkForValidProofLocal();
                 }
@@ -554,6 +558,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             this.trustButtonChecked = this._("#trust-button") && this._("#trust-button").checked;
         }
         this.hasValidProof = false;
+        this.isFullProof = false;
         this.showCreateTicket = false;
         this.greenPassHash = '';
     }
@@ -575,6 +580,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
+
+            .valid-for slot {
+                display: inline-block;
+            }
+
             h2 {
                 margin-top: 0;
             }
@@ -885,6 +895,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 .checkmark {
                     top: 10%;
                 }
+
+                .valid-for {
+                    padding-bottom: 7px;
+                }
             }
         `;
 
@@ -1084,18 +1098,34 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                 <div class="${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
                                         <span class="header">
                                             <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
-                                            <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
-                                                <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {
-                                                    clock: this.person.validUntil ?
-                                                            this.formatValidUntilTime(this.person.validUntil) : '',
-                                                    date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''
-                                                })}
-                                                </strong>
-                                                <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
-
-                                            </span> 
-                                            <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}
-                                            : ${this.person.firstname ? this.person.firstname + " " : ""}
+                                            ${ this.ticketTypes ? html`
+                                                <span class="valid-for">${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
+                                                    <slot name="partial-validity">
+                                                        <!--TODO maybe fill slot with a default text-->
+                                                    </slot>
+                                                     <!--TODO change tooltip text-->
+                                                    <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
+                                                    <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
+                                                        <slot name="full-validity">
+                                                            ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                                        </slot>
+                                                         <!--TODO change tooltip text-->
+                                                        <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
+                                                    </span>
+                                                </span>`
+                                            : html`
+                                                <span>${i18n.t('acquire-3g-ticket.3g-proof-status')}: 
+                                                    <strong>${i18n.t('acquire-3g-ticket.valid-till')}${i18n.t('date-time', {
+                                                        clock: this.person.validUntil ?
+                                                                this.formatValidUntilTime(this.person.validUntil) : '',
+                                                        date: this.person.validUntil ? this.formatValidUntilDate(this.person.validUntil) : ''
+                                                    })}
+                                                    </strong>
+                                                    <dbp-info-tooltip class="info-tooltip" text-content='${ i18n.t('validity-tooltip', { place: this.location }) }' interactive></dbp-info-tooltip>
+                                                </span>`
+                                            }
+                                            <br> ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}: 
+                                            ${this.person.firstname ? this.person.firstname + " " : ""}
                                             ${this.person.lastname} ${this.person.dob ? html`
                                             <br>${i18n.t('acquire-3g-ticket.3g-proof-birthdate')}: ${this.person.dob}` : ""}
                                         </span>

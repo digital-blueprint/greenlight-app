@@ -146,6 +146,7 @@ export default (async () => {
                     gpSearchQRString: config.gpSearchQRString,
                     gpSearchSelfTestStringArray: config.gpSearchSelfTestStringArray,
                     selfTestValid: config.selfTestValid,
+                    ticketTypes: config.ticketTypes,
                     showPreselected: config.showPreselected,
                     preselectedOption: config.preselectedOption,
                     serviceName: config.serviceName,

@@ -103,6 +103,7 @@
     gp-search-hash-string="<%= gpSearchQRString %>"
     gp-search-self-test-string-array="<%= gpSearchSelfTestStringArray %>"
     <% if(selfTestValid) { %> gp-self-test-valid <% } %>
+    <% if(ticketTypes) { %> ticket-types <% } %>
     preselected-option="<%= preselectedOption %>"
     service-name="<%= serviceName %>"
     file-handling-enabled-targets="local"
@@ -297,6 +298,26 @@
                 </div>
             </dbp-translated>
         </div>
+        <div slot="partial-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <b>Bibliothek, Prüfung, Eintritt</b>
+                </div>
+                <div slot="en">
+                    <b>Library, Exam, Entry</b>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="full-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <b>Lehrveranstaltungen</b>
+                </div>
+                <div slot="en">
+                    <b>Lectures</b>
+                </div>
+            </dbp-translated>
+        </div>
     </template>
     <template id="dbp-show-active-tickets">
         <div slot="greenlight-reference">
@@ -365,6 +386,36 @@
                         <span>Create entry ticket</span>
                     </a>
                     and upload a new evidence by requesting a new ticket.
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="full-proof-title">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <h4>PCR Test gefunden</h4>
+                </div>
+                <div slot="en">
+                    <h4>PCR test found</h4>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="partial-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Bibliothek, Prüfung, Eintritt
+                </div>
+                <div slot="en">
+                    Library, Exam, Entry
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="full-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Lehrveranstaltungen
+                </div>
+                <div slot="en">
+                    Lectures
                 </div>
             </dbp-translated>
         </div>
@@ -494,12 +545,20 @@
                     <h4>Informationen zum Nachweis</h4>
                     <br>
                     <p>
-                        Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit
-                        <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
-                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                        <% if(ticketTypes){ %>
+                            Ist ein <strong>gültiger PCR Test</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt.
                             <br><br>
-                            Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
-                            Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem herkömmlichen QR-Code Scanner erfolgen.
+                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, der <strong>kein PCR Test</strong> ist, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
+                            <br><br>
+                            Der angezeigte QR-Code kann mit <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
+                        <% } else { %>
+                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit
+                            <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
+                            <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                                <br><br>
+                                Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
+                                Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem herkömmlichen QR-Code Scanner erfolgen.
+                            <% } %>
                         <% } %>
                     </p>
                 </div>
@@ -507,12 +566,20 @@
                     <h4>Information about evidence</h4>
                     <br>
                     <p>
-                        If a <strong>valid health certitificate</strong> is available on this device then its QR code is displayed and the ticket is shown in color.
-                        This QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
-                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                        <% if(ticketTypes){ %>
+                            If a <strong>valid PCR Test</strong> is available on this device then its QR code is displayed and the ticket is shown in color. 
                             <br><br>
-                            If a <strong>self-test</strong> that was issued by Styria and Carinthia, is available on this device then its QR code is displayed and the ticket is shown in black and white.
-                            This QR code cannot be validated by this app, therefore its validation requires a common QR code scanner.
+                            If a <strong>valid health certitificate</strong> that is not a PCR test is available on this device, then its QR code is displayed and the ticket is shown in black and white.
+                            <br><br>
+                            The displayed QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
+                        <% } else { %>
+                            If a <strong>valid health certitificate</strong> is available on this device then its QR code is displayed and the ticket is shown in color.
+                            This QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
+                            <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                                <br><br>
+                                If a <strong>self-test</strong> that was issued by Styria and Carinthia, is available on this device then its QR code is displayed and the ticket is shown in black and white.
+                                This QR code cannot be validated by this app, therefore its validation requires a common QR code scanner.
+                            <% } %>
                         <% } %>
                     </p>
                 </div>

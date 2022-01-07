@@ -18,6 +18,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.searchHashString = '';
         this.searchSelfTestStringArray = '';
         this.selfTestValid = false;
+        this.ticketTypes = false;
     }
 
     static get properties() {
@@ -28,6 +29,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
             selfTestValid: {type: Boolean, attribute: 'gp-self-test-valid'},
+            ticketTypes: {type: Boolean, attribute: 'ticket-types'},
         };
     }
 
@@ -184,10 +186,21 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     }
 
     async sendCreateTicketRequest() {
+
+        let additionalInformation;
+        
+        if (this.ticketTypes && this.hasValidProof) {
+            additionalInformation = this.isFullProof ? 'full' : 'partial';
+        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+            additionalInformation = 'local-proof';
+        } else { 
+            additionalInformation = '';
+        }
+
         let body = {
-            // "place": this.location,
             "consentAssurance": this.isConfirmChecked,
-            "additionalInformation": await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : ''),
+            //"additionalInformation": await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : ''),
+            "additionalInformation": await encodeAdditionalInformation(this.auth.token, additionalInformation),
         };
 
         const options = {
@@ -338,6 +351,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.greenPassHash = data;
             this.isSelfTest = false;
             this.hasValidProof = true;
+
+            // TODO check before setting value
+            // this.isFullProof = true;
+
             this.proofUploadFailed = false;
             await this.doActivation(this.greenPassHash, 'ActivationRequest', this.preCheck);
             return;
@@ -379,6 +396,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
             this.hasValidProof = true;
             this.proofUploadFailed = false;
+
+            // TODO check before setting value
+            // this.isFullProof = true;
 
             if (this._("#text-switch"))
                 this._("#text-switch")._active = "";
@@ -450,6 +470,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.validationFailed = true;
             this.proofUploadFailed = true;
             this.hasValidProof = false;
+            this.isFullProof = false;
             this.detailedError = error.message;
             this.message = i18nKey('validation-not-possible');
             this.saveWrongHashAndNotify(i18n.t('validation-not-possible-title'), i18n.t('validation-not-possible-body'), greenPassHash);
@@ -461,6 +482,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '');
             this.proofUploadFailed = true;
             this.hasValidProof = false;
+            this.isFullProof = false;
             if (!preCheck) {
                 this.detailedError = res.error;
                 this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
@@ -505,6 +527,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 }
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
+                this.isFullProof = false;
                 await this.sendSuccessAnalyticsEvent('HCertValidation', 'NameDoesntMatch', '', '');
                 return;
             }
@@ -527,6 +550,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.hasValidProof = true;
         this.proofUploadFailed = false;
         this.isSelfTest = false;
+
+        // TODO check before setting value
+        // this.isFullProof = true;
 
         if (this._("#text-switch"))
             this._("#text-switch")._active = "";

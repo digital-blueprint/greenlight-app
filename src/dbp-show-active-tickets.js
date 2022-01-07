@@ -27,6 +27,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         this.loadingTickets = true;
         this.preCheck = false;
         this.validationFailed = false;
+        this.isFullProof = false;
     }
 
 
@@ -49,6 +50,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             hasValidProof: {type: Boolean, attribute: false},
             isSelfTest: {type: Boolean, attribute: false},
             loadingTickets: {type: Boolean, attribute: false},
+            isFullProof: {type: Boolean, attribute: false},
         };
     }
 
@@ -114,7 +116,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             },
         };
 
-        const additionalInformation = this.hasValidProof && !this.isSelfTest ? 'local-proof' : '';
+        // const additionalInformation = this.hasValidProof && !this.isSelfTest ? 'local-proof' : '';
+        let additionalInformation;
+
+        if (this.ticketTypes && this.hasValidProof) {
+            additionalInformation = this.isFullProof ? 'full' : 'partial';
+        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+            additionalInformation = 'local-proof';
+        } else { 
+            additionalInformation = '';
+        }
 
         return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits/' + encodeURIComponent(ticketID) + '?additional-information=' +
             encodeURIComponent(additionalInformation)), options);
@@ -134,7 +145,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                 Authorization: "Bearer " + this.auth.token
             },
         };
-        const additionalInformation = this.hasValidProof ? 'local-proof' : '';
+        // const additionalInformation = this.hasValidProof ? 'local-proof' : '';
+        let additionalInformation;
+
+        if (this.ticketTypes && this.hasValidProof) {
+            additionalInformation = this.isFullProof ? 'full' : 'partial';
+        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+            additionalInformation = 'local-proof';
+        } else { 
+            additionalInformation = '';
+        }
 
         return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits?additional-information=' +
             encodeURIComponent(additionalInformation)), options);
@@ -227,6 +247,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         if (!this.greenPassHash || this.greenPassHash === -1) {
             this.hasValidProof = false;
             this.isSelfTest = false;
+            this.isFullProof = false;
         }
         this.loading = false;
     }
@@ -254,6 +275,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         } else {
             this.hasValidProof = false;
             this.isSelfTest = false;
+            this.isFullProof = false;
         }
     }
 
@@ -386,6 +408,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
+
+            .valid-for .green {
+                display: inline-block;
+            }
+
             .red {
                 color: var(--dbp-danger-dark);
             }
@@ -475,9 +502,16 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             </div>
 
             <div class="proof-container ${classMap({hidden: !this.hasValidProof || this.ticketLoading})}">
-                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof})}">
+                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof || this.isFullProof})}">
                     <span>
                         <h4>${i18n.t('show-active-tickets.3-g-evidence-greenpass')}</h4>
+                    </span>
+                </div>
+                <div class="green-pass-evidence ${classMap({hidden: this.isSelfTest || !this.hasValidProof || !this.isFullProof})}">
+                    <span>
+                        <slot name="full-proof-title">
+                            <h4>${i18n.t('show-active-tickets.3-g-evidence-fullproof')}</h4>
+                        </slot>
                     </span>
                 </div>
                 <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
@@ -538,6 +572,27 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                     class="red">${i18n.t('show-active-tickets.validation-failed')}</span></b>
                             <span>
                                 ${i18n.t('show-active-tickets.validation-failed-text')}
+                            </span>
+                        </span>
+                        <span class="valid-for ${classMap({hidden: !this.ticketTypes})}">
+                            <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
+                                <span class="green"><!--TODO change span class-->
+                                    <slot name="partial-validity">
+                                        <!--TODO maybe fill slot with a default text-->
+                                    </slot>
+                                </span>
+                            </b>
+                            <!--TODO change tooltip text-->
+                            <dbp-info-tooltip class="info-tooltip" text-content='${ validTill }' interactive></dbp-info-tooltip>
+
+                            <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
+                                <b><span class="green"> <!--TODO change span class-->
+                                    <slot name="full-validity">
+                                        ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                    </slot>
+                                </span></b>
+                                <!--TODO change tooltip text-->
+                                <dbp-info-tooltip class="info-tooltip" text-content='${ validTill }' interactive></dbp-info-tooltip>
                             </span>
                         </span>
                     </span>
