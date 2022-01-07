@@ -14,18 +14,20 @@ suite('hcert validate', () => {
         let checkDate = new Date('2021-08-09T15:35:44Z');
 
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
-        let res = await test.validate(TEST_REC, checkDate, 'en');
+        let res = await test.validate(TEST_REC, checkDate, 'en', 'AT', ['ET']);
         assert.isTrue(res.isValid);
         assert.isNull(res.error);
         assert.equal(res.firstname, 'Gabriele');
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
-        assert.equal(res.validUntil.toISOString(), '2021-12-30T00:00:00.000Z');
+        assert.isTrue(res.regions['ET'].isValid);
+        assert.equal(res.regions['ET'].validUntil.toISOString(), '2021-12-30T00:00:00.000Z');
 
         checkDate = new Date(checkDate.getTime());
         checkDate.setFullYear(checkDate.getFullYear() + 2000);
         res = await test.validate(TEST_REC, checkDate, 'en');
-        assert.isFalse(res.isValid);
+        assert.isTrue(res.isValid);
+        assert.isFalse(res.regions['ET'].isValid);
     });
 
     test('validate no rules', async () => {
@@ -34,14 +36,15 @@ suite('hcert validate', () => {
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
         await test._ensureData();
         test._businessRules = test._businessRules.filter('NOPE', 'NOPE');
-        let res = await test.validate(TEST_REC, checkDate, 'en');
+        let res = await test.validate(TEST_REC, checkDate, 'en', 'AT', ['ET']);
         assert.isTrue(res.isValid);
         assert.isNull(res.error);
         assert.equal(res.firstname, 'Gabriele');
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
         // No rules, so the expiration date of the hcert defines the end date
-        assert.equal(res.validUntil.toISOString(), '2022-07-15T13:32:58.000Z');
+        assert.isTrue(res.regions['ET'].isValid);
+        assert.equal(res.regions['ET'].validUntil.toISOString(), '2022-07-15T13:32:58.000Z');
     });
 
     // https://github.com/eu-digital-green-certificates/dcc-quality-assurance/blob/main/AT/1.3.0/VAC.png
@@ -51,13 +54,14 @@ suite('hcert validate', () => {
         let checkDate = new Date('2021-08-09T15:35:44Z');
 
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
-        let res = await test.validate(TEST_VAC, checkDate, 'en');
-        assert.isFalse(res.isValid);
-        assert.isNotEmpty(res.error);
-        assert.isNull(res.firstname);
-        assert.isNull(res.lastname);
-        assert.isNull(res.dob);
-        assert.isNull(res.validUntil);
+        let res = await test.validate(TEST_VAC, checkDate, 'en', 'AT', ['ET']);
+        assert.isTrue(res.isValid);
+        assert.isNull(res.error);
+        assert.isNotNull(res.firstname);
+        assert.isNotNull(res.lastname);
+        assert.isNotNull(res.dob);
+        assert.isFalse(res.regions['ET'].isValid);
+        assert.isNotEmpty(res.regions['ET'].error);
     });
 
     // https://github.com/eu-digital-green-certificates/dcc-quality-assurance/blob/main/AT/1.3.0/TEST.png
@@ -67,23 +71,25 @@ suite('hcert validate', () => {
         let checkDate = new Date('2021-07-14T12:34:57Z');
 
         let test = new Validator(TEST_TRUSTDATA_DATE, false);
-        let res = await test.validate(TEST_TEST, checkDate, 'en');
+        let res = await test.validate(TEST_TEST, checkDate, 'en', 'AT', ['ET']);
         assert.isTrue(res.isValid);
         assert.isNull(res.error);
         assert.equal(res.firstname, 'Gabriele');
         assert.equal(res.lastname, 'Musterfrau-Gößinger');
         assert.equal(res.dob, '1998-02-26');
-        assert.equal(res.validUntil.toISOString(), '2021-07-15T12:34:55.999Z');
+        assert.equal(res.regions['ET'].validUntil.toISOString(), '2021-07-15T12:34:55.999Z');
 
         // Right before it becomes invalid
         checkDate = new Date('2021-07-15T12:34:55.999Z');
-        res = await test.validate(TEST_TEST, checkDate, 'en');
+        res = await test.validate(TEST_TEST, checkDate, 'en', 'AT', ['ET']);
         assert.isTrue(res.isValid);
+        assert.isTrue(res.regions['ET'].isValid);
 
         // Now its invalid
         checkDate = new Date('2021-07-15T12:34:56Z');
         res = await test.validate(TEST_TEST, checkDate, 'en');
-        assert.isFalse(res.isValid);
+        assert.isTrue(res.isValid);
+        assert.isFalse(res.regions['ET'].isValid);
     });
 
     test('rules validate empty', async () => {

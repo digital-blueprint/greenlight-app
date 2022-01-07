@@ -6,12 +6,28 @@ import {createInstance} from '../i18n.js';
 import { withDate } from './utils.js';
 
 
+export class RegionResult {
+    constructor() {
+        /** @type {string} */
+        this.country = null;
+        /** @type {string} */
+        this.region = null;
+        /** @type {boolean} Wether the HCERT is valid according to the regional rules */
+        this.isValid = false;
+        /** @type {string} Contains an error message if isValid === false */
+        this.error = null;
+        /** @type {Date|null} */
+        this.validUntil = null;
+    }
+}
+
+
 export class ValidationResult {
 
     constructor() {
-        /** @type {boolean} */
+        /** @type {boolean} Wether the HCERT itself + signature is valid */
         this.isValid = false;
-        /** @type {string} */
+        /** @type {string} Contains an error message if isValid === false*/
         this.error = null;
         /** @type {string} */
         this.firstname = null;
@@ -23,8 +39,8 @@ export class ValidationResult {
         this.lastname_t = null;
         /** @type {string} */
         this.dob = null;
-        /** @type {Date|null} */
-        this.validUntil = null;
+        /** @type {object.<string,RegionResult>} Contains a result for each region as long as isValid === true*/
+        this.regions = {};
     }
 }
 
@@ -60,7 +76,6 @@ export class Validator {
                 this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
         });
         this._businessRules = await decodeJSONBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
-        this._businessRules = this._businessRules.filter('AT', 'ET');
         this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor, this._trustDate);
         this._loaded = true;
     }
@@ -74,10 +89,10 @@ export class Validator {
      * @param {Date} date
      * @param {string} [lang]
      * @param {string} [country]
-     * @param {string} [region]
+     * @param {string[]} [regions]
      * @returns {ValidationResult}
      */
-     async validate(cert, date, lang='en', country='AT', region='ET') {
+     async validate(cert, date, lang='en', country='AT', regions=['ET']) {
         await this._ensureData();
 
         let i18n = createInstance();
@@ -112,54 +127,65 @@ export class Validator {
         let result = new ValidationResult();
         if (hcertData.isValid) {
             let greenCertificate = hcertData.greenCertificate;
-            let businessRules = this._businessRules.filter(country, region);
-            /** @type {RuleValidationResult} */
-            let res = validateHCertRules(greenCertificate, businessRules, this._valueSets, date, this._trustDate);
 
-            if (res.isValid) {
-                result.isValid = true;
-                result.firstname = greenCertificate.nam.gn ?? '';
-                result.lastname = greenCertificate.nam.fn ?? '';
-                result.firstname_t = greenCertificate.nam.gnt ?? '';
-                result.lastname_t = greenCertificate.nam.fnt ?? '';
-                result.dob = greenCertificate.dob ?? '';
+            result.isValid = true;
+            result.firstname = greenCertificate.nam.gn ?? '';
+            result.lastname = greenCertificate.nam.fn ?? '';
+            result.firstname_t = greenCertificate.nam.gnt ?? '';
+            result.lastname_t = greenCertificate.nam.fnt ?? '';
+            result.dob = greenCertificate.dob ?? '';
 
-                // according to the rules, returns null if it never becomes invalid
-                let validUntil = getValidUntil(
-                    greenCertificate, businessRules, this._valueSets, date);
+            for (let region of regions) {
+                let regionResult = new RegionResult();
+                regionResult.country = country;
+                regionResult.region = region;
 
-                let isFullDate = (date) => {
-                    // https://github.com/ehn-dcc-development/hcert-kotlin/pull/64
-                    return (date && date.includes("T"));
-                };
+                let businessRules = this._businessRules.filter(country, region);
+                /** @type {RuleValidationResult} */
+                let res = validateHCertRules(greenCertificate, businessRules, this._valueSets, date, this._trustDate);
 
-                // If anything regarding the certificate stops being valid earlier
-                // than the rules then it takes precedence
-                let meta = hcertData.metaInformation;
-                if (isFullDate(meta.certificateValidUntil)) {
-                    let certificateValidUntil = new Date(meta.certificateValidUntil);
-                    if (validUntil === null || certificateValidUntil < validUntil) {
-                        validUntil = certificateValidUntil;
+                if (res.isValid) {
+                    regionResult.isValid = true;
+
+                    // according to the rules, returns null if it never becomes invalid
+                    let validUntil = getValidUntil(
+                        greenCertificate, businessRules, this._valueSets, date);
+
+                    let isFullDate = (date) => {
+                        // https://github.com/ehn-dcc-development/hcert-kotlin/pull/64
+                        return (date && date.includes("T"));
+                    };
+
+                    // If anything regarding the certificate stops being valid earlier
+                    // than the rules then it takes precedence
+                    let meta = hcertData.metaInformation;
+                    if (isFullDate(meta.certificateValidUntil)) {
+                        let certificateValidUntil = new Date(meta.certificateValidUntil);
+                        if (validUntil === null || certificateValidUntil < validUntil) {
+                            validUntil = certificateValidUntil;
+                        }
                     }
+
+                    if (isFullDate(meta.expirationTime)) {
+                        let expirationTime = new Date(meta.expirationTime);
+                        if (validUntil === null || expirationTime < validUntil) {
+                            validUntil = expirationTime;
+                        }
+                    }
+
+                    regionResult.validUntil = validUntil;
+                } else {
+                    regionResult.isValid = false;
+                    regionResult.error = i18n.t('hcert.cert-not-valid-error', {error: getTranslatedErrors(res.errors).join('\n')});
                 }
 
-                if (isFullDate(meta.expirationTime)) {
-                    let expirationTime = new Date(meta.expirationTime);
-                    if (validUntil === null || expirationTime < validUntil) {
-                        validUntil = expirationTime;
-                    }
-                }
-
-                result.validUntil = validUntil;
-            } else {
-                result.isValid = false;
-                result.error = i18n.t('hcert.cert-not-valid-error', {error: getTranslatedErrors(res.errors).join('\n')});
+                result.regions[region] = regionResult;
             }
         } else {
             result.isValid = false;
             result.error = i18n.t('hcert.cert-validation-failed-error', {error: hcertData.error});
         }
-    
+
         return result;
     }
 }

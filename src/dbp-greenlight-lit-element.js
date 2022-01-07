@@ -3,7 +3,7 @@ import {getStackTrace} from "@dbp-toolkit/common/error";
 import {send} from "@dbp-toolkit/common/notification";
 import {combineURLs} from "@dbp-toolkit/common";
 import {parseGreenPassQRCode, i18nKey} from "./utils";
-import {defaultValidator, ValidationResult} from "./hcert";
+import {defaultValidator, ValidationResult, RegionResult} from "./hcert";
 import {checkPerson} from "./hcertmatch.js";
 import {encodeAdditionalInformation} from "./crypto.js";
 import * as storage from "./storage.js";
@@ -441,7 +441,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         /** @type {ValidationResult} */
         let res;
         try {
-            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang);
+            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang, 'AT', ['ET']);
             this.validationFailed = false;
         } catch (error) {
             // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
@@ -463,6 +463,21 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.hasValidProof = false;
             if (!preCheck) {
                 this.detailedError = res.error;
+                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+                this.message = i18nKey('acquire-3g-ticket.invalid-document');
+            }
+            return;
+        }
+
+        // HCert has expired according ot the "ET" rules
+        /** @type {RegionResult} */
+        let etResult = res.regions['ET'];
+        if (!etResult.isValid) {
+            await this.sendErrorAnalyticsEvent('HCertValidation', 'Expired', '');
+            this.proofUploadFailed = true;
+            this.hasValidProof = false;
+            if (!preCheck) {
+                this.detailedError = etResult.error;
                 this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
@@ -501,7 +516,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.person.firstname = res.firstname;
         this.person.lastname = res.lastname;
         this.person.dob = res.dob;
-        this.person.validUntil = res.validUntil;
+        this.person.validUntil = etResult.validUntil;
 
         if (this.showQrContainer !== undefined && this.showQrContainer !== false) {
             this.stopQRReader();
