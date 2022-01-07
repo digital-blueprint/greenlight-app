@@ -413,6 +413,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                 display: inline-block;
             }
 
+            .not-valid-for .black {
+                display: inline-block;
+            }
+
             .red {
                 color: var(--dbp-danger-dark);
             }
@@ -567,26 +571,32 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                 ${i18n.t('show-active-tickets.validation-failed-text')}
                             </span>
                         </span>
-                        <span class="valid-for ${classMap({hidden: !this.ticketTypes || !this.validationFailed})}">
+                        <span class="valid-for ${classMap({hidden: !this.ticketTypes || this.validationFailed || !this.hasValidProof})}">
                             <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
-                                <span class="green"><!--TODO change span class-->
-                                    <slot name="partial-validity">
-                                        <!--TODO maybe fill slot with a default text-->
-                                    </slot>
+                                <span class="green">
+                                    <slot name="partial-validity"></slot>
                                 </span>
                             </b>
-                            <!--TODO change tooltip text-->
-                            <dbp-info-tooltip class="info-tooltip" text-content='${ validTill }' interactive></dbp-info-tooltip>
 
-                            <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
-                                <b><span class="green"> <!--TODO change span class-->
-                                    <slot name="full-validity">
-                                        ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
-                                    </slot>
-                                </span></b>
-                                <!--TODO change tooltip text-->
-                                <dbp-info-tooltip class="info-tooltip" text-content='${ validTill }' interactive></dbp-info-tooltip>
-                            </span>
+                            ${ this.isFullProof ? html`
+                                <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
+                                    <b><span class="green">
+                                        <slot name="full-validity">
+                                            ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                        </slot>
+                                    </span></b>
+                                </span>
+                            ` : html`
+                                <br>
+                                <span class="not-valid-for">
+                                    <b>${i18n.t('acquire-3g-ticket.3g-proof-not-valid-for')}: 
+                                        <span class="black">
+                                            <slot name="full-validity">
+                                                ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                            </slot>
+                                        </span></b>
+                                </span>
+                            `}
                         </span>
                     </span>
                     <div class="btn">
