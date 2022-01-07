@@ -408,7 +408,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
-
+         
             .valid-for .green {
                 display: inline-block;
             }
@@ -572,29 +572,28 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                             </span>
                         </span>
                         <span class="valid-for ${classMap({hidden: !this.ticketTypes || this.validationFailed || !this.hasValidProof})}">
-                            <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
+                            <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: </b>
                                 <span class="green">
                                     <slot name="partial-validity"></slot>
                                 </span>
-                            </b>
-
+                            
                             ${ this.isFullProof ? html`
                                 <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
-                                    <b><span class="green">
+                                    <span class="green">
                                         <slot name="full-validity">
                                             ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                         </slot>
-                                    </span></b>
+                                    </span>
                                 </span>
                             ` : html`
                                 <br>
                                 <span class="not-valid-for">
-                                    <b>${i18n.t('acquire-3g-ticket.3g-proof-not-valid-for')}: 
+                                    <b>${i18n.t('acquire-3g-ticket.3g-proof-not-valid-for')}: </b>
                                         <span class="black">
                                             <slot name="full-validity">
                                                 ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                             </slot>
-                                        </span></b>
+                                        </span>
                                 </span>
                             `}
                         </span>
