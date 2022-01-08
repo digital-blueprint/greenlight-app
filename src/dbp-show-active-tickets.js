@@ -408,6 +408,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
+
+            .header {
+                grid-row-gap: 4px;
+            }
             
             .gray {
                 color: #595959;
@@ -429,6 +433,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             .valid-for {
                 display: flex;
                 gap: 8px;
+                padding-top: 2px;
             }
 
             .red {
@@ -486,6 +491,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     padding-bottom: 8px;
                     flex-direction: column;
                     gap: 0;
+                    padding-top: 0;
+                }
+
+                .header {
+                    grid-row-gap: 0;
                 }
             }
         `;
@@ -589,7 +599,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                     <slot name="partial-validity"></slot>
                                     <div class="full-validity">
                                             ${ this.isFullProof ? html`
-                                                <dbp-icon name='checkmark-circle' class="validity-icon" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>
+                                                <dbp-icon name='checkmark-circle' class="validity-icon green" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>
                                                 <b><slot name="full-validity" class="${classMap({gray: !this.isFullProof})}">
                                                     ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                                 </slot></b>
