@@ -582,7 +582,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getActivityCSS()}
 
             .gray {
-                color: #757575;
+                color: #595959;
+            }
+
+            .full-validity.invalid {
+                text-decoration: line-through;
+                text-decoration-color: #595959;
             }
 
             .full-validity {
@@ -1119,11 +1124,17 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                     <div class="validity-check">
                                                         <slot name="partial-validity"></slot>
                                                         <div class="full-validity">
-                                                            ${ this.isFullProof ? html` <dbp-icon name='checkmark-circle' class="validity-icon" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>` : html`
-                                                                <dbp-icon name='cross-circle' class="validity-icon" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>`}
-                                                            <slot name="full-validity" class="${classMap({gray: !this.isFullProof})}">
-                                                                ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
-                                                            </slot>
+                                                            ${ this.isFullProof ? html` 
+                                                                <dbp-icon name='checkmark-circle' class="validity-icon" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>
+                                                                <b><slot name="full-validity" class="${classMap({gray: !this.isFullProof})}">
+                                                                    ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                                                </slot></b>
+                                                            ` : html`
+                                                                <dbp-icon name='cross-circle' class="validity-icon gray" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>
+                                                                <slot name="full-validity" class="full-validity invalid gray">
+                                                                    ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                                                </slot>
+                                                            `}
                                                         </div>
                                                     </div>
                                                 </span>
