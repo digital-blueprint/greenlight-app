@@ -270,8 +270,9 @@ export function getTicketCss() {
             justify-content: space-between;
             column-gap: 15px;
             row-gap: 1.5em;
-            align-items: center;
             margin-bottom: 2em;
+            padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+            border: 1px solid black;
         }
 
         .tickets {
@@ -433,10 +434,6 @@ export function getTicketCss() {
 
             .header {
                 margin-bottom: 0.5rem;
-            }
-
-            #delete-btn {
-                margin-bottom: 2rem;
             }
 
             .btn {
