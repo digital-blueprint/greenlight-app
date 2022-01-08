@@ -581,8 +581,22 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
 
-            .valid-for slot {
-                display: inline-block;
+            .gray {
+                color: #757575;
+            }
+
+            .full-validity {
+                display: inline-flex;
+            }
+
+            .validity-icon {
+                margin-right: 4px;
+            }
+         
+            .valid-for {
+                padding-bottom: 4px;
+                display: flex;
+                gap: 8px;
             }
 
             h2 {
@@ -897,7 +911,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 }
 
                 .valid-for {
-                    padding-bottom: 7px;
+                    padding-bottom: 8px;
+                    flex-direction: column;
+                    gap: 0;
                 }
             }
         `;
@@ -1100,14 +1116,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4> 
                                             ${ this.ticketTypes ? html`
                                                 <span class="valid-for">${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: 
-                                                    <slot name="partial-validity">
-                                                        <!--TODO maybe fill slot with a default text-->
-                                                    </slot>
-                                                    <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
-                                                        <slot name="full-validity">
-                                                            ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
-                                                        </slot>
-                                                    </span>
+                                                    <div class="validity-check">
+                                                        <slot name="partial-validity"></slot>
+                                                        <div class="full-validity">
+                                                            ${ this.isFullProof ? html` <dbp-icon name='checkmark-circle' class="validity-icon" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>` : html`
+                                                                <dbp-icon name='cross-circle' class="validity-icon" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>`}
+                                                            <slot name="full-validity" class="${classMap({gray: !this.isFullProof})}">
+                                                                ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                                            </slot>
+                                                        </div>
+                                                    </div>
                                                 </span>
                                                 <span>${i18n.t('acquire-3g-ticket.3g-proof-valid-till-title')}: 
                                                     ${i18n.t('date-time', {

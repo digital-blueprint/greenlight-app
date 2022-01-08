@@ -6,7 +6,6 @@
     "3g-proof-proof-from": "Von",
     "3g-proof-status": "Status",
     "3g-proof-valid-for": "Gültig für",
-    "3g-proof-not-valid-for": "Nicht gültig für",
     "3g-proof-valid-till-title": "Gültig bis",
     "3g-proof-valid-full": "Lehrveranstaltungen",
     "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr importieren, indem Sie den entsprechenden QR-Code scannen. Alternativ kann auch ein PDF-Dokument oder ein Bild mit dem QR-Code ausgewählt werden.",
@@ -118,5 +117,7 @@
   "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
   "validation-not-possible-title": "Validierung aktuell nicht möglich",
   "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
-  "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig."
+  "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig.",
+  "aria-invalid-text": "Ungültig",
+  "aria-valid-text": "Gültig"
 }

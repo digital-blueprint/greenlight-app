@@ -408,13 +408,22 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
-         
-            .valid-for .green {
-                display: inline-block;
+            
+            .gray {
+                color: #757575;
             }
 
-            .not-valid-for .black {
-                display: inline-block;
+            .full-validity {
+                display: inline-flex;
+            }
+
+            .validity-icon {
+                margin-right: 4px;
+            }
+         
+            .valid-for {
+                display: flex;
+                gap: 8px;
             }
 
             .red {
@@ -466,6 +475,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             and (max-width: 768px) {
                 #qr-code-hash svg {
                     width: 100%;
+                }
+
+                .valid-for {
+                    padding-bottom: 8px;
+                    flex-direction: column;
+                    gap: 0;
                 }
             }
         `;
@@ -562,31 +577,20 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                 ${i18n.t('show-active-tickets.validation-failed-text')}
                             </span>
                         </span>
-                        <span class="valid-for ${classMap({hidden: !this.ticketTypes || this.validationFailed || !this.hasValidProof})}">
-                            <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: </b>
-                                <span class="green">
+                        <span class="${classMap({hidden: !this.ticketTypes || this.validationFailed || !this.hasValidProof})}">
+                            <div class="valid-for">
+                                <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: </b>
+                                <div class="validity-check">
                                     <slot name="partial-validity"></slot>
-                                </span>
-                            
-                            ${ this.isFullProof ? html`
-                                <span class="full-validity ${classMap({hidden: !this.isFullProof})}">
-                                    <span class="green">
-                                        <slot name="full-validity">
-                                            ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
-                                        </slot>
-                                    </span>
-                                </span>
-                            ` : html`
-                                <br>
-                                <span class="not-valid-for">
-                                    <b>${i18n.t('acquire-3g-ticket.3g-proof-not-valid-for')}: </b>
-                                        <span class="black">
-                                            <slot name="full-validity">
+                                    <div class="full-validity">
+                                            ${ this.isFullProof ? html` <dbp-icon name='checkmark-circle' class="validity-icon" aria-label="${i18n.t('aria-valid-text')}"></dbp-icon>` : html`
+                                                <dbp-icon name='cross-circle' class="validity-icon" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>`}
+                                            <slot name="full-validity" class="${classMap({gray: !this.isFullProof})}">
                                                 ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                             </slot>
-                                        </span>
-                                </span>
-                            `}
+                                    </div>
+                                </div>
+                            </div>
                         </span>
                     </span>
                     <div class="btn">

@@ -6,7 +6,6 @@
     "3g-proof-proof-from": "From",
     "3g-proof-status": "Status",
     "3g-proof-valid-for": "Valid for",
-    "3g-proof-not-valid-for": "Not valid for",
     "3g-proof-valid-till-title": "Valid until",
     "3g-proof-valid-full": "Lectures",
     "additional-information": "You can import your evidence of a low epidemiological risk by scanning the corresponding QR code. Alternatively, you can select a PDF document or an image with the QR code. ",
@@ -118,5 +117,7 @@
   "validation-not-possible-body": "The evidence cannot currently be validated. Please try again later.",
   "validation-not-possible-title": "Validierung aktuell nicht möglich",
   "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
-  "validity-tooltip-ticket-text": "The ticket is only valid in electronic form."
+  "validity-tooltip-ticket-text": "The ticket is only valid in electronic form.",
+  "aria-invalid-text": "Invalid",
+  "aria-valid-text": "Valid"
 }
