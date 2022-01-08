@@ -408,10 +408,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
-
-            .header {
-                grid-row-gap: 4px;
-            }
             
             .gray {
                 color: #595959;
@@ -618,8 +614,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                         <dbp-loading-button class="${classMap({hidden: !this.hasValidProof})}"
                                             type="is-primary"
                                             @click="${() => {this.showTicket(ticket);}}"
-                                            title="${i18n.t('show-btn-text')}">
-                            ${i18n.t('show-btn-text')}
+                                            title="${i18n.t('show-active-tickets.show-btn-text')}">
+                            ${i18n.t('show-active-tickets.show-btn-text')}
                         </dbp-loading-button>
                         <a class="button new-ticket-button ${classMap({hidden: this.hasValidProof || this.validationFailed})}" href="acquire-3g-ticket" title="${i18n.t('show-active-tickets.new-ticket')}">
                                 ${i18n.t('show-active-tickets.new-ticket')}

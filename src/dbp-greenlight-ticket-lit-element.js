@@ -282,6 +282,7 @@ export function getTicketCss() {
         .header {
             display: grid;
             align-items: center;
+            grid-row-gap: 4px;
         }
 
         .btn {

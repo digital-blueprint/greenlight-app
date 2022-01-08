@@ -100,7 +100,8 @@
     "status-active": "aktiv",
     "status-inactive": "inaktiv",
     "validation-failed": "Validierung aktuell nicht möglich",
-    "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
+    "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+    "show-btn-text": "Vorzeigen"
   },
   "show-btn-text": "Zeigen",
   "show-reference-ticket": {

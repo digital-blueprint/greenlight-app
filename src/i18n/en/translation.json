@@ -100,7 +100,8 @@
     "status-active": "active",
     "status-inactive": "inactive",
     "validation-failed": "Validation currently not possible",
-    "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
+    "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later.",
+    "show-btn-text": "Show"
   },
   "show-btn-text": "Show",
   "show-reference-ticket": {
