@@ -289,6 +289,7 @@ export function getTicketCss() {
             display: flex;
             justify-content: space-between;
             column-gap: 0.5em;
+            align-items: start;
         }
 
         .filterNone {
