@@ -49,6 +49,10 @@ export class TextSwitch extends AdapterLitElement {
             ${commonStyles.getThemeCSS()}
             ${commonStyles.getButtonCSS()}
 
+            :host {
+                display: block;
+            }
+
             div {
                 white-space: nowrap;
                 display: flex;

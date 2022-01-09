@@ -112,6 +112,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             ${commonStyles.getLinkCss()}
             ${getTicketCss()}
 
+            .color-switch {
+                margin-top: 0.5rem;
+            }
         `;
     }
 
@@ -166,6 +169,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             buttonArea = html`
                 <dbp-textswitch
                     name="${this.forceTicketGrayscale ? "grayscale" : "color"}"
+                    class="color-switch"
                     name1="color"
                     name2="grayscale"
                     value1="${i18n.t('show-reference-ticket.switch-label-in-color')}"
