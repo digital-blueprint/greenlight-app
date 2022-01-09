@@ -457,12 +457,15 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         let regions = [];
         let fullProofRegion = '';
+        let errorRegion = '';
         if (this.ticketTypes) {
             regions = Object.values(this.ticketTypes);
             fullProofRegion = this.ticketTypes['full'];
+            errorRegion = this.ticketTypes['partial'];
         } else {
             regions = ['ET'];
             fullProofRegion = 'ET';
+            errorRegion = 'ET';
         }
 
         /** @type {ValidationResult} */
@@ -513,8 +516,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.proofUploadFailed = true;
             this.hasValidProof = false;
             if (!preCheck) {
-                // Use the most strict region for the error message
-                this.detailedError = res.regions[fullProofRegion].error;
+                // Use the less strict region for the error message to show what would be needed
+                // to get at least something.
+                this.detailedError = res.regions[errorRegion].error;
                 this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
