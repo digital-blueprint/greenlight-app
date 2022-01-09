@@ -441,6 +441,7 @@ export function getTicketCss() {
             .btn {
                 flex-direction: column;
                 row-gap: 0.5em;
+                align-items: normal;
             }
 
             .loading {
