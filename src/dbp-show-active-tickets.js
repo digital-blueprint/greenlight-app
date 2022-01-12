@@ -422,6 +422,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             }
 
             .full-validity {
+                display: inline-grid;
+                grid-template-columns: auto auto auto;
+            }
+
+            .full-validity-content {
                 display: inline-flex;
             }
 
@@ -606,10 +611,11 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                                 </slot></b>
                                             ` : html`
                                                 <dbp-icon name='cross-circle' class="validity-icon gray" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>
-                                                <span class="gray">${i18n.t('acquire-3g-ticket.3g-proof-valid-full-no-access')}&#8239;</span>
-                                                <slot name="full-validity" class="full-validity invalid gray">
-                                                    ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
-                                                </slot>
+                                                <div class="full-validity-content gray">${i18n.t('acquire-3g-ticket.3g-proof-valid-full-no-access')}&#8239;
+                                                    <slot name="full-validity" class="full-validity invalid gray">
+                                                        ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
+                                                    </slot>
+                                                </div>
                                             `}
                                     </div>
                                 </div>
