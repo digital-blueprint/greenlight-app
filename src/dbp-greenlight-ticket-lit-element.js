@@ -440,8 +440,12 @@ export function getTicketCss() {
 
             .btn {
                 flex-direction: column;
-                row-gap: 0.5em;
                 align-items: normal;
+                row-gap: 1em;
+            }
+
+            .btn dbp-loading-button {
+                min-height: 33px;
             }
 
             .loading {

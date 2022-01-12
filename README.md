@@ -216,12 +216,12 @@ Example:
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
-          Zeigt alle Tickets angemeldeter Benutzer*innen.
+          Zeigt eine Liste erstellter Tickets an.
         </p>
       </div>
       <div slot="en">
         <p>
-          Shows all tickets for logged in users.
+          Shows a list of created tickets.
         </p>
       </div>
     </dbp-translated>

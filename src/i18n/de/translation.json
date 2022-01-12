@@ -5,9 +5,10 @@
     "3g-proof-label-text": "Nachweis importieren",
     "3g-proof-proof-from": "Von",
     "3g-proof-status": "Status",
-    "3g-proof-valid-for": "Gültig für",
+    "3g-proof-valid-for": "Gültigkeit",
     "3g-proof-valid-till-title": "Gültig bis",
     "3g-proof-valid-full": "Lehrveranstaltungen",
+    "3g-proof-valid-full-no-access": "Kein",
     "additional-information": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr importieren, indem Sie den entsprechenden QR-Code scannen. Alternativ kann auch ein PDF-Dokument oder ein Bild mit dem QR-Code ausgewählt werden.",
     "confirm-checkbox-valid-cert-text": "Ich bestätige, dass mein Nachweis für die Dauer meines Aufenthalts gültig ist, sowie die Richtigkeit meiner Angaben, und nehme zur Kenntnis, dass jeglicher Missbrauch der App greenlight oder die Angabe falscher Daten zu rechtlichen Konsequenzen führen kann.",
     "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
@@ -101,7 +102,8 @@
     "status-inactive": "inaktiv",
     "validation-failed": "Validierung aktuell nicht möglich",
     "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
-    "show-btn-text": "Vorzeigen"
+    "show-btn-text": "Vorzeigen",
+    "delete-dialog-text": "Möchten Sie das Ticket wirklich löschen?"
   },
   "show-btn-text": "Zeigen",
   "show-reference-ticket": {

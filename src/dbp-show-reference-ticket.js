@@ -115,6 +115,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             .color-switch {
                 margin-top: 0.5rem;
             }
+
+            .ticket {
+                column-gap: 20px;
+            }
         `;
     }
 

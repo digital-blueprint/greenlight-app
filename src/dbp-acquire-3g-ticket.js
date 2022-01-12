@@ -586,7 +586,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             .full-validity.invalid {
-                text-decoration: line-through;
                 text-decoration-color: #595959;
             }
 
@@ -596,6 +595,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .validity-icon {
                 margin-right: 4px;
+                font-size: 18px;
             }
          
             .valid-for {
@@ -840,6 +840,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             @media only screen
             and (orientation: portrait)
             and (max-width: 768px) {
+
+                dbp-loading-button {
+                    min-height: 33px;
+                }
 
                 .confirm-btn {
                     display: flex;
@@ -1131,6 +1135,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                                 </slot></b>
                                                             ` : html`
                                                                 <dbp-icon name='cross-circle' class="validity-icon gray" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>
+                                                                <span class="gray">${i18n.t('acquire-3g-ticket.3g-proof-valid-full-no-access')}&#8239;</span>
                                                                 <slot name="full-validity" class="full-validity invalid gray">
                                                                     ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                                                 </slot>

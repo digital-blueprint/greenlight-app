@@ -5,9 +5,10 @@
     "3g-proof-label-text": "Import evidence",
     "3g-proof-proof-from": "From",
     "3g-proof-status": "Status",
-    "3g-proof-valid-for": "Valid for",
+    "3g-proof-valid-for": "Validity",
     "3g-proof-valid-till-title": "Valid until",
     "3g-proof-valid-full": "Lectures",
+    "3g-proof-valid-full-no-access": "No",
     "additional-information": "You can import your evidence of a low epidemiological risk by scanning the corresponding QR code. Alternatively, you can select a PDF document or an image with the QR code. ",
     "confirm-checkbox-valid-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
     "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences",
@@ -101,7 +102,8 @@
     "status-inactive": "inactive",
     "validation-failed": "Validation currently not possible",
     "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later.",
-    "show-btn-text": "Show"
+    "show-btn-text": "Show",
+    "delete-dialog-text": "Do you really want to delete the ticket?"
   },
   "show-btn-text": "Show",
   "show-reference-ticket": {

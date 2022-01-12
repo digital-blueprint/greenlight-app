@@ -306,6 +306,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
      * @param {object} ticket
      */
     async deleteTicket(ticket) {
+        const i18n = this._i18n;
+        if (!confirm(i18n.t('show-active-tickets.delete-dialog-text'))) {
+            return;
+        }
         let response = await this.sendDeleteTicketRequest(ticket.identifier);
         let responseBody = await response.clone();
         await this.checkDeleteTicketResponse(responseBody);
@@ -414,7 +418,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             }
 
             .full-validity.invalid {
-                text-decoration: line-through;
                 text-decoration-color: #595959;
             }
 
@@ -424,6 +427,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
 
             .validity-icon {
                 margin-right: 4px;
+                font-size: 18px;
             }
          
             .valid-for {
@@ -491,7 +495,8 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                 }
 
                 .header {
-                    grid-row-gap: 0;
+                    grid-row-gap: 8px;
+                    margin-bottom: 0;
                 }
             }
         `;
@@ -601,6 +606,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                                 </slot></b>
                                             ` : html`
                                                 <dbp-icon name='cross-circle' class="validity-icon gray" aria-label="${i18n.t('aria-invalid-text')}"></dbp-icon>
+                                                <span class="gray">${i18n.t('acquire-3g-ticket.3g-proof-valid-full-no-access')}&#8239;</span>
                                                 <slot name="full-validity" class="full-validity invalid gray">
                                                     ${i18n.t('acquire-3g-ticket.3g-proof-valid-full')}
                                                 </slot>

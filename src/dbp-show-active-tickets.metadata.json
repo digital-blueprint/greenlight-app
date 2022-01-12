@@ -11,8 +11,8 @@
     "en": "Show tickets"
   },
   "description": {
-    "de": "Zeigt alle Tickets angemeldeter Benutzer*innen.",
-    "en": "Shows all tickets for logged in users."
+    "de": "Zeigt eine Liste erstellter Tickets an.",
+    "en": "Shows a list of created tickets."
   },
   "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array,gp-self-test-valid,preselected-option,ticket-types"
 }
