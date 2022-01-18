@@ -425,6 +425,7 @@ export function getTicketCss() {
         @media only screen
         and (orientation: portrait)
         and (max-width: 768px) {
+
             .ticket {
                 display: block;
                 margin-bottom: 0;
@@ -443,10 +444,6 @@ export function getTicketCss() {
                 align-items: normal;
                 row-gap: 1em;
                 padding-top: 0.5em;
-            }
-
-            .btn dbp-loading-button {
-                min-height: 33px;
             }
 
             .loading {

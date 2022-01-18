@@ -308,25 +308,29 @@
                     margin-right: 4px;
                     font-size: 18px;
                 }
+                .validity-items {
+                    display: grid;
+                    grid-template-columns: 22px auto;
+                }
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to On-site exams</b></div>
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to On-site exams</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
                 </div>
             </dbp-translated>
         </div>
         <div slot="full-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
                 </div>
             </dbp-translated>
         </div>
@@ -338,10 +342,10 @@
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
                 </div>
             </dbp-translated>
         </div>
@@ -423,25 +427,29 @@
                     font-size: 18px;
                     color: var(--dbp-success-dark);
                 }
+                .validity-items {
+                    display: grid;
+                    grid-template-columns: 22px auto;
+                }
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site exams</b></div>
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site exams</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
                 </div>
             </dbp-translated>
         </div>
         <div slot="full-validity">
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
                 </div>
             </dbp-translated>
         </div>
@@ -453,10 +461,10 @@
             </style>
             <dbp-translated subscribe="lang">
                 <div slot="de">
-                    <div><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
                 </div>
                 <div slot="en">
-                    <div><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
                 </div>
             </dbp-translated>
         </div>

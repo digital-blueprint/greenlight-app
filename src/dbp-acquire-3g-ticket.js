@@ -828,10 +828,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             and (orientation: portrait)
             and (max-width: 768px) {
 
-                dbp-loading-button {
-                    min-height: 33px;
-                }
-
                 .confirm-btn {
                     display: flex;
                     flex-direction: column;
