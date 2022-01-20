@@ -584,12 +584,18 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                             <div class="valid-for">
                                 <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}: </b>
                                 <div class="validity-check">
-                                    <slot name="partial-validity"></slot>
+                                    <slot name="partial-validity">
+                                        ${i18n.t('partial-validity-default')}
+                                    </slot>
                                     <div class="full-validity">
                                         ${ this.isFullProof ? html`
-                                            <slot name="full-validity"></slot>
+                                            <slot name="full-validity">
+                                                ${i18n.t('full-validity-default')}
+                                            </slot>
                                         ` : html`
-                                            <slot name="no-full-validity" class="full-validity invalid gray"></slot>
+                                            <slot name="no-full-validity" class="full-validity invalid gray">
+                                                ${i18n.t('no-full-validity-default')}
+                                            </slot>
                                         `}
                                     </div>
                                 </div>

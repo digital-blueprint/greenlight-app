@@ -123,5 +123,8 @@
   "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
   "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig.",
   "aria-invalid-text": "Ungültig",
-  "aria-valid-text": "Gültig"
+  "aria-valid-text": "Gültig",
+  "partial-validity-default": "Zutritt zur Universität",
+  "full-validity-default": "Erweiterter Zutritt zur Universität",
+  "no-full-validity-default": "Kein erweiterter Zutritt zur Universität"
 }

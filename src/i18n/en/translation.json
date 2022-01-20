@@ -123,5 +123,8 @@
   "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
   "validity-tooltip-ticket-text": "The ticket is only valid in electronic form.",
   "aria-invalid-text": "Invalid",
-  "aria-valid-text": "Valid"
+  "aria-valid-text": "Valid",
+  "partial-validity-default": "Access to the university",
+  "full-validity-default": "Extended access to the university",
+  "no-full-validity-default": "No extended access to the university"
 }
