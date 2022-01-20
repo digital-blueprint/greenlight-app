@@ -603,7 +603,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                             title="${i18n.t('show-active-tickets.show-btn-text')}">
                             ${i18n.t('show-active-tickets.show-btn-text')}
                         </dbp-loading-button>
-                        <a class="button new-ticket-button ${classMap({hidden: this.hasValidProof || this.validationFailed})}" href="acquire-3g-ticket" title="${i18n.t('show-active-tickets.new-ticket')}">
+                        <a class="button new-ticket-button ${classMap({hidden: this.hasValidProof || this.validationFailed})}" href='#' @click="${
+                                            (e) => {
+                                                this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
+                                                e.preventDefault();
+                                            }
+                                    }" title="${i18n.t('show-active-tickets.new-ticket')}">
                                 ${i18n.t('show-active-tickets.new-ticket')}
                         </a>
                         <dbp-loading-button id="delete-btn" class="${classMap({hidden: this.validationFailed})}"

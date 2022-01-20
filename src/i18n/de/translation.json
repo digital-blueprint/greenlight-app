@@ -89,6 +89,7 @@
     "logged-out-body": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "logged-out-title": "Sitzung abgelaufen!",
     "new-ticket": "Neues Ticket anfordern",
+    "acquire-ticket": "Ticket erstellen",
     "no-3g-evidence": "Kein Nachweis gefunden",
     "no-evidence": "Es wurde kein gültiger gespeicherter Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
     "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",

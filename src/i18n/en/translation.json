@@ -89,6 +89,7 @@
     "logged-out-body": "The session has expired. Please log in again.",
     "logged-out-title": "Session expired!",
     "new-ticket": "Request a new ticket",
+    "acquire-ticket": "Create a ticket",
     "no-3g-evidence": "No evidence found",
     "no-evidence": "No valid stored evidence was found. Show your evidence manually or upload a new evidence by creating a new ticket.",
     "other-error-body": "An unknown error occurred.",

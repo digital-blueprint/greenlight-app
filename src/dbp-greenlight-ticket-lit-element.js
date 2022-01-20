@@ -201,6 +201,14 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
                     </div>
                     <div class="no-tickets ${classMap({hidden: this.loading || (!this.activeTickets || this.activeTickets.length !== 0) || this.loadingTickets})}">
                         ${i18n.t('no-tickets-message')}
+                        <a class="button is-primary new-ticket-button" href='#' @click="${
+                                            (e) => {
+                                                this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
+                                                e.preventDefault();
+                                            }
+                                    }" title="${i18n.t('show-active-tickets.acquire-ticket')}">
+                                ${i18n.t('show-active-tickets.acquire-ticket')}
+                        </a>
                     </div>
                     <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
                         <span class="loading">
@@ -265,6 +273,13 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
 export function getTicketCss() {
     // language=css
     return css`
+        
+        .no-tickets {
+            display: flex;
+            justify-content: space-between;
+            column-gap: 0.5em;
+        }
+
         .ticket {
             display: flex;
             justify-content: space-between;
@@ -425,6 +440,12 @@ export function getTicketCss() {
         @media only screen
         and (orientation: portrait)
         and (max-width: 768px) {
+
+            .no-tickets {
+                flex-direction: column;
+                align-items: normal;
+                row-gap: 1.5em;
+            }
 
             .ticket {
                 display: block;
