@@ -177,6 +177,95 @@ Example:
 </dbp-acquire-3g-ticket>
 ```
 
+##### partial-validity
+
+The content of this slot will be shown in the validity information of the imported proof. It is used to show which rules and restrictions are valid for a given partial-validity. 
+
+Example:
+
+```html
+<template id="dbp-acquire-3g-ticket">
+  <div slot="partial-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu Präsenzprüfungen</b>
+          </div>
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu geöffneten Bereichen der TU Graz</b>
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to On-site exams</b>
+          </div>
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to opened areas of TU Graz</b>
+          </div>
+      </div>
+    </dbp-translated>
+  </div>  
+</template>
+```
+
+##### full-validity
+
+The content of this slot will be shown in the validity information of the imported proof. It is used to show which additional rules and restrictions are valid for a given full-validity. 
+
+Example:
+
+```html
+<template id="dbp-acquire-3g-ticket">
+  <div slot="full-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu Präsenzlehrveranstaltungen</b>
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to on-site lectures</b>
+          </div>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### no-full-validity
+
+The content of this slot will be shown in the validity information of the imported proof. It is used to show which rules and restrictions are not valid in case when only partial-validity is provided.
+
+Example:
+
+```html
+<template id="dbp-acquire-3g-ticket">
+  <div slot="no-full-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>
+            Kein Zutritt zu Präsenzlehrveranstaltungen
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>
+            No access to on-site lectures
+          </div>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
 ### dbp-show-active-tickets
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
@@ -298,7 +387,7 @@ Example:
 
 ##### 3-g-evidence-invalid-text
 
-Use this slot and add a link to faq
+Use this slot and add a link to faq.
 
 Example:
 
@@ -313,6 +402,95 @@ Example:
       <div slot="en">
         <a href="/link-to-faq">FAQ</a>
         You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.      
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### partial-validity
+
+The content of this slot will be shown in the validity information of the listed tickets. It is used to show which rules and restrictions are valid for a given partial-validity. 
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="partial-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu Präsenzprüfungen</b>
+          </div>
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu geöffneten Bereichen der TU Graz</b>
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to On-site exams</b>
+          </div>
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to opened areas of TU Graz</b>
+          </div>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### full-validity
+
+The content of this slot will be shown in the validity information of the listed tickets. It is used to show which additional rules and restrictions are valid for a given full-validity. 
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="full-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
+            <b>Zutritt zu Präsenzlehrveranstaltungen</b>
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
+            <b>Access to on-site lectures</b>
+          </div>
+      </div>
+    </dbp-translated>
+  </div>
+</template>
+```
+
+##### no-full-validity
+
+The content of this slot will be shown in the validity information of the listed tickets. It is used to show which rules and restrictions are not valid in case when only partial-validity is provided.
+
+Example:
+
+```html
+<template id="dbp-show-active-tickets">
+  <div slot="no-full-validity">
+    <dbp-translated subscribe="lang">
+      <div slot="de">
+          <div class="validity-items">
+            <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>
+            Kein Zutritt zu Präsenzlehrveranstaltungen
+          </div>
+      </div>
+      <div slot="en">
+          <div class="validity-items">
+            <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>
+            No access to on-site lectures
+          </div>
       </div>
     </dbp-translated>
   </div>
