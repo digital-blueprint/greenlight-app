@@ -485,6 +485,10 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     grid-row-gap: 8px;
                     margin-bottom: 0;
                 }
+
+                .new-ticket-button {
+                    min-height: 24px;
+                }
             }
         `;
     }

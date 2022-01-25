@@ -201,14 +201,14 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
                     </div>
                     <div class="no-tickets ${classMap({hidden: this.loading || (!this.activeTickets || this.activeTickets.length !== 0) || this.loadingTickets})}">
                         ${i18n.t('no-tickets-message')}
-                        <a class="button is-primary new-ticket-button" href='#' @click="${
+                        <div><a class="button is-primary create-ticket-button" href='#' @click="${
                                             (e) => {
                                                 this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
                                                 e.preventDefault();
                                             }
                                     }" title="${i18n.t('show-active-tickets.acquire-ticket')}">
                                 ${i18n.t('show-active-tickets.acquire-ticket')}
-                        </a>
+                        </a></div>
                     </div>
                     <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
                         <span class="loading">
@@ -276,8 +276,8 @@ export function getTicketCss() {
         
         .no-tickets {
             display: flex;
-            justify-content: space-between;
-            column-gap: 0.5em;
+            flex-direction: column;
+            row-gap: 2em;
         }
 
         .ticket {
@@ -441,8 +441,14 @@ export function getTicketCss() {
         and (orientation: portrait)
         and (max-width: 768px) {
 
-            .no-tickets {
+            .create-ticket-button {
+                display: flex;
                 flex-direction: column;
+                min-height: 24px;
+            }
+
+            .no-tickets {
+                justify-content: space-between;
                 align-items: normal;
                 row-gap: 1.5em;
             }
