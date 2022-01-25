@@ -195,27 +195,27 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
                     </slot>
                 </p>
 
+                <div class="no-tickets ${classMap({hidden: this.loading || (!this.activeTickets || this.activeTickets.length !== 0) || this.loadingTickets})}">
+                    ${i18n.t('no-tickets-message')}
+                    <div><a class="button is-primary create-ticket-button" href='#' @click="${
+                                        (e) => {
+                                            this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
+                                            e.preventDefault();
+                                        }
+                                }" title="${i18n.t('show-active-tickets.acquire-ticket')}">
+                            ${i18n.t('show-active-tickets.acquire-ticket')}
+                    </a></div>
+                </div>
                 <div class="tickets ${classMap({hidden: this.isLoading()})}">
                     <div class="${classMap({hidden: this.loading})}">
                         ${ticketList}
                     </div>
-                    <div class="no-tickets ${classMap({hidden: this.loading || (!this.activeTickets || this.activeTickets.length !== 0) || this.loadingTickets})}">
-                        ${i18n.t('no-tickets-message')}
-                        <div><a class="button is-primary create-ticket-button" href='#' @click="${
-                                            (e) => {
-                                                this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
-                                                e.preventDefault();
-                                            }
-                                    }" title="${i18n.t('show-active-tickets.acquire-ticket')}">
-                                ${i18n.t('show-active-tickets.acquire-ticket')}
-                        </a></div>
-                    </div>
-                    <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
-                        <span class="loading">
-                            <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
-                        </span>
-                    </span>
                 </div>
+                <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
+                    <span class="loading">
+                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                    </span>
+                </span>
             </div>
 
             <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
@@ -451,6 +451,7 @@ export function getTicketCss() {
                 justify-content: space-between;
                 align-items: normal;
                 row-gap: 1.5em;
+                margin-top: 2.3em;
             }
 
             .ticket {
