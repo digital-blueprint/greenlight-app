@@ -288,6 +288,7 @@ export function getTicketCss() {
             margin-bottom: 2em;
             padding: 1.25rem 1.5rem 1.25rem 1.5rem;
             border: var(--dbp-border);
+            border-radius: var(--dbp-border-radius);
         }
 
         .tickets {
