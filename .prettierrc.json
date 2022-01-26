@@ -1,0 +1,15 @@
+{
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "printWidth": 100,
+    "bracketSameLine": true,
+    "overrides": [
+        {
+            "files": "*.js",
+            "options": {
+                "semi": true
+            }
+        }
+    ]
+}

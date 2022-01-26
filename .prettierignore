@@ -1,0 +1,5 @@
+node_modules/
+/dist
+/vendor
+/src/micromodal.es.js
+/assets/hcert-kotlin.js
