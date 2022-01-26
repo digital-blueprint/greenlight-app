@@ -13,7 +13,7 @@ export function getCheckinCss() {
 
         .border {
             margin-top: 2rem;
-            border-top: var(--dbp-border-dark);
+            border-top: var(--dbp-borderk);
         }
 
         .container {

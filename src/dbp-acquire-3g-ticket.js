@@ -729,8 +729,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 width: 100%;
                 height: 29px;
                 font-weight: 300;
-                border: var(--dbp-border-dark);
-                border-color: var(--dbp-text-muted-dark);
+                border: var(--dbp-border);
+                border-color: var(--dbp-text-muted);
             }
 
             .loading-proof {
@@ -743,7 +743,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             }
 
             .close-icon {
-                color: var(--dbp-accent-dark);
+                color: var(--dbp-accent);
                 display: inline;
             }
 
@@ -758,7 +758,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             .border {
                 margin-top: 2rem;
                 margin-bottom: 2rem;
-                border-top: var(--dbp-border-dark);
+                border-top: var(--dbp-border);
             }
 
             .field {
@@ -767,7 +767,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
-                border-bottom: var(--dbp-border-dark);
+                border-bottom: var(--dbp-border);
             }
 
             /*.int-link-internal:hover{
@@ -777,8 +777,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .inline-notification .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
-                border-bottom: var(--dbp-border-light);
-                color: var(--dbp-text-light);
+                border-bottom: var(--dbp-border);
+                border-color: var(--dbp-text-inverted);
+                color: var(--dbp-text-inverted);
             }
             
             .inline-notification .int-link-internal:hover{
@@ -789,7 +790,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
 
             .inline-notification .int-link-internal {
-                border-bottom-color: var(--dbp-border-light);
+                border-bottom-color: var(--dbp-text-inverted);
             }
 
             .check-icon {
@@ -800,7 +801,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
             .g-proof-information {
                 margin: 1.5em 0;
-                border: var(--dbp-border-dark);
+                border: var(--dbp-border);
                 padding: 1.25rem 1.5rem 1.25rem 1.5rem;
                 border-radius: var(--dbp-border-radius);
                 display: flex;

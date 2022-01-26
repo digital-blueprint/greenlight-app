@@ -63,9 +63,9 @@ export class TextSwitch extends AdapterLitElement {
             }
 
             .active {
-                background-color: var(--dbp-secondary-dark) !important;
-                color: var(--dbp-text-light) !important;
-                border-color: var(--dbp-secondary-dark) !important;
+                background-color: var(--dbp-secondary-text) !important;
+                color: var(--dbp-secondary-base) !important;
+                border: var(--dbp-secondary-border) !important;
             }
 
             .button {

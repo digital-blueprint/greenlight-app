@@ -287,7 +287,7 @@ export function getTicketCss() {
             row-gap: 1.5em;
             margin-bottom: 2em;
             padding: 1.25rem 1.5rem 1.25rem 1.5rem;
-            border: 1px solid black;
+            border: var(--dbp-border);
         }
 
         .tickets {
@@ -328,8 +328,8 @@ export function getTicketCss() {
         }
 
         .proof-container, .information-container {
-            background-color: var(--dbp-info-dark);
-            color: var(--dbp-text-light);
+            background-color: var(--dbp-info);
+            color: var(--dbp-text-inverted);
             padding: 40px 10px;
             display: flex;
             flex-direction: column;
@@ -343,8 +343,9 @@ export function getTicketCss() {
         }
 
         .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal, .information-container .int-link-external {
-            border-bottom: var(--dbp-border-light);
-            color: var(--dbp-text-light)
+            border-bottom: var(--dbp-border);
+            border-color: var(--dbp-text-inverted);
+            color: var(--dbp-text-inverted);
         }
 
         .proof-container .int-link-external::after, .information-container .int-link-external::after {
@@ -405,7 +406,7 @@ export function getTicketCss() {
         }
 
         .reload-failed p {
-            color: var(--dbp-danger-dark);
+            color: var(--dbp-danger);
             margin-top: 0px;
             margin-bottom: 0px;
         }
