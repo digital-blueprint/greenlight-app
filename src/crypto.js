@@ -1,7 +1,7 @@
-import { CompactEncrypt, importJWK, base64url } from 'jose';
+import {CompactEncrypt, importJWK, base64url} from 'jose';
 
 /**
- * @param {string} passphraseKey 
+ * @param {string} passphraseKey
  * @param {ArrayBuffer } [salt]
  * @returns {Array}
  */
@@ -13,24 +13,24 @@ export async function generateKey(passphraseKey, salt) {
     let enc = new TextEncoder();
 
     let privateKey = await window.crypto.subtle.importKey(
-        "raw",
+        'raw',
         enc.encode(passphraseKey),
-        "PBKDF2",
+        'PBKDF2',
         false,
-        ["deriveBits", "deriveKey"]
+        ['deriveBits', 'deriveKey']
     );
 
     let key = await window.crypto.subtle.deriveKey(
         {
-            "name": "PBKDF2",
-            "salt": salt,
-            "iterations": 100000,
-            "hash": "SHA-256"
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256',
         },
         privateKey,
-        { "name": "AES-GCM", "length": 256 },
+        {name: 'AES-GCM', length: 256},
         true,
-        ["encrypt", "decrypt"]
+        ['encrypt', 'decrypt']
     );
 
     let binary = '';
@@ -44,8 +44,8 @@ export async function generateKey(passphraseKey, salt) {
 }
 
 /**
- * @param {CryptoKey} key 
- * @param {string} plaintext 
+ * @param {CryptoKey} key
+ * @param {string} plaintext
  * @returns {Array}
  */
 export async function encrypt(key, plaintext) {
@@ -54,7 +54,7 @@ export async function encrypt(key, plaintext) {
 
     let cipher = await window.crypto.subtle.encrypt(
         {
-            name: "AES-GCM",
+            name: 'AES-GCM',
             iv: iv,
         },
         key,
@@ -80,9 +80,9 @@ export async function encrypt(key, plaintext) {
 }
 
 /**
- * @param {string} ciphertext 
- * @param {CryptoKey} key 
- * @param {ArrayBuffer} iv 
+ * @param {string} ciphertext
+ * @param {CryptoKey} key
+ * @param {ArrayBuffer} iv
  * @returns {string}
  */
 export async function decrypt(ciphertext, key, iv) {
@@ -93,10 +93,10 @@ export async function decrypt(ciphertext, key, iv) {
     }
     let cipherArrayBuffer = bytes.buffer;
 
-    let dec = new TextDecoder("utf-8");
+    let dec = new TextDecoder('utf-8');
     let plaintext = await window.crypto.subtle.decrypt(
         {
-            name: "AES-GCM",
+            name: 'AES-GCM',
             iv: iv,
         },
         key,
@@ -120,8 +120,8 @@ export async function decrypt(ciphertext, key, iv) {
  * This doesn't make things more secure, it just makes the intent of the user
  * more clear in case the API isn't used through our UI flow.
  *
- * @param {string} token 
- * @param {string} additionalInformation 
+ * @param {string} token
+ * @param {string} additionalInformation
  * @returns {string}
  */
 export async function encodeAdditionalInformation(token, additionalInformation) {

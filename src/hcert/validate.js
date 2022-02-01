@@ -1,10 +1,17 @@
 import {importHCert, fetchTrustData, trustAnchorProd, trustAnchorTest} from './utils.js';
-import {validateHCertRules, ValueSets, BusinessRules, decodeValueSets, decodeJSONBusinessRules, RuleValidationResult, getValidUntil} from "./rules";
+import {
+    validateHCertRules,
+    ValueSets,
+    BusinessRules,
+    decodeValueSets,
+    decodeJSONBusinessRules,
+    RuleValidationResult,
+    getValidUntil,
+} from './rules';
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {createInstance} from '../i18n.js';
-import { withDate } from './utils.js';
-
+import {withDate} from './utils.js';
 
 export class RegionResult {
     constructor() {
@@ -21,9 +28,7 @@ export class RegionResult {
     }
 }
 
-
 export class ValidationResult {
-
     constructor() {
         /** @type {boolean} Wether the HCERT itself + signature is valid */
         this.isValid = false;
@@ -45,12 +50,11 @@ export class ValidationResult {
 }
 
 export class Validator {
-
     /**
      * @param {Date} trustDate - The date used to verify the trust data and to select the rules
      * @param {boolean} production
      */
-    constructor(trustDate, production=true) {
+    constructor(trustDate, production = true) {
         let dir = production ? 'prod' : 'test';
         this._trustAnchor = production ? trustAnchorProd : trustAnchorTest;
         this._baseUrl = commonUtils.getAssetURL(pkgName, 'dgc-trust/' + dir);
@@ -63,28 +67,39 @@ export class Validator {
         this._trustDate = trustDate;
     }
 
-    async _ensureData()
-    {
+    async _ensureData() {
         // Does all the one time setup if not already done
         // XXX: this is racy if called concurrently
-        if (this._loaded === true)
-            return;
+        if (this._loaded === true) return;
         let hcert = await importHCert();
         let trustData = await fetchTrustData(this._baseUrl);
         this._verifier = withDate(this._trustDate, () => {
             return new hcert.VerifierTrustList(
-                this._trustAnchor, trustData['trustlist'], trustData['trustlistsig']);
+                this._trustAnchor,
+                trustData['trustlist'],
+                trustData['trustlistsig']
+            );
         });
-        this._businessRules = await decodeJSONBusinessRules(hcert, trustData, this._trustAnchor, this._trustDate);
-        this._valueSets = await decodeValueSets(hcert, trustData, this._trustAnchor, this._trustDate);
+        this._businessRules = await decodeJSONBusinessRules(
+            hcert,
+            trustData,
+            this._trustAnchor,
+            this._trustDate
+        );
+        this._valueSets = await decodeValueSets(
+            hcert,
+            trustData,
+            this._trustAnchor,
+            this._trustDate
+        );
         this._loaded = true;
     }
 
     /**
      * Validate the HCERT for a given Date, usually the current date.
-     * 
+     *
      * Returns a ValidationResult or throws if validation wasn't possible.
-     * 
+     *
      * @param {string} cert
      * @param {Date} date
      * @param {string} [lang]
@@ -92,7 +107,7 @@ export class Validator {
      * @param {string[]} [regions]
      * @returns {ValidationResult}
      */
-     async validate(cert, date, lang='en', country='AT', regions=['ET']) {
+    async validate(cert, date, lang = 'en', country = 'AT', regions = ['ET']) {
         await this._ensureData();
 
         let i18n = createInstance();
@@ -142,18 +157,28 @@ export class Validator {
 
                 let businessRules = this._businessRules.filter(country, region);
                 /** @type {RuleValidationResult} */
-                let res = validateHCertRules(greenCertificate, businessRules, this._valueSets, date, this._trustDate);
+                let res = validateHCertRules(
+                    greenCertificate,
+                    businessRules,
+                    this._valueSets,
+                    date,
+                    this._trustDate
+                );
 
                 if (res.isValid) {
                     regionResult.isValid = true;
 
                     // according to the rules, returns null if it never becomes invalid
                     let validUntil = getValidUntil(
-                        greenCertificate, businessRules, this._valueSets, date);
+                        greenCertificate,
+                        businessRules,
+                        this._valueSets,
+                        date
+                    );
 
                     let isFullDate = (date) => {
                         // https://github.com/ehn-dcc-development/hcert-kotlin/pull/64
-                        return (date && date.includes("T"));
+                        return date && date.includes('T');
                     };
 
                     // If anything regarding the certificate stops being valid earlier
@@ -176,7 +201,9 @@ export class Validator {
                     regionResult.validUntil = validUntil;
                 } else {
                     regionResult.isValid = false;
-                    regionResult.error = i18n.t('hcert.cert-not-valid-error', {error: getTranslatedErrors(res.errors).join('\n')});
+                    regionResult.error = i18n.t('hcert.cert-not-valid-error', {
+                        error: getTranslatedErrors(res.errors).join('\n'),
+                    });
                 }
 
                 result.regions[region] = regionResult;

@@ -1,8 +1,7 @@
 import certlogic from 'certlogic-js';
-import { withDate } from './utils';
+import {withDate} from './utils';
 
-export class ValueSets
-{
+export class ValueSets {
     constructor() {
         /** @type {Date} */
         this.validFrom = null;
@@ -13,13 +12,12 @@ export class ValueSets
 
     /**
      * Converts an array of value sets to something certlogic can work with
-     * 
+     *
      * @returns {Array}
      */
-    forLogic()
-    {
+    forLogic() {
         let logicInput = {};
-        for(const set of this.valueSets) {
+        for (const set of this.valueSets) {
             logicInput[set.valueSetId] = Object.keys(set.valueSetValues);
         }
         return logicInput;
@@ -29,16 +27,19 @@ export class ValueSets
 /**
  * Decodes the Austrian version of the value sets
  *
- * @param {object} hcert 
- * @param {object} trustData 
- * @param {string} trustAnchor 
- * @param {Date} date 
+ * @param {object} hcert
+ * @param {object} trustData
+ * @param {string} trustAnchor
+ * @param {Date} date
  * @returns {ValueSets}
  */
-export async function decodeValueSets(hcert, trustData, trustAnchor, date)
-{
+export async function decodeValueSets(hcert, trustData, trustAnchor, date) {
     let decoded = withDate(date, () => {
-        return hcert.SignedDataDownloader.loadValueSets(trustAnchor, trustData['valuesets'], trustData['valuesetssig']);
+        return hcert.SignedDataDownloader.loadValueSets(
+            trustAnchor,
+            trustData['valuesets'],
+            trustData['valuesetssig']
+        );
     });
     let result = [];
     for (const entry of decoded.second.valueSets) {
@@ -53,9 +54,7 @@ export async function decodeValueSets(hcert, trustData, trustAnchor, date)
 }
 
 export class BusinessRules {
-
-    constructor()
-    {
+    constructor() {
         this.rules = [];
     }
 
@@ -63,17 +62,14 @@ export class BusinessRules {
      * Remove all rules matching the partial rule object.
      * If the passed object is empty, none are removed.
      *
-     * @param {object} ruleFilter 
+     * @param {object} ruleFilter
      */
-    removeAll(ruleFilter)
-    {
+    removeAll(ruleFilter) {
         let entries = Object.entries(ruleFilter);
-        if (entries.length === 0)
-            return;
+        if (entries.length === 0) return;
         this.rules = this.rules.filter((rule) => {
-            for(let [key, value] in entries) {
-                if (rule[key] !== value)
-                    return true;
+            for (let [key, value] in entries) {
+                if (rule[key] !== value) return true;
             }
             return false;
         });
@@ -82,24 +78,22 @@ export class BusinessRules {
     /**
      * Add a new rule
      *
-     * @param {object} rule 
+     * @param {object} rule
      */
-    add(rule)
-    {
+    add(rule) {
         this.rules.push(rule);
     }
 
     /**
      * Filters based on country and region
-     * 
-     * @param {string} country 
-     * @param {string} region 
+     *
+     * @param {string} country
+     * @param {string} region
      * @returns {BusinessRules}
      */
-    filter(country, region)
-    {
+    filter(country, region) {
         let filtered = [];
-        for(let rule of this.rules) {
+        for (let rule of this.rules) {
             if (rule.Country == country && rule.Region == region) {
                 filtered.push(rule);
             }
@@ -113,17 +107,20 @@ export class BusinessRules {
 
 /**
  * Decode the Austrian version of the business rules
- * 
- * @param {object} hcert 
- * @param {object} trustData 
- * @param {string} trustAnchor 
- * @param {Date} date 
+ *
+ * @param {object} hcert
+ * @param {object} trustData
+ * @param {string} trustAnchor
+ * @param {Date} date
  * @returns {BusinessRules}
  */
-export async function decodeBusinessRules(hcert, trustData, trustAnchor, date)
-{
+export async function decodeBusinessRules(hcert, trustData, trustAnchor, date) {
     let decoded = withDate(date, () => {
-        return hcert.SignedDataDownloader.loadBusinessRules(trustAnchor, trustData['rules'], trustData['rulessig']);
+        return hcert.SignedDataDownloader.loadBusinessRules(
+            trustAnchor,
+            trustData['rules'],
+            trustData['rulessig']
+        );
     });
     let result = [];
     for (const entry of decoded.second.rules) {
@@ -136,15 +133,14 @@ export async function decodeBusinessRules(hcert, trustData, trustAnchor, date)
 
 /**
  * Decode the Austrian version of the business rules from JSON instead of CBOR
- * 
- * @param {object} hcert 
- * @param {object} trustData 
- * @param {string} trustAnchor 
- * @param {Date} date 
+ *
+ * @param {object} hcert
+ * @param {object} trustData
+ * @param {string} trustAnchor
+ * @param {Date} date
  * @returns {BusinessRules}
  */
- export async function decodeJSONBusinessRules(hcert, trustData, trustAnchor, date)
- {
+export async function decodeJSONBusinessRules(hcert, trustData, trustAnchor, date) {
     let dataView = new DataView(trustData['rules.json']);
     let decoder = new TextDecoder('utf8');
     let decoded = JSON.parse(decoder.decode(dataView));
@@ -157,11 +153,10 @@ export async function decodeBusinessRules(hcert, trustData, trustAnchor, date)
     return br;
 }
 
-
 /**
  * Returns a rule description useable for an error message
- * 
- * @param {object} rule 
+ *
+ * @param {object} rule
  * @returns {object}
  */
 function getRuleErrorDescriptions(rule) {
@@ -173,7 +168,6 @@ function getRuleErrorDescriptions(rule) {
 }
 
 export class RuleValidationResult {
-
     constructor() {
         this.isValid = false;
         this.errors = [];
@@ -182,30 +176,29 @@ export class RuleValidationResult {
 
 /**
  * Validates a HCERT against specific business rules, value sets and the current time
- * 
+ *
  * Will set isValid to false in case the HCERT breaks one or more rules.
- * 
+ *
  * @param {object} cert
- * @param {BusinessRules} businessRules 
- * @param {ValueSets} valueSets 
+ * @param {BusinessRules} businessRules
+ * @param {ValueSets} valueSets
  * @param {Date} date The time used as input for the rules
  * @param {Date} rulesDate The time used to select the active set of rules
  * @returns {RuleValidationResult}
  */
-export function validateHCertRules(cert, businessRules, valueSets, date, rulesDate)
-{
+export function validateHCertRules(cert, businessRules, valueSets, date, rulesDate) {
     let logicInput = {
         payload: cert,
         external: {
             valueSets: valueSets.forLogic(),
             validationClock: date.toISOString(),
-        }
+        },
     };
 
     let valResult = new RuleValidationResult();
     valResult.isValid = true;
     let errors = [];
-    for(let rule of businessRules.rules) {
+    for (let rule of businessRules.rules) {
         // In case a rule isn't valid we should just ignore it. This is usually used to update
         // rules at a specific time, in which case there will be rule X which will stop being
         // valid at time T and rule Y which will start being valid at time T.
@@ -238,14 +231,13 @@ export function validateHCertRules(cert, businessRules, valueSets, date, rulesDa
  * never become valid again. If that's not the case then the returned result is
  * undefined.
  *
- * @param {object} hcert 
- * @param {BusinessRules} businessRules 
- * @param {ValueSets} valueSets 
- * @param {Date} fromDate 
+ * @param {object} hcert
+ * @param {BusinessRules} businessRules
+ * @param {ValueSets} valueSets
+ * @param {Date} fromDate
  * @returns {null|Date}
  */
-export function getValidUntil(hcert, businessRules, valueSets, fromDate)
-{
+export function getValidUntil(hcert, businessRules, valueSets, fromDate) {
     let isValid = (checkTime) => {
         // We pass as static fromDate so we always use the same set of rules and
         // so that validity of HCERTs doesn't flip back from invalid to valid in case

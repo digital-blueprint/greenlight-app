@@ -1,18 +1,18 @@
 {
-  "element": "dbp-show-reference-ticket",
-  "module_src": "dbp-show-reference-ticket.js",
-  "routing_name": "show-reference-ticket",
-  "name": {
-    "de": "Referenzticket anzeigen",
-    "en": "Show reference ticket"
-  },
-  "short_name": {
-    "de": "Referenzticket anzeigen",
-    "en": "Show reference ticket"
-  },
-  "description": {
-    "de": "Hier können Überprüfende das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen.",
-    "en": "Here, verifiers can view the currently valid reference ticket for the purpose of control."
-  },
-  "subscribe": "lang,entry-point-url,auth,html-overrides,ticket-types"
+    "element": "dbp-show-reference-ticket",
+    "module_src": "dbp-show-reference-ticket.js",
+    "routing_name": "show-reference-ticket",
+    "name": {
+        "de": "Referenzticket anzeigen",
+        "en": "Show reference ticket"
+    },
+    "short_name": {
+        "de": "Referenzticket anzeigen",
+        "en": "Show reference ticket"
+    },
+    "description": {
+        "de": "Hier können Überprüfende das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen.",
+        "en": "Here, verifiers can view the currently valid reference ticket for the purpose of control."
+    },
+    "subscribe": "lang,entry-point-url,auth,html-overrides,ticket-types"
 }

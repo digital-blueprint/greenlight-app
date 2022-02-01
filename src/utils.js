@@ -1,17 +1,13 @@
 export function parseGreenPassQRCode(data, id) {
     // The QR code is of the format: "?$id:$hash"
     let index = data.indexOf(id);
-    if (index === -1)
-        throw new Error('invalid green pass format');
+    if (index === -1) throw new Error('invalid green pass format');
 
     let passData = data.substring(index + id.length);
 
-    if (passData === "")
-        throw new Error('invalid green pass qr code');
-
+    if (passData === '') throw new Error('invalid green pass qr code');
 
     return data;
-    
 }
 
 /**
@@ -32,6 +28,6 @@ export function escapeRegExp(string) {
  * @param {object} [options]
  * @returns {string} The key param as is
  */
- export function i18nKey(key, options) {
+export function i18nKey(key, options) {
     return key;
 }

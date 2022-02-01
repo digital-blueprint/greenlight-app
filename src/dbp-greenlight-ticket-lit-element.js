@@ -1,14 +1,15 @@
 import {css, html} from 'lit';
-import {createInstance} from "./i18n";
-import {Icon, LoadingButton, MiniSpinner} from "@dbp-toolkit/common";
-import {send} from "@dbp-toolkit/common/notification";
-import MicroModal from "./micromodal.es";
-import {ScopedElementsMixin} from "@open-wc/scoped-elements";
-import DBPGreenlightLitElement from "./dbp-greenlight-lit-element";
+import {createInstance} from './i18n';
+import {Icon, LoadingButton, MiniSpinner} from '@dbp-toolkit/common';
+import {send} from '@dbp-toolkit/common/notification';
+import MicroModal from './micromodal.es';
+import {ScopedElementsMixin} from '@open-wc/scoped-elements';
+import DBPGreenlightLitElement from './dbp-greenlight-lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
 
-
-export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(DBPGreenlightLitElement) {
+export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
+    DBPGreenlightLitElement
+) {
     constructor() {
         super();
         this._i18n = createInstance();
@@ -27,7 +28,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         this.boundUpdateTicketwrapper = this.updateTicketWrapper.bind(this);
     }
 
-
     static get properties() {
         return {
             ...super.properties,
@@ -41,7 +41,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         };
     }
 
-
     static get scopedElements() {
         return {
             'dbp-icon': Icon,
@@ -50,31 +49,27 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         };
     }
 
-
     disconnectedCallback() {
         clearTimeout(this.timer);
         window.removeEventListener('focus', this.boundUpdateTicketwrapper);
         super.disconnectedCallback();
     }
 
-
     connectedCallback() {
         super.connectedCallback();
         window.addEventListener('focus', this.boundUpdateTicketwrapper);
     }
 
-
     update(changedProperties) {
         changedProperties.forEach((oldValue, propName) => {
             switch (propName) {
-                case "lang":
+                case 'lang':
                     this._i18n.changeLanguage(this.lang);
                     break;
             }
         });
         super.update(changedProperties);
     }
-
 
     /**
      * A wrapper for update ticket for calling it in an event handler
@@ -86,7 +81,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         this.showReloadButton = false;
         this.updateTicket();
     }
-
 
     /**
      * A wrapper for update ticket for calling it in an event handler
@@ -100,15 +94,14 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         if (!check && this.showReloadButton) {
             const i18n = this._i18n;
             send({
-                "summary": i18n.t('reload-error-title'),
-                "body": i18n.t('reload-error-body'),
-                "type": "danger",
-                "timeout": 5,
+                summary: i18n.t('reload-error-title'),
+                body: i18n.t('reload-error-body'),
+                type: 'danger',
+                timeout: 5,
             });
             this.showReloadButton = true;
         }
     }
-
 
     /**
      * Updates a ticket and sets a timer for next update
@@ -120,7 +113,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         // Implemented in subclasses
         return true;
     }
-
 
     /**
      * Sets a timer: this.timer
@@ -143,7 +135,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         }
     }
 
-
     /**
      * Opens the modal with the ticket
      *
@@ -154,7 +145,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
             this.ticketOpen = true;
             MicroModal.show(this._('#show-ticket-modal'), {
                 disableScroll: true,
-                onClose: modal => {
+                onClose: (modal) => {
                     this.ticketLoading = false;
                     this.ticketOpen = false;
                 },
@@ -163,16 +154,13 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
         }
     }
 
-
     /**
      * Close modal dialog #show-ticket-modal
      *
      */
     closeDialog() {
-        if (this._('#show-ticket-modal'))
-            MicroModal.close(this._('#show-ticket-modal'));
+        if (this._('#show-ticket-modal')) MicroModal.close(this._('#show-ticket-modal'));
     }
-
 
     /**
      * Returns a list of ticket and the html for the modal dialogue of the ticket
@@ -183,33 +171,43 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
      * @param [buttonArea]
      * @returns {html}
      */
-    getTicketUI(permissions, ticketList, additionalInformation, buttonArea=null) {
+    getTicketUI(permissions, ticketList, additionalInformation, buttonArea = null) {
         const i18n = this._i18n;
         return html`
             <div class="${classMap({hidden: permissions})}">
-            
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    <slot name="description">
-                        ${this.activity.getDescription(this.lang)}
-                    </slot>
+                    <slot name="description"> ${this.activity.getDescription(this.lang)} </slot>
                 </p>
 
-                <div class="no-tickets ${classMap({hidden: this.loading || (!this.activeTickets || this.activeTickets.length !== 0) || this.loadingTickets})}">
+                <div
+                    class="no-tickets ${classMap({
+                        hidden:
+                            this.loading ||
+                            !this.activeTickets ||
+                            this.activeTickets.length !== 0 ||
+                            this.loadingTickets,
+                    })}">
                     ${i18n.t('no-tickets-message')}
-                    <div><a class="button is-primary create-ticket-button" href='#' @click="${
-                                        (e) => {
-                                            this.dispatchEvent(new CustomEvent('dbp-show-activity', {detail: {'name': 'acquire-3g-ticket'}}));
-                                            e.preventDefault();
-                                        }
-                                }" title="${i18n.t('show-active-tickets.acquire-ticket')}">
+                    <div>
+                        <a
+                            class="button is-primary create-ticket-button"
+                            href="#"
+                            @click="${(e) => {
+                                this.dispatchEvent(
+                                    new CustomEvent('dbp-show-activity', {
+                                        detail: {name: 'acquire-3g-ticket'},
+                                    })
+                                );
+                                e.preventDefault();
+                            }}"
+                            title="${i18n.t('show-active-tickets.acquire-ticket')}">
                             ${i18n.t('show-active-tickets.acquire-ticket')}
-                    </a></div>
+                        </a>
+                    </div>
                 </div>
                 <div class="tickets ${classMap({hidden: this.isLoading()})}">
-                    <div class="${classMap({hidden: this.loading})}">
-                        ${ticketList}
-                    </div>
+                    <div class="${classMap({hidden: this.loading})}">${ticketList}</div>
                 </div>
                 <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
                     <span class="loading">
@@ -220,46 +218,76 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
 
             <div class="modal micromodal-slide" id="show-ticket-modal" aria-hidden="true">
                 <div class="modal-overlay" tabindex="-2" data-micromodal-close>
-                    <div class="modal-container" id="ticket-modal-box" role="dialog" aria-modal="true"
+                    <div
+                        class="modal-container"
+                        id="ticket-modal-box"
+                        role="dialog"
+                        aria-modal="true"
                         aria-labelledby="ticket-modal-title">
                         <main class="modal-content" id="ticket-modal-content">
-                            <span class="control ticket-loading ${classMap({hidden: !this.ticketLoading})}">
+                            <span
+                                class="control ticket-loading ${classMap({
+                                    hidden: !this.ticketLoading,
+                                })}">
                                 <span class="loading">
-                                    <dbp-mini-spinner text=${i18n.t('loading-message-ticket')}></dbp-mini-spinner>
+                                    <dbp-mini-spinner
+                                        text=${i18n.t('loading-message-ticket')}></dbp-mini-spinner>
                                 </span>
                             </span>
 
                             <div class="content-wrapper">
-                                <div class="left-container ${classMap({hidden: this.ticketLoading})}">
-                                        <h3 id="ticket-modal-title">
-                                            <slot name="ticket-place">
-                                                ${i18n.t('show-ticket-title')}<strong>${this.locationName}</strong>
-                                            </slot>
+                                <div
+                                    class="left-container ${classMap({
+                                        hidden: this.ticketLoading,
+                                    })}">
+                                    <h3 id="ticket-modal-title">
+                                        <slot name="ticket-place">
+                                            ${i18n.t('show-ticket-title')}<strong
+                                                >${this.locationName}</strong
+                                            >
+                                        </slot>
                                     </h3>
-                                    <div class="reload-failed ${classMap({hidden: !this.showReloadButton})}">
-                                        <p> ${i18n.t('reload-failed')}</p>
-                                        <button id="reload-btn" 
-                                                class="button" 
-                                                @click="${() => {this.updateTicketAndNotify();}}"
-                                                title="${i18n.t('reload')}">
-                                            <dbp-icon title="${i18n.t('reload')}" 
-                                                    name="reload" class="reload-icon"></dbp-icon>
+                                    <div
+                                        class="reload-failed ${classMap({
+                                            hidden: !this.showReloadButton,
+                                        })}">
+                                        <p>${i18n.t('reload-failed')}</p>
+                                        <button
+                                            id="reload-btn"
+                                            class="button"
+                                            @click="${() => {
+                                                this.updateTicketAndNotify();
+                                            }}"
+                                            title="${i18n.t('reload')}">
+                                            <dbp-icon
+                                                title="${i18n.t('reload')}"
+                                                name="reload"
+                                                class="reload-icon"></dbp-icon>
                                         </button>
                                     </div>
                                     <div class="foto-container">
-                                        <img 
-                                            class="${classMap({filterGrayscale: this.forceTicketGrayscale, filterNone: !this.forceTicketGrayscale})}"
-                                            src="${this.ticketImage || ''}" 
+                                        <img
+                                            class="${classMap({
+                                                filterGrayscale: this.forceTicketGrayscale,
+                                                filterNone: !this.forceTicketGrayscale,
+                                            })}"
+                                            src="${this.ticketImage || ''}"
                                             alt="${i18n.t('image-alt-text')}" />
                                         ${buttonArea ?? html``}
                                     </div>
                                 </div>
                                 ${additionalInformation}
-                                <button title="Close" 
-                                        class="modal-close" 
-                                        aria-label="Close modal" 
-                                        @click="${() => {this.closeDialog();}}">
-                                    <dbp-icon title="${i18n.t('file-sink.modal-close')}" name="close" class="close-icon"></dbp-icon>
+                                <button
+                                    title="Close"
+                                    class="modal-close"
+                                    aria-label="Close modal"
+                                    @click="${() => {
+                                        this.closeDialog();
+                                    }}">
+                                    <dbp-icon
+                                        title="${i18n.t('file-sink.modal-close')}"
+                                        name="close"
+                                        class="close-icon"></dbp-icon>
                                 </button>
                             </div>
                         </main>
@@ -273,7 +301,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(D
 export function getTicketCss() {
     // language=css
     return css`
-        
         .no-tickets {
             display: flex;
             flex-direction: column;
@@ -328,7 +355,8 @@ export function getTicketCss() {
             height: auto;
         }
 
-        .proof-container, .information-container {
+        .proof-container,
+        .information-container {
             background-color: var(--dbp-info);
             color: var(--dbp-text-inverted);
             padding: 40px 10px;
@@ -343,13 +371,17 @@ export function getTicketCss() {
             text-align: center;
         }
 
-        .proof-container .int-link-external, .proof-container .int-link-internal, .information-container .int-link-internal, .information-container .int-link-external {
+        .proof-container .int-link-external,
+        .proof-container .int-link-internal,
+        .information-container .int-link-internal,
+        .information-container .int-link-external {
             border-bottom: var(--dbp-border);
             border-color: var(--dbp-text-inverted);
             color: var(--dbp-text-inverted);
         }
 
-        .proof-container .int-link-external::after, .information-container .int-link-external::after {
+        .proof-container .int-link-external::after,
+        .information-container .int-link-external::after {
             filter: invert(100%);
             -webkit-filter: invert(100%);
         }
@@ -363,7 +395,9 @@ export function getTicketCss() {
             display: block;
         }
 
-        .left-container h3, .proof-container h4, .information-container h4 {
+        .left-container h3,
+        .proof-container h4,
+        .information-container h4 {
             margin: 0px 0px 10px 0px;
             line-height: 30px;
         }
@@ -420,9 +454,7 @@ export function getTicketCss() {
             display: none;
         }
 
-        @media only screen
-        and (orientation: landscape)
-        and (max-width: 768px) {
+        @media only screen and (orientation: landscape) and (max-width: 768px) {
             #ticket-modal-box {
                 height: 100%;
                 width: 100%;
@@ -430,19 +462,20 @@ export function getTicketCss() {
                 max-height: unset;
             }
 
-            #ticket-modal-content, #ticket-modal-content > div:first-of-type, .content-wrapper{
+            #ticket-modal-content,
+            #ticket-modal-content > div:first-of-type,
+            .content-wrapper {
                 height: 100%;
             }
 
-            .left-container, .proof-container, .information-container {
+            .left-container,
+            .proof-container,
+            .information-container {
                 justify-content: space-evenly;
             }
         }
 
-        @media only screen
-        and (orientation: portrait)
-        and (max-width: 768px) {
-
+        @media only screen and (orientation: portrait) and (max-width: 768px) {
             .create-ticket-button {
                 display: flex;
                 flex-direction: column;
@@ -504,7 +537,8 @@ export function getTicketCss() {
                 min-height: 100vh;
             }
 
-            .proof-container, .information-container {
+            .proof-container,
+            .information-container {
                 padding: 12px 20px 20px 20px;
                 flex-grow: 1;
             }
