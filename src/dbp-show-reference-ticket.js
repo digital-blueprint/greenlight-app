@@ -1,5 +1,5 @@
 import {css, html} from 'lit';
-import DBPGreenlightTicketLitElement, {getTicketCss} from "./dbp-greenlight-ticket-lit-element";
+import DBPGreenlightTicketLitElement, {getTicketCss} from './dbp-greenlight-ticket-lit-element';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {combineURLs} from '@dbp-toolkit/common';
@@ -10,7 +10,6 @@ import * as CheckinStyles from './styles';
 import {classMap} from 'lit/directives/class-map.js';
 import {TextSwitch} from './textswitch.js';
 
-
 class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElement) {
     constructor() {
         super();
@@ -19,14 +18,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         this.locationName = this._i18n.t('show-reference-ticket.place-name');
     }
 
-
     static get scopedElements() {
         return {
             ...super.scopedElements,
             'dbp-textswitch': TextSwitch,
         };
     }
-
 
     static get properties() {
         return {
@@ -35,7 +32,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         };
     }
 
-
     /**
      * Updates the referenceTicket and sets a timer for next update
      * Notifies the user if something went wrong
@@ -43,11 +39,10 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
      * @returns {boolean}
      */
     async updateTicket() {
-        if (this.ticketOpen === false)
-            return false;
+        if (this.ticketOpen === false) return false;
 
         let responseData = await this.getReferenceTicketRequest();
-        let responseBody = "";
+        let responseBody = '';
 
         try {
             responseBody = await responseData.clone().json();
@@ -57,7 +52,8 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             return false;
         }
 
-        if (responseData.status === 200) { // Success
+        if (responseData.status === 200) {
+            // Success
             this.sendSuccessAnalyticsEvent('UpdateReferenceTicketRequest', 'Success', '');
             this.showReloadButton = false;
             this.ticketImage = responseBody['hydra:member'][0].image || '';
@@ -66,13 +62,17 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         }
         // Other Error
         // fail soft if we cant update it
-        this.sendErrorAnalyticsEvent('UpdateReferenceTicketRequest', 'UnknownError', "", responseData);
-        console.log("Update reference ticket failed");
+        this.sendErrorAnalyticsEvent(
+            'UpdateReferenceTicketRequest',
+            'UnknownError',
+            '',
+            responseData
+        );
+        console.log('Update reference ticket failed');
         this.setTimeoutIsSet = false;
         this.showReloadButton = true;
         return false;
     }
-
 
     async getReferenceTicketRequest() {
         const options = {
@@ -82,9 +82,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             },
         };
 
-        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/reference-permits?page=1'), options);
+        return await this.httpGetAsync(
+            combineURLs(this.entryPointUrl, '/greenlight/reference-permits?page=1'),
+            options
+        );
     }
-
 
     /**
      * Generate a QR Code if a hash is available and valid,
@@ -97,7 +99,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         await this.updateTicket();
         this.ticketLoading = false;
     }
-
 
     static get styles() {
         // language=css
@@ -122,7 +123,6 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         `;
     }
 
-
     render() {
         const i18n = this._i18n;
 
@@ -139,9 +139,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             <div class="ticket">
                 <span class="header">
                     <h3>
-                        <slot name="place">
-                            ${i18n.t('entry-ticket')}: ${this.locationName}
-                        </slot>
+                        <slot name="place"> ${i18n.t('entry-ticket')}: ${this.locationName} </slot>
                     </h3>
                     <span class="header">
                         <slot name="ticket-description">
@@ -150,14 +148,18 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
                     </span>
                 </span>
                 <div class="btn">
-                    <dbp-loading-button type="is-primary"
-                                        @click="${() => {this.showTicket();}}"
-                                        title="${i18n.t('show-btn-text')}">
+                    <dbp-loading-button
+                        type="is-primary"
+                        @click="${() => {
+                            this.showTicket();
+                        }}"
+                        title="${i18n.t('show-btn-text')}">
                         ${i18n.t('show-btn-text')}
                     </dbp-loading-button>
-                    <dbp-loading-button id="delete-btn"
-                                        value="${i18n.t('delete-btn-text')}"
-                                       disabled >
+                    <dbp-loading-button
+                        id="delete-btn"
+                        value="${i18n.t('delete-btn-text')}"
+                        disabled>
                         ${i18n.t('delete-btn-text')}
                     </dbp-loading-button>
                 </div>
@@ -168,11 +170,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         if (this.ticketTypes) {
             let onChange = (e) => {
                 let name = e.target.name;
-                this.forceTicketGrayscale = (name === "grayscale");
+                this.forceTicketGrayscale = name === 'grayscale';
             };
             buttonArea = html`
                 <dbp-textswitch
-                    name="${this.forceTicketGrayscale ? "grayscale" : "color"}"
+                    name="${this.forceTicketGrayscale ? 'grayscale' : 'color'}"
                     class="color-switch"
                     name1="color"
                     name2="grayscale"
@@ -182,11 +184,9 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             `;
         }
 
-
         const permissions = this.isLoading();
 
         return html`
-
             <div class="control ${classMap({hidden: !this.isLoading()})}">
                 <span class="loading">
                     <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>

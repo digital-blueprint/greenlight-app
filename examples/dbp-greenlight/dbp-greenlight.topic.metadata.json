@@ -1,21 +1,21 @@
 {
-  "name": {
-    "de": "greenlight",
-    "en": "greenlight"
-  },
-  "short_name": {
-    "de": "greenlight",
-    "en": "greenlight"
-  },
-  "description": {
-    "de": "Mit dieser Applikation können Sie Ihren 3-G-Nachweis verwalten und Tickets für Orte ausstellen lassen.",
-    "en": "With this application you can manage your 3-G-evidence and acquire tickets for places."
-  },
-  "routing_name": "greenlight",
-  "activities": [
-    {"path": "dbp-acquire-3g-ticket.metadata.json"},
-    {"path": "dbp-show-active-tickets.metadata.json"},
-    {"path": "dbp-show-reference-ticket.metadata.json"}
-  ],
-  "attributes": []
+    "name": {
+        "de": "greenlight",
+        "en": "greenlight"
+    },
+    "short_name": {
+        "de": "greenlight",
+        "en": "greenlight"
+    },
+    "description": {
+        "de": "Mit dieser Applikation können Sie Ihren 3-G-Nachweis verwalten und Tickets für Orte ausstellen lassen.",
+        "en": "With this application you can manage your 3-G-evidence and acquire tickets for places."
+    },
+    "routing_name": "greenlight",
+    "activities": [
+        {"path": "dbp-acquire-3g-ticket.metadata.json"},
+        {"path": "dbp-show-active-tickets.metadata.json"},
+        {"path": "dbp-show-reference-ticket.metadata.json"}
+    ],
+    "attributes": []
 }

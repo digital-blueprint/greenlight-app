@@ -1,4 +1,3 @@
-
 import {assert} from 'chai';
 import {Validator} from '../src/hcert';
 import {validateHCertRules, BusinessRules, ValueSets} from '../src/hcert/rules';
@@ -95,7 +94,7 @@ suite('hcert validate', () => {
     test('rules validate empty', async () => {
         let rules = new BusinessRules();
         let valueSets = new ValueSets();
-        let date = new Date("2021-09-15T14:01:17Z");
+        let date = new Date('2021-09-15T14:01:17Z');
         let result = validateHCertRules({}, rules, valueSets, date, date);
         assert.isTrue(result.isValid);
         assert.isEmpty(result.errors);

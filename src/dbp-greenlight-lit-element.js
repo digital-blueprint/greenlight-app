@@ -1,12 +1,12 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
-import {getStackTrace} from "@dbp-toolkit/common/error";
-import {send} from "@dbp-toolkit/common/notification";
-import {combineURLs} from "@dbp-toolkit/common";
-import {parseGreenPassQRCode, i18nKey} from "./utils";
-import {defaultValidator, ValidationResult, RegionResult} from "./hcert";
-import {checkPerson} from "./hcertmatch.js";
-import {encodeAdditionalInformation} from "./crypto.js";
-import * as storage from "./storage.js";
+import {getStackTrace} from '@dbp-toolkit/common/error';
+import {send} from '@dbp-toolkit/common/notification';
+import {combineURLs} from '@dbp-toolkit/common';
+import {parseGreenPassQRCode, i18nKey} from './utils';
+import {defaultValidator, ValidationResult, RegionResult} from './hcert';
+import {checkPerson} from './hcertmatch.js';
+import {encodeAdditionalInformation} from './crypto.js';
+import * as storage from './storage.js';
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
@@ -26,7 +26,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             ...super.properties,
             auth: {type: Object},
 
-            searchSelfTestStringArray: {type: String, attribute: 'gp-search-self-test-string-array'},
+            searchSelfTestStringArray: {
+                type: String,
+                attribute: 'gp-search-self-test-string-array',
+            },
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
             selfTestValid: {type: Boolean, attribute: 'gp-self-test-valid'},
             ticketTypes: {type: Object, attribute: 'ticket-types'},
@@ -68,7 +71,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     update(changedProperties) {
         changedProperties.forEach((oldValue, propName) => {
             switch (propName) {
-                case "auth":
+                case 'auth':
                     this._updateAuth();
                     break;
             }
@@ -83,7 +86,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {boolean} true or false
      */
     isLoggedIn() {
-        return (this.auth.person !== undefined && this.auth.person !== null);
+        return this.auth.person !== undefined && this.auth.person !== null;
     }
 
     /**
@@ -92,15 +95,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {boolean} true or false
      */
     isLoading() {
-        if (this._loginStatus === "logged-out")
-            return false;
+        if (this._loginStatus === 'logged-out') return false;
 
-        return (!this.isLoggedIn() && this.auth.token !== undefined);
+        return !this.isLoggedIn() && this.auth.token !== undefined;
     }
 
     hasPermissions() {
-        if (!this.auth.person || !Array.isArray(this.auth.person.roles))
-            return false;
+        if (!this.auth.person || !Array.isArray(this.auth.person.roles)) return false;
 
         if (this.auth.person.roles.includes('ROLE_SCOPE_GREENLIGHT')) {
             return true;
@@ -117,14 +118,15 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @returns {object} response (error or result)
      */
     async httpGetAsync(url, options) {
-        let response = await fetch(url, options).then(result => {
+        let response = await fetch(url, options)
+            .then((result) => {
+                if (!result.ok) throw result;
 
-            if (!result.ok) throw result;
-
-            return result;
-        }).catch(error => {
-            return error;
-        });
+                return result;
+            })
+            .catch((error) => {
+                return error;
+            });
 
         return response;
     }
@@ -138,7 +140,6 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param responseData
      */
     async sendErrorAnalyticsEvent(category, action, information, responseData = {}) {
-
         let responseBody = {};
         // Use a clone of responseData to prevent "Failed to execute 'json' on 'Response': body stream already read"
         // after this function, but still a TypeError will occur if .json() was already called before this function
@@ -155,13 +156,13 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             errorDetails: responseBody['relay:errorDetails'] || '',
             information: information,
             // get 5 items from the stack trace
-            stack: getStackTrace().slice(1, 6)
+            stack: getStackTrace().slice(1, 6),
         };
 
         this.sendSetPropertyEvent('analytics-event', {
-            'category': category,
-            'action': action,
-            'name': JSON.stringify(data),
+            category: category,
+            action: action,
+            name: JSON.stringify(data),
         });
     }
 
@@ -173,58 +174,61 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
      * @param information
      */
     async sendSuccessAnalyticsEvent(category, action, information) {
-
         const data = {
             information: information,
         };
 
         this.sendSetPropertyEvent('analytics-event', {
-            'category': category,
-            'action': action,
-            'name': JSON.stringify(data)
+            category: category,
+            action: action,
+            name: JSON.stringify(data),
         });
     }
 
     async sendCreateTicketRequest() {
-
         let additionalInformation;
-        
+
         if (this.ticketTypes && this.hasValidProof) {
             additionalInformation = this.isFullProof ? 'full' : 'partial';
         } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
             additionalInformation = 'local-proof';
-        } else { 
+        } else {
             additionalInformation = '';
         }
 
         let body = {
-            "consentAssurance": this.isConfirmChecked,
+            consentAssurance: this.isConfirmChecked,
             //"additionalInformation": await encodeAdditionalInformation(this.auth.token, this.hasValidProof && !this.isSelfTest ? 'local-proof' : ''),
-            "additionalInformation": await encodeAdditionalInformation(this.auth.token, additionalInformation),
+            additionalInformation: await encodeAdditionalInformation(
+                this.auth.token,
+                additionalInformation
+            ),
         };
 
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/ld+json',
-                Authorization: "Bearer " + this.auth.token
+                Authorization: 'Bearer ' + this.auth.token,
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         };
 
-        return await this.httpGetAsync(combineURLs(this.entryPointUrl, '/greenlight/permits'), options);
+        return await this.httpGetAsync(
+            combineURLs(this.entryPointUrl, '/greenlight/permits'),
+            options
+        );
     }
 
-    saveWrongHashAndNotify(title, body, hash, notificationType="danger") {
+    saveWrongHashAndNotify(title, body, hash, notificationType = 'danger') {
         send({
-            "summary": title,
-            "body": body,
-            "type": notificationType,
-            "timeout": 5,
+            summary: title,
+            body: body,
+            type: notificationType,
+            timeout: 5,
         });
 
-        if (this.wrongHash)
-            this.wrongHash.push(hash);
+        if (this.wrongHash) this.wrongHash.push(hash);
     }
 
     formatValidUntilDate(date) {
@@ -242,10 +246,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         });
     }
 
-    async checkAlreadySend(data, reset, wrongQrArray, title = "", body = "", message = "") {
+    async checkAlreadySend(data, reset, wrongQrArray, title = '', body = '', message = '') {
         const i18n = this._i18n;
-        title = title === "" ? i18n.t('acquire-3g-ticket.invalid-title') : title;
-        body = body === "" ? i18n.t('acquire-3g-ticket.invalid-body'): body;
+        title = title === '' ? i18n.t('acquire-3g-ticket.invalid-title') : title;
+        body = body === '' ? i18n.t('acquire-3g-ticket.invalid-body') : body;
         let checkAlreadySend = await wrongQrArray.includes(data);
 
         if (checkAlreadySend) {
@@ -261,13 +265,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             wrongQrArray.push(data);
             if (!this.preCheck) {
                 send({
-                    "summary": title,
-                    "body": body,
-                    "type": "danger",
-                    "timeout": 5,
+                    summary: title,
+                    body: body,
+                    type: 'danger',
+                    timeout: 5,
                 });
                 this.proofUploadFailed = true;
-                this.message = message !== "" ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
+                this.message =
+                    message !== '' ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
             }
         }
     }
@@ -302,8 +307,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async isAlreadyChecked(data) {
         let alreadyChecked = false;
 
-        if (this.wrongHash !== undefined)
-            alreadyChecked = await this.wrongHash.includes(data);
+        if (this.wrongHash !== undefined) alreadyChecked = await this.wrongHash.includes(data);
 
         if (alreadyChecked) {
             const that = this;
@@ -329,21 +333,19 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             try {
                 hash = await storage.fetch(this.auth['person-id'], this.auth['subject']);
             } catch (error) {
-                console.log("checkForValidProofLocal Error", error);
+                console.log('checkForValidProofLocal Error', error);
             }
 
             if (hash !== null) {
                 await this.checkQRCode(hash);
             }
         } finally {
-            if (this.preCheck)
-                this.preCheck = false;
+            if (this.preCheck) this.preCheck = false;
         }
     }
 
     async checkQRCode(data) {
-        if (await this.isAlreadyChecked(data))
-            return;
+        if (await this.isAlreadyChecked(data)) return;
 
         let check = await this.tryParseHash(data, this.searchHashString);
 
@@ -359,8 +361,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         }
 
         let selfTestURL = '';
-        if (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== "") {
-            const array = this.searchSelfTestStringArray.split(",");
+        if (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '') {
+            const array = this.searchSelfTestStringArray.split(',');
             for (const selfTestString of array) {
                 check = await this.tryParseHash(data, selfTestString);
                 if (check) {
@@ -372,7 +374,14 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
         if (check && selfTestURL !== '' && !this.selfTestValid) {
             const i18n = this._i18n;
-            await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR ? this.wrongQR : [], i18n.t('self-test-not-supported-title'), i18n.t('self-test-not-supported-body'), i18n.t('self-test-not-supported-title'));
+            await this.checkAlreadySend(
+                data.data,
+                this.resetWrongQr,
+                this.wrongQR ? this.wrongQR : [],
+                i18n.t('self-test-not-supported-title'),
+                i18n.t('self-test-not-supported-body'),
+                i18n.t('self-test-not-supported-title')
+            );
             return;
         }
 
@@ -396,20 +405,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.proofUploadFailed = false;
             this.isFullProof = false;
 
-            if (this._("#text-switch"))
-                this._("#text-switch")._active = "";
+            if (this._('#text-switch')) this._('#text-switch')._active = '';
 
             this.showCreateTicket = true;
-            if (this._("#trust-button") && this._("#trust-button").checked) {
+            if (this._('#trust-button') && this._('#trust-button').checked) {
                 await this.encryptAndSaveHash();
             }
-
         } else {
             if (this.wrongQR !== undefined)
                 await this.checkAlreadySend(data.data, this.resetWrongQr, this.wrongQR);
         }
     }
-
 
     /**
      * Sends an activation request and do error handling and parsing
@@ -431,14 +437,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (greenPassHash.length <= 0) {
             if (!precheck) {
                 this.message = i18nKey('acquire-3g-ticket.invalid-qr-body');
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+                this.saveWrongHashAndNotify(
+                    i18n.t('acquire-3g-ticket.invalid-title'),
+                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    greenPassHash
+                );
             }
             return;
         }
 
         await this.checkActivationResponse(greenPassHash, category, precheck);
     }
-
 
     /**
      * Parse the response of a green pass activation request
@@ -471,11 +480,17 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         /** @type {ValidationResult} */
         let res;
         try {
-            res = await defaultValidator.validate(greenPassHash, new Date(), this.lang, 'AT', regions);
+            res = await defaultValidator.validate(
+                greenPassHash,
+                new Date(),
+                this.lang,
+                'AT',
+                regions
+            );
             this.validationFailed = false;
         } catch (error) {
             // Validation wasn't possible (Trust data couldn't be loaded, signatures are broken etc.)
-            console.error("ERROR:", error);
+            console.error('ERROR:', error);
             await this.sendErrorAnalyticsEvent('HCertValidation', 'DataError', '');
             this.validationFailed = true;
             this.proofUploadFailed = true;
@@ -483,7 +498,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.isFullProof = false;
             this.detailedError = error.message;
             this.message = i18nKey('validation-not-possible');
-            this.saveWrongHashAndNotify(i18n.t('validation-not-possible-title'), i18n.t('validation-not-possible-body'), greenPassHash);
+            this.saveWrongHashAndNotify(
+                i18n.t('validation-not-possible-title'),
+                i18n.t('validation-not-possible-body'),
+                greenPassHash
+            );
             return;
         }
 
@@ -495,7 +514,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.isFullProof = false;
             if (!preCheck) {
                 this.detailedError = res.error;
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+                this.saveWrongHashAndNotify(
+                    i18n.t('acquire-3g-ticket.invalid-title'),
+                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    greenPassHash
+                );
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
             return;
@@ -519,7 +542,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 // Use the less strict region for the error message to show what would be needed
                 // to get at least something.
                 this.detailedError = res.regions[errorRegion].error;
-                this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+                this.saveWrongHashAndNotify(
+                    i18n.t('acquire-3g-ticket.invalid-title'),
+                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    greenPassHash
+                );
                 this.message = i18nKey('acquire-3g-ticket.invalid-document');
             }
             return;
@@ -532,16 +559,34 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             const options = {
                 method: 'GET',
                 headers: {
-                    Authorization: "Bearer " + this.auth.token
+                    Authorization: 'Bearer ' + this.auth.token,
                 },
             };
-            let response = await this.httpGetAsync(combineURLs(this.entryPointUrl, '/base/people/' + encodeURIComponent(personId)), options);
+            let response = await this.httpGetAsync(
+                combineURLs(this.entryPointUrl, '/base/people/' + encodeURIComponent(personId)),
+                options
+            );
             let person = await response.json();
 
             // Make sure the person matches the proof
-            if (!checkPerson(res.firstname, res.lastname, res.firstname_t, res.lastname_t, res.dob, person.givenName, person.familyName, person.birthDate)) {
+            if (
+                !checkPerson(
+                    res.firstname,
+                    res.lastname,
+                    res.firstname_t,
+                    res.lastname_t,
+                    res.dob,
+                    person.givenName,
+                    person.familyName,
+                    person.birthDate
+                )
+            ) {
                 if (!preCheck) {
-                    this.saveWrongHashAndNotify(i18n.t('acquire-3g-ticket.invalid-title'), i18n.t('acquire-3g-ticket.invalid-body'), greenPassHash);
+                    this.saveWrongHashAndNotify(
+                        i18n.t('acquire-3g-ticket.invalid-title'),
+                        i18n.t('acquire-3g-ticket.invalid-body'),
+                        greenPassHash
+                    );
                     this.message = i18nKey('acquire-3g-ticket.not-same-person');
                 }
                 this.proofUploadFailed = true;
@@ -552,7 +597,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             }
         }
 
-        if (this._("#trust-button") && this._("#trust-button").checked) {
+        if (this._('#trust-button') && this._('#trust-button').checked) {
             await this.encryptAndSaveHash();
         }
 
@@ -587,8 +632,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             }
         }
 
-        if (this._("#text-switch"))
-            this._("#text-switch")._active = "";
+        if (this._('#text-switch')) this._('#text-switch')._active = '';
         this.showCreateTicket = true;
 
         if (preCheck) {
@@ -602,9 +646,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async persistStorageMaybe() {
         if (navigator.storage && navigator.storage.persist) {
             if (await navigator.storage.persist())
-                console.log("Storage will not be cleared except by explicit user action");
-            else
-                console.log("Storage may be cleared by the UA under storage pressure.");
+                console.log('Storage will not be cleared except by explicit user action');
+            else console.log('Storage may be cleared by the UA under storage pressure.');
         }
     }
 
@@ -618,7 +661,12 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         if (this.isSelfTest) {
             expiresAt = Date.now() + 60000 * 1440; //24 hours
         }
-        await storage.save(this.greenPassHash, this.auth['person-id'], this.auth['subject'], expiresAt);
+        await storage.save(
+            this.greenPassHash,
+            this.auth['person-id'],
+            this.auth['subject'],
+            expiresAt
+        );
     }
 
     async clearLocalStorage() {

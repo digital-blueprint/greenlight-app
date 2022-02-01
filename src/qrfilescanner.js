@@ -9,9 +9,12 @@ class QrScanner {
     }
 
     async scanImage(image) {
-        if (this._scanner === null)  {
+        if (this._scanner === null) {
             this._scanner = (await import('qr-scanner')).default;
-            this._scanner.WORKER_PATH = commonUtils.getAssetURL(pkgName, 'qr-scanner-worker.min.js');
+            this._scanner.WORKER_PATH = commonUtils.getAssetURL(
+                pkgName,
+                'qr-scanner-worker.min.js'
+            );
         }
         if (this._engine === null) {
             this._engine = await this._scanner.createQrEngine(this._scanner.WORKER_PATH);
@@ -46,12 +49,13 @@ const readBinaryFileContent = async (file) => {
 async function getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages) {
     let page = await pdf.getPage(currentPage);
     let viewport = page.getViewport({scale});
-    let canvas = document.createElement('canvas') , ctx = canvas.getContext('2d');
-    let renderContext = { canvasContext: ctx, viewport: viewport };
+    let canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+    let renderContext = {canvasContext: ctx, viewport: viewport};
     canvas.height = viewport.height;
     canvas.width = viewport.width;
     await page.render(renderContext).promise;
-    console.log("page rendered");
+    console.log('page rendered');
     pages.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
 
     heights.push(height);
@@ -61,13 +65,12 @@ async function getPage(pdf, pages, heights, width, height, currentPage, scale, c
     if (currentPage < pdf.numPages) {
         currentPage++;
         await getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages);
-    }
-    else {
-        let canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+    } else {
+        let canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d');
         canvas.width = width;
         canvas.height = height;
-        for(let i = 0; i < pages.length; i++)
-            ctx.putImageData(pages[i], 0, heights[i]);
+        for (let i = 0; i < pages.length; i++) ctx.putImageData(pages[i], 0, heights[i]);
         canvasImages.push(canvas);
     }
 }
@@ -79,15 +82,18 @@ async function getPage(pdf, pages, heights, width, height, currentPage, scale, c
  */
 async function getImageFromPDF(file) {
     const data = await readBinaryFileContent(file);
-    let pages = [], heights = [], width = 0, height = 0, currentPage = 1;
+    let pages = [],
+        heights = [],
+        width = 0,
+        height = 0,
+        currentPage = 1;
     let scale = 3;
     let canvasImages = [];
     try {
         let pdf = await pdfjs.getDocument({data: data}).promise;
         await getPage(pdf, pages, heights, width, height, currentPage, scale, canvasImages);
         return canvasImages;
-    }
-    catch (error) {
+    } catch (error) {
         //TODO Throw error if pdf cant converted to image
         console.error(error);
         return -1;
@@ -101,8 +107,7 @@ async function getQRCodeFromPDF(file) {
     let scanner = new QrScanner();
     for (const page of pages) {
         payload = await scanner.scanImage(page);
-        if (payload !== null)
-            break;
+        if (payload !== null) break;
     }
     return payload;
 }
@@ -112,9 +117,8 @@ async function getQRCodeFromImage(file) {
     return scanner.scanImage(file);
 }
 
-export async function getQRCodeFromFile(file)
-{
-    if (file.type === "application/pdf") {
+export async function getQRCodeFromFile(file) {
+    if (file.type === 'application/pdf') {
         return await getQRCodeFromPDF(file);
     } else {
         return await getQRCodeFromImage(file);

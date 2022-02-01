@@ -1,4 +1,3 @@
-
 const { CompactEncrypt, importJWK, base64url } = require('jose');
 
 /**
@@ -15,17 +14,20 @@ const { CompactEncrypt, importJWK, base64url } = require('jose');
  * This doesn't make things more secure, it just makes the intent of the user
  * more clear in case the API isn't used through our UI flow.
  *
- * @param {string} token 
- * @param {string} additionalInformation 
+ * @param {string} token
+ * @param {string} additionalInformation
  * @returns {string}
  */
 async function encodeAdditionalInformation(token, additionalInformation) {
-    const encoder = new TextEncoder();
-    const key = await importJWK({kty: 'oct', k: base64url.encode(token)}, 'PBES2-HS256+A128KW');
-    const jwe = await new CompactEncrypt(encoder.encode(additionalInformation))
-        .setProtectedHeader({alg: 'PBES2-HS256+A128KW', enc: 'A256GCM'})
-        .encrypt(key);
-    return jwe;
+	const encoder = new TextEncoder();
+	const key = await importJWK(
+		{ kty: 'oct', k: base64url.encode(token) },
+		'PBES2-HS256+A128KW'
+	);
+	const jwe = await new CompactEncrypt(encoder.encode(additionalInformation))
+		.setProtectedHeader({ alg: 'PBES2-HS256+A128KW', enc: 'A256GCM' })
+		.encrypt(key);
+	return jwe;
 }
 
 module.exports.encodeAdditionalInformation = encodeAdditionalInformation;

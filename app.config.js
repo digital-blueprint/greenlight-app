@@ -13,7 +13,8 @@ export default {
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
-        gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        gpSearchSelfTestStringArray:
+            'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     bs: {
         basePath: '/dist/',
@@ -29,7 +30,8 @@ export default {
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
-        gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        gpSearchSelfTestStringArray:
+            'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     development: {
         basePath: '/apps/greenlight/',
@@ -45,7 +47,8 @@ export default {
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
-        gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        gpSearchSelfTestStringArray:
+            'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     demo: {
         basePath: '/apps/greenlight/',
@@ -61,7 +64,8 @@ export default {
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
-        gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        gpSearchSelfTestStringArray:
+            'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
     production: {
         basePath: '/',
@@ -77,6 +81,7 @@ export default {
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
-        gpSearchSelfTestStringArray: 'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        gpSearchSelfTestStringArray:
+            'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
 };

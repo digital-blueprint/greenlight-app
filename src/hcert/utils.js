@@ -3,8 +3,8 @@ import {name as pkgName} from './../../package.json';
 import MockDate from 'mockdate';
 
 /**
- * @param {Date} date 
- * @param {callback} callback 
+ * @param {Date} date
+ * @param {callback} callback
  */
 export function withDate(date, callback) {
     MockDate.set(date.toISOString());
@@ -46,7 +46,7 @@ async function withFakeBigInt(callback) {
 
 /**
  * Returns the hcert-kotlin module
- * 
+ *
  * @returns {object} The module
  */
 export async function importHCert() {
@@ -70,11 +70,13 @@ export async function importHCert() {
             };
             script.src = commonUtils.getAssetURL(pkgName, 'hcert-kotlin.js');
             document.head.appendChild(script);
-          });
-          importHCert._promise = promise;
+        });
+        importHCert._promise = promise;
     }
 
-    return withFakeBigInt(async () => {return await promise;});
+    return withFakeBigInt(async () => {
+        return await promise;
+    });
 }
 
 export const trustAnchorProd = `-----BEGIN CERTIFICATE-----
@@ -104,25 +106,23 @@ F5F43q9mRGettRDLprASrxsDO9XxUUp3ObjcWQIhALfUWnserGEPiD7Pa25tg9lj
 wkrqDrMdZHZ39qb+Jf/E
 -----END CERTIFICATE-----`;
 
-
 /**
  * Fetches all the data needed for validating the certificate in parallel
- * 
+ *
  * @param {string} baseUrl
  * @returns {object}
  */
-export async function fetchTrustData(baseUrl)
-{
+export async function fetchTrustData(baseUrl) {
     let keys = ['rules.json', 'trustlist', 'trustlistsig', 'valuesets', 'valuesetssig'];
     // No longer used...
     // keys.push('rules', 'rulessig');
     let data = {};
 
-    for(let key of keys) {
+    for (let key of keys) {
         data[key] = fetch(baseUrl + '/' + key);
     }
 
-    for(let [key, promise] of Object.entries(data)) {
+    for (let [key, promise] of Object.entries(data)) {
         let response = await promise;
         if (!response.ok) {
             throw Error(response.statusText);
