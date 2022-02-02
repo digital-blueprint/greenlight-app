@@ -7,6 +7,24 @@ TODO add description how to only use an activity alone here
 
 ## Activities
 
+### Shared Attributes
+
+These attributes are available for all activities listed here:
+
+- `ticket-types`: object: maps ticket types to the region filter used for rules, only "full" and "partial" as types are allowed.
+
+#### ticket-types
+
+The greenlight app has two modes of operation:
+
+1) One single rule set is used. Valid tickets show their photo in color. Only the `"ET"` region in the rule set is used. Select this mode by not specifying a `ticket-types` attribute.
+
+2) Two rule sets are used, with one being a subset of the other one.
+
+`ticket-types='{"full": "ET-LV", "partial": "ET"}'`
+
+Tickets that are valid according to the "full" rule set show their photo in color. Tickets that are only valid according to the "partial" rule set are shown in "grayscale" instead. The values of the object passed via the attribute are the regions used for filtering the respective rule sets.
+
 ### dbp-acquire-3g-ticket
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.

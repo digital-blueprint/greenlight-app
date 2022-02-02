@@ -134,18 +134,6 @@ you need to manually add these attributes so that the topic will work properly:
 </dbp-greenlight>
 ```
 
-### ticket-types
-
-The greenlight app has two modes of operation:
-
-1) One single rule set is used. Valid tickets show their photo in color. Only the `"ET"` region in the rule set is used. Select this mode by not specifying a `ticket-types` attribute.
-
-2) Two rule sets are used, with one being a subset of the other one.
-
-`ticket-types='{"full": "ET-LV", "partial": "ET"}'`
-
-Tickets that are valid according to the "full" rule set show their photo in color. Tickets that are only valid according to the "partial" rule set are shown in "grayscale" instead. The values of the object passed via the attribute are the regions used for filtering the respective rule sets.
-
 ### Design
 For frontend design customizations, such as logo, colors, font, favicon, and more, take a look at the [theming documentation](https://dbp-demo.tugraz.at/dev-guide/frontend/theming/).
 
