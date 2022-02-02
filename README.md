@@ -83,6 +83,14 @@ You will find the certificates downloaded in `/<my-path>/greenlight-app/public/a
 NOTE: Failing to update the data will result in signatures expiring after 2 days
 which breaks the core functionality of the app.
 
+## Activities
+This app has the following activities:
+- `dbp-acquire-3g-ticket`
+- `dbp-show-active-tickets`
+- `dbp-show-reference-ticket`
+
+You can find the documentation of these activities in the [greenlight activities documentation](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
+
 ## Adapt app
 
 ### Functionality
@@ -92,7 +100,7 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 |----------------|-------| ------------|
 | `provider-root` | Boolean | [appshell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell) |
 | `lang`         | String | [language-select](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/language-select) | 
-| `entry-point-url` | String | entry point url to access the api |
+| `entry-point-url` | String | [appshell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell) |
 | `keycloak-config` | Object | [appshell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell) |
 | `base-path` | String | [appshell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell) |
 | `src` | String | [appshell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell) |
