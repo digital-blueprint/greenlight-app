@@ -1047,7 +1047,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 })}">
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    <slot name="description"> ${this.activity.getDescription(this.lang)} </slot>
+                    <slot name="description">${this.activity.getDescription(this.lang)}</slot>
                 </p>
                 <div>
                     <slot name="additional-information">
@@ -1097,11 +1097,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                   'acquire-3g-ticket.manage-tickets-link'
                                               )}"
                                               class="int-link-internal">
-                                              <span
-                                                  >${i18n.t(
+                                              <span>
+                                                  ${i18n.t(
                                                       'acquire-3g-ticket.manage-tickets-link'
-                                                  )}.</span
-                                              >
+                                                  )}.
+                                              </span>
                                           </a>
                                       </div>
                                   </dbp-inline-notification>
@@ -1252,12 +1252,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           ${i18n.t(this.message, {place: this.location})}
                                       </div>
                                       ${this.detailedError
-                                          ? html` <dbp-info-tooltip
-                                                class="info-tooltip"
-                                                text-content="${i18n.t(
-                                                    'acquire-3g-ticket.invalid-document-prefix'
-                                                ) + this.detailedError.replace(/\n/g, '<br>')}"
-                                                interactive></dbp-info-tooltip>`
+                                          ? html`
+                                                <dbp-info-tooltip
+                                                    class="info-tooltip"
+                                                    text-content="${i18n.t(
+                                                        'acquire-3g-ticket.invalid-document-prefix'
+                                                    ) + this.detailedError.replace(/\n/g, '<br>')}"
+                                                    interactive></dbp-info-tooltip>
+                                            `
                                           : ``}
                                   </div>
                               </div>
@@ -1274,8 +1276,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                               <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
                                               ${this.ticketTypes
                                                   ? html`
-                                                        <span class="valid-for"
-                                                            >${i18n.t(
+                                                        <span class="valid-for">
+                                                            ${i18n.t(
                                                                 'acquire-3g-ticket.3g-proof-valid-for'
                                                             )}:
                                                             <div class="validity-check">
@@ -1306,8 +1308,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                                 </div>
                                                             </div>
                                                         </span>
-                                                        <span
-                                                            >${i18n.t(
+                                                        <span>
+                                                            ${i18n.t(
                                                                 'acquire-3g-ticket.3g-proof-valid-till-title'
                                                             )}:
                                                             ${i18n.t('date-time', {
@@ -1331,34 +1333,36 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                                 interactive></dbp-info-tooltip>
                                                         </span>
                                                     `
-                                                  : html` <span
-                                                        >${i18n.t(
-                                                            'acquire-3g-ticket.3g-proof-status'
-                                                        )}:
-                                                        <strong
-                                                            >${i18n.t(
-                                                                'acquire-3g-ticket.valid-till'
-                                                            )}${i18n.t('date-time', {
-                                                                clock: this.person.validUntil
-                                                                    ? this.formatValidUntilTime(
-                                                                          this.person.validUntil
-                                                                      )
-                                                                    : '',
-                                                                date: this.person.validUntil
-                                                                    ? this.formatValidUntilDate(
-                                                                          this.person.validUntil
-                                                                      )
-                                                                    : '',
-                                                            })}
-                                                        </strong>
-                                                        <dbp-info-tooltip
-                                                            class="info-tooltip"
-                                                            text-content="${i18n.t(
-                                                                'validity-tooltip',
-                                                                {place: this.location}
-                                                            )}"
-                                                            interactive></dbp-info-tooltip>
-                                                    </span>`}
+                                                  : html`
+                                                        <span>
+                                                            ${i18n.t(
+                                                                'acquire-3g-ticket.3g-proof-status'
+                                                            )}:
+                                                            <strong>
+                                                                ${i18n.t(
+                                                                    'acquire-3g-ticket.valid-till'
+                                                                )}${i18n.t('date-time', {
+                                                                    clock: this.person.validUntil
+                                                                        ? this.formatValidUntilTime(
+                                                                              this.person.validUntil
+                                                                          )
+                                                                        : '',
+                                                                    date: this.person.validUntil
+                                                                        ? this.formatValidUntilDate(
+                                                                              this.person.validUntil
+                                                                          )
+                                                                        : '',
+                                                                })}
+                                                            </strong>
+                                                            <dbp-info-tooltip
+                                                                class="info-tooltip"
+                                                                text-content="${i18n.t(
+                                                                    'validity-tooltip',
+                                                                    {place: this.location}
+                                                                )}"
+                                                                interactive></dbp-info-tooltip>
+                                                        </span>
+                                                    `}
                                               <br />
                                               ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}:
                                               ${this.person.firstname
@@ -1366,10 +1370,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                   : ''}
                                               ${this.person.lastname}
                                               ${this.person.dob
-                                                  ? html` <br />${i18n.t(
+                                                  ? html`
+                                                        <br />
+                                                        ${i18n.t(
                                                             'acquire-3g-ticket.3g-proof-birthdate'
                                                         )}:
-                                                        ${this.person.dob}`
+                                                        ${this.person.dob}
+                                                    `
                                                   : ''}
                                           </span>
                                       </div>
@@ -1380,8 +1387,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           <span class="header">
                                               <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4>
                                               ${i18n.t('acquire-3g-ticket.self-test-information')}
-                                              <span
-                                                  >${i18n.t('acquire-3g-ticket.self-test-link')}:
+                                              <span>
+                                                  ${i18n.t('acquire-3g-ticket.self-test-link')}:
                                                   <a
                                                       class="int-link-external"
                                                       title="${i18n.t(
@@ -1389,10 +1396,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                       )}"
                                                       target="_blank"
                                                       rel="noopener"
-                                                      href="${this.greenPassHash}"
-                                                      >${this.greenPassHash}</a
-                                                  ></span
-                                              >
+                                                      href="${this.greenPassHash}">
+                                                      ${this.greenPassHash}
+                                                  </a>
+                                              </span>
                                           </span>
                                       </div>
                                       <dbp-loading-button

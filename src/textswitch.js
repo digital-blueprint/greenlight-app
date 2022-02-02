@@ -137,8 +137,9 @@ export class TextSwitch extends AdapterLitElement {
                     class="button ${this._active === BUTTON1 ? `active` : ``}"
                     id="${BUTTON1}"
                     ?disabled="${this.disabled}">
-                    ${this.value1}</button
-                ><button
+                    ${this.value1}
+                </button>
+                <button
                     @click="${onClick}"
                     class="button ${this._active === BUTTON2 ? `active` : ``}"
                     id="${BUTTON2}"

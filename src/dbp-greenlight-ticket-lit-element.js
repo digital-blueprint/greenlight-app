@@ -177,7 +177,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
             <div class="${classMap({hidden: permissions})}">
                 <h2>${this.activity.getName(this.lang)}</h2>
                 <p class="subheadline">
-                    <slot name="description"> ${this.activity.getDescription(this.lang)} </slot>
+                    <slot name="description">${this.activity.getDescription(this.lang)}</slot>
                 </p>
 
                 <div
@@ -242,9 +242,8 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                     })}">
                                     <h3 id="ticket-modal-title">
                                         <slot name="ticket-place">
-                                            ${i18n.t('show-ticket-title')}<strong
-                                                >${this.locationName}</strong
-                                            >
+                                            ${i18n.t('show-ticket-title')}
+                                            <strong>${this.locationName}</strong>
                                         </slot>
                                     </h3>
                                     <div

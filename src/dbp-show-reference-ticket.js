@@ -139,7 +139,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             <div class="ticket">
                 <span class="header">
                     <h3>
-                        <slot name="place"> ${i18n.t('entry-ticket')}: ${this.locationName} </slot>
+                        <slot name="place">${i18n.t('entry-ticket')}: ${this.locationName}</slot>
                     </h3>
                     <span class="header">
                         <slot name="ticket-description">
