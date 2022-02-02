@@ -110,14 +110,15 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 | `gp-search-hash-string` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 | `gp-search-self-test-string-array` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 | `gp-self-test-valid` | Boolean | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
+| `ticket-types` | Object | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 | `show-preselected` | Boolean | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 | `preselected-option` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 | `file-handling-enabled-targets` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
 | `nextcloud-web-app-password-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
-| `nextcloud-web-dav-url` | String | https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling |
-| `nextcloud-file-url` | String | https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling |
-| `nextcloud-auth-info` | String | https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling |
-| `nextcloud-name` | String | https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling |
+| `nextcloud-web-dav-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
+| `nextcloud-file-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
+| `nextcloud-auth-info` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
+| `nextcloud-name` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
 
 #### Mandatory attributes
 
@@ -136,6 +137,7 @@ you need to manually add these attributes so that the topic will work properly:
 
 ### Design
 For frontend design customizations, such as logo, colors, font, favicon, and more, take a look at the [theming documentation](https://dbp-demo.tugraz.at/dev-guide/frontend/theming/).
+
 
 ## "dbp-greenlight" Slots
 
