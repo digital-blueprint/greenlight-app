@@ -57,6 +57,8 @@ If you want to update the DBP greenlight App in the current folder you can call:
 npx @digital-blueprint/cli update-app greenlight
 ```
 
+**Warning:** After the update the trust data has to be restored, see below.
+
 **Warning:** There may be issues when you run these commands as root user, best use a non-root user, like `www-data`.
 To do this you can for example open a shell with `runuser -u www-data -- bash`.
 
