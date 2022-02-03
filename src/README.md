@@ -573,7 +573,7 @@ Example:
       <div slot="en">
           <h4>Information about 3-G evidence</h4>
           <p>
-              If a <strong>valid health certitificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
+              If a <strong>valid health certificate</strong> is available on this device then its QR-code is displayed and the ticked is shown in color.
           </p>
       </div>
     </dbp-translated>
