@@ -356,8 +356,10 @@ export function getTicketCss() {
 
         .proof-container,
         .information-container {
-            background-color: var(--dbp-info);
-            color: var(--dbp-text-inverted);
+            border: var(--dbp-border);
+            border-color: var(--dbp-info-surface-border-color);
+            background-color: var(--dbp-info-surface);
+            color: var(--dbp-on-info-surface);
             padding: 40px 10px;
             display: flex;
             flex-direction: column;
@@ -374,9 +376,10 @@ export function getTicketCss() {
         .proof-container .int-link-internal,
         .information-container .int-link-internal,
         .information-container .int-link-external {
-            border-bottom: var(--dbp-border);
-            border-color: var(--dbp-text-inverted);
-            color: var(--dbp-text-inverted);
+            border: var(--dbp-border);
+            border-color: var(--dbp-info-surface-border-color);
+            background-color: var(--dbp-info-surface);
+            color: var(--dbp-on-info-surface);
         }
 
         .proof-container .int-link-external::after,

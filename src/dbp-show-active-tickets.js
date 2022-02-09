@@ -450,7 +450,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${getTicketCss()}
             
             .gray {
-                color: var(--dbp-text-muted);
+                color: var(--dbp-muted);
             }
 
             .valid-for {
@@ -468,7 +468,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             }
 
             .warning {
-                color: var(--dbp-warning-as-text);
+                color: var(--dbp-warning);
             }
 
             .qr-code-wrapper {
