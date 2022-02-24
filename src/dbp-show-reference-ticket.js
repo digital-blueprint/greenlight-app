@@ -167,7 +167,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         `;
 
         let buttonArea = null;
-        if (this.ticketTypes) {
+        if (this._hasMultipleTicketTypes()) {
             let onChange = (e) => {
                 let name = e.target.name;
                 this.forceTicketGrayscale = name === 'grayscale';

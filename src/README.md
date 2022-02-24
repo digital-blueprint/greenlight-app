@@ -11,13 +11,15 @@ TODO add description how to only use an activity alone here
 
 These attributes are available for all activities listed here:
 
-- `ticket-types`: object: maps ticket types to the region filter used for rules, only "full" and "partial" as types are allowed.
+- `ticket-types`: object: maps ticket types to the region filter used for rules, only "full" and "partial" as types are allowed. Defaults to `{"full": "ET"}`.
 
 #### ticket-types
 
 The greenlight app has two modes of operation:
 
-1) One single rule set is used. Valid tickets show their photo in color. Only the `"ET"` region in the rule set is used. Select this mode by not specifying a `ticket-types` attribute.
+1) One single rule set `"full"` is used. Valid tickets show their photo in color. Select this mode by not specifying a `ticket-types` attribute, or only specifying a `"full"` region.
+
+`ticket-types='{"full": "ET"}'`
 
 2) Two rule sets are used, with one being a subset of the other one.
 

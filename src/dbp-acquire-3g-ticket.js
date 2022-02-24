@@ -840,7 +840,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 transition: background-color 0.15s, color 0.15s;
                 border-bottom: var(--dbp-border);
             }
-            
+
             .inline-notification .int-link-internal {
                 transition: background-color 0.15s, color 0.15s;
                 border-bottom: var(--dbp-border);
@@ -1269,7 +1269,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           })}">
                                           <span class="header">
                                               <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
-                                              ${this.ticketTypes
+                                              ${this._hasMultipleTicketTypes()
                                                   ? html`
                                                         <span class="valid-for">
                                                             ${i18n.t(

@@ -18,7 +18,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.searchHashString = '';
         this.searchSelfTestStringArray = '';
         this.selfTestValid = false;
-        this.ticketTypes = null;
+        this.ticketTypes = {full: 'ET'};
+    }
+
+    _hasMultipleTicketTypes() {
+        return this.ticketTypes['full'] !== undefined && this.ticketTypes['partial'] !== undefined;
     }
 
     static get properties() {
@@ -188,9 +192,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async sendCreateTicketRequest() {
         let additionalInformation;
 
-        if (this.ticketTypes && this.hasValidProof) {
+        if (this._hasMultipleTicketTypes() && this.hasValidProof) {
             additionalInformation = this.isFullProof ? 'full' : 'partial';
-        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+        } else if (!this._hasMultipleTicketTypes() && this.hasValidProof && !this.isSelfTest) {
             additionalInformation = 'local-proof';
         } else {
             additionalInformation = '';
@@ -464,18 +468,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
     async checkActivationResponse(greenPassHash, category, preCheck = false) {
         const i18n = this._i18n;
 
-        let regions = [];
-        let fullProofRegion = '';
-        let errorRegion = '';
-        if (this.ticketTypes) {
-            regions = Object.values(this.ticketTypes);
-            fullProofRegion = this.ticketTypes['full'];
-            errorRegion = this.ticketTypes['partial'];
-        } else {
-            regions = ['ET'];
-            fullProofRegion = 'ET';
-            errorRegion = 'ET';
-        }
+        let regions = Object.values(this.ticketTypes);
+        let fullProofRegion = this.ticketTypes['full'] ?? 'ET';
+        let errorRegion = this.ticketTypes['partial'] ?? fullProofRegion;
 
         /** @type {ValidationResult} */
         let res;

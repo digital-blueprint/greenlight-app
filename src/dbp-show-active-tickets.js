@@ -114,9 +114,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         // const additionalInformation = this.hasValidProof && !this.isSelfTest ? 'local-proof' : '';
         let additionalInformation;
 
-        if (this.ticketTypes && this.hasValidProof) {
+        if (this._hasMultipleTicketTypes() && this.hasValidProof) {
             additionalInformation = this.isFullProof ? 'full' : 'partial';
-        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+        } else if (!this._hasMultipleTicketTypes() && this.hasValidProof && !this.isSelfTest) {
             additionalInformation = 'local-proof';
         } else {
             additionalInformation = '';
@@ -150,9 +150,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
         // const additionalInformation = this.hasValidProof ? 'local-proof' : '';
         let additionalInformation;
 
-        if (this.ticketTypes && this.hasValidProof) {
+        if (this._hasMultipleTicketTypes() && this.hasValidProof) {
             additionalInformation = this.isFullProof ? 'full' : 'partial';
-        } else if (!this.ticketTypes && this.hasValidProof && !this.isSelfTest) {
+        } else if (!this._hasMultipleTicketTypes() && this.hasValidProof && !this.isSelfTest) {
             additionalInformation = 'local-proof';
         } else {
             additionalInformation = '';
@@ -670,7 +670,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                             <span
                                 class="${classMap({
                                     hidden:
-                                        !this.ticketTypes ||
+                                        !this._hasMultipleTicketTypes() ||
                                         this.validationFailed ||
                                         !this.hasValidProof,
                                 })}">
