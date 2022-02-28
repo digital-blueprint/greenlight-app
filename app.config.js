@@ -63,7 +63,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
+        ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
@@ -80,7 +80,7 @@ export default {
         preselectedOption: 'TU Graz',
         serviceName: 'TUGRAZonline',
         selfTestValid: false,
-        ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
+        ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
     },
