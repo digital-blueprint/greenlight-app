@@ -293,7 +293,6 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             qr.make();
             let opts = {};
             opts.cellSize = 2;
-            opts.margin = 2;
             opts.scalable = true;
             if (this._('#qr-code-hash')) this._('#qr-code-hash').innerHTML = qr.createSvgTag(opts);
         } else {
