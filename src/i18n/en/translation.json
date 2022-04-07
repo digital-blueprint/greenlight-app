@@ -55,6 +55,7 @@
     "file-sink": {
         "modal-close": "Close"
     },
+    "full-validity-default": "Extended access to the university",
     "hcert": {
         "cert-not-valid-error": "Does not comply with the following rules: {{error}}",
         "cert-validation-failed-error": "Validation failed: {{error}}"
@@ -62,7 +63,9 @@
     "image-alt-text": "Ticket image",
     "loading-message": "Loading...",
     "loading-message-ticket": "Loading the ticket ...",
+    "no-full-validity-default": "No extended access to the university",
     "no-tickets-message": "You do not have any tickets!",
+    "partial-validity-default": "Access to the university",
     "reload": "Refresh",
     "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
     "reload-error-title": "Update failed",
@@ -77,6 +80,8 @@
         "3-g-evidence-invalid-text": "You may have imported your evidence on another device, the evidence is no longer valid or the application has not been used for a longer period of time.",
         "3-g-evidence-maximize-saving": "Add the app to the home screen of your smartphone to maximize the storage time of the evidence.",
         "3-g-evidence-selftest": "Self-test imported on this device, manual control necessary",
+        "acquire-ticket": "Create a ticket",
+        "delete-dialog-text": "Do you really want to delete the ticket?",
         "delete-ticket-notfound-body": "No active ticket: {{place}} was found. The ticket has probably already expired or deleted.",
         "delete-ticket-notfound-title": "Ticket not found!",
         "delete-ticket-success-body": "The ticket for {{place}} was successfully deleted.",
@@ -85,7 +90,6 @@
         "logged-out-body": "The session has expired. Please log in again.",
         "logged-out-title": "Session expired!",
         "new-ticket": "Request a new ticket",
-        "acquire-ticket": "Create a ticket",
         "no-3g-evidence": "No evidence found",
         "no-evidence": "No valid stored evidence was found. Show your evidence manually or upload a new evidence by creating a new ticket.",
         "other-error-body": "An unknown error occurred.",
@@ -94,13 +98,12 @@
         "self-test-found": "Evidence: Self-test found",
         "self-test-information": "Please check whether the evidence is still valid.",
         "self-test-link": "Link to the test",
+        "show-btn-text": "Show",
         "status": "Status: ",
         "status-active": "active",
         "status-inactive": "inactive",
         "validation-failed": "Validation currently not possible",
-        "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later.",
-        "show-btn-text": "Show",
-        "delete-dialog-text": "Do you really want to delete the ticket?"
+        "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
     },
     "show-btn-text": "Show",
     "show-reference-ticket": {
@@ -117,8 +120,5 @@
     "validation-not-possible-body": "The evidence cannot currently be validated. Please try again later.",
     "validation-not-possible-title": "Validierung aktuell nicht möglich",
     "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
-    "validity-tooltip-ticket-text": "The ticket is only valid in electronic form.",
-    "partial-validity-default": "Access to the university",
-    "full-validity-default": "Extended access to the university",
-    "no-full-validity-default": "No extended access to the university"
+    "validity-tooltip-ticket-text": "The ticket is only valid in electronic form."
 }

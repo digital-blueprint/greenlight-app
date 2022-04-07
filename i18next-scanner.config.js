@@ -2,6 +2,7 @@ module.exports = {
     input: ['src/**/*.js'],
     output: './',
     options: {
+        sort: true,
         debug: false,
         removeUnusedKeys: true,
         lngs: ['en', 'de'],

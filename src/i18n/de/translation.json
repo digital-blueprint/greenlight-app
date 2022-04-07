@@ -55,6 +55,7 @@
     "file-sink": {
         "modal-close": "Schließen"
     },
+    "full-validity-default": "Erweiterter Zutritt zur Universität",
     "hcert": {
         "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
         "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
@@ -62,7 +63,9 @@
     "image-alt-text": "Ticketfoto",
     "loading-message": "Lädt...",
     "loading-message-ticket": "Ticket wird geladen ...",
+    "no-full-validity-default": "Kein erweiterter Zutritt zur Universität",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
+    "partial-validity-default": "Zutritt zur Universität",
     "reload": "Aktualisieren",
     "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
     "reload-error-title": "Aktualisierung fehlgeschlagen",
@@ -77,6 +80,8 @@
         "3-g-evidence-invalid-text": "Eventuell haben Sie Ihren Nachweis auf einem anderen Gerät importiert, der Nachweis ist nicht mehr gültig oder die Applikation wurde für einen längeren Zeitraum nicht genutzt.",
         "3-g-evidence-maximize-saving": "Fügen Sie die App auf dem Startbildschirm Ihres Smartphones hinzu, um die Speicherdauer des Nachweises zu maximieren.",
         "3-g-evidence-selftest": "Selbsttest auf diesem Gerät importiert, manuelle Kontrolle notwendig",
+        "acquire-ticket": "Ticket erstellen",
+        "delete-dialog-text": "Möchten Sie das Ticket wirklich löschen?",
         "delete-ticket-notfound-body": "Es wurde kein aktives Ticket: {{place}} gefunden. Das Ticket ist wahrscheinlich schon abgelaufen oder gelöscht.",
         "delete-ticket-notfound-title": "Ticket nicht gefunden!",
         "delete-ticket-success-body": "Das Ticket für den Ort {{place}} wurde erfolgreich gelöscht.",
@@ -85,7 +90,6 @@
         "logged-out-body": "Die Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
         "logged-out-title": "Sitzung abgelaufen!",
         "new-ticket": "Neues Ticket anfordern",
-        "acquire-ticket": "Ticket erstellen",
         "no-3g-evidence": "Kein Nachweis gefunden",
         "no-evidence": "Es wurde kein gültiger gespeicherter Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket erstellen.",
         "other-error-body": "Es ist ein unbekannter Fehler aufgetreten.",
@@ -94,13 +98,12 @@
         "self-test-found": "Nachweis: Selbsttest gefunden",
         "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
         "self-test-link": "Link zum Test",
+        "show-btn-text": "Vorzeigen",
         "status": "Status: ",
         "status-active": "aktiv",
         "status-inactive": "inaktiv",
         "validation-failed": "Validierung aktuell nicht möglich",
-        "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
-        "show-btn-text": "Vorzeigen",
-        "delete-dialog-text": "Möchten Sie das Ticket wirklich löschen?"
+        "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
     },
     "show-btn-text": "Zeigen",
     "show-reference-ticket": {
@@ -117,8 +120,5 @@
     "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
     "validation-not-possible-title": "Validierung aktuell nicht möglich",
     "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
-    "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig.",
-    "partial-validity-default": "Zutritt zur Universität",
-    "full-validity-default": "Erweiterter Zutritt zur Universität",
-    "no-full-validity-default": "Kein erweiterter Zutritt zur Universität"
+    "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig."
 }
