@@ -31,3 +31,16 @@ export function escapeRegExp(string) {
 export function i18nKey(key, options) {
     return key;
 }
+
+/**
+ * Dummy function to evaluate a i18next key from a variable
+ *
+ * @param {Function} t
+ * @param {string} key
+ * @param {object} [options]
+ * @returns {string} The key param as is
+ */
+export function i18nForKey(t, key, options) {
+    let dummy = t;
+    return dummy(key, options);
+}

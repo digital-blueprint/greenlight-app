@@ -44,7 +44,7 @@ export class ValidationResult {
         this.lastname_t = null;
         /** @type {string} */
         this.dob = null;
-        /** @type {object.<string,RegionResult>} Contains a result for each region as long as isValid === true*/
+        /** @type {Object<string, RegionResult>} Contains a result for each region as long as isValid === true*/
         this.regions = {};
     }
 }

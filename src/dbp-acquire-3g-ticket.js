@@ -17,7 +17,7 @@ import {send} from '@dbp-toolkit/common/notification';
 import {FileSource} from '@dbp-toolkit/file-handling';
 import {TextSwitch} from './textswitch.js';
 import {QrCodeScanner} from '@dbp-toolkit/qr-code-scanner';
-import {escapeRegExp, i18nKey} from './utils.js';
+import {escapeRegExp, i18nKey, i18nForKey} from './utils.js';
 import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
@@ -1237,14 +1237,16 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                       <dbp-icon
                                           name="checkmark-circle"
                                           class="check-icon"></dbp-icon>
-                                      ${i18n.t(this.message)}
+                                      ${i18nForKey(i18n.t, this.message)}
                                   </div>
                                   <div
                                       class="no-proof-found ${classMap({
                                           hidden: !this.proofUploadFailed || this.loading,
                                       })}">
                                       <div class="close-icon">
-                                          ${i18n.t(this.message, {place: this.location})}
+                                          ${i18nForKey(i18n.t, this.message, {
+                                              place: this.location,
+                                          })}
                                       </div>
                                       ${this.detailedError
                                           ? html`

@@ -82,7 +82,6 @@ config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     httpbin.org ${getOrigin(config.nextcloudBaseURL)} \
     img-src * blob: data:; font-src 'self' data:`;
 
-
 export default (async () => {
     // Make sure the trustlist is up to date
     if (watch) {
