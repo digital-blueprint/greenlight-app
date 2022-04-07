@@ -83,7 +83,6 @@ config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     img-src * blob: data:; font-src 'self' data:`;
 
 
-console.log("-----",config.CSP);
 export default (async () => {
     // Make sure the trustlist is up to date
     if (watch) {
