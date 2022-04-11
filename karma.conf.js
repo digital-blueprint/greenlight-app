@@ -10,7 +10,7 @@ module.exports = async function (config) {
         client: {
             mocha: {
                 ui: 'tdd',
-                timeout: 2000 * (process.env.CI === undefined ? 1 : 10),
+                timeout: 6000 * (process.env.CI === undefined ? 1 : 10),
             },
         },
         files: [
