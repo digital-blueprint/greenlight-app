@@ -48,6 +48,7 @@ if (appEnv in appConfig) {
         nextcloudName: '',
         preselectedOption: '',
         serviceName: '',
+        ticketTypes: '{}',
     };
 } else {
     console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(appConfig)}'`);
