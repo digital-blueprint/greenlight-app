@@ -526,7 +526,7 @@
                     <h4>Informationen zum Nachweis</h4>
                     <br>
                     <p>
-                        <% if(ticketTypes === "partial"){ %>
+                        <% if(JSON.parse(ticketTypes)["partial"]){ %>
                             Ist ein <strong>gültiger PCR Test</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in <strong>Farbe</strong> dargestellt.
                             <br><br>
                             Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, der <strong>kein PCR Test</strong> ist, wird dessen QR-Code angezeigt und das Ticket in <strong>Graustufen</strong> dargestellt.
@@ -547,7 +547,7 @@
                     <h4>Information about evidence</h4>
                     <br>
                     <p>
-                        <% if(ticketTypes === "partial"){ %>
+                        <% if(JSON.parse(ticketTypes)["partial"]){ %>
                             If a <strong>valid PCR Test</strong> is available on this device then its QR code is displayed and the ticket is shown in <strong>color</strong>. 
                             <br><br>
                             If a <strong>valid health certificate</strong> that is not a PCR test is available on this device, then its QR code is displayed and the ticket is shown in <strong>black and white</strong>.
