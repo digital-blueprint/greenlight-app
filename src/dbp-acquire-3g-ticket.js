@@ -1138,11 +1138,6 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                                   <label id="last-checkbox" class="button-container">
                                       ${i18n.t('acquire-3g-ticket.trust-and-save-1')}
-                                      <dbp-info-tooltip
-                                          class="info-tooltip"
-                                          text-content="${i18n.t(
-                                              'acquire-3g-ticket.trust-and-save-2'
-                                          )}"></dbp-info-tooltip>
                                       <input
                                           type="checkbox"
                                           id="trust-button"
@@ -1150,6 +1145,11 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           value="trust-button"
                                           @click="${this.checkTrustButtonCheckmark}" />
                                       <span class="checkmark" id="trust-button-checkmark"></span>
+                                      <dbp-info-tooltip
+                                          class="info-tooltip"
+                                          text-content="${i18n.t(
+                                              'acquire-3g-ticket.trust-and-save-2'
+                                          )}"></dbp-info-tooltip>
                                   </label>
 
                                   <div id="btn-container" class="btn-container wrapper">
