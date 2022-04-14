@@ -4,6 +4,12 @@
 [npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
 [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/)
 
+## Prerequisites
+
+- You need the [API server](https://gitlab.tugraz.at/dbp/relay/dbp-relay-server-template) running
+- You need the [DbpRelayGreenlightBundle](https://gitlab.tugraz.at/dbp/greenlight/dbp-relay-greenlight-bundle) to create permits for the Covid19 certificate evaluation process
+- For more information please visit the [Greenlight project documentation](https://dbp-demo.tugraz.at/site/software/greenlight.html)
+
 ## Local development
 
 ```bash
