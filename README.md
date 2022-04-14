@@ -22,7 +22,7 @@ yarn run watch
 yarn test
 ```
 
-Jump to <https://localhost:8001> and you should get a Single Sign On login page.
+Jump to <https://localhost:8001>, and you should get a Single Sign On login page.
 
 ## Using this app as pre-built package
 
@@ -142,6 +142,6 @@ For frontend design customizations, such as logo, colors, font, favicon, and mor
 
 ## "dbp-greenlight" Slots
 
-These are common slots for the appshell. You can find the documentation of these slot in the [appshell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
+These are common slots for the app-shell. You can find the documentation of these slot in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
 For the app specific slots take a look at the [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
 
