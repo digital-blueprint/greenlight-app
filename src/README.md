@@ -63,6 +63,7 @@ Note that you will need a Keycloak server along with a client id for the domain 
     - example `nextcloud-auth-info="You need special permissions for this function"`
 - `nextcloud-name` (optional): the name of the nextcloud
     - example `nextcloud-name="Your university cloud"`
+- `no-ticket-required` (optional, default: `false`): If set, the user will be notified that currently no tickets are required.
 
 
 #### Slots

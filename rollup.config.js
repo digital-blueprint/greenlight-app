@@ -49,6 +49,7 @@ if (appEnv in appConfig) {
         preselectedOption: '',
         serviceName: '',
         ticketTypes: '{}',
+        noTicketRequired: true,
     };
 } else {
     console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(appConfig)}'`);
@@ -160,6 +161,7 @@ export default (async () => {
                     matomoUrl: config.matomoUrl,
                     matomoSiteId: config.matomoSiteId,
                     buildInfo: getBuildInfo(appEnv),
+                    noTicketRequired: config.noTicketRequired
                 },
             }),
             replace({

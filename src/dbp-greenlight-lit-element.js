@@ -1,4 +1,5 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
+import {createInstance} from './i18n';
 import {getStackTrace} from '@dbp-toolkit/common/error';
 import {send} from '@dbp-toolkit/common/notification';
 import {combineURLs} from '@dbp-toolkit/common';
@@ -11,6 +12,7 @@ import * as storage from './storage.js';
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
         super();
+        this._i18n = createInstance();
         this.isSessionRefreshed = false;
         this.auth = {};
         this.person = {};
@@ -19,6 +21,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.searchSelfTestStringArray = '';
         this.selfTestValid = false;
         this.ticketTypes = {full: 'ET'};
+        this.noTicketRequired = false;
     }
 
     _hasMultipleTicketTypes() {
@@ -37,6 +40,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             searchHashString: {type: String, attribute: 'gp-search-hash-string'},
             selfTestValid: {type: Boolean, attribute: 'gp-self-test-valid'},
             ticketTypes: {type: Object, attribute: 'ticket-types'},
+            noTicketRequired: {type: Boolean, attribute: 'no-ticket-required'}
         };
     }
 
@@ -46,6 +50,15 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this._loginStatus = '';
         this._loginState = [];
         this._loginCalled = false;
+
+        if (this.noTicketRequired) {
+            send({
+                summary: this._i18n.t('no-ticket-required.summary'),
+                body: this._i18n.t('no-ticket-required.body'),
+                type: "info",
+                timeout: 10,
+            });
+        }
     }
 
     /**

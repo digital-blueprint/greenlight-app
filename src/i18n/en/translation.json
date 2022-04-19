@@ -64,6 +64,10 @@
     "loading-message": "Loading...",
     "loading-message-ticket": "Loading the ticket ...",
     "no-full-validity-default": "No extended access to the university",
+    "no-ticket-required": {
+        "body": "No entry ticket is required for access at this time.",
+        "summary": "This application is currently inactive"
+    },
     "no-tickets-message": "You do not have any tickets!",
     "partial-validity-default": "Access to the university",
     "reload": "Refresh",

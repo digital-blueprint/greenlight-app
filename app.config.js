@@ -15,6 +15,7 @@ export default {
         ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        noTicketRequired: true,
     },
     bs: {
         basePath: '/dist/',
@@ -32,6 +33,7 @@ export default {
         ticketTypes: '{"full": "ET-LV", "partial": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        noTicketRequired: true,
     },
     development: {
         basePath: '/apps/greenlight/',
@@ -49,6 +51,7 @@ export default {
         ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        noTicketRequired: true,
     },
     demo: {
         basePath: '/apps/greenlight/',
@@ -66,6 +69,7 @@ export default {
         ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        noTicketRequired: true,
     },
     production: {
         basePath: '/',
@@ -83,5 +87,6 @@ export default {
         ticketTypes: '{"full": "ET"}',
         gpSearchSelfTestStringArray:
             'https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=',
+        noTicketRequired: true,
     },
 };

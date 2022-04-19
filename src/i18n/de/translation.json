@@ -64,6 +64,10 @@
     "loading-message": "Lädt...",
     "loading-message-ticket": "Ticket wird geladen ...",
     "no-full-validity-default": "Kein erweiterter Zutritt zur Universität",
+    "no-ticket-required": {
+        "body": "Für den Zugang wird zur Zeit kein Eintrittsticket benötigt.",
+        "summary": "Diese Applikation ist zur Zeit inaktiv"
+    },
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
     "partial-validity-default": "Zutritt zur Universität",
     "reload": "Aktualisieren",

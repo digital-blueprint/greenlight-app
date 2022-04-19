@@ -127,6 +127,7 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 | `nextcloud-file-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
 | `nextcloud-auth-info` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
 | `nextcloud-name` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling) |
+| `no-ticket-required` | Boolean | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
 
 #### Mandatory attributes
 

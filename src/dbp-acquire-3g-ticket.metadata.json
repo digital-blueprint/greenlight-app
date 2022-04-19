@@ -14,5 +14,5 @@
         "de": "Erstellt ein Ticket für den Zugang zu den Räumlichkeiten der Universität.",
         "en": "Creates a ticket for access to premises of the university."
     },
-    "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array,gp-self-test-valid,preselected-option,ticket-types,service-name,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets"
+    "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array,gp-self-test-valid,preselected-option,ticket-types,service-name,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets,no-ticket-required"
 }
