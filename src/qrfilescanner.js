@@ -1,27 +1,7 @@
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import {name as pkgName} from './../package.json';
+import {QrCodeScannerEngine, ScanResult} from '@dbp-toolkit/qr-code-scanner';
 import pdfjs from 'pdfjs-dist/legacy/build/pdf.js';
-
-class QrScanner {
-    constructor() {
-        this._engine = null;
-        this._scanner = null;
-    }
-
-    async scanImage(image) {
-        if (this._scanner === null) {
-            this._scanner = (await import('qr-scanner')).default;
-        }
-        if (this._engine === null) {
-            this._engine = await this._scanner.createQrEngine();
-        }
-        try {
-            return {data: await this._scanner.scanImage(image, {})};
-        } catch (e) {
-            return null;
-        }
-    }
-}
 
 /**
  * Returns the content of the file
@@ -96,23 +76,38 @@ async function getImageFromPDF(file) {
     }
 }
 
+/**
+ * @param {File} file
+ * @returns {?ScanResult}
+ */
 async function getQRCodeFromPDF(file) {
     pdfjs.GlobalWorkerOptions.workerSrc = commonUtils.getAssetURL(pkgName, 'pdfjs/pdf.worker.js');
     let pages = await getImageFromPDF(file);
-    let payload = null;
-    let scanner = new QrScanner();
+    let result = null;
+    let scanner = new QrCodeScannerEngine();
     for (const page of pages) {
-        payload = await scanner.scanImage(page);
-        if (payload !== null) break;
+        /** @type {ScanResult} */
+        result = await scanner.scanImage(page);
+        if (result !== null) {
+            return result;
+        }
     }
-    return payload.data;
+    return result;
 }
 
+/**
+ * @param {File} file
+ * @returns {?ScanResult}
+ */
 async function getQRCodeFromImage(file) {
-    let scanner = new QrScanner();
+    let scanner = new QrCodeScannerEngine();
     return scanner.scanImage(file);
 }
 
+/**
+ * @param {File} file
+ * @returns {?ScanResult}
+ */
 export async function getQRCodeFromFile(file) {
     if (file.type === 'application/pdf') {
         return await getQRCodeFromPDF(file);

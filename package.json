@@ -61,8 +61,7 @@
         "mockdate": "^3.0.5",
         "pdfjs-dist": "^2.12.313",
         "qrcode-generator": "^1.4.4",
-        "string-similarity": "^4.0.4",
-        "qr-scanner": "^1.4.0"
+        "string-similarity": "^4.0.4"
     },
     "scripts": {
         "build": "rollup -c",
