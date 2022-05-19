@@ -80,8 +80,10 @@ config.CSP = `default-src 'self' 'unsafe-eval' 'unsafe-inline' \
     ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(
     config.entryPointURL
 )} \
-    httpbin.org ${getOrigin(config.nextcloudBaseURL)} \
-    img-src * blob: data:; font-src 'self' data:`;
+    ${getOrigin(config.nextcloudBaseURL)} \
+    img-src * blob: data:; font-src 'self' data:; child-src 'self' ${getOrigin(
+        config.keyCloakBaseURL
+    )} blob:; worker-src 'self' blob:`;
 
 export default (async () => {
     // Make sure the trustlist is up to date
@@ -253,10 +255,6 @@ export default (async () => {
                         dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
                     },
                     {
-                        src: await getPackagePath('qr-scanner', 'qr-scanner-worker.*'),
-                        dest: 'dist/' + (await getDistPath('@dbp-toolkit/qr-code-scanner')),
-                    },
-                    {
                         src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.js'),
                         dest: 'dist/' + (await getDistPath(pkg.name, 'pdfjs')),
                     },
@@ -270,10 +268,6 @@ export default (async () => {
                         dest:
                             'dist/' +
                             (await getDistPath('@dbp-toolkit/file-handling', 'tabulator-tables')),
-                    },
-                    {
-                        src: await getPackagePath('qr-scanner', 'qr-scanner-worker.*'),
-                        dest: 'dist/' + (await getDistPath(pkg.name)),
                     },
                 ],
             }),

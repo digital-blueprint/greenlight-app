@@ -11,16 +11,12 @@ class QrScanner {
     async scanImage(image) {
         if (this._scanner === null) {
             this._scanner = (await import('qr-scanner')).default;
-            this._scanner.WORKER_PATH = commonUtils.getAssetURL(
-                pkgName,
-                'qr-scanner-worker.min.js'
-            );
         }
         if (this._engine === null) {
-            this._engine = await this._scanner.createQrEngine(this._scanner.WORKER_PATH);
+            this._engine = await this._scanner.createQrEngine();
         }
         try {
-            return {data: await this._scanner.scanImage(image)};
+            return {data: await this._scanner.scanImage(image, {})};
         } catch (e) {
             return null;
         }
@@ -109,7 +105,7 @@ async function getQRCodeFromPDF(file) {
         payload = await scanner.scanImage(page);
         if (payload !== null) break;
     }
-    return payload;
+    return payload.data;
 }
 
 async function getQRCodeFromImage(file) {
