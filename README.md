@@ -1,6 +1,7 @@
 # Greenlight Application
 
- Create an entrance ticket and import your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam. The ticket then enables you to access the university premises quickly and efficiently.
+Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam. 
+The ticket then enables you to access the university premises quickly and efficiently.
 
 [GitLab Repository](https://gitlab.tugraz.at/dbp/greenlight/greenlight) |
 [npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
