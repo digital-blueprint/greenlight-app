@@ -1,13 +1,13 @@
 # Greenlight Application
 
-Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam. 
-The ticket then enables you to access the university premises quickly and efficiently.
-
 [GitLab Repository](https://gitlab.tugraz.at/dbp/greenlight/greenlight) |
 [npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
 [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/) |
 [Greenlight Bundle](https://gitlab.tugraz.at/dbp/greenlight/dbp-relay-greenlight-bundle) |
 [Project documentation](https://dbp-demo.tugraz.at/site/software/greenlight.html)
+
+Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam.
+The ticket then enables you to access the university premises quickly and efficiently.
 
 ## Prerequisites
 
@@ -97,6 +97,7 @@ NOTE: Failing to update the data will result in signatures expiring after 2 days
 which breaks the core functionality of the app.
 
 ## Activities
+
 This app has the following activities:
 - `dbp-acquire-3g-ticket`
 - `dbp-show-active-tickets`
@@ -107,6 +108,7 @@ You can find the documentation of these activities in the [greenlight activities
 ## Adapt app
 
 ### Functionality
+
 You can add multiple attributes to the `<dbp-greenlight>` tag.
 
 | attribute name | value | Link to description |
@@ -148,11 +150,11 @@ you need to manually add these attributes so that the topic will work properly:
 ```
 
 ### Design
+
 For frontend design customizations, such as logo, colors, font, favicon, and more, take a look at the [theming documentation](https://dbp-demo.tugraz.at/dev-guide/frontend/theming/).
 
+## "dbp-greenlight" slots
 
-## "dbp-greenlight" Slots
-
-These are common slots for the app-shell. You can find the documentation of these slot in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
+These are common slots for the app-shell. You can find the documentation of these slots in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
 For the app specific slots take a look at the [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
 
