@@ -1,10 +1,10 @@
-# greenlight Activities
+# Greenlight Activities
 
-Here you can find the individual activities of the `greenlight` App. If you want to use the whole app look at [greenlight](https://gitlab.tugraz.at/dbp/greenlight/greenlight).
+Here you can find the individual activities of the `greenlight` app. If you want to use the whole app look at [greenlight](https://gitlab.tugraz.at/dbp/greenlight/greenlight).
 
-## Usage of an activity
+<!-- ## Usage of an activity
 TODO add description how to only use an activity alone here
-
+-->
 ## Activities
 
 ### Shared Attributes
@@ -12,6 +12,11 @@ TODO add description how to only use an activity alone here
 These attributes are available for all activities listed here:
 
 - `ticket-types`: object: maps ticket types to the region filter used for rules, only "full" and "partial" as types are allowed. Defaults to `{"full": "ET"}`.
+- `lang` (optional, default: `de`): set to `de` or `en` for German or English
+  - example `lang="de"`
+- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
+  - example `entry-point-url="https://api-dev.tugraz.at"`
+
 
 #### ticket-types
 
@@ -33,10 +38,6 @@ Note that you will need a Keycloak server along with a client id for the domain 
 
 #### Attributes
 
-- `lang` (optional, default: `de`): set to `de` or `en` for German or English
-    - example `lang="de"`
-- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
-    - example `entry-point-url="https://api-dev.tugraz.at"`
 - `auth` object: you need to set that object property for the auth token
     - example auth property: `{token: "THE_BEARER_TOKEN"}`
     - note: most often this should be an attribute that is not set directly, but subscribed at a provider
@@ -214,10 +215,6 @@ Note that you will need a Keycloak server along with a client id for the domain 
 
 #### Attributes
 
-- `lang` (optional, default: `de`): set to `de` or `en` for German or English
-    - example `lang="de"`
-- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
-    - example `entry-point-url="https://api-dev.tugraz.at"`
 - `auth` object: you need to set that object property for the auth token
     - example auth property: `{token: "THE_BEARER_TOKEN"}`
     - note: most often this should be an attribute that is not set directly, but subscribed at a provider
@@ -445,10 +442,7 @@ Note that you will need a Keycloak server along with a client id for the domain 
 
 #### Attributes
 
-- `lang` (optional, default: `de`): set to `de` or `en` for German or English
-    - example `lang="de"`
-- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
-    - example `entry-point-url="https://api-dev.tugraz.at"`
+See [shared attributes](#shared-attributes).
 
 
 #### Slots
