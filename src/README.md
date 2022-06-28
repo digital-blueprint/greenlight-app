@@ -5,6 +5,7 @@ Here you can find the individual activities of the `greenlight` app. If you want
 <!-- ## Usage of an activity
 TODO add description how to only use an activity alone here
 -->
+
 ## Activities
 
 ### Shared Attributes
