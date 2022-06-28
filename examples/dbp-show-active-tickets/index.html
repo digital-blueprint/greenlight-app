@@ -7,7 +7,7 @@
     <!-- Package bundles-->
     <script type="module" src="https://unpkg.com/@dbp-toolkit/provider@latest/dist/dbp-provider.js"></script>
     <script type="module" src="https://unpkg.com/@dbp-toolkit/auth@latest/dist/dbp-auth.js"></script>
-    <script type="module" src="https://unpkg.com/@dbp-topics/greenlight@latest/dist/dbp-acquire-3g-ticket.js"></script>
+    <script type="module" src="https://unpkg.com/@dbp-topics/greenlight@latest/dist/dbp-show-active-tickets.js"></script>
 
     <!-- Prevent Chrome/Edge from suggesting to translate the page -->
     <meta name="google" content="notranslate">
@@ -45,12 +45,12 @@
                            url="https://auth-dev.tugraz.at/auth"
         ></dbp-auth-keycloak>
         <dbp-login-button subscribe="auth,lang"></dbp-login-button>
-        <dbp-acquire-3g-ticket subscribe="lang,entry-point-url,auth"
+        <dbp-show-active-tickets subscribe="lang,entry-point-url,auth"
                               gp-search-hash-string="HC1:"
                               gp-search-self-test-string-array="https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id="
                               preselected-option="University"
                               file-handling-enabled-targets="local"
-        ></dbp-acquire-3g-ticket>
+        ></dbp-show-active-tickets>
     </dbp-provider>
 
 </body>
