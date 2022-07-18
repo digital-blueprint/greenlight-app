@@ -51,7 +51,7 @@ export class ValidationResult {
 
 export class Validator {
     /**
-     * @param {Date} trustDate - The date used to verify the trust data and to select the rules
+     * @param {Date} trustDate - The date used to verify the trust data, the HCERT signature and to select the rules
      * @param {boolean} production
      */
     constructor(trustDate, production = true) {
@@ -136,8 +136,11 @@ export class Validator {
             return translated;
         };
 
-        // Verify that the signature is correct and decode the HCERT
-        let hcertData = this._verifier.verify(cert);
+        // Verify that the signature is correct and decode the HCERT.
+        // This also verifies if the signature is still valid, so mock the date
+        let hcertData = withDate(this._trustDate, () => {
+            return this._verifier.verify(cert);
+        });
 
         let result = new ValidationResult();
         if (hcertData.isValid) {
