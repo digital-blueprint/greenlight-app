@@ -1,18 +1,20 @@
 import {css, html} from 'lit';
-import {createInstance} from './i18n';
+import {createInstance, addTranslations} from './i18n';
 import {Icon, LoadingButton, MiniSpinner} from '@dbp-toolkit/common';
 import {send} from '@dbp-toolkit/common/notification';
 import MicroModal from './micromodal.es';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import DBPGreenlightLitElement from './dbp-greenlight-lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
+import * as commonStyles from '@dbp-toolkit/common/styles';
 
 export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
     DBPGreenlightLitElement
 ) {
     constructor() {
         super();
-        this._i18n = createInstance();
+        addTranslations(this._i18n);
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
 
@@ -39,6 +41,12 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
             ticketImage: {type: String, attribute: false},
             forceTicketGrayscale: {type: Boolean, attribute: false},
         };
+    }
+
+    static get styles() {
+      return css`
+            ${commonStyles.getLinkCss()}
+      `;
     }
 
     static get scopedElements() {
@@ -179,7 +187,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                 <p class="subheadline">
                     <slot name="description">${this.activity.getDescription(this.lang)}</slot>
                 </p>
-
                 <div
                     class="no-tickets ${classMap({
                         hidden:
@@ -241,10 +248,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                         hidden: this.ticketLoading,
                                     })}">
                                     <h3 id="ticket-modal-title">
-                                        <slot name="ticket-place">
-                                            ${i18n.t('show-ticket-title')}
-                                            <strong>${this.locationName}</strong>
-                                        </slot>
+                                        Ticket: <strong>${ i18n.t('university-name') }</strong>
                                     </h3>
                                     <div
                                         class="reload-failed ${classMap({

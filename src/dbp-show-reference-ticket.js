@@ -9,6 +9,7 @@ import * as commonStyles from '@dbp-toolkit/common/styles';
 import * as CheckinStyles from './styles';
 import {classMap} from 'lit/directives/class-map.js';
 import {TextSwitch} from './textswitch.js';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElement) {
     constructor() {
@@ -125,13 +126,31 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
 
     render() {
         const i18n = this._i18n;
+        let additionalInfo = html``;
+          if (this.ticketTypes["partial"]){
+              additionalInfo = html`
+                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-2')) }
+                  `;
+          } else {
+              let info = html``;
+              if(this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '' && this.selfTestValid) {
+                  info = html`
+                  <br><br>
+                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-4')) }
+                  `;
+              }
+              additionalInfo = html`
+                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-3')) }
+                  ${ info }
+              `;
+          }
 
         const additionalInformation = html`
             <div class="information-container ${classMap({hidden: this.ticketLoading})}">
-                <slot name="information-container">
-                    <h4>${i18n.t('show-reference-ticket.information-container-headline')}</h4>
-                    ${i18n.t('show-reference-ticket.information-container-body')}
-                </slot>
+                <h4>${ i18n.t('show-reference-ticket.information-container-1') }</h4><br>
+                <p>
+                  ${ additionalInfo }
+                </p>
             </div>
         `;
 
@@ -139,12 +158,12 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             <div class="ticket">
                 <span class="header">
                     <h3>
-                        <slot name="place">${i18n.t('entry-ticket')}: ${this.locationName}</slot>
+                        ${i18n.t('show-reference-ticket.place')}
                     </h3>
                     <span class="header">
-                        <slot name="ticket-description">
-                            <span>${i18n.t('show-reference-ticket.description')}</span>
-                        </slot>
+                        <div>
+                        ${ unsafeHTML(i18n.t('show-reference-ticket.description'))}
+                        </div>
                     </span>
                 </span>
                 <div class="btn">

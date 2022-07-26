@@ -1,4 +1,3 @@
-import {createInstance} from './i18n.js';
 import {css, html} from 'lit';
 import DBPGreenlightLitElement from './dbp-greenlight-lit-element';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
@@ -22,11 +21,11 @@ import {Activity} from './activity.js';
 import metadata from './dbp-acquire-3g-ticket.metadata.json';
 import {getQRCodeFromFile} from './qrfilescanner.js';
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
     constructor() {
         super();
-        this._i18n = createInstance();
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
         this.activity = new Activity(metadata);
@@ -651,6 +650,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getActivityCSS()}
+            ${commonStyles.getLinkCss()}
 
             .gray {
                 color: #595959;
@@ -1041,13 +1041,20 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     hidden: !this.isLoggedIn() || this.isLoading() || !this.hasPermissions(),
                 })}">
                 <h2>${this.activity.getName(this.lang)}</h2>
-                <p class="subheadline">
-                    <slot name="description">${this.activity.getDescription(this.lang)}</slot>
-                </p>
+                    <p class="subheadline">
+                        ${ i18n.t('acquire-3g-ticket.description') }
+                    </p>
                 <div>
-                    <slot name="additional-information">
-                        <p>${i18n.t('acquire-3g-ticket.additional-information')}</p>
-                    </slot>
+                    <p>
+                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-1'))}
+                        ${ (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '' && this.selfTestValid) ? unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-2')) : ""}<br /><br />
+                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-3'))}
+                    </p>
+                    <div class="privacy-information">
+                        <p>
+                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-4'))}
+                        </p>
+                    </div>
                 </div>
 
                 <div
@@ -1278,29 +1285,27 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                                 'acquire-3g-ticket.3g-proof-valid-for'
                                                             )}:
                                                             <div class="validity-check">
-                                                                <slot name="partial-validity">
-                                                                    ${i18n.t(
-                                                                        'partial-validity-default'
-                                                                    )}
-                                                                </slot>
+                                                                <div class=\"validity-items\">
+                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
+                                                                  <b>${i18n.t('acquire-3g-ticket.partial-validity-1')}</b>
+                                                                </div>
+                                                                <div class=\"validity-items\">
+                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
+                                                                  <b>${i18n.t('acquire-3g-ticket.partial-validity-2')}</b>
+                                                                </div>
                                                                 <div class="full-validity">
                                                                     ${this.isFullProof
                                                                         ? html`
-                                                                              <slot
-                                                                                  name="full-validity">
-                                                                                  ${i18n.t(
-                                                                                      'full-validity-default'
-                                                                                  )}
-                                                                              </slot>
+                                                                              <div class=\"validity-items\">
+                                                                                <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
+                                                                                <b>${i18n.t('acquire-3g-ticket.full-validity')}</b>
+                                                                              </div>
                                                                           `
                                                                         : html`
-                                                                              <slot
-                                                                                  name="no-full-validity"
-                                                                                  class="full-validity invalid gray">
-                                                                                  ${i18n.t(
-                                                                                      'no-full-validity-default'
-                                                                                  )}
-                                                                              </slot>
+                                                                              <div class=\"validity-items\">
+                                                                                <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='${i18n.t('aria-label-invalid')}'></dbp-icon>
+                                                                                <b>${i18n.t('acquire-3g-ticket.no-full-validity')}</b>
+                                                                              </div>
                                                                           `}
                                                                 </div>
                                                             </div>

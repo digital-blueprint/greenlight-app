@@ -7,10 +7,12 @@ import {defaultValidator, ValidationResult, RegionResult} from './hcert';
 import {checkPerson} from './hcertmatch.js';
 import {encodeAdditionalInformation} from './crypto.js';
 import * as storage from './storage.js';
+import {createInstance, addTranslations} from './i18n.js';
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
         super();
+        addTranslations(this._i18n);
         this.isSessionRefreshed = false;
         this.auth = {};
         this.person = {};

@@ -447,7 +447,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
             ${getTicketCss()}
-            
+
             .gray {
                 color: var(--dbp-muted);
             }
@@ -550,9 +550,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     <span>
                         <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
                     </span>
-                    <slot name="greenlight-reference">
-                        <p>${i18n.t('show-active-tickets.no-evidence')}</p>
-                    </slot>
+                    <p>${i18n.t('show-active-tickets.greenlight-reference')}</p>
                 </div>
             </div>
 
@@ -586,9 +584,9 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     <div id="qr-code-hash"></div>
                 </div>
                 <div class="${classMap({hidden: !this.isSelfTest || !this.hasValidProof})}">
-                    <slot name="greenlight-reference-invalid">
-                        ${i18n.t('show-active-tickets.invalid-evidence')}
-                    </slot>
+                    ${i18n.t('show-active-tickets.invalid-1')}
+                    <a href='acquire-3g-ticket' title='${i18n.t('show-active-tickets.invalid-tooltip')}' target='_self' class='int-link-internal-light'><span>C${i18n.t('show-active-tickets.invalid-2')}</span></a>
+                    ${i18n.t('show-active-tickets.invalid-3')}
                 </div>
             </div>
         `;
@@ -676,22 +674,30 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                 <div class="valid-for">
                                     <b>${i18n.t('acquire-3g-ticket.3g-proof-valid-for')}:</b>
                                     <div class="validity-check">
-                                        <slot name="partial-validity">
-                                            ${i18n.t('partial-validity-default')}
-                                        </slot>
+                                        <div class="validity-items">
+                                          <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${ i18n.t('aria-label-valid') }'>
+                                          </dbp-icon>
+                                          ${i18n.t('acquire-3g-ticket.partial-validity-1')}
+                                        </div>
+                                        <div class="validity-items">
+                                          <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${ i18n.t('aria-label-valid') }'>
+                                          </dbp-icon>
+                                          ${i18n.t('acquire-3g-ticket.partial-validity-2')}
+                                        </div>
                                         <div class="full-validity">
                                             ${this.isFullProof
                                                 ? html`
-                                                      <slot name="full-validity">
-                                                          ${i18n.t('full-validity-default')}
-                                                      </slot>
+                                                      <div class="validity-items">
+                                                        <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'>
+                                                        </dbp-icon>
+                                                        ${i18n.t('acquire-3g-ticket.full-validity')}
+                                                      </div>
                                                   `
                                                 : html`
-                                                      <slot
-                                                          name="no-full-validity"
-                                                          class="full-validity invalid gray">
-                                                          ${i18n.t('no-full-validity-default')}
-                                                      </slot>
+                                                      <div class="validity-items">
+                                                        <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='${ i18n.t('aria-label-invalid') }'></dbp-icon>
+                                                        ${i18n.t('acquire-3g-ticket.no-full-validity')}
+                                                      </div>
                                                   `}
                                         </div>
                                     </div>
