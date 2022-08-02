@@ -34,6 +34,8 @@ export class ValidationResult {
         this.isValid = false;
         /** @type {string} Contains an error message if isValid === false*/
         this.error = null;
+        /** @type {string} Contains an error key if isValid === false*/
+        this.errorKey = null;
         /** @type {string} */
         this.firstname = null;
         /** @type {string} */
@@ -113,6 +115,7 @@ export class Validator {
         let i18n = createInstance();
         i18n.changeLanguage(lang);
 
+        /*
         // Iterate through all errors and use the description in the language we prefere the most
         let getTranslatedErrors = (errors) => {
             let languages = i18n.languages + ['en'];
@@ -134,7 +137,7 @@ export class Validator {
             }
             translated.sort();
             return translated;
-        };
+        };*/
 
         // Verify that the signature is correct and decode the HCERT
         let hcertData = this._verifier.verify(cert);
@@ -201,16 +204,20 @@ export class Validator {
                     regionResult.validUntil = validUntil;
                 } else {
                     regionResult.isValid = false;
-                    regionResult.error = i18n.t('hcert.cert-not-valid-error', {
+                    regionResult.error = res.errors;
+                    /*regionResult.error = i18n.t('hcert.cert-not-valid-error', {
                         error: getTranslatedErrors(res.errors).join('\n'),
-                    });
+                    });*/
+                    regionResult.errorKey = 'hcert.cert-not-valid-error';
                 }
 
                 result.regions[region] = regionResult;
             }
         } else {
             result.isValid = false;
-            result.error = i18n.t('hcert.cert-validation-failed-error', {error: hcertData.error});
+            result.error = hcertData.error;
+            result.errorKey = 'hcert.cert-validation-failed-error';
+            // result.error = i18n.t('hcert.cert-validation-failed-error', {error: hcertData.error});
         }
 
         return result;
