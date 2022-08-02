@@ -1213,9 +1213,9 @@
   integrity sha512-PqYTTtb3/Wu3zVFLYvuu1nEjfeAjvLSnknSfA5gv153WXmXtSVLOTmvPiiy3ZRERBoUv33jL7VwK5QcDRI3V8g==
 
 "@tugraz/web-components@^0.3.4":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@tugraz/web-components/-/web-components-0.3.5.tgz#0376d83415c318f382a75ae11f5d969fe962b69d"
-  integrity sha512-vMlRBYh2pPQ1xJNYqdnQSMkFzEoPCyJXQnHWFMdqg7CW9mD3rEy4WosyMRzW1mFgZLjiO2LbGs7QGyWxSGgU2Q==
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@tugraz/web-components/-/web-components-0.3.6.tgz#884299230332ed0b584fe05ed57c98d79af2260f"
+  integrity sha512-yCmVI21trViZaJnvyIydXv8cxf6OaYiopWKwEwpCaBGHjvoVQGXV9f2YILDAmsG3QFelup9qyjYluQ48TLWeFw==
   dependencies:
     "@dbp-toolkit/common" "^0.3.4"
     "@open-wc/scoped-elements" "^2.1.0"
