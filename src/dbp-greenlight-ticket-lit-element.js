@@ -14,7 +14,6 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
 ) {
     constructor() {
         super();
-        addTranslations(this._i18n);
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
 

@@ -14,5 +14,5 @@
         "de": "Zeigt eine Liste erstellter Tickets an.",
         "en": "Shows a list of created tickets."
     },
-    "subscribe": "lang,entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array,gp-self-test-valid,preselected-option,ticket-types"
+    "subscribe": "lang,lang-dir, entry-point-url,auth,html-overrides,gp-search-hash-string,gp-search-self-test-string-array,gp-self-test-valid,preselected-option,ticket-types"
 }

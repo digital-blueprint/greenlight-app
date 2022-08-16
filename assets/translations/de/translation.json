@@ -68,6 +68,24 @@
         "aria-label-invalid": "Ungültig"
       },
       "dbp-show-active-tickets": {
+        "acquire-3g-ticket": {
+            "3g-proof-valid-for": "Gültigkeit",
+            "full-validity": "Zutritt zu Präsenzlehrveranstaltungen",
+            "no-full-validity": "Kein Zutritt zu Präsenzlehrveranstaltungen",
+            "partial-validity-1": "Zutritt zu Präsenzprüfungen",
+            "partial-validity-2": "Zutritt zu geöffneten Bereichen der TU Graz",
+            "photo-not-available-body": "Es konnte kein Foto von Ihrem Studierenden- oder Bedienstetenausweis aus {{serviceName}} geladen werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+            "photo-not-available-title": "Ticketerstellung fehlgeschlagen!",
+            "qr-button-text": "QR-Code scannen",
+            "remove-proof": "Nachweis entfernen",
+            "request-ticket-button-text": "Ticket anfordern",
+            "self-test": "Selbsttest",
+            "self-test-information": "Bitte überprüfen Sie ob der Nachweis noch gültig ist.",
+            "self-test-link": "Link",
+            "trust-and-save-1": "Meinen Nachweis importieren und auf diesem Gerät speichern.",
+            "trust-and-save-2": "Ihre Daten werden ausschließlich auf diesem Gerät gespeichert und verarbeitet. Es findet keine automatische Übertragung von importierten Nachweisen zwischen Geräten statt. Nachweise, die auf anderen Geräten importiert wurden, sind nur auf diesen verfügbar.",
+            "valid-till": "gültig bis "
+        },
         "show-active-tickets": {
             "3-g-evidence": "Nachweis",
             "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",

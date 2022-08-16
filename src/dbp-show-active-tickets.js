@@ -11,6 +11,7 @@ import qrcode from 'qrcode-generator';
 import {InfoTooltip} from '@dbp-toolkit/tooltip';
 import {Activity} from './activity';
 import metadata from './dbp-show-active-tickets.metadata.json';
+import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 
 class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElement) {
     constructor() {
@@ -446,6 +447,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
             ${CheckinStyles.getCheckinCss()}
             ${commonStyles.getButtonCSS()}
             ${commonStyles.getModalDialogCSS()}
+            ${commonStyles.getLinkCss()}
             ${getTicketCss()}
 
             .gray {
@@ -550,7 +552,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                     <span>
                         <h4>${i18n.t('show-active-tickets.no-3g-evidence')}</h4>
                     </span>
-                    <p>${i18n.t('show-active-tickets.greenlight-reference')}</p>
+                    <p>${ unsafeHTML(i18n.t('show-active-tickets.greenlight-reference')) }</p>
                 </div>
             </div>
 
@@ -677,12 +679,12 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                         <div class="validity-items">
                                           <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${ i18n.t('aria-label-valid') }'>
                                           </dbp-icon>
-                                          ${i18n.t('acquire-3g-ticket.partial-validity-1')}
+                                          <b>${i18n.t('acquire-3g-ticket.partial-validity-1')}</b>
                                         </div>
                                         <div class="validity-items">
                                           <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${ i18n.t('aria-label-valid') }'>
                                           </dbp-icon>
-                                          ${i18n.t('acquire-3g-ticket.partial-validity-2')}
+                                          <b>${i18n.t('acquire-3g-ticket.partial-validity-2')}</b>
                                         </div>
                                         <div class="full-validity">
                                             ${this.isFullProof
@@ -690,7 +692,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
                                                       <div class="validity-items">
                                                         <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'>
                                                         </dbp-icon>
-                                                        ${i18n.t('acquire-3g-ticket.full-validity')}
+                                                        <b>${i18n.t('acquire-3g-ticket.full-validity')}</b>
                                                       </div>
                                                   `
                                                 : html`

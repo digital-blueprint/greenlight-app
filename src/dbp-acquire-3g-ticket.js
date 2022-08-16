@@ -32,7 +32,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         this.loading = false;
         this.processStarted = false;
-        this.preselectionLoading = true;
+        this.preselectionLoading = false;
         this._activationInProgress = false;
         this.preCheck = true;
 
@@ -1285,24 +1285,24 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                                 'acquire-3g-ticket.3g-proof-valid-for'
                                                             )}:
                                                             <div class="validity-check">
-                                                                <div class=\"validity-items\">
+                                                                <div class="validity-items">
                                                                   <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
                                                                   <b>${i18n.t('acquire-3g-ticket.partial-validity-1')}</b>
                                                                 </div>
-                                                                <div class=\"validity-items\">
+                                                                <div class="validity-items">
                                                                   <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
                                                                   <b>${i18n.t('acquire-3g-ticket.partial-validity-2')}</b>
                                                                 </div>
                                                                 <div class="full-validity">
                                                                     ${this.isFullProof
                                                                         ? html`
-                                                                              <div class=\"validity-items\">
+                                                                              <div class="validity-item">
                                                                                 <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
                                                                                 <b>${i18n.t('acquire-3g-ticket.full-validity')}</b>
                                                                               </div>
                                                                           `
                                                                         : html`
-                                                                              <div class=\"validity-items\">
+                                                                              <div class="validity-items">
                                                                                 <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='${i18n.t('aria-label-invalid')}'></dbp-icon>
                                                                                 <b>${i18n.t('acquire-3g-ticket.no-full-validity')}</b>
                                                                               </div>
