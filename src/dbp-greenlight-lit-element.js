@@ -7,12 +7,13 @@ import {defaultValidator, ValidationResult, RegionResult} from './hcert';
 import {checkPerson} from './hcertmatch.js';
 import {encodeAdditionalInformation} from './crypto.js';
 import * as storage from './storage.js';
-import {createInstance, addTranslations} from './i18n.js';
+import {createInstance, setOverridesByGlobalCache} from './i18n.js';
 
 export default class DBPGreenlightLitElement extends DBPLitElement {
     constructor() {
         super();
-        addTranslations(this._i18n);
+        this._i18n = createInstance();
+        this.langDir = '';
         this.isSessionRefreshed = false;
         this.auth = {};
         this.person = {};
@@ -31,6 +32,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         return {
             ...super.properties,
             auth: {type: Object},
+            langDir: {type: String, attribute: 'lang-dir'},
 
             searchSelfTestStringArray: {
                 type: String,
@@ -48,6 +50,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this._loginStatus = '';
         this._loginState = [];
         this._loginCalled = false;
+
+        if (this.langDir != '') {
+          setOverridesByGlobalCache(this._i18n, this);
+        }
     }
 
     /**

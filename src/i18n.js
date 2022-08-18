@@ -1,4 +1,4 @@
-import {createInstance as _createInstance} from '@dbp-toolkit/common/i18next.js';
+import {createInstance as _createInstance, setOverridesByGlobalCache} from '@dbp-toolkit/common/i18next.js';
 
 import de from './i18n/de/translation.json';
 import en from './i18n/en/translation.json';
@@ -14,3 +14,5 @@ export function addTranslations(i18n) {
     i18n.addResourceBundle('en', 'translation', en);
     i18n.addResourceBundle('de', 'translation', de);
 }
+
+export {setOverridesByGlobalCache};

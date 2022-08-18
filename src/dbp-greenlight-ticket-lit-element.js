@@ -1,12 +1,10 @@
 import {css, html} from 'lit';
-import {createInstance, addTranslations} from './i18n';
 import {Icon, LoadingButton, MiniSpinner} from '@dbp-toolkit/common';
 import {send} from '@dbp-toolkit/common/notification';
 import MicroModal from './micromodal.es';
 import {ScopedElementsMixin} from '@open-wc/scoped-elements';
 import DBPGreenlightLitElement from './dbp-greenlight-lit-element';
 import {classMap} from 'lit-html/directives/class-map.js';
-import {unsafeHTML} from 'lit/directives/unsafe-html.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 
 export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
