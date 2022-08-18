@@ -461,6 +461,29 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         await this.checkActivationResponse(greenPassHash, category, precheck);
     }
 
+    // Iterate through all errors and use the description in the language we prefere the most
+    getTranslatedErrors(errors) {
+        let languages = this._i18n.languages + ['en'];
+        let translated = [];
+        for (let error of errors) {
+            let text = 'unknown';
+            let prio = -1;
+            for (let [ln, desc] of Object.entries(error)) {
+                let thisPrio = languages.indexOf(ln);
+                if (prio === -1) {
+                    text = desc;
+                    prio = thisPrio;
+                } else if (thisPrio !== -1 && thisPrio < prio) {
+                    text = desc;
+                    prio = thisPrio;
+                }
+            }
+            translated.push(text);
+        }
+        translated.sort();
+        return translated;
+    }
+
     /**
      * Parse the response of a green pass activation request
      * Include message for user when it worked or not
@@ -516,30 +539,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.hasValidProof = false;
             this.isFullProof = false;
             if (!preCheck) {
-                // Iterate through all errors and use the description in the language we prefere the most
-                let getTranslatedErrors = (errors) => {
-                    let languages = i18n.languages + ['en'];
-                    let translated = [];
-                    for (let error of errors) {
-                        let text = 'unknown';
-                        let prio = -1;
-                        for (let [ln, desc] of Object.entries(error)) {
-                            let thisPrio = languages.indexOf(ln);
-                            if (prio === -1) {
-                                text = desc;
-                                prio = thisPrio;
-                            } else if (thisPrio !== -1 && thisPrio < prio) {
-                                text = desc;
-                                prio = thisPrio;
-                            }
-                        }
-                        translated.push(text);
-                    }
-                    translated.sort();
-                    return translated;
-                };
-
-                this.detailedError = i18n.t(res.errorKey, {error: getTranslatedErrors(res.error).join('\n')});
+                this.detailedError = i18n.t(res.errorKey, {error: this.getTranslatedErrors(res.error).join('\n')});
                 this.saveWrongHashAndNotify(
                     i18n.t('acquire-3g-ticket.invalid-title'),
                     i18n.t('acquire-3g-ticket.invalid-body'),
@@ -565,9 +565,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.proofUploadFailed = true;
             this.hasValidProof = false;
             if (!preCheck) {
+
                 // Use the less strict region for the error message to show what would be needed
                 // to get at least something.
-                this.detailedError = i18n.t(res.regions[errorRegion].errorKey, {error: getTranslatedErrors(res.regions[errorRegion].error).join('\n')});
+                this.detailedError = i18n.t(res.regions[errorRegion].errorKey, {error: this.getTranslatedErrors(res.regions[errorRegion].error).join('\n')});
                 this.saveWrongHashAndNotify(
                     i18n.t('acquire-3g-ticket.invalid-title'),
                     i18n.t('acquire-3g-ticket.invalid-body'),
