@@ -240,7 +240,7 @@ export default (async () => {
                     {src: 'assets/hcert-kotlin.js*', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/internal', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {
-                        src: await getPackagePath('@dbp-toolkit/font-source-sans-pro', 'files/*'),
+                        src: await getPackagePath('@tugraz/font-source-sans-pro', 'files/*'),
                         dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/source-sans-pro')),
                     },
                     {

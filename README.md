@@ -42,7 +42,7 @@ Jump to <https://localhost:8001>, and you should get a Single Sign On login page
 If you want to install the dbp greenlight app in a new folder `greenlight-app` you can call:
 
 ```bash
-npx @digital-blueprint/cli install-app greenlight greenlight-app /
+npx @digital-blueprint/cli@latest install-app greenlight greenlight-app /
 ```
 
 **Warning:** There may be issues when you run these commands as root user, best use a non-root user, like `www-data`.
@@ -65,7 +65,7 @@ Note that you will need a Keycloak server along with a client id for the domain 
 If you want to update the dbp greenlight app in the current folder you can call:
 
 ```bash
-npx @digital-blueprint/cli update-app greenlight
+npx @digital-blueprint/cli@latest update-app greenlight
 ```
 
 **Warning:** After the update the trust data has to be restored, see below.
