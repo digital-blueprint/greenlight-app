@@ -10,7 +10,6 @@ import {
 } from './rules';
 import {name as pkgName} from './../../package.json';
 import * as commonUtils from '@dbp-toolkit/common/utils';
-import {createInstance} from '../i18n.js';
 import {withDate} from './utils.js';
 
 export class RegionResult {
@@ -112,9 +111,6 @@ export class Validator {
     async validate(cert, date, lang = 'en', country = 'AT', regions = ['ET']) {
         await this._ensureData();
 
-        let i18n = createInstance();
-        i18n.changeLanguage(lang);
-
         /*
         // Iterate through all errors and use the description in the language we prefere the most
         let getTranslatedErrors = (errors) => {
@@ -208,9 +204,6 @@ export class Validator {
                 } else {
                     regionResult.isValid = false;
                     regionResult.error = res.errors;
-                    /*regionResult.error = i18n.t('hcert.cert-not-valid-error', {
-                        error: getTranslatedErrors(res.errors).join('\n'),
-                    });*/
                     regionResult.errorKey = 'hcert.cert-not-valid-error';
                 }
 
@@ -220,7 +213,6 @@ export class Validator {
             result.isValid = false;
             result.error = hcertData.error;
             result.errorKey = 'hcert.cert-validation-failed-error';
-            // result.error = i18n.t('hcert.cert-validation-failed-error', {error: hcertData.error});
         }
 
         return result;
