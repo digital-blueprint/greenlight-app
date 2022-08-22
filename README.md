@@ -26,7 +26,7 @@ git submodule update --init
 # install dependencies
 yarn install
 
-# constantly build dist/bundle.js and run a local web-server on port 8001 
+# constantly build dist/bundle.js and run a local web-server on port 8001
 yarn run watch
 
 # run tests
@@ -114,7 +114,8 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 | attribute name | value | Link to description |
 |----------------|-------| ------------|
 | `provider-root` | Boolean | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell#attributes) |
-| `lang`         | String | [language-select](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/language-select#attributes) | 
+| `lang`         | String | [language-select](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/language-select#attributes) |
+| `lang-dir`      | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell#attributes) |
 | `entry-point-url` | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell#attributes) |
 | `keycloak-config` | Object | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell#attributes) |
 | `base-path` | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell#attributes) |
@@ -157,4 +158,3 @@ For frontend design customizations, such as logo, colors, font, favicon, and mor
 
 These are common slots for the app-shell. You can find the documentation of these slots in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
 For the app specific slots take a look at the [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
-
