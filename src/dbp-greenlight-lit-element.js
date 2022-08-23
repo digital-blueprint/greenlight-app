@@ -539,7 +539,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.hasValidProof = false;
             this.isFullProof = false;
             if (!preCheck) {
-                this.detailedError = i18n.t(res.errorKey, {error: this.getTranslatedErrors(res.error).join('\n')});
+                this.detailedError = i18n.t(res.errorKey, {error: res.error});
                 this.saveWrongHashAndNotify(
                     i18n.t('acquire-3g-ticket.invalid-title'),
                     i18n.t('acquire-3g-ticket.invalid-body'),
