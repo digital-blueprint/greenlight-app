@@ -121,9 +121,9 @@
         "switch-label-in-color": "In color",
         "switch-label-in-grayscale": "In grayscale",
         "information-container-1": "Information about evidence",
-        "information-container-2": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck.",
-        "information-container-3": "If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
-        "information-container-4": "If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner."
+        "information-container-2": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
+        "information-container-3": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
+        "information-container-4": ""
     },
     "show-ticket-title": "Ticket: ",
     "valid-till": "Probably valid until ",
@@ -132,5 +132,5 @@
     "validation-not-possible-title": "Validation currently not possible",
     "validity-tooltip": "According to the current regulations of {{place}}. The validity period is automatically updated when the regulations change.",
     "validity-tooltip-ticket-text": "The ticket is only valid in electronic form.",
-    "university-name": "TU Graz"
+    "university-name": "Place"
 }
