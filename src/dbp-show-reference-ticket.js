@@ -16,7 +16,7 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         super();
 
         this.activity = new Activity(metadata);
-        this.locationName = this._i18n.t('show-reference-ticket.place-name');
+        this.locationName = this._i18n.t('dbp-show-reference-ticket.place-name');
     }
 
     static get scopedElements() {
@@ -129,25 +129,25 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
         let additionalInfo = html``;
           if (this.ticketTypes["partial"]){
               additionalInfo = html`
-                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-2')) }
+                  ${ unsafeHTML(i18n.t('dbp-show-reference-ticket.information-container-2')) }
                   `;
           } else {
               let info = html``;
               if(this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '' && this.selfTestValid) {
                   info = html`
                   <br><br>
-                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-4')) }
+                  ${ unsafeHTML(i18n.t('dbp-show-reference-ticket.information-container-4')) }
                   `;
               }
               additionalInfo = html`
-                  ${ unsafeHTML(i18n.t('show-reference-ticket.information-container-3')) }
+                  ${ unsafeHTML(i18n.t('dbp-show-reference-ticket.information-container-3')) }
                   ${ info }
               `;
           }
 
         const additionalInformation = html`
             <div class="information-container ${classMap({hidden: this.ticketLoading})}">
-                <h4>${ i18n.t('show-reference-ticket.information-container-1') }</h4><br>
+                <h4>${ i18n.t('dbp-show-reference-ticket.information-container-1') }</h4><br>
                 <p>
                   ${ additionalInfo }
                 </p>
@@ -158,11 +158,11 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
             <div class="ticket">
                 <span class="header">
                     <h3>
-                        ${i18n.t('show-reference-ticket.place')}
+                        ${i18n.t('dbp-show-reference-ticket.place')}
                     </h3>
                     <span class="header">
                         <div>
-                        ${ unsafeHTML(i18n.t('show-reference-ticket.description'))}
+                        ${ unsafeHTML(i18n.t('dbp-show-reference-ticket.description'))}
                         </div>
                     </span>
                 </span>
@@ -197,8 +197,8 @@ class ShowReferenceTicket extends ScopedElementsMixin(DBPGreenlightTicketLitElem
                     class="color-switch"
                     name1="color"
                     name2="grayscale"
-                    value1="${i18n.t('show-reference-ticket.switch-label-in-color')}"
-                    value2="${i18n.t('show-reference-ticket.switch-label-in-grayscale')}"
+                    value1="${i18n.t('dbp-show-reference-ticket.switch-label-in-color')}"
+                    value2="${i18n.t('dbp-show-reference-ticket.switch-label-in-grayscale')}"
                     @change=${(e) => onChange(e)}></dbp-textswitch>
             `;
         }

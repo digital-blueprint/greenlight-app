@@ -1,5 +1,5 @@
 {
-    "acquire-3g-ticket": {
+    "dbp-acquire-3g-ticket": {
         "3g-proof": "Evidence",
         "3g-proof-birthdate": "Birthdate",
         "3g-proof-label-text": "Import evidence",
@@ -7,7 +7,10 @@
         "3g-proof-status": "Status",
         "3g-proof-valid-for": "Validity",
         "3g-proof-valid-till-title": "Valid until",
-        "additional-information": "You can import your evidence of a low epidemiological risk by scanning the corresponding QR code. Alternatively, you can select a PDF document or an image with the QR code. ",
+        "additional-information-1": "You can import your evidence of a low epidemiological risk by scanning the corresponding QR code. Alternatively, you can select a PDF document or an image with the QR code. ",
+        "additional-information-2": "",
+        "additional-information-3": "",
+        "additional-information-4": "",
         "confirm-checkbox-valid-cert-text": "I confirm the accuracy of my evidence and understand that any misuse of the greenlight app or the provision of incorrect data can lead to legal consequences.",
         "confirm-not-checked-body": "Please confirm that the information you have provided is correct and that you are aware that misuse of the greenlight app may lead to legal consequences",
         "confirm-not-checked-title": "Consent not given!",
@@ -60,7 +63,6 @@
     "file-sink": {
         "modal-close": "Close"
     },
-    "full-validity-default": "Extended access to the university",
     "hcert": {
         "cert-not-valid-error": "Does not comply with the following rules: {{error}}",
         "cert-validation-failed-error": "Validation failed: {{error}}"
@@ -68,16 +70,14 @@
     "image-alt-text": "Ticket image",
     "loading-message": "Loading...",
     "loading-message-ticket": "Loading the ticket ...",
-    "no-full-validity-default": "No extended access to the university",
     "no-tickets-message": "You do not have any tickets!",
-    "partial-validity-default": "Access to the university",
     "reload": "Refresh",
     "reload-error-body": "The update failed. Check your internet connection, log in again or try again later.",
     "reload-error-title": "Update failed",
     "reload-failed": "Automatic update failed",
     "self-test-not-supported-body": "Antigen tests with self-acceptance (\"self-tests\") are no longer permitted as proof of entry.",
     "self-test-not-supported-title": "Self-tests are not supported",
-    "show-active-tickets": {
+    "dbp-show-active-tickets": {
         "3-g-evidence": "Evidence",
         "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
         "3-g-evidence-greenpass": "Evidence: Green Pass found",
@@ -112,7 +112,7 @@
         "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
     },
     "show-btn-text": "Show",
-    "show-reference-ticket": {
+    "dbp-show-reference-ticket": {
         "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the evidence imported on the controlled person's device. The reference ticket does not entitle you to enter rooms at the university.",
         "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
         "information-container-headline": "Information about evidence",
@@ -125,7 +125,8 @@
         "information-container-3": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
         "information-container-4": ""
     },
-    "show-ticket-title": "Ticket: ",
+    "aria-label-valid": "Valid",
+    "aria-label-invalid": "Invalid",
     "valid-till": "Probably valid until ",
     "validation-not-possible": "The validation of the evidence is currently not possible for technical reasons. Please try again later.",
     "validation-not-possible-body": "The evidence cannot currently be validated. Please try again later.",

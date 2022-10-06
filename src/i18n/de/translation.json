@@ -1,5 +1,5 @@
 {
-    "acquire-3g-ticket": {
+    "dbp-acquire-3g-ticket": {
         "3g-proof": "Nachweis",
         "3g-proof-birthdate": "Geburtsdatum",
         "3g-proof-label-text": "Nachweis importieren",
@@ -8,9 +8,9 @@
         "3g-proof-valid-for": "Gültigkeit",
         "3g-proof-valid-till-title": "Gültig bis",
         "additional-information-1": "Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr importieren, indem Sie den entsprechenden QR-Code scannen. Alternativ kann auch ein PDF-Dokument oder ein Bild mit dem QR-Code ausgewählt werden.",
-        "additional-information-2": "Selbsttests der Länder Steiermark und Kärnten können ebenfalls importiert, aber nicht direkt in der Applikation validiert werden. sie müssen sicherstellen, dass Ihr Testergebnis noch gültig ist. die Kontrolle erfolgt beim Einlass.",
-        "additional-information-3": "Weitere Informationen zum Thema Corona an der TU Graz finden Sie unter: <a target=\"_blank\" class=\"int-link-external\" href=\"{{- linkDE}}\" title=\"Coronavirus TU Graz\"><span>Coronavirus TU Graz </span></a><br /><br />",
-        "additional-information-4": "Was macht die TU Graz mit Ihren Daten? Die Datenschutzerklärung zur App \"TU Graz greenlight\" finden Sie hier: <a target=\"_blank\" class=\"int-link-external\" href=\"{{- link}}\" title=\"zur Datenschutzerklärung\"><span>zur Datenschutzerklärung </span></a>",
+        "additional-information-2": "",
+        "additional-information-3": "",
+        "additional-information-4": "",
         "confirm-checkbox-valid-cert-text": "Ich bestätige, dass mein Nachweis für die Dauer meines Aufenthalts gültig ist, sowie die Richtigkeit meiner Angaben, und nehme zur Kenntnis, dass jeglicher Missbrauch der App greenlight oder die Angabe falscher Daten zu rechtlichen Konsequenzen führen kann.",
         "confirm-not-checked-body": "Bitte bestätigen Sie, dass Ihre Angaben richtig sind und dass Sie sich bewusst sind, dass der Missbrauch der App greenlight zu rechtlichen Konsequenzen führen kann.",
         "confirm-not-checked-title": "Zustimmung nicht erteilt!",
@@ -63,7 +63,6 @@
     "file-sink": {
         "modal-close": "Schließen"
     },
-    "full-validity-default": "Erweiterter Zutritt zur Universität",
     "hcert": {
         "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
         "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
@@ -71,16 +70,14 @@
     "image-alt-text": "Ticketfoto",
     "loading-message": "Lädt...",
     "loading-message-ticket": "Ticket wird geladen ...",
-    "no-full-validity-default": "Kein erweiterter Zutritt zur Universität",
     "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
-    "partial-validity-default": "Zutritt zur Universität",
     "reload": "Aktualisieren",
     "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
     "reload-error-title": "Aktualisierung fehlgeschlagen",
     "reload-failed": "Automatische Aktualisierung fehlgeschlagen",
     "self-test-not-supported-body": "Antigen-Tests mit Selbstabnahme („Wohnzimmertests“) sind nicht mehr als Eintrittsnachweis zulässig.",
     "self-test-not-supported-title": "Antigen-Selbsttests („Wohnzimmertests“) werden nicht unterstützt.",
-    "show-active-tickets": {
+    "dbp-show-active-tickets": {
         "3-g-evidence": "Nachweis",
         "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",
         "3-g-evidence-greenpass": "Nachweis: Grüner Pass gefunden",
@@ -115,7 +112,7 @@
         "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
     },
     "show-btn-text": "Zeigen",
-    "show-reference-ticket": {
+    "dbp-show-reference-ticket": {
         "description": "Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der Universität.",
         "information-container-body": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
         "information-container-headline": "Informationen zum Nachweis",
@@ -128,7 +125,8 @@
         "information-container-3": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
         "information-container-4": ""
     },
-    "show-ticket-title": "Ticket: ",
+    "aria-label-valid": "Gültig",
+    "aria-label-invalid": "Ungültig",
     "valid-till": "Voraussichtlich gültig bis ",
     "validation-not-possible": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
     "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
