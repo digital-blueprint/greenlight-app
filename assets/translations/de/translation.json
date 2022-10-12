@@ -1,11 +1,11 @@
 {
-  "dbp-translation": {
-      "university-name": "Technische Universität Graz",
-      "footer-privacy-policy": "<a target=\"_blank\" rel=\"noopener\" href=\"{{- linkDE}}\" class=\"footer-link\">Datenschutz</a>",
-      "footer-legal-notice": "<a target=\"_blank\" rel=\"noopener\" href=\"{{- linkDE}}\" class=\"footer-link\">Impressum</a>",
-      "footer-contact": "<a rel=\"noopener\" href=\"{{- link}}\" class=\"footer-link\">Kontakt</a>"
-  },
-    "dbp-acquire-3g-ticket": {
+    "dbp-translation": {
+        "university-name": "Technische Universität Graz",
+        "footer-privacy-policy": "<a target=\"_blank\" rel=\"noopener\" href=\"{{- linkDE}}\" class=\"footer-link\">Datenschutz</a>",
+        "footer-legal-notice": "<a target=\"_blank\" rel=\"noopener\" href=\"{{- linkDE}}\" class=\"footer-link\">Impressum</a>",
+        "footer-contact": "<a rel=\"noopener\" href=\"{{- link}}\" class=\"footer-link\">Kontakt</a>"
+    },
+    "acquire-3g-ticket": {
             "3g-proof": "Nachweis",
             "3g-proof-birthdate": "Geburtsdatum",
             "3g-proof-label-text": "Nachweis importieren",
@@ -61,7 +61,7 @@
             "trust-and-save-2": "Ihre Daten werden ausschließlich auf diesem Gerät gespeichert und verarbeitet. Es findet keine automatische Übertragung von importierten Nachweisen zwischen Geräten statt. Nachweise, die auf anderen Geräten importiert wurden, sind nur auf diesen verfügbar.",
             "valid-till": "gültig bis "
       },
-      "dbp-show-active-tickets": {
+      "show-active-tickets": {
           "3-g-evidence": "Nachweis",
           "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",
           "3-g-evidence-greenpass": "Nachweis: Grüner Pass gefunden",
@@ -95,7 +95,7 @@
           "validation-failed": "Validierung aktuell nicht möglich",
           "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
       },
-      "dbp-show-reference-ticket": {
+      "show-reference-ticket": {
           "description": "Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der TU Graz. Genauere Informationen finden Sie in der <a target=\"_blank\" class=\"int-link-external\" id=\"tu-green-link\" href=\"https://tu4u.tugraz.at/go/green\" title=\"TU Graz greenlight\"><span>Übersicht für Überprüfende</span></a>",
           "information-container-body": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
           "information-container-headline": "Informationen zum Nachweis",

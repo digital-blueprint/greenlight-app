@@ -205,8 +205,8 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                 );
                                 e.preventDefault();
                             }}"
-                            title="${i18n.t('dbp-show-active-tickets.acquire-ticket')}">
-                            ${i18n.t('dbp-show-active-tickets.acquire-ticket')}
+                            title="${i18n.t('show-active-tickets.acquire-ticket')}">
+                            ${i18n.t('show-active-tickets.acquire-ticket')}
                         </a>
                     </div>
                 </div>

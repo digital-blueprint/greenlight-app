@@ -5,7 +5,7 @@
         "footer-legal-notice": "<a target=\"_blank\" rel=\"noopener\" href=\"{{- linkEN}}\" class=\"footer-link\">Legal Notice</a>",
         "footer-contact": "<a rel=\"noopener\" href=\"{{- link}}\" class=\"footer-link\">Contact</a>"
     },
-    "dbp-acquire-3g-ticket": {
+    "acquire-3g-ticket": {
             "3g-proof": "Evidence",
             "3g-proof-birthdate": "Birthdate",
             "3g-proof-label-text": "Import evidence",
@@ -61,7 +61,7 @@
             "trust-and-save-2": "Your data is stored and processed exclusively on this device. There is no automatic transfer of an imported evidence between devices. The evidence imported on other devices is only available on these devices.",
             "valid-till": "valid until "
     },
-    "dbp-show-active-tickets": {
+    "show-active-tickets": {
             "3-g-evidence": "Evidence",
             "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
             "3-g-evidence-greenpass": "Evidence: Green Pass found",
@@ -95,7 +95,7 @@
             "validation-failed": "Validation currently not possible",
             "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
     },
-    "dbp-show-reference-ticket": {
+    "show-reference-ticket": {
             "description": "As a verifier, always compare the tickets presented by students with the reference ticket. The background of the ticket image changes in regular intervals for security reasons. If the background image matches the one of the reference ticket, the ticket is valid. The reference ticket does not entitle you to enter rooms at TU Graz. More detailed information can be found in the <a target=\"_blank\" class=\"int-link-external\" id=\"tu-green-link\" href=\"https://tu4u.tugraz.at/go/green\" title=\"TU Graz greenlight\"><span>Overview for verifiers</span></a>",
             "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
             "information-container-headline": "Information about evidence",

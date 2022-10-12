@@ -1,5 +1,5 @@
 {
-    "dbp-acquire-3g-ticket": {
+    "acquire-3g-ticket": {
         "3g-proof": "Nachweis",
         "3g-proof-birthdate": "Geburtsdatum",
         "3g-proof-label-text": "Nachweis importieren",
@@ -77,7 +77,7 @@
     "reload-failed": "Automatische Aktualisierung fehlgeschlagen",
     "self-test-not-supported-body": "Antigen-Tests mit Selbstabnahme („Wohnzimmertests“) sind nicht mehr als Eintrittsnachweis zulässig.",
     "self-test-not-supported-title": "Antigen-Selbsttests („Wohnzimmertests“) werden nicht unterstützt.",
-    "dbp-show-active-tickets": {
+    "show-active-tickets": {
         "3-g-evidence": "Nachweis",
         "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",
         "3-g-evidence-greenpass": "Nachweis: Grüner Pass gefunden",
@@ -112,7 +112,7 @@
         "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
     },
     "show-btn-text": "Zeigen",
-    "dbp-show-reference-ticket": {
+    "show-reference-ticket": {
         "description": "Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der Universität.",
         "information-container-body": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
         "information-container-headline": "Informationen zum Nachweis",

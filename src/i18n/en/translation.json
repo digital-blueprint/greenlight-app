@@ -1,5 +1,5 @@
 {
-    "dbp-acquire-3g-ticket": {
+    "acquire-3g-ticket": {
         "3g-proof": "Evidence",
         "3g-proof-birthdate": "Birthdate",
         "3g-proof-label-text": "Import evidence",
@@ -77,7 +77,7 @@
     "reload-failed": "Automatic update failed",
     "self-test-not-supported-body": "Antigen tests with self-acceptance (\"self-tests\") are no longer permitted as proof of entry.",
     "self-test-not-supported-title": "Self-tests are not supported",
-    "dbp-show-active-tickets": {
+    "show-active-tickets": {
         "3-g-evidence": "Evidence",
         "3-g-evidence-green-pass-valid": "Green Pass imported and valid on this device",
         "3-g-evidence-greenpass": "Evidence: Green Pass found",
@@ -112,7 +112,7 @@
         "validation-failed-text": "The validation of the evidence is currently not possible for technical reasons. Please try again later."
     },
     "show-btn-text": "Show",
-    "dbp-show-reference-ticket": {
+    "show-reference-ticket": {
         "description": "At this point the validity of an entrance ticket is displayed. Whether a ticket is active or inactive depends on the evidence imported on the controlled person's device. The reference ticket does not entitle you to enter rooms at the university.",
         "information-container-body": "If a valid health certificate is available on this device then its QR code is displayed and the ticket is shown in color. This QR code can be checked with GreenCheck. If a self-test that was issued by Land Steiermark or Land Kärnten is available on this device then its QR code is displayed and the ticket is shown in black and white. This QR code cannot be validated by this app, therefore its validation requires a QR code scanner. If a valid university-internal test is available on this device then the ticket is shown in color. Manual validation of this test can only be done with the original document.",
         "information-container-headline": "Information about evidence",
