@@ -193,13 +193,13 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let data = await this.searchQRInFile();
         if (data === null) {
             send({
-                summary: i18n.t('acquire-3g-ticket.invalid-title'),
-                body: i18n.t('acquire-3g-ticket.invalid-body'),
+                summary: i18n.t('dbp-acquire-3g-ticket.invalid-title'),
+                body: i18n.t('dbp-acquire-3g-ticket.invalid-body'),
                 type: 'danger',
                 timeout: 5,
             });
 
-            this.message = i18nKey('acquire-3g-ticket.no-qr-code');
+            this.message = i18nKey('dbp-acquire-3g-ticket.no-qr-code');
             this.proofUploadFailed = true;
             this._activationInProgress = false;
             this.loading = false;
@@ -356,8 +356,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         switch (response.status) {
             case 201:
                 send({
-                    summary: i18n.t('acquire-3g-ticket.create-ticket-success-title'),
-                    body: i18n.t('acquire-3g-ticket.create-ticket-success-body', {
+                    summary: i18n.t('dbp-acquire-3g-ticket.create-ticket-success-title'),
+                    body: i18n.t('dbp-acquire-3g-ticket.create-ticket-success-body', {
                         place: this.location,
                     }),
                     type: 'success',
@@ -396,8 +396,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
-                            body: i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.confirm-not-checked-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.confirm-not-checked-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -410,8 +410,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                            body: i18n.t('acquire-3g-ticket.other-error-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -424,8 +424,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                            body: i18n.t('acquire-3g-ticket.other-error-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -443,8 +443,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            body: i18n.t('acquire-3g-ticket.photo-not-available-body', {
+                            summary: i18n.t('dbp-acquire-3g-ticket.photo-not-available-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.photo-not-available-body', {
                                 serviceName: this.serviceName,
                             }),
                             type: 'danger',
@@ -460,8 +460,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                            body: i18n.t('acquire-3g-ticket.other-error-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -477,8 +477,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     response
                 );
                 send({
-                    summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                    body: i18n.t('acquire-3g-ticket.other-error-body'),
+                    summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                    body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                     type: 'danger',
                     timeout: 5,
                 });
@@ -494,8 +494,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            body: i18n.t('acquire-3g-ticket.photo-not-available-body', {
+                            summary: i18n.t('dbp-acquire-3g-ticket.photo-not-available-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.photo-not-available-body', {
                                 serviceName: this.serviceName,
                             }),
                             type: 'danger',
@@ -510,8 +510,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            body: i18n.t('acquire-3g-ticket.photo-not-available-body', {
+                            summary: i18n.t('dbp-acquire-3g-ticket.photo-not-available-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.photo-not-available-body', {
                                 serviceName: this.serviceName,
                             }),
                             type: 'danger',
@@ -526,8 +526,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                            body: i18n.t('acquire-3g-ticket.other-error-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -545,8 +545,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.photo-not-available-title'),
-                            body: i18n.t('acquire-3g-ticket.no-photo-body', {
+                            summary: i18n.t('dbp-acquire-3g-ticket.photo-not-available-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.no-photo-body', {
                                 serviceName: this.serviceName,
                             }),
                             type: 'danger',
@@ -561,8 +561,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             response
                         );
                         send({
-                            summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                            body: i18n.t('acquire-3g-ticket.other-error-body'),
+                            summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                            body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                             type: 'danger',
                             timeout: 5,
                         });
@@ -579,8 +579,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                     response
                 );
                 send({
-                    summary: i18n.t('acquire-3g-ticket.other-error-title'),
-                    body: i18n.t('acquire-3g-ticket.other-error-body'),
+                    summary: i18n.t('dbp-acquire-3g-ticket.other-error-title'),
+                    body: i18n.t('dbp-acquire-3g-ticket.other-error-body'),
                     type: 'danger',
                     timeout: 5,
                 });
@@ -595,8 +595,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
         if (!this.isConfirmChecked) {
             send({
-                summary: i18n.t('acquire-3g-ticket.confirm-not-checked-title'),
-                body: i18n.t('acquire-3g-ticket.confirm-not-checked-body'),
+                summary: i18n.t('dbp-acquire-3g-ticket.confirm-not-checked-title'),
+                body: i18n.t('dbp-acquire-3g-ticket.confirm-not-checked-body'),
                 type: 'danger',
                 timeout: 8,
             });
@@ -1020,19 +1020,19 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 class="notification is-warning ${classMap({
                     hidden: this.isLoggedIn() || this.isLoading(),
                 })}">
-                ${i18n.t('error-login-message')}
+                ${i18n.t('dbp-greenlight-common.error-login-message')}
             </div>
 
             <div
                 class="notification is-danger ${classMap({
                     hidden: this.hasPermissions() || !this.isLoggedIn() || this.isLoading(),
                 })}">
-                ${i18n.t('error-permission-message')}
+                ${i18n.t('dbp-greenlight-common.error-permission-message')}
             </div>
 
             <div class="control ${classMap({hidden: this.isLoggedIn() || !this.isLoading()})}">
                 <span class="loading">
-                    <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                    <dbp-mini-spinner text=${i18n.t('dbp-greenlight-common.loading-message')}></dbp-mini-spinner>
                 </span>
             </div>
 
@@ -1042,17 +1042,17 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                 })}">
                 <h2>${this.activity.getName(this.lang)}</h2>
                     <p class="subheadline">
-                        ${ i18n.t('acquire-3g-ticket.description') }
+                        ${ i18n.t('dbp-acquire-3g-ticket.description') }
                     </p>
                 <div>
                     <p>
-                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-1'))}
-                        ${ (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '' && this.selfTestValid) ? unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-2')) : ""}<br /><br />
-                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-3'))}
+                        ${ unsafeHTML(i18n.t('dbp-acquire-3g-ticket.additional-information-1'))}
+                        ${ (this.searchSelfTestStringArray && this.searchSelfTestStringArray !== '' && this.selfTestValid) ? unsafeHTML(i18n.t('dbp-acquire-3g-ticket.additional-information-2')) : ""}<br /><br />
+                        ${ unsafeHTML(i18n.t('dbp-acquire-3g-ticket.additional-information-3'))}
                     </p>
                     <div class="privacy-information">
                         <p>
-                        ${ unsafeHTML(i18n.t('acquire-3g-ticket.additional-information-4'))}
+                        ${ unsafeHTML(i18n.t('dbp-acquire-3g-ticket.additional-information-4'))}
                         </p>
                     </div>
                 </div>
@@ -1063,7 +1063,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                             !this.preCheck && !this.preselectionCheck && !this.preselectionLoading,
                     })}">
                     <span class="loading">
-                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                        <dbp-mini-spinner text=${i18n.t('dbp-greenlight-common.loading-message')}></dbp-mini-spinner>
                     </span>
                 </div>
 
@@ -1084,7 +1084,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                   })}">
                                   <dbp-inline-notification class="inline-notification">
                                       <div slot="body">
-                                          ${i18n.t('acquire-3g-ticket.manage-tickets-text')}
+                                          ${i18n.t('dbp-acquire-3g-ticket.manage-tickets-text')}
                                           <a
                                               href="#"
                                               @click="${(e) => {
@@ -1096,12 +1096,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                   e.preventDefault();
                                               }}"
                                               title="${i18n.t(
-                                                  'acquire-3g-ticket.manage-tickets-link'
+                                                  'dbp-acquire-3g-ticket.manage-tickets-link'
                                               )}"
                                               class="int-link-internal">
                                               <span>
                                                   ${i18n.t(
-                                                      'acquire-3g-ticket.manage-tickets-link'
+                                                      'dbp-acquire-3g-ticket.manage-tickets-link'
                                                   )}.
                                               </span>
                                           </a>
@@ -1118,15 +1118,15 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                             id="start-ticket-btn"
                                             value="${!this.hasTicket
                                                 ? i18n.t(
-                                                      'acquire-3g-ticket.request-ticket-button-text'
+                                                      'dbp-acquire-3g-ticket.request-ticket-button-text'
                                                   )
-                                                : i18n.t('acquire-3g-ticket.create-new-ticket')}"
+                                                : i18n.t('dbp-acquire-3g-ticket.create-new-ticket')}"
                                             @click="${() => {
                                                 this.processStarted = true;
                                                 this.scrollToConfirmButton();
                                             }}"
                                             title="${i18n.t(
-                                                'acquire-3g-ticket.request-ticket-button-text'
+                                                'dbp-acquire-3g-ticket.request-ticket-button-text'
                                             )}"></dbp-loading-button>
                                     `
                                   : ``}
@@ -1141,10 +1141,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                   class="proof-upload-container ${classMap({
                                       hidden: this.location === '' || this.showCreateTicket,
                                   })}">
-                                  <h3>${i18n.t('acquire-3g-ticket.3g-proof-label-text')}</h3>
+                                  <h3>${i18n.t('dbp-acquire-3g-ticket.3g-proof-label-text')}</h3>
 
                                   <label id="last-checkbox" class="button-container">
-                                      ${i18n.t('acquire-3g-ticket.trust-and-save-1')}
+                                      ${i18n.t('dbp-acquire-3g-ticket.trust-and-save-1')}
                                       <input
                                           type="checkbox"
                                           id="trust-button"
@@ -1155,7 +1155,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                       <dbp-info-tooltip
                                           class="info-tooltip"
                                           text-content="${i18n.t(
-                                              'acquire-3g-ticket.trust-and-save-2'
+                                              'dbp-acquire-3g-ticket.trust-and-save-2'
                                           )}"></dbp-info-tooltip>
                                   </label>
 
@@ -1166,12 +1166,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           ?disabled="${!this.trustButtonChecked}"
                                           name2="manual"
                                           name="${i18n.t(
-                                              'acquire-3g-ticket.qr-button-text'
-                                          )} || ${i18n.t('acquire-3g-ticket.manually-button-text')}"
+                                              'dbp-acquire-3g-ticket.qr-button-text'
+                                          )} || ${i18n.t('dbp-acquire-3g-ticket.manually-button-text')}"
                                           class="switch"
-                                          value1="${i18n.t('acquire-3g-ticket.qr-button-text')}"
+                                          value1="${i18n.t('dbp-acquire-3g-ticket.qr-button-text')}"
                                           value2="${i18n.t(
-                                              'acquire-3g-ticket.manually-button-text'
+                                              'dbp-acquire-3g-ticket.manually-button-text'
                                           )}"
                                           @change=${(e) =>
                                               this.uploadSwitch(e.target.name)}></dbp-textswitch>
@@ -1179,7 +1179,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                                   <dbp-file-source
                                       id="file-source"
-                                      context="${i18n.t('acquire-3g-ticket.filepicker-context')}"
+                                      context="${i18n.t('dbp-acquire-3g-ticket.filepicker-context')}"
                                       allowed-mime-types="image/*,application/pdf,.pdf"
                                       nextcloud-auth-url="${this.nextcloudWebAppPasswordURL}"
                                       nextcloud-web-dav-url="${this.nextcloudWebDavURL}"
@@ -1189,9 +1189,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                       enabled-targets="${this.fileHandlingEnabledTargets}"
                                       decompress-zip
                                       lang="${this.lang}"
-                                      text="${i18n.t('acquire-3g-ticket.filepicker-context')}"
+                                      text="${i18n.t('dbp-acquire-3g-ticket.filepicker-context')}"
                                       button-label="${i18n.t(
-                                          'acquire-3g-ticket.filepicker-button-title'
+                                          'dbp-acquire-3g-ticket.filepicker-button-title'
                                       )}"
                                       number-of-files="1"
                                       @dbp-file-source-file-selected="${this
@@ -1222,7 +1222,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                       <span class="qr-loading">
                                           <dbp-mini-spinner
                                               text=${i18n.t(
-                                                  'acquire-3g-ticket.manual-uploading-message'
+                                                  'dbp-acquire-3g-ticket.manual-uploading-message'
                                               )}></dbp-mini-spinner>
                                       </span>
                                   </div>
@@ -1231,7 +1231,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
 
                               <!-- Show Proof -->
                               <h3 class="${classMap({hidden: !this.showCreateTicket})}">
-                                  ${i18n.t('acquire-3g-ticket.create-ticket')}
+                                  ${i18n.t('dbp-acquire-3g-ticket.create-ticket')}
                               </h3>
                               <div
                                   class="${classMap({
@@ -1260,7 +1260,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                 <dbp-info-tooltip
                                                     class="info-tooltip"
                                                     text-content="${i18n.t(
-                                                        'acquire-3g-ticket.invalid-document-prefix'
+                                                        'dbp-acquire-3g-ticket.invalid-document-prefix'
                                                     ) + this.detailedError.replace(/\n/g, '<br>')}"
                                                     interactive></dbp-info-tooltip>
                                             `
@@ -1277,34 +1277,34 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                               hidden: this.isSelfTest || !this.hasValidProof,
                                           })}">
                                           <span class="header">
-                                              <h4>${i18n.t('acquire-3g-ticket.3g-proof')}</h4>
+                                              <h4>${i18n.t('dbp-acquire-3g-ticket.3g-proof')}</h4>
                                               ${this._hasMultipleTicketTypes()
                                                   ? html`
                                                         <span class="valid-for">
                                                             ${i18n.t(
-                                                                'acquire-3g-ticket.3g-proof-valid-for'
+                                                                'dbp-acquire-3g-ticket.3g-proof-valid-for'
                                                             )}:
                                                             <div class="validity-check">
                                                                 <div class="validity-items">
-                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
-                                                                  <b>${i18n.t('acquire-3g-ticket.partial-validity-1')}</b>
+                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('dbp-greenlight-common.aria-label-valid')}'></dbp-icon>
+                                                                  <b>${i18n.t('dbp-acquire-3g-ticket.partial-validity-1')}</b>
                                                                 </div>
                                                                 <div class="validity-items">
-                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
-                                                                  <b>${i18n.t('acquire-3g-ticket.partial-validity-2')}</b>
+                                                                  <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('dbp-greenlight-common.aria-label-valid')}'></dbp-icon>
+                                                                  <b>${i18n.t('dbp-acquire-3g-ticket.partial-validity-2')}</b>
                                                                 </div>
                                                                 <div class="full-validity">
                                                                     ${this.isFullProof
                                                                         ? html`
                                                                               <div class="validity-item">
-                                                                                <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('aria-label-valid')}'></dbp-icon>
-                                                                                <b>${i18n.t('acquire-3g-ticket.full-validity')}</b>
+                                                                                <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='${i18n.t('dbp-greenlight-common.aria-label-valid')}'></dbp-icon>
+                                                                                <b>${i18n.t('dbp-acquire-3g-ticket.full-validity')}</b>
                                                                               </div>
                                                                           `
                                                                         : html`
                                                                               <div class="validity-items">
-                                                                                <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='${i18n.t('aria-label-invalid')}'></dbp-icon>
-                                                                                <b>${i18n.t('acquire-3g-ticket.no-full-validity')}</b>
+                                                                                <dbp-icon name='cross-circle' class='validity-icon gray' aria-label='${i18n.t('dbp-greenlight-common.aria-label-invalid')}'></dbp-icon>
+                                                                                <b>${i18n.t('dbp-acquire-3g-ticket.no-full-validity')}</b>
                                                                               </div>
                                                                           `}
                                                                 </div>
@@ -1312,9 +1312,9 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                         </span>
                                                         <span>
                                                             ${i18n.t(
-                                                                'acquire-3g-ticket.3g-proof-valid-till-title'
+                                                                'dbp-acquire-3g-ticket.3g-proof-valid-till-title'
                                                             )}:
-                                                            ${i18n.t('date-time', {
+                                                            ${i18n.t('dbp-greenlight-common.date-time', {
                                                                 clock: this.person.validUntil
                                                                     ? this.formatValidUntilTime(
                                                                           this.person.validUntil
@@ -1329,7 +1329,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                             <dbp-info-tooltip
                                                                 class="info-tooltip"
                                                                 text-content="${i18n.t(
-                                                                    'validity-tooltip',
+                                                                    'dbp-greenlight-common.validity-tooltip',
                                                                     {place: this.location}
                                                                 )}"
                                                                 interactive></dbp-info-tooltip>
@@ -1338,12 +1338,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                   : html`
                                                         <span>
                                                             ${i18n.t(
-                                                                'acquire-3g-ticket.3g-proof-status'
+                                                                'dbp-acquire-3g-ticket.3g-proof-status'
                                                             )}:
                                                             <strong>
                                                                 ${i18n.t(
-                                                                    'acquire-3g-ticket.valid-till'
-                                                                )}${i18n.t('date-time', {
+                                                                    'dbp-acquire-3g-ticket.valid-till'
+                                                                )}${i18n.t('dbp-greenlight-common.date-time', {
                                                                     clock: this.person.validUntil
                                                                         ? this.formatValidUntilTime(
                                                                               this.person.validUntil
@@ -1359,14 +1359,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                             <dbp-info-tooltip
                                                                 class="info-tooltip"
                                                                 text-content="${i18n.t(
-                                                                    'validity-tooltip',
+                                                                    'dbp-greenlight-common.validity-tooltip',
                                                                     {place: this.location}
                                                                 )}"
                                                                 interactive></dbp-info-tooltip>
                                                         </span>
                                                     `}
                                               <br />
-                                              ${i18n.t('acquire-3g-ticket.3g-proof-proof-from')}:
+                                              ${i18n.t('dbp-acquire-3g-ticket.3g-proof-proof-from')}:
                                               ${this.person.firstname
                                                   ? this.person.firstname + ' '
                                                   : ''}
@@ -1375,7 +1375,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                                   ? html`
                                                         <br />
                                                         ${i18n.t(
-                                                            'acquire-3g-ticket.3g-proof-birthdate'
+                                                            'dbp-acquire-3g-ticket.3g-proof-birthdate'
                                                         )}:
                                                         ${this.person.dob}
                                                     `
@@ -1387,14 +1387,14 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                               hidden: !this.isSelfTest || !this.hasValidProof,
                                           })}">
                                           <span class="header">
-                                              <h4>${i18n.t('acquire-3g-ticket.self-test')}</h4>
-                                              ${i18n.t('acquire-3g-ticket.self-test-information')}
+                                              <h4>${i18n.t('dbp-acquire-3g-ticket.self-test')}</h4>
+                                              ${i18n.t('dbp-acquire-3g-ticket.self-test-information')}
                                               <span>
-                                                  ${i18n.t('acquire-3g-ticket.self-test-link')}:
+                                                  ${i18n.t('dbp-acquire-3g-ticket.self-test-link')}:
                                                   <a
                                                       class="int-link-external"
                                                       title="${i18n.t(
-                                                          'acquire-3g-ticket.self-test'
+                                                          'dbp-acquire-3g-ticket.self-test'
                                                       )}"
                                                       target="_blank"
                                                       rel="noopener"
@@ -1406,12 +1406,12 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                       </div>
                                       <dbp-loading-button
                                           id="remove-proof-btn"
-                                          value="${i18n.t('acquire-3g-ticket.remove-proof')}"
+                                          value="${i18n.t('dbp-acquire-3g-ticket.remove-proof')}"
                                           @click="${() => {
                                               this.removeProof();
                                           }}"
                                           title="${i18n.t(
-                                              'acquire-3g-ticket.remove-proof'
+                                              'dbp-acquire-3g-ticket.remove-proof'
                                           )}"></dbp-loading-button>
                                   </div>
                               </div>
@@ -1425,7 +1425,7 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                   <div>
                                       <label id="last-checkbox" class="button-container">
                                           ${i18n.t(
-                                              'acquire-3g-ticket.confirm-checkbox-valid-cert-text'
+                                              'dbp-acquire-3g-ticket.confirm-checkbox-valid-cert-text'
                                           )}
                                           <input
                                               type="checkbox"
@@ -1447,8 +1447,8 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
                                           @click="${(event) => {
                                               this.createTicket(event);
                                           }}"
-                                          title="${i18n.t('acquire-3g-ticket.create-ticket')}">
-                                          ${i18n.t('acquire-3g-ticket.create-ticket')}
+                                          title="${i18n.t('dbp-acquire-3g-ticket.create-ticket')}">
+                                          ${i18n.t('dbp-acquire-3g-ticket.create-ticket')}
                                       </dbp-loading-button>
                                       <div id="scrollToConfirmBtn"></div>
                                   </div>

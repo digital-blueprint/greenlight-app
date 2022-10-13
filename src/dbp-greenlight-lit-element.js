@@ -260,8 +260,8 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
 
     async checkAlreadySend(data, reset, wrongQrArray, title = '', body = '', message = '') {
         const i18n = this._i18n;
-        title = title === '' ? i18n.t('acquire-3g-ticket.invalid-title') : title;
-        body = body === '' ? i18n.t('acquire-3g-ticket.invalid-body') : body;
+        title = title === '' ? i18n.t('dbp-acquire-3g-ticket.invalid-title') : title;
+        body = body === '' ? i18n.t('dbp-acquire-3g-ticket.invalid-body') : body;
         let checkAlreadySend = await wrongQrArray.includes(data);
 
         if (checkAlreadySend) {
@@ -284,7 +284,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 });
                 this.proofUploadFailed = true;
                 this.message =
-                    message !== '' ? message : i18nKey('acquire-3g-ticket.invalid-qr-body');
+                    message !== '' ? message : i18nKey('dbp-acquire-3g-ticket.invalid-qr-body');
             }
         }
     }
@@ -390,18 +390,18 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 data.data,
                 this.resetWrongQr,
                 this.wrongQR ? this.wrongQR : [],
-                i18n.t('self-test-not-supported-title'),
-                i18n.t('self-test-not-supported-body'),
-                i18n.t('self-test-not-supported-title')
+                i18n.t('dbp-greenlight-common.self-test-not-supported-title'),
+                i18n.t('dbp-greenlight-common.self-test-not-supported-body'),
+                i18n.t('dbp-greenlight-common.self-test-not-supported-title')
             );
             return;
         }
 
         if (check && selfTestURL !== '') {
             if (!this.preCheck) {
-                this.message = i18nKey('acquire-3g-ticket.found-valid-selftest');
+                this.message = i18nKey('dbp-acquire-3g-ticket.found-valid-selftest');
             } else {
-                this.message = i18nKey('acquire-3g-ticket.found-valid-selftest-preCheck');
+                this.message = i18nKey('dbp-acquire-3g-ticket.found-valid-selftest-preCheck');
             }
 
             this.isSelfTest = true;
@@ -448,10 +448,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         // Error: no valid hash detected
         if (greenPassHash.length <= 0) {
             if (!precheck) {
-                this.message = i18nKey('acquire-3g-ticket.invalid-qr-body');
+                this.message = i18nKey('dbp-acquire-3g-ticket.invalid-qr-body');
                 this.saveWrongHashAndNotify(
-                    i18n.t('acquire-3g-ticket.invalid-title'),
-                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-title'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-body'),
                     greenPassHash
                 );
             }
@@ -523,10 +523,10 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             this.hasValidProof = false;
             this.isFullProof = false;
             this.detailedError = error.message;
-            this.message = i18nKey('validation-not-possible');
+            this.message = i18nKey('dbp-greenlight-common.validation-not-possible');
             this.saveWrongHashAndNotify(
-                i18n.t('validation-not-possible-title'),
-                i18n.t('validation-not-possible-body'),
+                i18n.t('dbp-greenlight-common.validation-not-possible-title'),
+                i18n.t('dbp-greenlight-common.validation-not-possible-body'),
                 greenPassHash
             );
             return;
@@ -541,11 +541,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             if (!preCheck) {
                 this.detailedError = i18n.t(res.errorKey, {error: res.error});
                 this.saveWrongHashAndNotify(
-                    i18n.t('acquire-3g-ticket.invalid-title'),
-                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-title'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-body'),
                     greenPassHash
                 );
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
+                this.message = i18nKey('dbp-acquire-3g-ticket.invalid-document');
             }
             return;
         }
@@ -570,11 +570,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 // to get at least something.
                 this.detailedError = i18n.t(res.regions[errorRegion].errorKey, {error: this.getTranslatedErrors(res.regions[errorRegion].error).join('\n')});
                 this.saveWrongHashAndNotify(
-                    i18n.t('acquire-3g-ticket.invalid-title'),
-                    i18n.t('acquire-3g-ticket.invalid-body'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-title'),
+                    i18n.t('dbp-acquire-3g-ticket.invalid-body'),
                     greenPassHash
                 );
-                this.message = i18nKey('acquire-3g-ticket.invalid-document');
+                this.message = i18nKey('dbp-acquire-3g-ticket.invalid-document');
             }
             return;
         }
@@ -610,11 +610,11 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
             ) {
                 if (!preCheck) {
                     this.saveWrongHashAndNotify(
-                        i18n.t('acquire-3g-ticket.invalid-title'),
-                        i18n.t('acquire-3g-ticket.invalid-body'),
+                        i18n.t('dbp-acquire-3g-ticket.invalid-title'),
+                        i18n.t('dbp-acquire-3g-ticket.invalid-body'),
                         greenPassHash
                     );
-                    this.message = i18nKey('acquire-3g-ticket.not-same-person');
+                    this.message = i18nKey('dbp-acquire-3g-ticket.not-same-person');
                 }
                 this.proofUploadFailed = true;
                 this.hasValidProof = false;
@@ -663,9 +663,9 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
         this.showCreateTicket = true;
 
         if (preCheck) {
-            this.message = i18nKey('acquire-3g-ticket.found-valid-3g-preCheck');
+            this.message = i18nKey('dbp-acquire-3g-ticket.found-valid-3g-preCheck');
         } else {
-            this.message = i18nKey('acquire-3g-ticket.found-valid-3g');
+            this.message = i18nKey('dbp-acquire-3g-ticket.found-valid-3g');
         }
         await this.sendSuccessAnalyticsEvent('HCertValidation', 'Success', '');
     }

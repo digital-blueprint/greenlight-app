@@ -1,5 +1,5 @@
 {
-    "acquire-3g-ticket": {
+    "dbp-acquire-3g-ticket": {
         "3g-proof": "Nachweis",
         "3g-proof-birthdate": "Geburtsdatum",
         "3g-proof-label-text": "Nachweis importieren",
@@ -55,29 +55,7 @@
         "trust-and-save-2": "Ihre Daten werden ausschließlich auf diesem Gerät gespeichert und verarbeitet. Es findet keine automatische Übertragung von importierten Nachweisen zwischen Geräten statt. Nachweise, die auf anderen Geräten importiert wurden, sind nur auf diesen verfügbar.",
         "valid-till": "gültig bis "
     },
-    "date-time": "{{clock}} Uhr am {{date}}",
-    "delete-btn-text": "Löschen",
-    "entry-ticket": "Eintrittsticket",
-    "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
-    "error-permission-message": "Diese Funktion ist aktuell nur für Studierende verfügbar!",
-    "file-sink": {
-        "modal-close": "Schließen"
-    },
-    "hcert": {
-        "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
-        "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
-    },
-    "image-alt-text": "Ticketfoto",
-    "loading-message": "Lädt...",
-    "loading-message-ticket": "Ticket wird geladen ...",
-    "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
-    "reload": "Aktualisieren",
-    "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
-    "reload-error-title": "Aktualisierung fehlgeschlagen",
-    "reload-failed": "Automatische Aktualisierung fehlgeschlagen",
-    "self-test-not-supported-body": "Antigen-Tests mit Selbstabnahme („Wohnzimmertests“) sind nicht mehr als Eintrittsnachweis zulässig.",
-    "self-test-not-supported-title": "Antigen-Selbsttests („Wohnzimmertests“) werden nicht unterstützt.",
-    "show-active-tickets": {
+    "dbp-show-active-tickets": {
         "3-g-evidence": "Nachweis",
         "3-g-evidence-green-pass-valid": "Grüner Pass auf diesem Gerät importiert und gültig",
         "3-g-evidence-greenpass": "Nachweis: Grüner Pass gefunden",
@@ -111,8 +89,8 @@
         "validation-failed": "Validierung aktuell nicht möglich",
         "validation-failed-text": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal."
     },
-    "show-btn-text": "Zeigen",
-    "show-reference-ticket": {
+
+    "dbp-show-reference-ticket": {
         "description": "Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der Universität.",
         "information-container-body": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
         "information-container-headline": "Informationen zum Nachweis",
@@ -125,13 +103,38 @@
         "information-container-3": "Ist ein gültiger Grüner Pass auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit GreenCheck validiert werden. Ist ein Selbsttest des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt. Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem QR-Code Scanner erfolgen. Ist ein gültiger universitätsinterner Test auf dem Gerät importiert, wird das Ticket in Farbe dargestellt. Die manuelle Validierung dieses Tests kann nur mit dem Originaldokument erfolgen.",
         "information-container-4": ""
     },
-    "aria-label-valid": "Gültig",
-    "aria-label-invalid": "Ungültig",
-    "valid-till": "Voraussichtlich gültig bis ",
-    "validation-not-possible": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
-    "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
-    "validation-not-possible-title": "Validierung aktuell nicht möglich",
-    "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
-    "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig.",
-    "university-name": "Ort"
+    "dbp-greenlight-common": {
+      "date-time": "{{clock}} Uhr am {{date}}",
+      "delete-btn-text": "Löschen",
+      "entry-ticket": "Eintrittsticket",
+      "error-login-message": "Sie müssen angemeldet sein um diese Funktion nutzen zu können!",
+      "error-permission-message": "Diese Funktion ist aktuell nur für Studierende verfügbar!",
+      "file-sink": {
+          "modal-close": "Schließen"
+      },
+      "hcert": {
+          "cert-not-valid-error": "Erfüllt nicht die folgenden Regeln: {{error}}",
+          "cert-validation-failed-error": "Validierung fehlgeschlagen: {{error}}"
+      },
+      "image-alt-text": "Ticketfoto",
+      "loading-message": "Lädt...",
+      "loading-message-ticket": "Ticket wird geladen ...",
+      "no-tickets-message": "Sie besitzen derzeit keine Tickets!",
+      "reload": "Aktualisieren",
+      "reload-error-body": "Die Aktualisierung schlug fehl. Prüfen Sie Ihre Internetverbindung, loggen Sie sich neu ein oder probieren Sie es später noch einmal.",
+      "reload-error-title": "Aktualisierung fehlgeschlagen",
+      "reload-failed": "Automatische Aktualisierung fehlgeschlagen",
+      "self-test-not-supported-body": "Antigen-Tests mit Selbstabnahme („Wohnzimmertests“) sind nicht mehr als Eintrittsnachweis zulässig.",
+      "self-test-not-supported-title": "Antigen-Selbsttests („Wohnzimmertests“) werden nicht unterstützt.",
+      "show-btn-text": "Zeigen",
+      "aria-label-valid": "Gültig",
+      "aria-label-invalid": "Ungültig",
+      "valid-till": "Voraussichtlich gültig bis ",
+      "validation-not-possible": "Die Validierung des Nachweises ist aus technischen Gründen derzeit nicht möglich. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.",
+      "validation-not-possible-body": "Der Nachweis kann aktuell nicht validiert werden. Versuchen Sie es später nochmals.",
+      "validation-not-possible-title": "Validierung aktuell nicht möglich",
+      "validity-tooltip": "Nach den aktuellen Bestimmungen der {{place}}. Die Gültigkeitsdauer wird bei einer Änderung der Bestimmungen automatisch aktualisiert.",
+      "validity-tooltip-ticket-text": "Das Ticket ist nur in elektronischer Form gültig.",
+      "university-name": "Ort"
+    }
 }

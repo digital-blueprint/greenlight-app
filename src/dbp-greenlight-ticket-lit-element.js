@@ -99,8 +99,8 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
         if (!check && this.showReloadButton) {
             const i18n = this._i18n;
             send({
-                summary: i18n.t('reload-error-title'),
-                body: i18n.t('reload-error-body'),
+                summary: i18n.t('dbp-greenlight-common.reload-error-title'),
+                body: i18n.t('dbp-greenlight-common.reload-error-body'),
                 type: 'danger',
                 timeout: 5,
             });
@@ -205,8 +205,8 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                 );
                                 e.preventDefault();
                             }}"
-                            title="${i18n.t('show-active-tickets.acquire-ticket')}">
-                            ${i18n.t('show-active-tickets.acquire-ticket')}
+                            title="${i18n.t('dbp-show-active-tickets.acquire-ticket')}">
+                            ${i18n.t('dbp-show-active-tickets.acquire-ticket')}
                         </a>
                     </div>
                 </div>
@@ -215,7 +215,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                 </div>
                 <span class="control ${classMap({hidden: !this.loading && !this.loadingTickets})}">
                     <span class="loading">
-                        <dbp-mini-spinner text=${i18n.t('loading-message')}></dbp-mini-spinner>
+                        <dbp-mini-spinner text=${i18n.t('dbp-greenlight-common.loading-message')}></dbp-mini-spinner>
                     </span>
                 </span>
             </div>
@@ -235,7 +235,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                 })}">
                                 <span class="loading">
                                     <dbp-mini-spinner
-                                        text=${i18n.t('loading-message-ticket')}></dbp-mini-spinner>
+                                        text=${i18n.t('dbp-greenlight-common.loading-message-ticket')}></dbp-mini-spinner>
                                 </span>
                             </span>
 
@@ -245,22 +245,22 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                         hidden: this.ticketLoading,
                                     })}">
                                     <h3 id="ticket-modal-title">
-                                        Ticket: <strong>${ i18n.t('university-name') }</strong>
+                                        Ticket: <strong>${ i18n.t('dbp-greenlight-common.university-name') }</strong>
                                     </h3>
                                     <div
                                         class="reload-failed ${classMap({
                                             hidden: !this.showReloadButton,
                                         })}">
-                                        <p>${i18n.t('reload-failed')}</p>
+                                        <p>${i18n.t('dbp-greenlight-common.reload-failed')}</p>
                                         <button
                                             id="reload-btn"
                                             class="button"
                                             @click="${() => {
                                                 this.updateTicketAndNotify();
                                             }}"
-                                            title="${i18n.t('reload')}">
+                                            title="${i18n.t('dbp-greenlight-common.reload')}">
                                             <dbp-icon
-                                                title="${i18n.t('reload')}"
+                                                title="${i18n.t('dbp-greenlight-common.reload')}"
                                                 name="reload"
                                                 class="reload-icon"></dbp-icon>
                                         </button>
@@ -272,7 +272,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                                 filterNone: !this.forceTicketGrayscale,
                                             })}"
                                             src="${this.ticketImage || ''}"
-                                            alt="${i18n.t('image-alt-text')}" />
+                                            alt="${i18n.t('dbp-greenlight-common.image-alt-text')}" />
                                         ${buttonArea ?? html``}
                                     </div>
                                 </div>
@@ -285,7 +285,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                                         this.closeDialog();
                                     }}">
                                     <dbp-icon
-                                        title="${i18n.t('file-sink.modal-close')}"
+                                        title="${i18n.t('dbp-greenlight-common.file-sink.modal-close')}"
                                         name="close"
                                         class="close-icon"></dbp-icon>
                                 </button>

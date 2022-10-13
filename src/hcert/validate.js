@@ -204,7 +204,7 @@ export class Validator {
                 } else {
                     regionResult.isValid = false;
                     regionResult.error = res.errors;
-                    regionResult.errorKey = 'hcert.cert-not-valid-error';
+                    regionResult.errorKey = 'dbp-greenlight-common.hcert.cert-not-valid-error';
                 }
 
                 result.regions[region] = regionResult;
@@ -212,7 +212,7 @@ export class Validator {
         } else {
             result.isValid = false;
             result.error = hcertData.error;
-            result.errorKey = 'hcert.cert-validation-failed-error';
+            result.errorKey = 'dbp-greenlight-common.hcert.cert-validation-failed-error';
         }
 
         return result;
