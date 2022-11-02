@@ -6,5 +6,11 @@
         "enabled": false
     },
     "cloneSubmodules": true,
-    "ignorePaths": ["**/bench/**"]
+    "ignorePaths": ["**/bench/**"],
+    "packageRules": [
+        {
+          "matchPackageNames": ["pdfjs-dist"],
+          "allowedVersions": "<3"
+        }
+    ]
 }
