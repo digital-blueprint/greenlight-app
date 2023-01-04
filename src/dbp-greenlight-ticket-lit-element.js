@@ -192,7 +192,7 @@ export default class DbpGreenlightTicketLitElement extends ScopedElementsMixin(
                             this.activeTickets.length !== 0 ||
                             this.loadingTickets,
                     })}">
-                    ${i18n.t('no-tickets-message')}
+                    ${i18n.t('dbp-greenlight-common.no-tickets-message')}
                     <div>
                         <a
                             class="button is-primary create-ticket-button"
