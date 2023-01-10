@@ -19,7 +19,7 @@ The ticket then enables you to access the university premises quickly and effici
 
 ```bash
 # get the source
-git clone git@gitlab.tugraz.at:dbp/greenlight/greenlight.git
+git clone git@github.com:digital-blueprint/greenlight-frontend.git
 cd greenlight
 git submodule update --init
 
@@ -56,7 +56,7 @@ Also make sure to add all of your resources you are using (like your API and Key
 `Content-Security-Policy` in your `greenlight-app/public/.htaccess`, so the browser allows access to those sites.
 
 You can also use this app directly from the [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/)
-for example like this: [dbp-greenlight/index.html](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/examples/dbp-greenlight/index.html)
+for example like this: [dbp-greenlight/index.html](https://github.com/digital-blueprint/greenlight-frontend/blob/main/examples/dbp-greenlight/index.html)
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
 
@@ -103,7 +103,7 @@ This app has the following activities:
 - `dbp-show-active-tickets`
 - `dbp-show-reference-ticket`
 
-You can find the documentation of these activities in the [greenlight activities documentation](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
+You can find the documentation of these activities in the [greenlight activities documentation](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src).
 
 ## Adapt app
 
@@ -122,12 +122,12 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 | `html-overrides` | String | [common](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/common#overriding-slots-in-nested-web-components) |
 | `themes` | Array | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/theme-switcher#themes-attribute) |
 | `darkModeThemeOverride` | String | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/theme-switcher#themes-attribute) |
-| `gp-search-hash-string` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
-| `gp-search-self-test-string-array` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
-| `gp-self-test-valid` | Boolean | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
-| `ticket-types` | Object | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src#shared-attributes) |
-| `show-preselected` | Boolean | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
-| `preselected-option` | String | [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src) |
+| `gp-search-hash-string` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src) |
+| `gp-search-self-test-string-array` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src) |
+| `gp-self-test-valid` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src) |
+| `ticket-types` | Object | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src#shared-attributes) |
+| `show-preselected` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src) |
+| `preselected-option` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src) |
 | `file-handling-enabled-targets` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
 | `nextcloud-web-app-password-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
 | `nextcloud-web-dav-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
@@ -156,5 +156,5 @@ For frontend design customizations, such as logo, colors, font, favicon, and mor
 ## "dbp-greenlight" slots
 
 These are common slots for the app-shell. You can find the documentation of these slots in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
-For the app specific slots take a look at the [greenlight activities](https://gitlab.tugraz.at/dbp/greenlight/greenlight/-/tree/main/src).
+For the app specific slots take a look at the [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/blob/main/src).
 
