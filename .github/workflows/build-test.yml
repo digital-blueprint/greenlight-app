@@ -1,15 +1,11 @@
-name: Test
+name: Build and Test
 on: [push, pull_request, workflow_dispatch]
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}-ci
 
 jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      image: ghcr.io/${{ github.repository }}-ci:latest
 
     steps:
       - name: Checkout repository
