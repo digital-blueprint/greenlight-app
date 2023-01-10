@@ -1,0 +1,30 @@
+name: Test
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-ci
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run build
+        run: APP_ENV=development yarn run build
+
+      - name: Run tests
+        run: yarn run test-full
+
+      - name: Run lint
+        run: yarn run lint
