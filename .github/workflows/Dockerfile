@@ -32,7 +32,4 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     firefox-esr \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -u 1000 -ms /bin/bash user
-RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER user
-WORKDIR /home/user
+USER 1001
