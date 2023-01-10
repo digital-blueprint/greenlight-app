@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.repository }}-ci:latest
-      options: --user user
+      options: --user root
 
     steps:
       - name: Checkout repository
