@@ -31,5 +31,3 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     chromium \
     firefox-esr \
     && rm -rf /var/lib/apt/lists/*
-
-USER 1001
