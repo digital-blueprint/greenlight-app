@@ -30,4 +30,4 @@ jobs:
         with:
           context: .github/workflows
           push: true
-          tags: latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
