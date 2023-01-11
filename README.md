@@ -1,6 +1,6 @@
 # Greenlight Application
 
-[GitLab Repository](https://gitlab.tugraz.at/dbp/greenlight/greenlight) |
+[GitHub Repository](https://github.com/digital-blueprint/greenlight-frontend) |
 [npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
 [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/) |
 [Greenlight Bundle](https://gitlab.tugraz.at/dbp/greenlight/dbp-relay-greenlight-bundle) |

@@ -1,6 +1,6 @@
 # Greenlight activities
 
-Here you can find the individual activities of the `greenlight` app. If you want to use the whole app look at [greenlight](https://gitlab.tugraz.at/dbp/greenlight/greenlight).
+Here you can find the individual activities of the `greenlight` app. If you want to use the whole app look at [greenlight](https://github.com/digital-blueprint/greenlight-frontend).
 
 ## Usage of an activity
 
