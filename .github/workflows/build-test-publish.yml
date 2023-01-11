@@ -31,6 +31,8 @@ jobs:
         run: yarn run lint
 
       - name: Publish to NPM
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           # https://www.npmjs.com/settings/dbp-deploy/tokens
           # NPM_TOKEN needs to be a "Publish" token with 2FA disabled!
