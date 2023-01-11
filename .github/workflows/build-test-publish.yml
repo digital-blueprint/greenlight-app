@@ -47,6 +47,9 @@ jobs:
         run: yarn run lint
 
       - name: Publish to NPM
+        if: github.ref == 'refs/heads/main'
+        with:
+          environment: ${{ github.ref_name }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
