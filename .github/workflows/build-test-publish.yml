@@ -4,6 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
     container:
       image: ghcr.io/${{ github.repository }}-ci:latest
       options: --user root
@@ -48,8 +49,6 @@ jobs:
 
       - name: Publish to NPM
         if: github.ref == 'refs/heads/main'
-        with:
-          environment: ${{ github.ref_name }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -63,8 +62,6 @@ jobs:
 
       - name: Deploy
         if: github.ref == 'refs/heads/main'
-        with:
-          environment: ${{ github.ref_name }}
         env:
           DEPLOY_TRIGGER_TOKEN: ${{ secrets.DEPLOY_TRIGGER_TOKEN }}
         run: |
