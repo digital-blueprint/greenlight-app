@@ -4,7 +4,7 @@ Here you can find the individual activities of the `greenlight` app. If you want
 
 ## Usage of an activity
 
-You can use every activity alone. Take a look at our examples [here](https://github.com/digital-blueprint/greenlight-frontend/blob/main/examples).
+You can use every activity alone. Take a look at our examples [here](https://github.com/digital-blueprint/greenlight-frontend/tree/main/examples).
 
 ## Activities
 
