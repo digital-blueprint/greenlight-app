@@ -6,6 +6,8 @@
 [Greenlight Bundle](https://gitlab.tugraz.at/dbp/greenlight/dbp-relay-greenlight-bundle) |
 [Project documentation](https://dbp-demo.tugraz.at/site/software/greenlight.html)
 
+[![Build and Test](https://github.com/digital-blueprint/greenlight-frontend/actions/workflows/build-test-publish.yml/badge.svg)](https://github.com/digital-blueprint/greenlight-frontend/actions/workflows/build-test-publish.yml)
+
 Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam.
 The ticket then enables you to access the university premises quickly and efficiently.
 
