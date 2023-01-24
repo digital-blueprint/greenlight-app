@@ -1,12 +1,12 @@
 # Greenlight Application
 
-[GitHub Repository](https://github.com/digital-blueprint/greenlight-frontend) |
-[npmjs package](https://www.npmjs.com/package/@dbp-topics/greenlight) |
-[Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/) |
+[GitHub Repository](https://github.com/digital-blueprint/greenlight-app) |
+[npmjs package](https://www.npmjs.com/package/@digital-blueprint/greenlight-app) |
+[Unpkg CDN](https://unpkg.com/browse/@digital-blueprint/greenlight-app/) |
 [Greenlight Bundle](https://gitlab.tugraz.at/dbp/greenlight/dbp-relay-greenlight-bundle) |
 [Project documentation](https://dbp-demo.tugraz.at/site/software/greenlight.html)
 
-[![Build and Test](https://github.com/digital-blueprint/greenlight-frontend/actions/workflows/build-test-publish.yml/badge.svg)](https://github.com/digital-blueprint/greenlight-frontend/actions/workflows/build-test-publish.yml)
+[![Build and Test](https://github.com/digital-blueprint/greenlight-app/actions/workflows/build-test-publish.yml/badge.svg)](https://github.com/digital-blueprint/greenlight-app/actions/workflows/build-test-publish.yml)
 
 Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam.
 The ticket then enables you to access the university premises quickly and efficiently.
@@ -57,8 +57,8 @@ Make sure you are allowing `.htaccess` files in your Apache configuration.
 Also make sure to add all of your resources you are using (like your API and Keycloak servers) to the
 `Content-Security-Policy` in your `greenlight-app/public/.htaccess`, so the browser allows access to those sites.
 
-You can also use this app directly from the [Unpkg CDN](https://unpkg.com/browse/@dbp-topics/greenlight/)
-for example like this: [dbp-greenlight/index.html](https://github.com/digital-blueprint/greenlight-frontend/tree/main/examples/dbp-greenlight/index.html)
+You can also use this app directly from the [Unpkg CDN](https://unpkg.com/browse/@digital-blueprint/greenlight-app/)
+for example like this: [dbp-greenlight/index.html](https://github.com/digital-blueprint/greenlight-app/tree/main/examples/dbp-greenlight/index.html)
 
 Note that you will need a Keycloak server along with a client id for the domain you are running this html on.
 
@@ -93,7 +93,7 @@ Both data sets need to be updated regularly via a cron job.
 The first argument passed to update.sh defines the rule set which should be
 downloaded. The script depends on `curl` being installed.
 
-You will find the certificates downloaded in `/<my-path>/greenlight-app/public/app/local/@dbp-topics/greenlight/dgc-trust/prod`.
+You will find the certificates downloaded in `/<my-path>/greenlight-app/public/app/local/@digital-blueprint/greenlight-app/dgc-trust/prod`.
 
 NOTE: Failing to update the data will result in signatures expiring after 2 days
 which breaks the core functionality of the app.
@@ -105,7 +105,7 @@ This app has the following activities:
 - `dbp-show-active-tickets`
 - `dbp-show-reference-ticket`
 
-You can find the documentation of these activities in the [greenlight activities documentation](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src).
+You can find the documentation of these activities in the [greenlight activities documentation](https://github.com/digital-blueprint/greenlight-app/tree/main/src).
 
 ## Adapt app
 
@@ -124,12 +124,12 @@ You can add multiple attributes to the `<dbp-greenlight>` tag.
 | `html-overrides` | String | [common](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/common#overriding-slots-in-nested-web-components) |
 | `themes` | Array | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/theme-switcher#themes-attribute) |
 | `darkModeThemeOverride` | String | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/theme-switcher#themes-attribute) |
-| `gp-search-hash-string` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src) |
-| `gp-search-self-test-string-array` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src) |
-| `gp-self-test-valid` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src) |
-| `ticket-types` | Object | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src#shared-attributes) |
-| `show-preselected` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src) |
-| `preselected-option` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src) |
+| `gp-search-hash-string` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src) |
+| `gp-search-self-test-string-array` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src) |
+| `gp-self-test-valid` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src) |
+| `ticket-types` | Object | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src#shared-attributes) |
+| `show-preselected` | Boolean | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src) |
+| `preselected-option` | String | [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src) |
 | `file-handling-enabled-targets` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
 | `nextcloud-web-app-password-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
 | `nextcloud-web-dav-url` | String | [file-handling](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/file-handling#attributes) |
@@ -158,5 +158,5 @@ For frontend design customizations, such as logo, colors, font, favicon, and mor
 ## "dbp-greenlight" slots
 
 These are common slots for the app-shell. You can find the documentation of these slots in the [app-shell documentation](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/master/packages/app-shell).
-For the app specific slots take a look at the [greenlight activities](https://github.com/digital-blueprint/greenlight-frontend/tree/main/src).
+For the app specific slots take a look at the [greenlight activities](https://github.com/digital-blueprint/greenlight-app/tree/main/src).
 

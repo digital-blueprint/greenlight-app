@@ -1,10 +1,10 @@
 # Greenlight activities
 
-Here you can find the individual activities of the `greenlight` app. If you want to use the whole app look at [greenlight](https://github.com/digital-blueprint/greenlight-frontend).
+Here you can find the individual activities of the `greenlight` app. If you want to use the whole app look at [greenlight](https://github.com/digital-blueprint/greenlight-app).
 
 ## Usage of an activity
 
-You can use every activity alone. Take a look at our examples [here](https://github.com/digital-blueprint/greenlight-frontend/tree/main/examples).
+You can use every activity alone. Take a look at our examples [here](https://github.com/digital-blueprint/greenlight-app/tree/main/examples).
 
 ## Activities
 

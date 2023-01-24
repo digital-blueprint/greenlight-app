@@ -1,11 +1,11 @@
 {
-    "name": "@dbp-topics/greenlight",
+    "name": "@digital-blueprint/greenlight-app",
     "internalName": "dbp-greenlight",
     "version": "1.2.3",
     "license": "LGPL-2.1-or-later",
     "repository": {
         "type": "git",
-        "url": "https://github.com/digital-blueprint/greenlight-frontend"
+        "url": "https://github.com/digital-blueprint/greenlight-app"
     },
     "private": true,
     "workspaces": [

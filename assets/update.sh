@@ -12,4 +12,4 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 RULE_SET="${1:-TUGRAZ}"
 
-"${DIR}/local/@dbp-topics/greenlight/dgc-trust/update.sh" "${RULE_SET}"
+"${DIR}/local/@digital-blueprint/greenlight-app/dgc-trust/update.sh" "${RULE_SET}"
