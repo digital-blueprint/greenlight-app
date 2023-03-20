@@ -1,6 +1,6 @@
 {
-    "short_name": "TU Graz greenlight",
-    "name": "TU Graz greenlight",
+    "short_name": "dbp greenlight",
+    "name": "dbp greenlight",
     "icons": [
         {
             "src": "local/@digital-blueprint/greenlight-app/icon/android-chrome-192x192.png",

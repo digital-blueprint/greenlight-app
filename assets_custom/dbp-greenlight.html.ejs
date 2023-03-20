@@ -1,0 +1,576 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="white"/>
+
+    <!-- Meta Data for Search Engines -->
+    <meta title="<%= shortName %> greenlight - Dein Eintrittsticket in die Universität | <%= shortName %>">
+    <meta name="description" content="Erstellen Sie ein Eintrittsticket mit TU Graz greenlight und importieren Sie Ihren Nachweis, um ihn so schon vor dem Besuch der TU Graz für den Eintritt zu validieren." />
+
+    <!-- Meta Data for open graph(facebook & co) -->
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="TU Graz greenlight: Dein Eintrittsticket in die Universität | <%= shortName %>" />
+    <meta property="og:description" content="Erstellen Sie ein Eintrittsticket mit TU Graz greenlight und importieren Sie Ihren Nachweis, um ihn so schon vor dem Besuch der TU Graz für den Eintritt zu validieren." />
+    <meta property="og:url" content="https://greenlight.tugraz.at/" />
+    <meta property="og:site_name" content="<%= shortName %> greenlight" />
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" type="image/x-icon" href="<%= getPrivateUrl('icon/favicon.ico') %>">
+    <link rel="icon" type="image/svg+xml" href="<%= getPrivateUrl('icon/favicon.svg') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= getPrivateUrl('icon/apple-touch-icon.png') %>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= getPrivateUrl('icon/favicon-32x32.png') %>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= getPrivateUrl('icon/favicon-16x16.png') %>">
+    <link rel="manifest" href="<%= getUrl(name + '.webmanifest') %>">
+    <link rel="mask-icon" href="<%= getPrivateUrl('icon/safari-pinned-tab.svg') %>" color="#e4154b">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+
+    <!-- Loading spinner -->
+    <script type="module">
+        import {Spinner} from '<%= getPrivateUrl('tug_spinner.js') %>';
+        customElements.define('tug-spinner', Spinner);
+    </script>
+
+    <!-- App bundles-->
+    <script type="module" src="<%= getUrl(name + '.js') %>"></script>
+
+    <!-- Prevent Chrome/Edge from suggesting to translate the page -->
+    <meta name="google" content="notranslate">
+
+    <!-- Font related CSS -->
+    <style>
+        @import "<%= getPrivateUrl('fonts/source-sans-pro/300.css') %>";
+        @import "<%= getPrivateUrl('fonts/source-sans-pro/400.css') %>";
+        @import "<%= getPrivateUrl('fonts/source-sans-pro/600.css') %>";
+
+        body {
+            font-family: 'Source Sans Pro', 'Calibri', 'Arial', 'sans-serif';
+            font-weight: 300;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        #spinner{
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* TU-Graz style override */
+        .light-theme {
+            --dbp-override-background: white;
+            --dbp-override-content: black;
+
+            --dbp-override-primary: #245b78;
+            --dbp-override-secondary: black;
+            --dbp-override-secondary-surface: white;
+            --dbp-override-on-secondary-surface: black;
+            --dbp-override-secondary-surface-border-color: black;
+
+            --dbp-override-muted: #5c5856;
+            --dbp-override-accent: #e4154b;
+            --dbp-override-info: #245b78;
+            --dbp-override-success: #138800;
+            --dbp-override-warning: #af6405;
+            --dbp-override-warning-surface: #ffad4d;
+            --dbp-override-warning-surface-border-color: #ffad4d;
+            --dbp-override-on-warning-surface: black;
+            --dbp-override-danger: #e4154b;
+
+            --dbp-override-border: 1px solid black;
+
+            --dbp-override-image-nextcloud: url(<%= getUrl('') %>images/nextcloud.svg);
+        }
+
+    </style>
+
+    <!-- Preloading/Preconnecting -->
+    <link rel="preconnect" href="<%= entryPointURL %>">
+    <link rel="preconnect" href="<%= keyCloakBaseURL %>">
+</head>
+
+<body>
+<<%= name %>
+    provider-root
+    lang="de" entry-point-url="<%= entryPointURL %>"
+    gp-search-hash-string="<%= gpSearchQRString %>"
+    gp-search-self-test-string-array="<%= gpSearchSelfTestStringArray %>"
+    <% if(selfTestValid) { %> gp-self-test-valid <% } %>
+    <% if(ticketTypes) { %> ticket-types="<%= ticketTypes %>" <% } %>
+    preselected-option="<%= preselectedOption %>"
+    service-name="<%= serviceName %>"
+    file-handling-enabled-targets="local"
+    src="<%= getUrl(name + '.topic.metadata.json') %>"
+    base-path="<%= getUrl('') %>"
+    keycloak-config='{"url": "<%= keyCloakBaseURL %>", "realm": "<%= keyCloakRealm %>", "clientId": "<%= keyCloakClientId %>", "silentCheckSsoRedirectUri": "<%= getUrl('silent-check-sso.html') %>"}'
+    git-info='<%= buildInfo.info %>'
+    build-url='<%= buildInfo.url %>'
+    build-time='<%= buildInfo.time %>'
+    env='<%= buildInfo.env %>'
+    matomo-url="<%= matomoUrl %>"
+    matomo-site-id="<%= matomoSiteId %>"
+    html-overrides="global-override"
+    themes='[{"class": "light-theme", "icon": "sun", "name": "Light Mode"}]'
+><tug-spinner id='spinner'></tug-spinner>
+
+</<%= name %>>
+
+<template id="global-override">
+    <template id="<%= name %>">
+        <div slot="name">
+            TU Graz<br />
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Technische Universität Graz
+                </div>
+                <div slot="en">
+                    Graz University of Technology
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="title">
+            TU Graz greenlight
+        </div>
+        <div slot="logo">
+            <style>
+                #main-logo {
+                    padding: 0 50px 0 0;
+                }
+            </style>
+            <a href="https://www.tugraz.at" title="TU Graz Home" target="_blank" rel="noopener">
+                <tug-logo id="main-logo" subscribe="lang"></tug-logo>
+            </a>
+        </div>
+        <div slot="footer-links">
+            <style>
+                .footer-links {
+                    margin-top: 0.5em;
+                }
+
+                .footer-links a {
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+                    padding: 0;
+                    margin-left: 1em;
+                    transition: background-color 0.15s ease 0s, color 0.15s ease 0s;
+                    color: var(--dbp-muted);
+                    cursor: pointer;
+                    text-decoration: none;
+                }
+
+
+                input::-moz-focus-inner { border: 0; }
+
+                :focus-visible{
+                    outline:none !important;
+                    outline-width: 0 !important;
+                    box-shadow: none;
+                    -moz-box-shadow: none;
+                    -webkit-box-shadow: none;
+                    box-shadow: 0px 0px 4px 2px var(--dbp-accent);
+                }
+
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de" class="footer-links">
+                    <a target="_blank" rel="noopener" href="https://www.tugraz.at/ueber-diese-seite/datenschutzerklaerung/">Datenschutz</a>
+                    <a target="_blank" rel="noopener" href="https://www.tugraz.at/ueber-diese-seite/impressum/">Impressum</a>
+                    <a rel="noopener" href="mailto:aktuell-und-offiziell@tugraz.at">Kontakt</a>
+                </div>
+                <div slot="en" class="footer-links">
+                    <a target="_blank" rel="noopener" href="https://www.tugraz.at/en/about-this-page/privacy-policy/">Privacy Policy</a>
+                    <a target="_blank" rel="noopener" href="https://www.tugraz.at/en/about-this-page/legal-notice/">Legal Notice</a>
+                    <a rel="noopener" href="mailto:aktuell-und-offiziell@tugraz.at">Contact</a>
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
+    <template id="dbp-acquire-3g-ticket">
+        <div slot="description">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Erstellt ein Ticket für den Zugang zu den Räumlichkeiten der TU Graz.
+                </div>
+                <div slot="en">
+                    Creates a ticket for access to premises of TU Graz.
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="additional-information">
+            <style>
+                .int-link-external, .int-link-internal, .link, .link-without-hover {
+                    border-bottom: 1px solid var(--dbp-content);
+                }
+
+                .int-link-external:after{
+                    content: "\00a0\00a0\00a0";
+                    background-color: var(--dbp-content);
+                    -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Ebene_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2022.7%2062.4%22%20style%3D%22enable-background%3Anew%200%200%2022.7%2062.4%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%20transform%3D%22translate%28-382.21%20-336.98%29%22%3E%0A%09%3Cg%3E%0A%09%09%3Cpath%20d%3D%22M386.9%2C380.5c-0.2%2C0-0.4-0.1-0.6-0.3c-0.3-0.3-0.3-0.8%2C0.1-1.1l12.5-10.9l-12.5-10.9c-0.3-0.3-0.4-0.8-0.1-1.1%0A%09%09%09c0.3-0.3%2C0.8-0.4%2C1.1-0.1l13.1%2C11.5c0.2%2C0.2%2C0.3%2C0.4%2C0.3%2C0.6s-0.1%2C0.5-0.3%2C0.6l-13.1%2C11.5C387.3%2C380.4%2C387.1%2C380.5%2C386.9%2C380.5z%22%0A%09%09%09%2F%3E%0A%09%3C%2Fg%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A');
+                    mask-image: url('data:image/svg+xml;charset=utf-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Ebene_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2022.7%2062.4%22%20style%3D%22enable-background%3Anew%200%200%2022.7%2062.4%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%20transform%3D%22translate%28-382.21%20-336.98%29%22%3E%0A%09%3Cg%3E%0A%09%09%3Cpath%20d%3D%22M386.9%2C380.5c-0.2%2C0-0.4-0.1-0.6-0.3c-0.3-0.3-0.3-0.8%2C0.1-1.1l12.5-10.9l-12.5-10.9c-0.3-0.3-0.4-0.8-0.1-1.1%0A%09%09%09c0.3-0.3%2C0.8-0.4%2C1.1-0.1l13.1%2C11.5c0.2%2C0.2%2C0.3%2C0.4%2C0.3%2C0.6s-0.1%2C0.5-0.3%2C0.6l-13.1%2C11.5C387.3%2C380.4%2C387.1%2C380.5%2C386.9%2C380.5z%22%0A%09%09%09%2F%3E%0A%09%3C%2Fg%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A');
+                    -webkit-mask-repeat: no-repeat;
+                    mask-repeat: no-repeat;
+                    -webkit-mask-position: center -2px;
+                    mask-position: center center;
+                    margin: 0 0 0 4px;
+                    padding: 0 0 0.25% 0;
+                    -webkit-mask-size: 100%;
+                    mask-size: 120%;
+                }
+
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <p>
+                        Sie können Ihren Nachweis einer geringen epidemiologischen Gefahr importieren, indem Sie den entsprechenden QR-Code scannen. Alternativ kann auch ein PDF-Dokument oder ein Bild mit dem QR-Code ausgewählt werden.
+                        <br /><br />
+                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                            Selbsttests der Länder Steiermark und Kärnten können ebenfalls importiert, aber nicht direkt in der Applikation validiert werden. Sie müssen sicherstellen, dass Ihr Testergebnis noch gültig ist. Die Kontrolle erfolgt beim Einlass.
+                            <br /><br />
+                        <% } %>
+                        Weitere Informationen zum Thema Corona an der TU Graz finden Sie unter: 
+                        <a target="_blank" class="int-link-external" href="https://tugraz.at/go/coronavirus" title="Coronavirus TU Graz">
+                            <span>Coronavirus TU Graz </span>
+                        </a>
+                        <br /><br />
+                    </p>
+                    <div class="privacy-information">
+                        <p>
+                            Was macht die TU Graz mit Ihren Daten? Die Datenschutzerklärung zur App "TU Graz greenlight" finden Sie hier:
+                            <a target="_blank" class="int-link-external" href="<%= getPrivateUrl('datenschutzerklaerung-tu-graz-greenlight.pdf') %>" title="zur Datenschutzerklärung">
+                                <span>zur Datenschutzerklärung </span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div slot="en">
+                    <p>
+                        You can import your evidence of a low epidemiological risk by scanning the corresponding QR code. Alternatively, you can select a PDF document or an image with the QR code.
+                        <br /><br />
+                        <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                            Self-tests from Styria and Carinthia can also be imported, but not validated directly in the application. You must ensure that your test result is still valid. The control takes place at the entrance.
+                            <br /><br />
+                        <% } %>
+                        For more information about Corona at TU Graz, please visit: 
+                        <a target="_blank" class="int-link-external" href="https://tugraz.at/go/coronavirus" title="Coronavirus TU Graz">
+                            <span>Coronavirus TU Graz </span>
+                        </a>
+                        <br /><br />
+                    </p>
+                    <div class="privacy-information">
+                        <p>
+                            What does TU Graz do with your data? You can find the data protection declaration for the app "TU Graz greenlight" here:
+                            <a target="_blank" class="int-link-external" href="<%= getPrivateUrl('datenschutzerklaerung-tu-graz-greenlight.pdf') %>" title="privacy statement">
+                                <span>privacy statement </span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="partial-validity">
+            <style>
+                .validity-icon {
+                    margin-right: 4px;
+                    font-size: 18px;
+                }
+                .validity-items {
+                    display: grid;
+                    grid-template-columns: 22px auto;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to On-site exams</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="full-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="no-full-validity">
+            <style>
+                .gray {
+                    color: #595959;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
+    <template id="dbp-show-active-tickets">
+        <div slot="greenlight-reference">
+            <style>
+                .int-link-internal-light{
+                    transition: background-color 0.15s, color 0.15s;
+                    border-bottom: var(--dbp-border);
+                    border-color: var(--dbp-on-content-surface);
+                    color: var(--dbp-on-content-surface);
+                }
+
+                @media only screen
+                and (orientation: portrait)
+                and (max-width:768px) {
+                    .int-link-internal-light{
+                        border-bottom: var(--dbp-border);
+                        border-color: var(--dbp-on-content-surface);
+                    }
+
+
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <p>
+                        Es wurde kein gültiger gespeicherter Nachweis gefunden. Zeigen Sie ihren Nachweis manuell vor oder laden Sie einen neuen Nachweis hoch, indem Sie ein neues Ticket unter
+                            <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal-light'>
+                            <span>Eintrittsticket erstellen</span>
+                            </a>
+                        anfordern.
+                    </p>
+                </div>
+                <div slot="en">
+                    No valid stored evidence was found. Show your evidence manually or upload a new evidence by requesting a new ticket under
+                    <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal-light'>
+                        <span>Create entry ticket</span>.
+                    </a>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="greenlight-reference-invalid">
+            <style>
+                .int-link-internal-light{
+                    transition: background-color 0.15s, color 0.15s;
+                    border-bottom: var(--dbp-border);
+                    border-color: var(--dbp-on-content-surface);
+                    color: var(--dbp-on-content-surface);
+                }
+
+                @media only screen
+                and (orientation: portrait)
+                and (max-width:768px) {
+                    .int-link-internal-light{
+                        border-bottom: var(--dbp-border);
+                        border-color: var(--dbp-on-content-surface);
+                    }
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Falls der Nachweis nicht mehr gültig ist, können Sie unter
+                    <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal-light'>
+                        <span>Eintrittsticket erstellen</span>
+                    </a>
+                    einen neuen Nachweis hochladen, indem Sie ein neues Ticket anfordern.
+                </div>
+                <div slot="en">
+                    If the evidence is no longer valid, you can go to
+                    <a href='acquire-3g-ticket' title='Eintrittsticket erstellen' target='_self' class='int-link-internal-light'>
+                        <span>Create entry ticket</span>
+                    </a>
+                    and upload a new evidence by requesting a new ticket.
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="partial-validity">
+            <style>
+                .validity-icon {
+                    margin-right: 4px;
+                    font-size: 18px;
+                    color: var(--dbp-success);
+                }
+                .validity-items {
+                    display: grid;
+                    grid-template-columns: 22px auto;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzprüfungen</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu geöffneten Bereichen der TU Graz</b></div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site exams</b></div>
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to opened areas of TU Graz</b></div>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="full-validity">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon><b>Zutritt zu Präsenzlehrveranstaltungen</b></div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon><b>Access to on-site lectures</b></div>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="no-full-validity">
+            <style>
+                .gray {
+                    color: #595959;
+                }
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Ungültig'></dbp-icon>Kein Zutritt zu Präsenzlehrveranstaltungen</div>
+                </div>
+                <div slot="en">
+                    <div class="validity-items"><dbp-icon name='cross-circle' class='validity-icon gray' aria-label='Invalid'></dbp-icon>No access to on-site lectures</div>
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
+    <template id="dbp-show-reference-ticket">
+        <div slot="description">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <p>
+                        Hier können Überprüfende das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen.
+                    </p>
+                </div>
+                <div slot="en">
+                    <p>
+                        Here, verifiers can view the currently valid reference ticket for the purpose of control.
+                    </p>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="place">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Eintrittsticket: TU Graz
+                </div>
+                <div slot="en">
+                    Entry Ticket: TU Graz
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="ticket-description">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <span>
+                        Vergleichen Sie als Überprüfende/r immer die Tickets, die von Studierenden vorgezeigt werden, mit dem Referenzticket. Der Hintergrund des Ticketbildes wird aus Sicherheitsgründen in regelmäßigen Abständen geändert. Wenn der Hintergrund mit dem des aktuellen Referenztickets übereinstimmt, ist das Ticket gültig. Das Referenzticket berechtigt nicht für den Zugang zu den Räumlichkeiten der TU Graz. Genauere Informationen finden Sie in der 
+                        <a target="_blank" class="int-link-external" id="tu-green-link" href="https://tu4u.tugraz.at/go/green" title="TU Graz greenlight">
+                            <span>Übersicht für Überprüfende </span>
+                        </a>
+                    </span>
+                </div>
+                <div slot="en">
+                    <span>
+                        As a verifier, always compare the tickets presented by students with the reference ticket. The background of the ticket image changes in regular intervals for security reasons. If the background image matches the one of the reference ticket, the ticket is valid. The reference ticket does not entitle you to enter rooms at TU Graz. More detailed information can be found in the 
+                        <a target="_blank" class="int-link-external" id="tu-green-link" href="https://tu4u.tugraz.at/go/green" title="TU Graz greenlight">
+                            <span>Overview for verifiers </span>
+                        </a>
+                    </span>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="ticket-place">
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    Ticket: <strong>TU Graz</strong>
+                </div>
+                <div slot="en">
+                    Ticket: <strong>TU Graz</strong>
+                </div>
+            </dbp-translated>
+        </div>
+        <div slot="information-container">
+            <style>
+
+                .int-link-external-light {
+                    color: var(--dbp-on-content-surface);
+                    border-bottom: 1px solid var(--dbp-on-content-surface);
+                }
+
+                .int-link-external-light:after{
+                    content: "\00a0\00a0\00a0";
+                    background-color: var(--dbp-on-content-surface);
+                    -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Ebene_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2022.7%2062.4%22%20style%3D%22enable-background%3Anew%200%200%2022.7%2062.4%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%20transform%3D%22translate%28-382.21%20-336.98%29%22%3E%0A%09%3Cg%3E%0A%09%09%3Cpath%20d%3D%22M386.9%2C380.5c-0.2%2C0-0.4-0.1-0.6-0.3c-0.3-0.3-0.3-0.8%2C0.1-1.1l12.5-10.9l-12.5-10.9c-0.3-0.3-0.4-0.8-0.1-1.1%0A%09%09%09c0.3-0.3%2C0.8-0.4%2C1.1-0.1l13.1%2C11.5c0.2%2C0.2%2C0.3%2C0.4%2C0.3%2C0.6s-0.1%2C0.5-0.3%2C0.6l-13.1%2C11.5C387.3%2C380.4%2C387.1%2C380.5%2C386.9%2C380.5z%22%0A%09%09%09%2F%3E%0A%09%3C%2Fg%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A');
+                    mask-image: url('data:image/svg+xml;charset=utf-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Ebene_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20viewBox%3D%220%200%2022.7%2062.4%22%20style%3D%22enable-background%3Anew%200%200%2022.7%2062.4%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cg%20transform%3D%22translate%28-382.21%20-336.98%29%22%3E%0A%09%3Cg%3E%0A%09%09%3Cpath%20d%3D%22M386.9%2C380.5c-0.2%2C0-0.4-0.1-0.6-0.3c-0.3-0.3-0.3-0.8%2C0.1-1.1l12.5-10.9l-12.5-10.9c-0.3-0.3-0.4-0.8-0.1-1.1%0A%09%09%09c0.3-0.3%2C0.8-0.4%2C1.1-0.1l13.1%2C11.5c0.2%2C0.2%2C0.3%2C0.4%2C0.3%2C0.6s-0.1%2C0.5-0.3%2C0.6l-13.1%2C11.5C387.3%2C380.4%2C387.1%2C380.5%2C386.9%2C380.5z%22%0A%09%09%09%2F%3E%0A%09%3C%2Fg%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A');
+                    -webkit-mask-repeat: no-repeat;
+                    mask-repeat: no-repeat;
+                    -webkit-mask-position: center -2px;
+                    mask-position: center center;
+                    margin: 0 0 0 4px;
+                    padding: 0 0 0.25% 0;
+                    -webkit-mask-size: 100%;
+                    mask-size: 120%;
+                }
+
+            </style>
+            <dbp-translated subscribe="lang">
+                <div slot="de">
+                    <h4>Informationen zum Nachweis</h4>
+                    <br>
+                    <p>
+                        <% if(ticketTypes["partial"]){ %>
+                            Ist ein <strong>gültiger PCR Test</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in <strong>Farbe</strong> dargestellt.
+                            <br><br>
+                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, der <strong>kein PCR Test</strong> ist, wird dessen QR-Code angezeigt und das Ticket in <strong>Graustufen</strong> dargestellt.
+                            <br><br>
+                            Der angezeigte QR-Code kann mit <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
+                        <% } else { %>
+                            Ist ein <strong>gültiger Grüner Pass</strong> auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Farbe dargestellt. Der QR-Code kann mit
+                            <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a> überprüft werden.
+                            <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                                <br><br>
+                                Ist ein <strong>Selbsttest</strong> des Landes Steiermark oder Kärnten auf dem Gerät importiert, wird dessen QR-Code angezeigt und das Ticket in Graustufen dargestellt.
+                                Dieser QR-Code kann nicht in greenlight validiert werden, daher muss die Kontrolle mit einem herkömmlichen QR-Code Scanner erfolgen.
+                            <% } %>
+                        <% } %>
+                    </p>
+                </div>
+                <div slot="en">
+                    <h4>Information about evidence</h4>
+                    <br>
+                    <p>
+                        <% if(ticketTypes["partial"]){ %>
+                            If a <strong>valid PCR Test</strong> is available on this device then its QR code is displayed and the ticket is shown in <strong>color</strong>. 
+                            <br><br>
+                            If a <strong>valid health certificate</strong> that is not a PCR test is available on this device, then its QR code is displayed and the ticket is shown in <strong>black and white</strong>.
+                            <br><br>
+                            The displayed QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
+                        <% } else { %>
+                            If a <strong>valid health certificate</strong> is available on this device then its QR code is displayed and the ticket is shown in color.
+                            This QR code can be checked with <a href="https://greencheck.gv.at/" title="GreenCheck" target="_blank" class="int-link-external-light">GreenCheck</a>.
+                            <% if(gpSearchSelfTestStringArray && gpSearchSelfTestStringArray !== '' && selfTestValid){ %>
+                                <br><br>
+                                If a <strong>self-test</strong> that was issued by Styria and Carinthia, is available on this device then its QR code is displayed and the ticket is shown in black and white.
+                                This QR code cannot be validated by this app, therefore its validation requires a common QR code scanner.
+                            <% } %>
+                        <% } %>
+                    </p>
+                </div>
+            </dbp-translated>
+        </div>
+    </template>
+</template>
+
+<!-- Error handling for too old browsers -->
+<script src="<%= getPrivateUrl('browser-check.js') %>" defer></script>
+<noscript>Diese Applikation benötigt Javascript / This application requires Javascript</noscript>
+</body>
+</html>

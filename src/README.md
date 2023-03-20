@@ -15,7 +15,7 @@ These attributes are available for all activities listed here:
 - `ticket-types`: object: maps ticket types to the region filter used for rules, only "full" and "partial" as types are allowed. Defaults to `{"full": "ET"}`.
 - `lang` (optional, default: `de`): set to `de` or `en` for German or English
   - example `lang="de"`
-- `entry-point-url` (optional, default is the TU Graz entry point url): entry point url to access the api
+- `entry-point-url` (optional, default is the dbp API entry point url): entry point url to access the api
   - example `entry-point-url="https://api-dev.tugraz.at"`
 
 
@@ -84,10 +84,10 @@ Example:
   <template slot="description">
     <dbp-translated subscribe="lang">
       <div slot="de">
-          Erstellt ein Ticket für den Zugang zu Räumlichkeiten der TU Graz.
+          Erstellt ein Ticket für den Zugang zu Räumlichkeiten der Universität.
       </div>
       <div slot="en">
-          Creates a ticket for access to premises of TU Graz.
+          Creates a ticket for access to premises of the University.
       </div>
     </dbp-translated>
   </template>
@@ -138,7 +138,7 @@ Example:
           </div>
           <div class="validity-items">
             <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
-            <b>Zutritt zu geöffneten Bereichen der TU Graz</b>
+            <b>Zutritt zu geöffneten Bereichen der Universität</b>
           </div>
       </div>
       <div slot="en">
@@ -148,7 +148,7 @@ Example:
           </div>
           <div class="validity-items">
             <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
-            <b>Access to opened areas of TU Graz</b>
+            <b>Access to opened areas of the University</b>
           </div>
       </div>
     </dbp-translated>
@@ -270,12 +270,12 @@ Example:
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
-          Tu Graz
+          Meine Universität
         </p>
       </div>
       <div slot="en">
         <p>
-          TU Graz
+          My University
         </p>
       </div>
     </dbp-translated>
@@ -365,7 +365,7 @@ Example:
           </div>
           <div class="validity-items">
             <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Gültig'></dbp-icon>
-            <b>Zutritt zu geöffneten Bereichen der TU Graz</b>
+            <b>Zutritt zu geöffneten Bereichen der Universität</b>
           </div>
       </div>
       <div slot="en">
@@ -375,7 +375,7 @@ Example:
           </div>
           <div class="validity-items">
             <dbp-icon name='checkmark-circle' class='validity-icon' aria-label='Valid'></dbp-icon>
-            <b>Access to opened areas of TU Graz</b>
+            <b>Access to opened areas of the University</b>
           </div>
       </div>
     </dbp-translated>
@@ -463,12 +463,12 @@ Example:
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
-          Hier können Sie das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen. Dieses Ticket berechtigt nicht zum Eintritt an die TU Graz.
+          Hier können Sie das aktuell gültige Referenzticket zum Zweck der Kontrolle einsehen. Dieses Ticket berechtigt nicht zum Eintritt an der Universität.
         </p>
       </div>
       <div slot="en">
         <p>
-          Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the TU Graz.
+          Here you can view the currently valid reference ticket for the purpose of control. This ticket does not entitle you to enter the University.
         </p>
       </div>
     </dbp-translated>
@@ -488,12 +488,12 @@ Example:
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
-          Ticket: Tu Graz
+          Ticket: Meine Universität
         </p>
       </div>
       <div slot="en">
         <p>
-          Ticket: Tu Graz
+          Ticket: My University
         </p>
       </div>
     </dbp-translated>
@@ -513,12 +513,12 @@ Example:
     <dbp-translated subscribe="lang">
       <div slot="de">
         <p>
-          Tu Graz
+          Meine Universität
         </p>
       </div>
       <div slot="en">
         <p>
-          TU Graz
+          My University
         </p>
       </div>
     </dbp-translated>
