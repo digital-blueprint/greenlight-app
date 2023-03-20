@@ -3,3 +3,4 @@ node_modules/
 /vendor
 /src/micromodal.es.js
 /assets/hcert-kotlin.js
+/assets_custom/hcert-kotlin.js
