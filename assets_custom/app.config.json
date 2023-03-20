@@ -15,7 +15,8 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "dbp"
+        "shortName": "dbp",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/greenlight/"
     },
     "localCustom": {
         "basePath": "/dist/",
@@ -33,7 +34,9 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
         "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "TU Graz"
+        "shortName": "TU Graz",
+        "appDomain": "https://greenlight.tugraz.at/"
+
     },
     "bs": {
         "basePath": "/dist/",
@@ -51,7 +54,8 @@
         "ticketTypes": {"full": "ET-LV", "partial": "ET"},
         "gpSearchSelfTestStringArray":
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "bs"
+        "shortName": "bs",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/greenlight/"
     },
     "development": {
         "basePath": "/apps/greenlight/",
@@ -69,7 +73,8 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "dbp"
+        "shortName": "dbp",
+        "appDomain": "https://dbp-dev.tugraz.at/apps/greenlight/"
     },
     "developmentCustom": {
         "basePath": "/tugapps/greenlight/",
@@ -87,7 +92,8 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
         "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "TU Graz"
+        "shortName": "TU Graz",
+        "appDomain": "https://greenlight.tugraz.at/"
     },
     "demo": {
         "basePath": "/apps/greenlight/",
@@ -105,7 +111,8 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "dbp"
+        "shortName": "dbp",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/greenlight/"
     },
     "demoCustom": {
         "basePath": "/tugapps/greenlight/",
@@ -123,7 +130,8 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
         "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "TU Graz"
+        "shortName": "TU Graz",
+        "appDomain": "https://greenlight.tugraz.at/"
     },
     "production": {
         "basePath": "/",
@@ -141,6 +149,7 @@
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "TU Graz"
+        "shortName": "TU Graz",
+        "appDomain": "https://greenlight.tugraz.at/"
     }
 }

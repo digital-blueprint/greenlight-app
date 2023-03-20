@@ -14,6 +14,8 @@
         "selfTestValid": false,
         "ticketTypes": {"full": "ET"},
         "gpSearchSelfTestStringArray":
-            "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id="
+            "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
+        "shortName": "dbp",
+        "appDomain": "https://dbp-dev.tugraz.at/apps/greenlight/"
     }
 }
