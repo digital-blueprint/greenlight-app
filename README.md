@@ -31,7 +31,7 @@ yarn install
 # constantly build dist/bundle.js and run a local web-server on port 8001 
 yarn run watch
 
-# constantly build dist/bundle.js and run a local web-server on port 8001 using a custom assets directory assets_local/
+# constantly build dist/bundle.js and run a local web-server on port 8001 using a custom assets directory assets_custom/
 yarn run watch-custom
 
 # run tests
