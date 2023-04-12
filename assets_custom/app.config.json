@@ -132,24 +132,5 @@
         "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
         "shortName": "TU Graz",
         "appDomain": "https://greenlight.tugraz.at/"
-    },
-    "production": {
-        "basePath": "/",
-        "entryPointURL": "https://api.tugraz.at",
-        "keyCloakBaseURL": "https://auth.tugraz.at/auth",
-        "keyCloakRealm": "tugraz",
-        "keyCloakClientId": "greenlight_tugraz_at-GREENLIGHT",
-        "matomoUrl": "https://analytics.tugraz.at/",
-        "matomoSiteId": 167,
-        "nextcloudBaseURL": "https://cloud.tugraz.at",
-        "nextcloudName": "TU Graz cloud",
-        "preselectedOption": "TU Graz",
-        "serviceName": "TUGRAZonline",
-        "selfTestValid": false,
-        "ticketTypes": {"full": "ET"},
-        "gpSearchSelfTestStringArray":
-            "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
-        "shortName": "TU Graz",
-        "appDomain": "https://greenlight.tugraz.at/"
     }
 }
