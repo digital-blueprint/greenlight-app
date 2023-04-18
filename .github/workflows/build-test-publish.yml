@@ -40,10 +40,13 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-          ./node_modules/.bin/playwright install-deps chromium firefox
 
       - name: Run build
         run: APP_ENV=development yarn run build
+
+      - name: Install test dependencies
+        run: |
+          ./node_modules/.bin/playwright install-deps chromium firefox
 
       - name: Run tests
         run: yarn run test-full
