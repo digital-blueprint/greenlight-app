@@ -558,7 +558,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                 },
             };
             let response = await this.httpGetAsync(
-                combineURLs(this.entryPointUrl, '/base/people/' + encodeURIComponent(personId)),
+                combineURLs(this.entryPointUrl, '/base/people/' + encodeURIComponent(personId) + '?includeLocal=birthDate'),
                 options
             );
             let person = await response.json();
@@ -573,7 +573,7 @@ export default class DBPGreenlightLitElement extends DBPLitElement {
                     res.dob,
                     person.givenName,
                     person.familyName,
-                    person.birthDate
+                    person.localData.birthDate
                 )
             ) {
                 if (!preCheck) {
