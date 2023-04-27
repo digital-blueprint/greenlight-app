@@ -5,3 +5,5 @@ npm-debug.log
 .vscode
 .cert
 yarn.lock
+assets_custom
+deployer
