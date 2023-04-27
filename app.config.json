@@ -17,5 +17,43 @@
             "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
         "shortName": "dbp",
         "appDomain": "https://dbp-dev.tugraz.at/apps/greenlight/"
+    },
+    "localCustom": {
+        "basePath": "/dist/",
+        "entryPointURL": "http://127.0.0.1:8000",
+        "keyCloakBaseURL": "",
+        "keyCloakRealm": "",
+        "keyCloakClientId": "",
+        "matomoUrl": "",
+        "matomoSiteId": 0,
+        "nextcloudBaseURL": "http://localhost:8081",
+        "nextcloudName": "My cloud",
+        "preselectedOption": "",
+        "serviceName": "",
+        "selfTestValid": false,
+        "ticketTypes": {"full": "ET"},
+        "gpSearchSelfTestStringArray":
+            "",
+        "shortName": "My organization",
+        "appDomain": ""
+    },
+    "development": {
+        "basePath": "/apps/greenlight/",
+        "entryPointURL": "https://api-dev.tugraz.at",
+        "keyCloakBaseURL": "https://auth-dev.tugraz.at/auth",
+        "keyCloakRealm": "tugraz-vpu",
+        "keyCloakClientId": "dbp-greenlight",
+        "matomoUrl": "https://analytics.tugraz.at/",
+        "matomoSiteId": 131,
+        "nextcloudBaseURL": "https://nc-dev.tugraz.at/pers",
+        "nextcloudName": "TU Graz cloud",
+        "preselectedOption": "TU Graz",
+        "serviceName": "TUGRAZonline",
+        "selfTestValid": false,
+        "ticketTypes": {"full": "ET"},
+        "gpSearchSelfTestStringArray":
+            "https://selbsttest.stmk.gv.at/public-result?id=,https://selbsttest.ktn.gv.at/public-result?id=",
+        "shortName": "dbp",
+        "appDomain": "https://dbp-dev.tugraz.at/apps/greenlight/"
     }
 }

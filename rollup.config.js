@@ -55,7 +55,7 @@ try {
     customAssetsPath = devPath;
 } catch(e) {
     if (e.code == "MODULE_NOT_FOUND") {
-        console.warn("no dev-config found, try deployment config instead ...");
+        console.warn("no dev-config found, try deployment-config instead ...");
 
         // load devconfig for deployment if present
         try {
@@ -64,7 +64,7 @@ try {
             customAssetsPath = deploymentPath;
         } catch(e) {
             if (e.code == "MODULE_NOT_FOUND") {
-                console.warn("no dev-config found, use default whitelabel config instead ...");
+                console.warn("no deployment-config found, use default whitelabel config instead ...");
             } else {
                 throw e;
             }
@@ -94,7 +94,7 @@ if ((devConfig != undefined && appEnv in devConfig)) {
         ticketTypes: '{}',
     };
 } else {
-    console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(appConfig)}'`);
+    console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(devConfig)}'`);
     process.exit(1);
 }
 
