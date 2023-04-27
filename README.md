@@ -40,7 +40,7 @@ npm test
 
 Jump to <https://localhost:8001>, and you should get a Single Sign On login page.
 
-To add enable building with custom assets, you need to provide your custom assets in the directory `assets_custom/dbp-greenlight/assets/`. If you want to, you can also change this path in the file `rollup.config.js`. For more information, please visit the [dbp handbook page on custom assets](https://handbook.digital-blueprint.org/frontend/dev/assets/#custom-assets).
+To enable building with custom assets, you need to provide your custom assets in the directory `assets_custom/dbp-greenlight/assets/`. If you want to, you can also change this path in the file `rollup.config.js`. For more information, please visit the [dbp handbook page on custom assets](https://handbook.digital-blueprint.org/frontend/dev/assets/#custom-assets).
 
 ## Using this app as pre-built package
 
