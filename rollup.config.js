@@ -36,7 +36,7 @@ let whitelabel;
 // path to non whitelabel assets and configs
 let customAssetsPath;
 // development path
-let devPath = 'assets_custom/dbp-greenlight/assets/';
+let devPath = 'assets_custom/greenlight-app/assets/';
 // deployment path
 let deploymentPath = '../assets/';
 
