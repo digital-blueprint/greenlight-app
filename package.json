@@ -29,7 +29,7 @@
         "chai": "^4.2.0",
         "chai-as-promised": "^7.1.1",
         "eslint": "^8.0.1",
-        "eslint-plugin-jsdoc": "^45.0.0",
+        "eslint-plugin-jsdoc": "^46.0.0",
         "glob": "^10.0.0",
         "i18next-parser": "^8.0.0",
         "karma": "^6.0.0",
