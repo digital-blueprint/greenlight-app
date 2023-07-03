@@ -11,6 +11,8 @@
 Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam.
 The ticket then enables you to access the university premises quickly and efficiently.
 
+![Screenshot](./screenshot.png)
+
 ## Prerequisites
 
 - You need the [API server](https://gitlab.tugraz.at/dbp/relay/dbp-relay-server-template) running
