@@ -12,5 +12,6 @@
           "matchPackageNames": ["pdfjs-dist"],
           "allowedVersions": "<3"
         }
-    ]
+    ],
+    "enabled": false
 }
