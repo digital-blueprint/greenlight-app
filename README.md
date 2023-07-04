@@ -8,6 +8,11 @@
 
 [![Build and Test](https://github.com/digital-blueprint/greenlight-app/actions/workflows/build-test-publish.yml/badge.svg)](https://github.com/digital-blueprint/greenlight-app/actions/workflows/build-test-publish.yml)
 
+**Note:** This project depends on the DCC infrastructure of the Austrian
+Government. Since the DCC infrastructure is [no longer available since June
+2023](https://github.com/Federal-Ministry-of-Health-AT/green-pass-overview/issues/11#issuecomment-1617997232),
+this project is no longer actively maintained.
+
 Creates an entrance ticket and imports your evidence of a low epidemiological risk on the working device to validate it for admission even before attending a course or exam.
 The ticket then enables you to access the university premises quickly and efficiently.
 
