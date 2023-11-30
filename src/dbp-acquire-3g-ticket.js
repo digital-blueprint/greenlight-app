@@ -329,15 +329,10 @@ class Acquire3GTicket extends ScopedElementsMixin(DBPGreenlightLitElement) {
         let responseBody = await responseData.clone().json();
         let status = responseData.status;
 
-        let numTypes = parseInt(responseBody['hydra:totalItems']);
-        if (isNaN(numTypes)) {
-            numTypes = 0;
-        }
-
         switch (status) {
             case 200:
-                for (let i = 0; i < numTypes; i++) {
-                    //For the case we have more then one possible ticket (places), we need to check here if it is the same ticket as the selected
+                if (responseBody['hydra:member'].length > 0) {
+                    // For the case we have more than one possible ticket (places), we need to check here if it is the same ticket as the selected
                     this.hasTicket = true;
                     console.log('Found a valid ticket for this room.');
                 }

@@ -65,12 +65,7 @@ class ShowActiveTickets extends ScopedElementsMixin(DBPGreenlightTicketLitElemen
      */
     parseActiveTickets(response) {
         let list = [];
-
-        let numTypes = parseInt(response['hydra:totalItems']);
-        if (isNaN(numTypes)) {
-            numTypes = 0;
-        }
-        for (let i = 0; i < numTypes; i++) {
+        for (let i = 0; i < response['hydra:member'].length; i++) {
             list[i] = response['hydra:member'][i];
         }
 
